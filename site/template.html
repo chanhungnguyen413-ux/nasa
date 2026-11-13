@@ -757,8 +757,10 @@
       const CONF_TONE = { high: 'good', medium: 'warn', low: 'bad' }
 
       function rotLines(lines) {
+        // Màn rộng: giữ trích nguồn trên một dòng. Điện thoại: cho xuống dòng, vì một trích dẫn dài
+        // (vd. "FAO Training Manual 3, Tables 4–5") không ngắt được sẽ đẩy thẻ rộng hơn màn hình 375 px.
         const srcTag = (src) =>
-          src.length ? ` <span class="whitespace-nowrap text-xs font-semibold text-moss-700">(${src.map((k) => SOURCES[k]?.short ?? k).join(' · ')})</span>` : ''
+          src.length ? ` <span class="text-xs font-semibold text-moss-700 sm:whitespace-nowrap">(${src.map((k) => SOURCES[k]?.short ?? k).join(' · ')})</span>` : ''
         return `<ul class="mt-2 space-y-2 text-[15px] leading-relaxed">${lines
           .map((x) => `<li class="flex gap-2.5"><span class="mt-2.5 size-1.5 shrink-0 rounded-full bg-moss-700"></span><span>${esc(x.text)}${srcTag(x.src)}</span></li>`)
           .join('')}</ul>`

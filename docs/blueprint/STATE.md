@@ -5,7 +5,7 @@ File này là trí nhớ giữa các phiên. Phiên nào cũng đọc đầu ti�
 ## Đang ở đâu
 
 - Phase đã xong: 0, 1, 2 (14/11/2026). Phase tiếp theo: 3.
-- Commit gần nhất: "Phase 2: Trạm dữ liệu", nhánh `master`. Đã khai báo `origin` nhưng **chưa đẩy lên GitHub**.
+- Commit gần nhất: "Sửa thẻ Luân canh tràn màn hình 375 px", nhánh `master`. Đã khai báo `origin` nhưng **chưa đẩy lên GitHub**.
 - Build: `index.html` khoảng 1,1 MB (Leaflet nhúng thẳng). `npm test`: 78 ca, đều qua. `check:i18n`: field 207, data 212 khóa.
 
 ## Quyết định đã chốt (người duyệt: Hưng, 13/11/2026)
@@ -56,7 +56,6 @@ File này là trí nhớ giữa các phiên. Phiên nào cũng đọc đầu ti�
 - Nhiệt độ, pH chưa có bảng chỉ tiêu có nguồn → luôn Xám. Tọa độ bất kỳ chỉ chấm được 2/6 khi chưa có số đo đất.
 - Tiêu chí nước thô (tổng mưa vụ so với giữa khoảng FAO; chưa có Kc theo giai đoạn, nước giữ trong đất). Ngưỡng tưới "hạn chế" 150 mm do nhóm chọn.
 - Phase 2 chưa làm: [N] độ cao cho từng ô (cần nguồn sai số đứng của Copernicus GLO-90), [N] SoilGrids, [C] NDVI cho tọa độ bất kỳ. Bảng nguồn chưa có dòng SoilGrids.
-- Trang Luân canh rộng hơn 375 px khoảng 22 px (thẻ `article`), có từ trước Phase 2.
 - File lớn (tới 20 MB) có thể vượt bộ nhớ localStorage: trang báo "chỉ dùng trong lần mở này".
 - Ngày ảnh GIBS cố định (13/11) sẽ cũ dần. Chưa tự kiểm tra mở `index.html` bằng nhấp đúp. `.impeccable/` còn mô tả giao diện cũ. Lịch sử git chưa nối với `origin`.
 
