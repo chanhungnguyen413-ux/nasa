@@ -1,0 +1,81 @@
+{
+ "type": "FeatureCollection",
+ "_nguon": "MODIS MOD13Q1, 250 m, 16-day composite, via ORNL DAAC MODIS subset REST API. Lấy lúc 2026-11-10T18:53:11+00:00 (chép từ site/data/precomputed/ndvi_raw.json).",
+ "features": [
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     105.43,
+     10.1
+    ]
+   },
+   "properties": {
+    "district": "cantho",
+    "date": "2025-12-19",
+    "ndvi": 0.5833
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     105.26,
+     10.3
+    ]
+   },
+   "properties": {
+    "district": "angiang",
+    "date": "2025-12-19",
+    "ndvi": 0.2179
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     105.83,
+     9.62
+    ]
+   },
+   "properties": {
+    "district": "soctrang",
+    "date": "2025-12-19",
+    "ndvi": 0.0931
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     105.83,
+     10.55
+    ]
+   },
+   "properties": {
+    "district": "dongthap",
+    "date": "2025-12-19",
+    "ndvi": 0.7821
+   }
+  },
+  {
+   "type": "Feature",
+   "geometry": {
+    "type": "Point",
+    "coordinates": [
+     106.13,
+     10.25
+    ]
+   },
+   "properties": {
+    "district": "bentre",
+    "date": "2025-12-19",
+    "ndvi": 0.6897
+   }
+  }
+ ]
+}

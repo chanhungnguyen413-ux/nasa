@@ -84,3 +84,67 @@ test('khí hậu bị thiếu → tiêu chí nước Xám, không đoán', () =>
   assert.equal(r.criteria.find((c) => c.key === 'water').grade, 'gray')
   assert.notEqual(r.overall, 'green')
 })
+
+/* ---------------- Phase 2: số đo đất và đánh dấu của nông dân ---------------- */
+import { fiMarksForField, fiSoilForField, fiCheck } from '../../site/sources/farmerInput.js'
+import { hzField } from '../../site/core/harmonize.js'
+
+const P2_FIELD = hzField({ polygon: [[10.1, 105.43], [10.1, 105.432], [10.102, 105.432], [10.102, 105.43]] })
+
+test('số đo ECe của ruộng cao hơn ngưỡng FAO-29 của ngô → tiêu chí mặn Vàng, bằng chứng là số đo tại ruộng', () => {
+  const soil = fiSoilForField([{ id: 'a', date: '2026-11-01', where: 'field', lat: 10.101, lon: 105.431, ec: 4, ecType: 'ece' }], P2_FIELD)
+  assert.equal(soil.ec.kind, 'ground')
+  const climate = climateOf(flat(200), flat(150))
+  const before = suitAssess({ crop: 'maize', window: suitWindow({ ...ndvi([5, 6, 7, 8, 9]), crop: 'maize' }), climate })
+  const after = suitAssess({ crop: 'maize', window: suitWindow({ ...ndvi([5, 6, 7, 8, 9]), crop: 'maize' }), climate, salinityEce: soil.ec, salinityType: soil.ecType })
+  const sal = after.criteria.find((c) => c.key === 'salinity')
+  assert.equal(sal.grade, 'yellow')
+  assert.ok(sal.evidence.some((e) => e.kind === 'ground' && e.value === 4))
+  assert.equal(after.gradedCount, before.gradedCount + 1)
+  assert.notEqual(after.overall, before.overall, 'đèn của ngô phải đổi khi có số đo độ mặn')
+})
+
+test('số đo EC kiểu khác (nước, 1:5) không được quy đổi: tiêu chí mặn vẫn Xám và nói cần ECe', () => {
+  const soil = fiSoilForField([{ id: 'a', date: '2026-11-01', where: 'field', lat: 10.101, lon: 105.431, ec: 4, ecType: 'ecw' }], P2_FIELD)
+  const r = suitAssess({ crop: 'maize', window: suitWindow({ ...ndvi([5, 6, 7, 8, 9]), crop: 'maize' }), climate: climateOf(flat(200), flat(150)), salinityEce: soil.ec, salinityType: soil.ecType })
+  const sal = r.criteria.find((c) => c.key === 'salinity')
+  assert.equal(sal.grade, 'gray')
+  assert.equal(sal.reason, 'salinityNotEce')
+})
+
+test('đánh dấu "Hay ngập" trong ruộng → cây cạn bị Vàng ở tiêu chí úng; lúa nước không đổi; dấu ngoài ruộng không tính', () => {
+  const marks = [
+    { id: 'm1', type: 'flood', lat: 10.1012, lon: 105.4312, date: '2026-11-02' },
+    { id: 'm2', type: 'flood', lat: 10.3, lon: 105.8, date: '2026-11-02' },
+  ]
+  const m = fiMarksForField(marks, P2_FIELD)
+  assert.equal(m.flood.value, 1)
+  assert.equal(m.flood.kind, 'farmer')
+  const climate = climateOf(flat(200), flat(150), 0.3) // ẩm vùng rễ thấp: khí hậu không báo úng
+  const maize = suitAssess({ crop: 'maize', window: suitWindow({ ...ndvi([5, 6, 7, 8, 9]), crop: 'maize' }), climate, floodMarks: m.flood })
+  const w = maize.criteria.find((c) => c.key === 'waterlogging')
+  assert.equal(w.grade, SUIT_PARAMS.farmerFloodGrade)
+  assert.equal(w.reason, 'waterlog_farmer')
+  assert.ok(w.evidence.some((e) => e.kind === 'farmer'))
+  const rice = suitAssess({ crop: 'rice', window: suitWindow({ ...ndvi([5, 6, 7]), crop: 'rice' }), climate, floodMarks: m.flood })
+  assert.equal(rice.criteria.find((c) => c.key === 'waterlogging').grade, 'green')
+})
+
+test('biểu mẫu đất: số ngoài giới hạn vật lý bị từ chối, ô trống là chưa đo', () => {
+  assert.equal(fiCheck('ph', '5,6'), 5.6)
+  assert.equal(fiCheck('ph', '15'), 'out')
+  assert.equal(fiCheck('ec', '-1'), 'out')
+  assert.equal(fiCheck('om', ''), null)
+  const none = fiSoilForField([], P2_FIELD)
+  assert.equal(none.ph.kind, 'missing')
+  assert.equal(none.ph.need, 'measure')
+})
+
+test('số đo "cả ruộng" vẫn thuộc ruộng sau khi khoanh thửa không chứa điểm đã chọn', () => {
+  const point = [10.1, 105.43]
+  const far = hzField({ point, polygon: [[10.11, 105.44], [10.11, 105.442], [10.112, 105.442], [10.112, 105.44]] })
+  const soil = fiSoilForField([{ id: 'a', date: '2026-11-01', where: 'field', lat: point[0], lon: point[1], ph: 5.5 }], far)
+  assert.equal(soil.ph.value, 5.5)
+  const other = fiSoilForField([{ id: 'b', date: '2026-11-01', where: 'point', lat: point[0], lon: point[1], ph: 6 }], far)
+  assert.equal(other.ph.kind, 'missing', 'số đo tại MỘT điểm ngoài thửa thì không tính cho thửa')
+})

@@ -62,7 +62,26 @@ export const CATALOG = {
     url: 'https://www.openstreetmap.org/copyright',
     credit: '© OpenStreetMap contributors',
   },
+  soilForm: {
+    name: { vi: 'Số đo đất bạn nhập (trang Dữ liệu)', en: 'Soil measurement you entered (Data page)' },
+    provider: '—',
+    kind: 'ground',
+    resolution: { vi: 'một điểm hoặc cả ruộng, theo lúc nhập', en: 'one point or the whole field, as entered' },
+    url: null,
+    credit: null,
+  },
+  farmerMark: {
+    name: { vi: 'Đánh dấu của nông dân trên bản đồ', en: 'Farmer marks on the map' },
+    provider: '—',
+    kind: 'farmer',
+    resolution: { vi: 'một điểm chạm trên bản đồ', en: 'one tapped point on the map' },
+    url: null,
+    credit: null,
+  },
 }
+
+// Nguồn sinh ra lúc chạy (mỗi file tải lên là một nguồn, id dạng 'upload:<id>'). Trang Dữ liệu đăng ký vào đây.
+export const CATALOG_DYNAMIC = new Map()
 
 // Lớp ảnh GIBS cho bốn nút. Định danh, bộ ô, mức zoom, ngày ảnh và chú giải chép NGUYÊN VĂN từ docs/API_STATUS.md.
 // Ngày là ngày mới nhất lúc dò; dùng ngày cố định để nhãn "ngày ảnh" trên trang luôn đúng.
@@ -93,6 +112,7 @@ export const gibsTileTemplate = (layer) =>
 /** Tìm một nguồn theo id: trong CATALOG trước, rồi trong SOURCES (nguồn tra bảng). */
 export function catalogSource(id) {
   if (CATALOG[id]) return CATALOG[id]
+  if (CATALOG_DYNAMIC.has(id)) return CATALOG_DYNAMIC.get(id)
   const s = SOURCES[id]
   if (!s) return null
   return { name: { vi: s.short, en: s.short }, provider: s.short, kind: 'reference', resolution: null, url: s.url, credit: s.short, cite: s.cite }

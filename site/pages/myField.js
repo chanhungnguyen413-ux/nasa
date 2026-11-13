@@ -8,6 +8,7 @@
 import { evidence, evIsMissing } from '../core/evidence.js'
 import { PROVINCES } from '../data/demo.js'
 import { ROTATION_CROPS } from '../data/rotationCrops.js'
+import { DATA_TEXT } from '../i18n/dataText.js'
 import { FIELD_TEXT } from '../i18n/fieldText.js'
 import { et0Months } from '../logic/et0.js'
 import { seasonWindows } from '../logic/rotation.js'
@@ -70,6 +71,9 @@ const mfTxt = (x) => (x && typeof x === 'object' ? x[S.lang] ?? x.vi : x ?? '')
 const mfUnit = (u) => mfT().units[u] ?? u ?? ''
 const mfLabel = (ev) => (ev?.label ? mfT().evLabels[ev.label] ?? ev.label : ev?.inputName ?? '')
 
+/** Số chữ số thập phân vừa với độ lớn: 0,82 (ẩm vùng rễ) cần 2 chữ số, 304 mm thì không cần. */
+const mfDigits = (ev) => (evIsMissing(ev) || Number.isInteger(ev.value) ? 0 : Math.abs(ev.value) < 1 ? 2 : Math.abs(ev.value) < 10 ? 1 : 0)
+
 function showValue(ev, { digits = 0, compact = false, unit = true } = {}) {
   const id = `ev${++mfLedgerSeq}`
   MF_LEDGER.set(id, ev)
@@ -99,7 +103,7 @@ function mfOpenLedger(btn) {
         <p class="text-base font-extrabold text-moss-900">${esc(mfLabel(ev))}</p>
         <button type="button" data-action="close-term" aria-label="${t().closeTerm}" class="-m-1 rounded-full p-1 text-muted hover:bg-moss-50 hover:text-ink">${icon('x', 'size-4')}</button>
       </div>
-      <p class="tabular mt-1 text-2xl font-extrabold">${evIsMissing(ev) ? '—' : `${mfNum(ev.value, Math.abs(ev.value) < 10 ? 2 : 0)} <span class="text-base font-bold text-muted">${esc(mfUnit(ev.unit))}</span>`}</p>
+      <p class="tabular mt-1 text-2xl font-extrabold">${evIsMissing(ev) ? '—' : `${mfNum(ev.value, Number.isInteger(ev.value) ? 0 : Math.abs(ev.value) < 10 ? 2 : 0)} <span class="text-base font-bold text-muted">${esc(mfUnit(ev.unit))}</span>`}</p>
       <dl class="mt-3 text-sm leading-relaxed">
         ${row(R.ledger.kind, `<span class="rounded-full px-2 py-0.5 text-xs font-bold ${MF_KIND_STYLE[ev.kind]}">${R.kinds[ev.kind]}</span>`)}
         ${row(R.ledger.source, src ? `${esc(src.name[S.lang])}${src.url ? ` · <a href="${src.url}" target="_blank" rel="noopener" class="font-semibold text-moss-700 underline">${R.ledger.open}</a>` : ''}` : '')}
@@ -133,11 +137,15 @@ function mfCompute() {
       strip = seasonStrip({ climate: inputs.climate, monthly, windows })
     }
   }
+  // Phase 2 (site/pages/myFieldData.js): file tải lên, số đo đất, đánh dấu của nông dân cho ruộng này.
+  const user = mfdCollect(climate)
+  const extra = mfdSuitInputs(user)
   const results = MF_CROPS.map((crop) => {
     const ndviWindow = windows ? windows.find((w) => w.season === MF.season) : null
-    return suitAssess({ crop, window: suitWindow({ ndviWindow, sowingMonth: MF.sowing, crop }), climate, irrigation: MF.irrigation })
+    return suitAssess({ crop, window: suitWindow({ ndviWindow, sowingMonth: MF.sowing, crop }), climate, irrigation: MF.irrigation, ...extra })
   })
-  return { climate, et0, wb, windows, strip, results }
+  const uploadRain = user?.uploads.find((u) => u.upload.passport.variable === 'rain' && u.months)?.months ?? null
+  return { climate, et0, wb, windows, strip, results, user, uploadRain }
 }
 
 /* ================================================================
@@ -184,6 +192,7 @@ function renderMyField() {
           ${GIBS_LAYERS.map((l) => mfPill(`data-mf="layer" data-value="${l.key}"`, `${icon('layers', 'size-4')}${R.layers[l.key]}`, MF.layer === l.key)).join('')}
         </div>
         <div id="mf-layer-info" class="mt-3"></div>
+        <div id="mf-tools" class="mt-5"></div>
         <div id="mf-selected" class="mt-5"></div>
       </section>
 
@@ -210,6 +219,7 @@ function renderMyField() {
 function myFieldOnShow() {
   if (!MF.map) mfInitMap()
   else MF.map.invalidateSize()
+  mfdRestore() // mở lại trang: chọn lại ruộng đã lưu trên máy
 }
 
 function mfInitMap() {
@@ -228,7 +238,7 @@ function mfInitMap() {
       })
       .addTo(MF.map)
   }
-  MF.map.on('click', (e) => mfSelect({ lat: Math.round(e.latlng.lat * 1e4) / 1e4, lon: Math.round(e.latlng.lng * 1e4) / 1e4 }))
+  MF.map.on('click', (e) => mfdMapClick(e.latlng) || mfSelect({ lat: Math.round(e.latlng.lat * 1e4) / 1e4, lon: Math.round(e.latlng.lng * 1e4) / 1e4 }))
   mfApplyOverlay()
   mfApplyMarker()
 }
@@ -263,6 +273,7 @@ function mfApplyMarker() {
   if (MF.marker) MF.marker.remove()
   if (!MF.loc) return
   MF.marker = Lf.circleMarker([MF.loc.lat, MF.loc.lon], { radius: 11, color: '#0b2e1b', weight: 3, fillColor: '#b8e55a', fillOpacity: 1 }).addTo(MF.map)
+  mfdDrawLayers() // ranh thửa và đánh dấu của nông dân
 }
 
 function mfApplyOverlay() {
@@ -288,6 +299,7 @@ function mfApplyOverlay() {
  * Hiện ngay bản có sẵn (nếu có), rồi thay bằng bản mới khi mạng trả lời.
  * ================================================================ */
 async function mfSelect(loc) {
+  mfdOnSelect(loc)
   MF.loc = loc
   const seq = ++MF.seq
   const cached = powerReadCache(loc.lat, loc.lon)
@@ -310,6 +322,7 @@ async function mfSelect(loc) {
     Object.assign(MF, { status: 'failed', error: rec.reason?.message ?? String(rec.reason) })
   }
   mfRenderDynamic()
+  dhRenderAll() // trang Dữ liệu hiện trạng thái nguồn của ruộng này
 }
 
 function mfRenderDistrictButtons() {
@@ -342,6 +355,7 @@ function mfRenderDynamic() {
     return
   }
   const data = mfCompute()
+  mfdRenderTools()
   $('#mf-selected').innerHTML = mfSelectedHtml()
   $('#mf-water').innerHTML = mfWaterHtml(data)
   $('#mf-crops').innerHTML = mfCropsHtml(data)
@@ -396,7 +410,7 @@ function mfWaterHtml(data) {
       <p class="mt-1 text-base leading-relaxed text-muted">${R.chartSub(years)}</p>
       <div class="mt-4">${mfRainChart(data)}</div>
       <div class="mt-2">${mfTempChart(data)}</div>
-      ${mfLegendHtml(Boolean(data.strip))}
+      ${mfLegendHtml(Boolean(data.strip), Boolean(data.uploadRain))}
       <p class="mt-3 text-base font-semibold">${deficits.length ? R.deficitSummary(deficits.join(', ')) : R.noDeficit}</p>
       <p class="mt-1 text-base text-muted">${data.strip ? R.stripNote : R.noCalendar}</p>
     </div>
@@ -416,10 +430,11 @@ function mfWaterHtml(data) {
             .join('')}</tbody>
         </table>
       </div>
-    </div>`
+    </div>
+    ${mfdSeriesHtml(data)}`
 }
 
-function mfLegendHtml(hasStrip) {
+function mfLegendHtml(hasStrip, hasUploadRain = false) {
   const R = mfT()
   const item = (swatch, label) => `<span class="flex items-center gap-2">${swatch}${label}</span>`
   return `<div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[15px] text-muted">
@@ -428,6 +443,7 @@ function mfLegendHtml(hasStrip) {
     ${item('<span class="h-1 w-5 rounded-full bg-moss-900"></span>', R.legend.et0)}
     ${item('<span class="size-3.5 rounded-sm bg-clay-100 ring-1 ring-clay-700/30"></span>', R.legend.deficit)}
     ${item('<span class="h-1 w-5 rounded-full bg-[#e07b2a]"></span>', R.legend.tmax)}
+    ${hasUploadRain ? item('<span class="size-3 border-2 border-ink bg-white"></span>', DATA_TEXT[S.lang].series.legendUpload) : ''}
     ${hasStrip ? item('<span class="rounded-full border border-dashed border-muted px-1.5 text-xs font-bold">—</span>', R.legend.bare) : ''}
     ${hasStrip ? item(`<span class="text-sun-700">${icon('triangle-alert', 'size-4')}</span>`, R.legend.vulnerable) : ''}
   </div>`
@@ -481,6 +497,7 @@ function mfRainChart(data) {
     parts.push(`<polyline points="${pts.map((p) => p.join(',')).join(' ')}" fill="none" stroke="#0f3d24" stroke-width="3" stroke-linejoin="round"/>`)
     for (const [px, py] of pts) parts.push(`<circle cx="${px}" cy="${py}" r="4.5" fill="#0f3d24" stroke="#fff" stroke-width="2"/>`)
   }
+  if (data.uploadRain) parts.push(...mfdRainOverlay(data.uploadRain, { cx, y })) // mưa của file tải lên: chuỗi riêng có nhãn
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${R.chartAria}" class="block h-auto w-full">${parts.join('')}</svg>`
 }
 
@@ -525,6 +542,7 @@ function mfCropsHtml(data) {
     ? `<p class="mt-3 text-base font-semibold ${MF.cropQuery.known ? 'text-moss-900' : 'text-clay-700'}">${esc(MF.cropQuery.known ? R.knownCrop(MF.cropQuery.text) : R.unknownCrop(MF.cropQuery.text))}</p>`
     : ''
   return `
+    ${mfdSoilSummaryHtml(data.user)}
     <div class="grid gap-5 rounded-[28px] border border-line bg-white p-5 shadow-card sm:p-7 lg:grid-cols-2">
       <div>${question}</div>
       <div><p class="text-base font-bold">${R.irrigationQ}</p><div class="mt-2 flex flex-wrap gap-2">${IRRIGATION_ANSWERS.map((a) => mfPill(`data-mf="irrigation" data-value="${a}"`, R.irrigation[a], MF.irrigation === a)).join('')}</div></div>
@@ -560,7 +578,7 @@ function mfCropCard(r) {
           (c) => `<li class="py-3">
             <div class="flex flex-wrap items-center justify-between gap-2"><span class="font-extrabold">${R.criteria[c.key]}</span>${mfGradeBadge(c.grade, R.grades[c.grade])}</div>
             <p class="mt-1 text-base leading-relaxed">${esc(reasonFor(c))}</p>
-            ${c.evidence.length ? `<p class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted">${c.evidence.map((ev) => `<span class="inline-flex items-center gap-1">${esc(mfLabel(ev))}: ${showValue(ev)}</span>`).join('')}</p>` : ''}
+            ${c.evidence.length ? `<p class="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted">${c.evidence.map((ev) => `<span class="inline-flex items-center gap-1">${esc(mfLabel(ev))}: ${showValue(ev, { digits: mfDigits(ev) })}</span>`).join('')}</p>` : ''}
           </li>`,
         )
         .join('')}</ul>`

@@ -37,13 +37,21 @@ const modules = [
   'site/logic/seasonStrip.js',
   // Phase 1: trang "Ruộng của tôi" (thứ tự phụ thuộc: evidence → nguồn → logic → chữ → trang)
   'site/core/evidence.js',
+  'site/core/harmonize.js',
   'site/sources/catalog.js',
+  'site/sources/upload.js',
+  'site/sources/farmerInput.js',
+  'site/sources/dataStore.js',
   'site/sources/power.js',
   'site/logic/et0.js',
   'site/logic/waterBalance.js',
   'site/logic/suitability.js',
+  'site/logic/fieldData.js',
   'site/i18n/fieldText.js',
+  'site/i18n/dataText.js',
   'site/pages/myField.js',
+  'site/pages/myFieldData.js',
+  'site/pages/dataHub.js',
 ]
 
 // 0. Leaflet (bản đồ) nhúng thẳng vào trang để chạy được khi mở bằng nhấp đúp. Không dùng ảnh marker của Leaflet.

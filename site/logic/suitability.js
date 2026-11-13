@@ -11,6 +11,9 @@ export const SUIT_PARAMS = {
   limitedIrrigationMm: 150, // ruộng tưới "hạn chế": bù được tối đa chừng này mm nước mỗi vụ
   cycleToleranceDays: 20, // cửa sổ vụ ngắn hơn chu kỳ ngắn nhất của FAO tới chừng này ngày → Vàng thay vì Đỏ
   wetRootFlag: ROTATION_PARAMS.wetRootFlag, // ẩm vùng rễ trung bình từ mức này trở lên trong vụ: nhắc nguy cơ úng
+  // Nông dân đánh dấu 'Hay ngập' trong ruộng: cây cạn ra hạng này. Vàng chứ không Đỏ, vì chưa biết ngập vào tháng nào
+  // so với cửa sổ vụ; trang nhắc hỏi lại nông dân.
+  farmerFloodGrade: 'yellow',
 }
 export const SUIT_GRADES = ['green', 'yellow', 'red'] // từ tốt đến xấu; 'gray' = không chấm
 export const SUIT_CRITERIA = ['water', 'cycle', 'waterlogging', 'salinity', 'temperature', 'ph']
@@ -70,25 +73,41 @@ function suitCycle(info, window) {
   return { key: 'cycle', grade, reason: `cycle_${grade}`, evidence: [cycleMin, windowDays], numbers: { window: window.days, cycleMin: info.cycleDays[0], cycleMax: info.cycleDays[1] } }
 }
 
-function suitWaterlogging(info, window, climate) {
+function suitWaterlogging(info, window, climate, floodMarks) {
   if (!info.upland) {
     // Lúa nước: ruộng ngập là cách trồng bình thường (FAO Manual 3 ghi "Rice (paddy)"), nên tiêu chí này đạt.
     return { key: 'waterlogging', grade: 'green', reason: 'waterlogPaddy', evidence: [] }
   }
   const values = window.months.map((m) => climate.months[m - 1].gwetroot)
-  if (values.some(evIsMissing)) return { key: 'waterlogging', grade: 'gray', reason: 'missingClimate', evidence: values.filter(evIsMissing) }
+  // Đánh dấu 'Hay ngập' của nông dân (Evidence kind 'farmer', giá trị = số điểm đánh dấu trong ruộng).
+  const farmer = floodMarks && !evIsMissing(floodMarks) && floodMarks.value > 0 ? floodMarks : null
+  if (values.some(evIsMissing)) {
+    if (farmer) return { key: 'waterlogging', grade: SUIT_PARAMS.farmerFloodGrade, reason: 'waterlog_farmer', evidence: [farmer, ...values.filter(evIsMissing)] }
+    return { key: 'waterlogging', grade: 'gray', reason: 'missingClimate', evidence: values.filter(evIsMissing) }
+  }
   const wet = evDerive({ inputs: Object.fromEntries(values.map((ev, i) => [`m${i}`, ev])), compute: (v) => Object.values(v).reduce((a, b) => a + b, 0) / values.length, unit: '0–1', formula: evText('trung bình ẩm vùng rễ (GWETROOT) các tháng trong vụ', 'mean root-zone wetness (GWETROOT) over the season months'), label: 'wetSeason' })
-  const grade = wet.value >= SUIT_PARAMS.wetRootFlag ? 'yellow' : 'green'
-  return { key: 'waterlogging', grade, reason: `waterlog_${grade}`, evidence: [wet], numbers: { wet: wet.value, flag: SUIT_PARAMS.wetRootFlag } }
+  const climateGrade = wet.value >= SUIT_PARAMS.wetRootFlag ? 'yellow' : 'green'
+  const numbers = { wet: wet.value, flag: SUIT_PARAMS.wetRootFlag, marks: farmer?.value ?? 0 }
+  if (farmer && SUIT_GRADES.indexOf(SUIT_PARAMS.farmerFloodGrade) >= SUIT_GRADES.indexOf(climateGrade)) {
+    return { key: 'waterlogging', grade: SUIT_PARAMS.farmerFloodGrade, reason: 'waterlog_farmer', evidence: [farmer, wet], numbers }
+  }
+  return { key: 'waterlogging', grade: climateGrade, reason: `waterlog_${climateGrade}`, evidence: [wet], numbers }
 }
 
-function suitSalinity(info, salinityEce) {
+/**
+ * Độ mặn. salinity: số (dS/m) hoặc Evidence 'ground' từ biểu mẫu đất. salinityType: 'ece' | 'ecw' | 'ec15' | 'unknown'.
+ * Ngưỡng FAO-29 là ECe (dịch chiết bão hoà của đất): số đo kiểu khác KHÔNG được quy đổi (không có công thức có nguồn),
+ * nên tiêu chí vẫn Xám và nói rõ cần đo ECe.
+ */
+function suitSalinity(info, salinity, salinityType) {
+  const salinityEce = salinity && typeof salinity === 'object' ? (evIsMissing(salinity) ? null : salinity.value) : salinity
   if (info.salinityEce === null) return { key: 'salinity', grade: 'gray', reason: 'salinityNoThreshold', evidence: [evMissing({ reason: evText('FAO-29 không có dòng cho cây này', 'FAO-29 has no row for this crop'), need: 'source', label: 'salinityThreshold' })] }
   const threshold = suitRef(info.salinityEce, 'dS/m', info.salinitySrc, 'salinityThreshold')
   if (salinityEce === null || salinityEce === undefined) {
     return { key: 'salinity', grade: 'gray', reason: 'salinityNeedMeasure', evidence: [threshold, evMissing({ reason: evText('chưa có số đo độ mặn của ruộng', 'no salinity measurement for this field yet'), need: 'measure', unit: 'dS/m', label: 'salinityField' })] }
   }
-  const measured = evidence({ value: salinityEce, unit: 'dS/m', kind: 'ground', label: 'salinityField' })
+  const measured = salinity && typeof salinity === 'object' ? salinity : evidence({ value: salinityEce, unit: 'dS/m', kind: 'ground', label: 'salinityField' })
+  if (salinityType && salinityType !== 'ece') return { key: 'salinity', grade: 'gray', reason: 'salinityNotEce', evidence: [threshold, measured] }
   // Trên ngưỡng 100% năng suất của FAO-29 thì năng suất bắt đầu giảm: Vàng, cần cán bộ khuyến nông xem.
   const grade = salinityEce <= info.salinityEce ? 'green' : 'yellow'
   return { key: 'salinity', grade, reason: `salinity_${grade}`, evidence: [threshold, measured] }
@@ -98,12 +117,14 @@ const suitNoTable = (key) => ({ key, grade: 'gray', reason: 'noSourcedTable', ev
 
 /**
  * Chấm một cây. crop: id trong ROTATION_CROPS · window: suitWindow() · climate: powerClimate()
- * irrigation: 'yes' | 'limited' | 'no' | null · salinityEce: số đo (dS/m) hoặc null
+ * irrigation: 'yes' | 'limited' | 'no' | null
+ * salinityEce: số đo (dS/m) hoặc Evidence 'ground', hoặc null · salinityType: kiểu số đo EC (chỉ 'ece' mới chấm)
+ * floodMarks: Evidence 'farmer' đếm số điểm 'Hay ngập' nông dân đánh dấu trong ruộng, hoặc null
  */
-export function suitAssess({ crop, window, climate, irrigation = null, salinityEce = null }) {
+export function suitAssess({ crop, window, climate, irrigation = null, salinityEce = null, salinityType = null, floodMarks = null }) {
   const info = ROTATION_CROPS[crop]
   if (!info) return { crop, known: false }
-  const criteria = [suitWater(info, window, climate, irrigation), suitCycle(info, window), suitWaterlogging(info, window, climate), suitSalinity(info, salinityEce), suitNoTable('temperature'), suitNoTable('ph')]
+  const criteria = [suitWater(info, window, climate, irrigation), suitCycle(info, window), suitWaterlogging(info, window, climate, floodMarks), suitSalinity(info, salinityEce, salinityType), suitNoTable('temperature'), suitNoTable('ph')]
   const graded = criteria.filter((c) => c.grade !== 'gray')
   const worst = graded.reduce((acc, c) => (SUIT_GRADES.indexOf(c.grade) > SUIT_GRADES.indexOf(acc) ? c.grade : acc), 'green')
   const enough = graded.length >= SUIT_PARAMS.minGradedShare * criteria.length

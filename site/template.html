@@ -52,6 +52,7 @@
         <section id="weather" class="bg-moss-950 pb-20 pt-16 text-white sm:pb-24 sm:pt-20"></section>
       </div>
       <div data-page="sources" hidden class="bg-white pt-[4.5rem]">
+        <section id="datahub" class="bg-white pt-16 sm:pt-20"></section>
         <section id="sources" class="bg-white pb-20 pt-16 sm:pb-24 sm:pt-20"></section>
       </div>
     </main>
@@ -89,7 +90,7 @@
         vi: {
           navHome: 'Trang chủ',
           navRotations: 'Luân canh',
-          navSources: 'Nguồn dữ liệu',
+          navSources: 'Dữ liệu',
           navDash: 'Ruộng hôm nay',
           navMyField: 'Ruộng của tôi',
           navLabel: 'Các trang',
@@ -101,7 +102,7 @@
             rotations: 'Lịch mùa vụ 12 tháng của huyện và so sánh bốn kiểu luân canh theo ưu tiên của bạn.',
             field: 'Bốn thửa ruộng hôm nay: độ ẩm, NDVI, rủi ro hạn hán và gợi ý tưới cho từng thửa.',
             weather: 'Tuần đã qua và 7 ngày tới, thử giả định khô hạn hay mưa lớn.',
-            sources: 'Từng bộ dữ liệu dùng để làm gì, thời gian nào và giới hạn của nó.',
+            sources: 'Nạp file vệ tinh hoặc số đo đất của bạn, xem nguồn nào đang có, và giới hạn của từng bộ dữ liệu.',
           },
           openPage: 'Mở trang',
           navWeather: 'Thời tiết',
@@ -153,7 +154,7 @@
         en: {
           navHome: 'Home',
           navRotations: 'Rotations',
-          navSources: 'Data sources',
+          navSources: 'Data',
           navDash: "Today's field",
           navMyField: 'My field',
           navLabel: 'Pages',
@@ -165,7 +166,7 @@
             rotations: 'The district’s 12-month crop calendar and four rotations compared by your priorities.',
             field: 'Four plots today: soil moisture, NDVI, drought risk and watering advice for each plot.',
             weather: 'The week just past and the next 7 days; try a drought or heavy-rain what-if.',
-            sources: 'What each dataset is used for, which period it covers and its limits.',
+            sources: 'Load your satellite files or soil measurements, see which sources are available, and the limits of each dataset.',
           },
           openPage: 'Open page',
           navWeather: 'Weather',
@@ -379,7 +380,8 @@
         { id: 'rotations', slug: 'luan-canh', nav: 'navRotations', icon: 'refresh-cw' },
         { id: 'field', slug: 'ruong-hom-nay', nav: 'navDash', icon: 'map', menu: false },
         { id: 'weather', slug: 'thoi-tiet', nav: 'navWeather', icon: 'cloud-sun', menu: false },
-        { id: 'sources', slug: 'nguon-du-lieu', nav: 'navSources', icon: 'database' },
+        // Phase 2: mục "Nguồn dữ liệu" thành trang "Dữ liệu"; địa chỉ cũ vẫn mở được (aliases).
+        { id: 'sources', slug: 'du-lieu', aliases: ['nguon-du-lieu'], nav: 'navSources', icon: 'database' },
       ]
       const menuPages = () => PAGES.filter((p) => p.menu !== false)
       const pageHref = (id) => `#/${PAGES.find((p) => p.id === id).slug}`
@@ -401,6 +403,7 @@
           if (id === 'field') renderMapCard() // bản đồ đo lại cỡ chữ khi hiện ra
         }
         if (id === 'myfield') myFieldOnShow() // bản đồ Leaflet chỉ khởi tạo được khi khung đang hiện (site/pages/myField.js)
+        if (id === 'sources') dataHubOnShow() // trang Dữ liệu: chọn lại ruộng đã lưu (site/pages/dataHub.js)
       }
 
       // Mở trang chứa phần tử id (nếu cần), ghi địa chỉ mới vào lịch sử để nút Back hoạt động.
@@ -429,7 +432,7 @@
       function route() {
         const h = decodeURIComponent(location.hash.slice(1))
         if (h === '' || h.startsWith('/')) {
-          const page = PAGES.find((p) => p.slug === h.slice(1)) ?? PAGES[0]
+          const page = PAGES.find((p) => p.slug === h.slice(1) || p.aliases?.includes(h.slice(1))) ?? PAGES[0]
           showPage(page.id)
           return scrollTo({ top: 0, behavior: 'instant' })
         }
@@ -1861,6 +1864,7 @@
         renderDashboard()
         renderSolutions()
         renderWeather()
+        renderDataHub() // trang Dữ liệu (Phase 2): site/pages/dataHub.js
         renderSources()
         renderCta()
         renderFooter()
