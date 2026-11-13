@@ -1,0 +1,11 @@
+node_modules
+.env.local
+.impeccable/config.local.json
+.impeccable/review
+
+# File chương trình (.exe, 14 MB) của skill impeccable: của bên thứ ba, không đưa vào lịch sử git.
+# Skill tự tải lại file này khi thiếu.
+.claude/skills/**/bin/
+
+# File tạm Python sinh ra khi chạy scripts/python/*.py
+__pycache__/

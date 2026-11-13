@@ -1,0 +1,753 @@
+{
+ "method": "rule-based: Savitzky-Golay smoothing, peak detection, NDVI threshold for bare/flooded",
+ "params": {
+  "smoothWindowImages": 5,
+  "smoothPolyOrder": 2,
+  "peakMinNdvi": 0.5,
+  "peakProminence": 0.15,
+  "peakMinGapImages": 4,
+  "bareNdvi": 0.3
+ },
+ "source": "MODIS MOD13Q1, 250 m, 16-day composite, via ORNL DAAC MODIS subset REST API",
+ "years": [
+  2021,
+  2025
+ ],
+ "districts": [
+  {
+   "id": "cantho",
+   "name": "Cần Thơ · Cờ Đỏ",
+   "cyclesPerYear": {
+    "2021": 2,
+    "2022": 4,
+    "2023": 3,
+    "2024": 2,
+    "2025": 3
+   },
+   "meanCyclesPerYear": 2.8,
+   "yearsWithThreeCycles": 2,
+   "peakDates": [
+    "2021-05-09",
+    "2021-07-28",
+    "2022-01-01",
+    "2022-04-23",
+    "2022-07-28",
+    "2022-12-19",
+    "2023-04-07",
+    "2023-07-12",
+    "2023-12-19",
+    "2024-04-22",
+    "2024-08-12",
+    "2025-01-01",
+    "2025-04-07",
+    "2025-07-28"
+   ],
+   "bareWindows": [
+    {
+     "start": "2021-09-30",
+     "end": "2021-11-01",
+     "images": 3
+    },
+    {
+     "start": "2022-09-14",
+     "end": "2022-11-01",
+     "images": 4
+    },
+    {
+     "start": "2023-09-14",
+     "end": "2023-11-01",
+     "images": 4
+    },
+    {
+     "start": "2024-09-29",
+     "end": "2024-10-15",
+     "images": 2
+    },
+    {
+     "start": "2025-09-14",
+     "end": "2025-11-17",
+     "images": 5
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "ndviMedian": 0.712,
+     "bareShare": 0.0,
+     "peaks": 2,
+     "images": 10
+    },
+    {
+     "month": 2,
+     "ndviMedian": 0.478,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 3,
+     "ndviMedian": 0.455,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 4,
+     "ndviMedian": 0.642,
+     "bareShare": 0.0,
+     "peaks": 4,
+     "images": 10
+    },
+    {
+     "month": 5,
+     "ndviMedian": 0.49,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 10
+    },
+    {
+     "month": 6,
+     "ndviMedian": 0.482,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 7,
+     "ndviMedian": 0.588,
+     "bareShare": 0.0,
+     "peaks": 4,
+     "images": 10
+    },
+    {
+     "month": 8,
+     "ndviMedian": 0.52,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 10
+    },
+    {
+     "month": 9,
+     "ndviMedian": 0.234,
+     "bareShare": 0.8,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 10,
+     "ndviMedian": 0.196,
+     "bareShare": 0.83,
+     "peaks": 0,
+     "images": 6
+    },
+    {
+     "month": 11,
+     "ndviMedian": 0.241,
+     "bareShare": 0.56,
+     "peaks": 0,
+     "images": 9
+    },
+    {
+     "month": 12,
+     "ndviMedian": 0.614,
+     "bareShare": 0.0,
+     "peaks": 2,
+     "images": 10
+    }
+   ]
+  },
+  {
+   "id": "angiang",
+   "name": "An Giang · Thoại Sơn",
+   "cyclesPerYear": {
+    "2021": 2,
+    "2022": 3,
+    "2023": 3,
+    "2024": 3,
+    "2025": 3
+   },
+   "meanCyclesPerYear": 2.8,
+   "yearsWithThreeCycles": 4,
+   "peakDates": [
+    "2021-06-10",
+    "2021-09-30",
+    "2022-01-17",
+    "2022-05-25",
+    "2022-09-14",
+    "2023-01-17",
+    "2023-05-09",
+    "2023-09-30",
+    "2024-01-17",
+    "2024-05-08",
+    "2024-09-29",
+    "2025-01-01",
+    "2025-04-23",
+    "2025-09-14"
+   ],
+   "bareWindows": [
+    {
+     "start": "2021-07-28",
+     "end": "2021-08-13",
+     "images": 2
+    },
+    {
+     "start": "2022-07-12",
+     "end": "2022-07-28",
+     "images": 2
+    },
+    {
+     "start": "2022-11-01",
+     "end": "2022-11-17",
+     "images": 2
+    },
+    {
+     "start": "2023-03-22",
+     "end": "2023-03-22",
+     "images": 1
+    },
+    {
+     "start": "2023-07-12",
+     "end": "2023-07-28",
+     "images": 2
+    },
+    {
+     "start": "2023-11-17",
+     "end": "2023-12-03",
+     "images": 2
+    },
+    {
+     "start": "2024-03-21",
+     "end": "2024-03-21",
+     "images": 1
+    },
+    {
+     "start": "2024-07-11",
+     "end": "2024-07-27",
+     "images": 2
+    },
+    {
+     "start": "2024-11-16",
+     "end": "2024-11-16",
+     "images": 1
+    },
+    {
+     "start": "2025-07-12",
+     "end": "2025-07-12",
+     "images": 1
+    },
+    {
+     "start": "2025-11-01",
+     "end": "2025-12-19",
+     "images": 4
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "ndviMedian": 0.899,
+     "bareShare": 0.0,
+     "peaks": 4,
+     "images": 10
+    },
+    {
+     "month": 2,
+     "ndviMedian": 0.828,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 3,
+     "ndviMedian": 0.396,
+     "bareShare": 0.2,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 4,
+     "ndviMedian": 0.524,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 10
+    },
+    {
+     "month": 5,
+     "ndviMedian": 0.85,
+     "bareShare": 0.0,
+     "peaks": 3,
+     "images": 10
+    },
+    {
+     "month": 6,
+     "ndviMedian": 0.689,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 10
+    },
+    {
+     "month": 7,
+     "ndviMedian": 0.232,
+     "bareShare": 0.8,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 8,
+     "ndviMedian": 0.567,
+     "bareShare": 0.1,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 9,
+     "ndviMedian": 0.738,
+     "bareShare": 0.0,
+     "peaks": 5,
+     "images": 10
+    },
+    {
+     "month": 10,
+     "ndviMedian": 0.598,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 6
+    },
+    {
+     "month": 11,
+     "ndviMedian": 0.226,
+     "bareShare": 0.67,
+     "peaks": 0,
+     "images": 9
+    },
+    {
+     "month": 12,
+     "ndviMedian": 0.413,
+     "bareShare": 0.3,
+     "peaks": 0,
+     "images": 10
+    }
+   ]
+  },
+  {
+   "id": "soctrang",
+   "name": "Sóc Trăng · Mỹ Tú",
+   "cyclesPerYear": {
+    "2021": 3,
+    "2022": 2,
+    "2023": 3,
+    "2024": 3,
+    "2025": 3
+   },
+   "meanCyclesPerYear": 2.8,
+   "yearsWithThreeCycles": 4,
+   "peakDates": [
+    "2021-02-18",
+    "2021-07-12",
+    "2021-11-01",
+    "2022-02-18",
+    "2022-06-26",
+    "2023-01-17",
+    "2023-06-10",
+    "2023-10-16",
+    "2024-01-17",
+    "2024-06-09",
+    "2024-10-31",
+    "2025-02-18",
+    "2025-06-10",
+    "2025-10-16"
+   ],
+   "bareWindows": [
+    {
+     "start": "2021-04-23",
+     "end": "2021-04-23",
+     "images": 1
+    },
+    {
+     "start": "2021-08-29",
+     "end": "2021-09-14",
+     "images": 2
+    },
+    {
+     "start": "2022-04-23",
+     "end": "2022-05-09",
+     "images": 2
+    },
+    {
+     "start": "2022-09-14",
+     "end": "2022-09-30",
+     "images": 2
+    },
+    {
+     "start": "2023-12-03",
+     "end": "2023-12-03",
+     "images": 1
+    },
+    {
+     "start": "2024-04-22",
+     "end": "2024-04-22",
+     "images": 1
+    },
+    {
+     "start": "2024-08-28",
+     "end": "2024-08-28",
+     "images": 1
+    },
+    {
+     "start": "2024-12-02",
+     "end": "2024-12-18",
+     "images": 2
+    },
+    {
+     "start": "2025-04-23",
+     "end": "2025-04-23",
+     "images": 1
+    },
+    {
+     "start": "2025-08-29",
+     "end": "2025-08-29",
+     "images": 1
+    },
+    {
+     "start": "2025-12-19",
+     "end": "2025-12-19",
+     "images": 1
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "ndviMedian": 0.645,
+     "bareShare": 0.0,
+     "peaks": 2,
+     "images": 10
+    },
+    {
+     "month": 2,
+     "ndviMedian": 0.81,
+     "bareShare": 0.0,
+     "peaks": 3,
+     "images": 10
+    },
+    {
+     "month": 3,
+     "ndviMedian": 0.595,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 4,
+     "ndviMedian": 0.31,
+     "bareShare": 0.4,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 5,
+     "ndviMedian": 0.475,
+     "bareShare": 0.1,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 6,
+     "ndviMedian": 0.8,
+     "bareShare": 0.0,
+     "peaks": 4,
+     "images": 10
+    },
+    {
+     "month": 7,
+     "ndviMedian": 0.671,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 10
+    },
+    {
+     "month": 8,
+     "ndviMedian": 0.352,
+     "bareShare": 0.3,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 9,
+     "ndviMedian": 0.426,
+     "bareShare": 0.3,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 10,
+     "ndviMedian": 0.724,
+     "bareShare": 0.0,
+     "peaks": 3,
+     "images": 6
+    },
+    {
+     "month": 11,
+     "ndviMedian": 0.612,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 9
+    },
+    {
+     "month": 12,
+     "ndviMedian": 0.371,
+     "bareShare": 0.4,
+     "peaks": 0,
+     "images": 10
+    }
+   ]
+  },
+  {
+   "id": "dongthap",
+   "name": "Đồng Tháp · Tháp Mười",
+   "cyclesPerYear": {
+    "2021": 3,
+    "2022": 3,
+    "2023": 3,
+    "2024": 3,
+    "2025": 2
+   },
+   "meanCyclesPerYear": 2.8,
+   "yearsWithThreeCycles": 4,
+   "peakDates": [
+    "2021-04-07",
+    "2021-08-13",
+    "2021-12-03",
+    "2022-03-22",
+    "2022-07-28",
+    "2022-12-03",
+    "2023-03-06",
+    "2023-07-12",
+    "2023-12-03",
+    "2024-03-21",
+    "2024-08-12",
+    "2024-12-02",
+    "2025-03-22",
+    "2025-07-12"
+   ],
+   "bareWindows": [
+    {
+     "start": "2022-09-30",
+     "end": "2022-10-16",
+     "images": 2
+    },
+    {
+     "start": "2023-09-14",
+     "end": "2023-09-30",
+     "images": 2
+    },
+    {
+     "start": "2024-09-29",
+     "end": "2024-09-29",
+     "images": 1
+    },
+    {
+     "start": "2025-09-30",
+     "end": "2025-09-30",
+     "images": 1
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "ndviMedian": 0.526,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 2,
+     "ndviMedian": 0.461,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 3,
+     "ndviMedian": 0.768,
+     "bareShare": 0.0,
+     "peaks": 4,
+     "images": 10
+    },
+    {
+     "month": 4,
+     "ndviMedian": 0.752,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 10
+    },
+    {
+     "month": 5,
+     "ndviMedian": 0.488,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 6,
+     "ndviMedian": 0.513,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 7,
+     "ndviMedian": 0.737,
+     "bareShare": 0.0,
+     "peaks": 3,
+     "images": 10
+    },
+    {
+     "month": 8,
+     "ndviMedian": 0.687,
+     "bareShare": 0.0,
+     "peaks": 2,
+     "images": 10
+    },
+    {
+     "month": 9,
+     "ndviMedian": 0.292,
+     "bareShare": 0.5,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 10,
+     "ndviMedian": 0.375,
+     "bareShare": 0.17,
+     "peaks": 0,
+     "images": 6
+    },
+    {
+     "month": 11,
+     "ndviMedian": 0.725,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 9
+    },
+    {
+     "month": 12,
+     "ndviMedian": 0.819,
+     "bareShare": 0.0,
+     "peaks": 4,
+     "images": 10
+    }
+   ]
+  },
+  {
+   "id": "bentre",
+   "name": "Bến Tre · Chợ Lách",
+   "cyclesPerYear": {
+    "2021": 1,
+    "2022": 0,
+    "2023": 1,
+    "2024": 1,
+    "2025": 1
+   },
+   "meanCyclesPerYear": 0.8,
+   "yearsWithThreeCycles": 0,
+   "peakDates": [
+    "2021-12-19",
+    "2023-01-01",
+    "2024-01-01",
+    "2025-05-09"
+   ],
+   "bareWindows": [
+    {
+     "start": "2022-10-16",
+     "end": "2022-10-16",
+     "images": 1
+    }
+   ],
+   "monthly": [
+    {
+     "month": 1,
+     "ndviMedian": 0.696,
+     "bareShare": 0.0,
+     "peaks": 2,
+     "images": 10
+    },
+    {
+     "month": 2,
+     "ndviMedian": 0.672,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 3,
+     "ndviMedian": 0.649,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 4,
+     "ndviMedian": 0.593,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 5,
+     "ndviMedian": 0.66,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 10
+    },
+    {
+     "month": 6,
+     "ndviMedian": 0.621,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 7,
+     "ndviMedian": 0.584,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 8,
+     "ndviMedian": 0.612,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 9,
+     "ndviMedian": 0.543,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 10
+    },
+    {
+     "month": 10,
+     "ndviMedian": 0.629,
+     "bareShare": 0.17,
+     "peaks": 0,
+     "images": 6
+    },
+    {
+     "month": 11,
+     "ndviMedian": 0.632,
+     "bareShare": 0.0,
+     "peaks": 0,
+     "images": 9
+    },
+    {
+     "month": 12,
+     "ndviMedian": 0.679,
+     "bareShare": 0.0,
+     "peaks": 1,
+     "images": 10
+    }
+   ]
+  }
+ ]
+}
