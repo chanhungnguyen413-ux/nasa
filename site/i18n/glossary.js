@@ -96,6 +96,33 @@ export const GLOSSARY = {
       ],
       source: 'FAO, Soils and pulses',
     },
+    et0: {
+      title: 'ET0 – Bốc thoát hơi nước tham chiếu',
+      short: 'Lượng nước một thảm cỏ tham chiếu đủ nước mất đi do bốc hơi và thoát hơi qua lá, trong khí hậu của nơi đó. Đây là "nhu cầu nước của không khí".',
+      detail: [
+        'Trang "Ruộng của tôi" tính bằng công thức Penman–Monteith của FAO-56 từ nhiệt độ, độ ẩm, gió và bức xạ của NASA POWER',
+        'Công thức đã được kiểm tra bằng Ví dụ 17 của FAO-56 (Bangkok, tháng 4: 5,72 mm/ngày)',
+        'Thiếu một đầu vào (kể cả độ cao) thì trang báo thiếu, không đoán',
+      ],
+      source: 'FAO-56 (Allen et al. 1998), chương 3–4',
+    },
+    wbalance: {
+      title: 'Cân bằng nước (P − ET0)',
+      short: 'Mưa của tháng trừ đi ET0 của tháng. Số âm nghĩa là mưa không bù đủ lượng nước bốc thoát: tháng đó thiếu nước nếu không tưới.',
+      detail: ['Chưa trừ nước chảy tràn hay thấm sâu', 'Không tính nước tưới hay nước kênh rạch'],
+      source: 'NASA POWER + FAO-56',
+    },
+    dryyear: {
+      title: 'Năm khô (p10)',
+      short: 'Mức mưa của tháng mà chỉ 1 trong 10 năm thấp hơn (bách phân vị 10), tính từ 25 năm số liệu NASA POWER.',
+      detail: ['Cộng các tháng ở mức p10 là một kịch bản khá bi quan, vì hiếm khi mọi tháng cùng khô một lúc'],
+      source: 'NASA POWER',
+    },
+    modelsat: {
+      title: 'Mô hình ước tính và vệ tinh đo',
+      short: 'Vệ tinh đo là tín hiệu đo thật từ không gian, ví dụ NDVI của MODIS. Mô hình ước tính là số tính ra từ mô hình khí hậu, ví dụ NASA POWER (MERRA-2), phủ ô lưới rộng khoảng nửa độ.',
+      detail: ['Cả hai đều mô tả một vùng, không phải một thửa ruộng', 'Mỗi con số trên trang có nhãn loại; chạm vào để xem nguồn'],
+    },
   },
   en: {
     ndvi: {
@@ -191,6 +218,33 @@ export const GLOSSARY = {
         'This page has no data on how much nitrogen fertiliser it saves in the Mekong Delta',
       ],
       source: 'FAO, Soils and pulses',
+    },
+    et0: {
+      title: 'ET0 – Reference evapotranspiration',
+      short: 'The water a well-watered reference grass loses to evaporation and to transpiration through its leaves, in the local climate. It is the "thirst of the air".',
+      detail: [
+        'The "My field" page computes it with the FAO-56 Penman–Monteith equation from NASA POWER temperature, humidity, wind and radiation',
+        'The equation is checked against FAO-56 Example 17 (Bangkok, April: 5.72 mm/day)',
+        'If any input is missing (including elevation), the page says so instead of guessing',
+      ],
+      source: 'FAO-56 (Allen et al. 1998), chapters 3–4',
+    },
+    wbalance: {
+      title: 'Water balance (P − ET0)',
+      short: 'Monthly rain minus monthly ET0. A negative number means rain does not make up for the water lost: the month is short of water without irrigation.',
+      detail: ['Runoff and deep drainage are not subtracted', 'Irrigation and canal water are not counted'],
+      source: 'NASA POWER + FAO-56',
+    },
+    dryyear: {
+      title: 'Dry year (p10)',
+      short: 'The monthly rain that only 1 year in 10 falls below (10th percentile), from 25 years of NASA POWER data.',
+      detail: ['Adding up every month at its p10 is a fairly pessimistic case, since all months are rarely dry at once'],
+      source: 'NASA POWER',
+    },
+    modelsat: {
+      title: 'Model estimate vs satellite measurement',
+      short: 'A satellite measurement is a real signal measured from space, such as MODIS NDVI. A model estimate is computed by a climate model, such as NASA POWER (MERRA-2), on a grid about half a degree wide.',
+      detail: ['Both describe an area, not a single field', 'Every number on the page carries its type; tap it to see the source'],
     },
   },
 }

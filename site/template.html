@@ -18,6 +18,8 @@
     </script>
     <style>/*__FONTS__*/</style>
     <style>/*__CSS__*/</style>
+    <!-- Leaflet 1.9.4 (BSD-2-Clause), nhúng bởi scripts/build-site.mjs cho bản đồ ở trang "Ruộng của tôi" -->
+    <style>/*__LEAFLET_CSS__*/</style>
   </head>
   <body class="bg-ground text-ink antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-lime-400 focus:px-4 focus:py-2 focus:font-bold focus:text-moss-950">Bỏ qua menu · Skip to content</a>
@@ -36,6 +38,9 @@
       </div>
       <!-- Mọi trang con: đệm trên = chiều cao thanh menu (4.5rem), rồi tiêu đề trang cách thêm pt-16 / sm:pt-20,
            để tiêu đề của cả bốn trang nằm cùng một độ cao. -->
+      <div data-page="myfield" hidden class="pt-[4.5rem]">
+        <section id="myfield" class="pb-20 pt-16 sm:pb-24 sm:pt-20"></section>
+      </div>
       <div data-page="rotations" hidden class="pt-[4.5rem]">
         <section id="rotations" class="mx-auto max-w-6xl px-5 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20"></section>
       </div>
@@ -57,6 +62,7 @@
     <div id="popover" class="contents"></div>
     <div id="overlay"></div>
 
+    <script>/*__LEAFLET_JS__*/</script>
     <script type="module">
       /* ================================================================
        * Advice engine, demo/live data and translations (site/data, site/i18n,
@@ -85,11 +91,13 @@
           navRotations: 'Luân canh',
           navSources: 'Nguồn dữ liệu',
           navDash: 'Ruộng hôm nay',
+          navMyField: 'Ruộng của tôi',
           navLabel: 'Các trang',
           menu: 'Mở menu',
           pagesTitle: 'Bắt đầu từ đâu?',
           pagesSub: 'Mỗi trang trả lời một câu hỏi. Nên bắt đầu từ Luân canh.',
           pageCards: {
+            myfield: 'Chọn ruộng trên bản đồ: mưa nắng 25 năm từ NASA POWER, tháng thiếu nước, và cây nào hợp.',
             rotations: 'Lịch mùa vụ 12 tháng của huyện và so sánh bốn kiểu luân canh theo ưu tiên của bạn.',
             field: 'Bốn thửa ruộng hôm nay: độ ẩm, NDVI, rủi ro hạn hán và gợi ý tưới cho từng thửa.',
             weather: 'Tuần đã qua và 7 ngày tới, thử giả định khô hạn hay mưa lớn.',
@@ -100,7 +108,7 @@
           contact: 'Bắt đầu',
           heroTitle: 'Luân canh nào hợp với ruộng của bạn?',
           heroSub: 'So sánh bốn cách luân canh lúa với đậu xanh và ngô cho 5 huyện ĐBSCL, dựa trên ảnh vệ tinh, khí hậu 25 năm của NASA và một thí nghiệm 10 năm tại địa phương.',
-          heroPrimary: 'So sánh luân canh',
+          heroPrimary: 'Xem ruộng của tôi',
           heroSecondary: 'Dữ liệu lấy từ đâu?',
           scrollDown: 'Cuộn xuống bảng điều khiển',
           stats: [
@@ -147,11 +155,13 @@
           navRotations: 'Rotations',
           navSources: 'Data sources',
           navDash: "Today's field",
+          navMyField: 'My field',
           navLabel: 'Pages',
           menu: 'Open menu',
           pagesTitle: 'Where to start?',
           pagesSub: 'Each page answers one question. Start with Rotations.',
           pageCards: {
+            myfield: 'Pick your field on the map: 25 years of NASA POWER rain and heat, water-short months, and which crops fit.',
             rotations: 'The district’s 12-month crop calendar and four rotations compared by your priorities.',
             field: 'Four plots today: soil moisture, NDVI, drought risk and watering advice for each plot.',
             weather: 'The week just past and the next 7 days; try a drought or heavy-rain what-if.',
@@ -162,7 +172,7 @@
           contact: 'Get started',
           heroTitle: 'Which crop rotation suits your field?',
           heroSub: 'Compare four rice rotations with mung bean and maize for 5 Mekong Delta districts, using satellite images, 25 years of NASA climate data and a 10-year local trial.',
-          heroPrimary: 'Compare rotations',
+          heroPrimary: 'See my field',
           heroSecondary: 'Where does the data come from?',
           scrollDown: 'Scroll to the dashboard',
           stats: [
@@ -213,7 +223,6 @@
         hero: { id: 'photo-1519082572439-7ed19908e47e', by: 'Joel Vodell' },
         plots: { id: 'photo-1558388556-2261d4cc1938', by: 'Ivan Bandura' },
         curves: { id: 'photo-1556490496-45afc7b8b8e5', by: 'Ivan Bandura' },
-        house: { id: 'photo-1666160416071-f760a7af9ea6', by: 'Can Pham' },
         drip: { id: 'photo-1738598665806-7ecc32c3594c', by: 'Being Organic in EU' },
         seedling: { id: 'photo-1752775312083-1cefe2f93358', by: 'Sercan Naya' },
         rows: { id: 'photo-1640677117376-573b9dbb8ea8', by: 'Anil Sharma' },
@@ -362,13 +371,17 @@
        * "#/luan-canh" opens a whole page and scrolls to its top.
        * "#dashboard" (a plain element id) opens the page that holds that element and scrolls to it.
        * ================================================================ */
+      // `menu: false`: trang vẫn mở được bằng địa chỉ, nhưng không hiện trên menu và thẻ trang chủ.
+      // Phase 1 ẩn hai trang dùng 4 thửa mô phỏng ("Ruộng hôm nay", "Thời tiết"); Phase 4 sẽ xoá hẳn.
       const PAGES = [
         { id: 'home', slug: '', nav: 'navHome', icon: 'house' },
+        { id: 'myfield', slug: 'ruong-cua-toi', nav: 'navMyField', icon: 'map-pin' },
         { id: 'rotations', slug: 'luan-canh', nav: 'navRotations', icon: 'refresh-cw' },
-        { id: 'field', slug: 'ruong-hom-nay', nav: 'navDash', icon: 'map' },
-        { id: 'weather', slug: 'thoi-tiet', nav: 'navWeather', icon: 'cloud-sun' },
+        { id: 'field', slug: 'ruong-hom-nay', nav: 'navDash', icon: 'map', menu: false },
+        { id: 'weather', slug: 'thoi-tiet', nav: 'navWeather', icon: 'cloud-sun', menu: false },
         { id: 'sources', slug: 'nguon-du-lieu', nav: 'navSources', icon: 'database' },
       ]
+      const menuPages = () => PAGES.filter((p) => p.menu !== false)
       const pageHref = (id) => `#/${PAGES.find((p) => p.id === id).slug}`
 
       // Hiện đúng một trang, cập nhật menu, tiêu đề tab và nền thanh menu.
@@ -387,6 +400,7 @@
           updateCarouselArrows() // hàng thẻ chỉ đo được kích thước khi trang đang hiện
           if (id === 'field') renderMapCard() // bản đồ đo lại cỡ chữ khi hiện ra
         }
+        if (id === 'myfield') myFieldOnShow() // bản đồ Leaflet chỉ khởi tạo được khi khung đang hiện (site/pages/myField.js)
       }
 
       // Mở trang chứa phần tử id (nếu cần), ghi địa chỉ mới vào lịch sử để nút Back hoạt động.
@@ -443,7 +457,7 @@
               <span class="text-[15px] font-extrabold tracking-tight">${appName()}</span>
             </a>
             <div class="hidden items-center gap-1 lg:flex">
-              ${PAGES.map(link).join('')}
+              ${menuPages().map(link).join('')}
             </div>
             <div class="flex items-center gap-2">
               <div role="group" aria-label="${t().langLabel}" class="flex rounded-full border border-white/40 p-0.5 group-data-[solid=true]:border-line">
@@ -460,7 +474,7 @@
           </nav>
           ${
             S.menuOpen
-              ? `<div id="mobile-menu" class="mx-5 mb-3 rounded-[28px] border border-line bg-white p-2 shadow-lift sm:mx-8 lg:hidden">${PAGES.map(mobileLink).join('')}</div>`
+              ? `<div id="mobile-menu" class="mx-5 mb-3 rounded-[28px] border border-line bg-white p-2 shadow-lift sm:mx-8 lg:hidden">${menuPages().map(mobileLink).join('')}</div>`
               : ''
           }`
       }
@@ -482,7 +496,7 @@
               <h1 class="text-[2.6rem] font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl [@media(min-width:640px)_and_(max-height:780px)]:text-5xl">${L_.heroTitle}</h1>
               <p class="mt-5 max-w-xl text-lg leading-relaxed text-white/80">${L_.heroSub}</p>
               <div class="mt-8 flex flex-wrap gap-3">
-                ${pillBtn(`${L_.heroPrimary}${icon('arrow-down', 'size-4')}`, 'data-action="goto" data-value="rotations"', 'lime')}
+                ${pillBtn(`${L_.heroPrimary}${icon('arrow-down', 'size-4')}`, 'data-action="goto" data-value="myfield"', 'lime')}
                 ${pillBtn(L_.heroSecondary, 'data-action="goto" data-value="sources"', 'outline')}
               </div>
             </div>
@@ -494,14 +508,9 @@
       }
 
       // Only the chip changes with the numbers, so the hero photo never reloads.
+      // Phase 1: không hiện gợi ý tưới của 4 thửa MÔ PHỎNG ở trang chủ nữa (blueprint: ẩn dữ liệu demo, xoá ở Phase 4).
       function renderHeroChip() {
-        const top = D.plans[0]
-        const glyph = top.type === 'water' ? 'droplets' : top.type === 'wait' ? 'cloud-rain' : 'check'
-        $('#hero-chip').innerHTML = `
-          <button type="button" data-action="open-advice" data-value="${top.plot.id}" class="flex items-center gap-3 rounded-full border border-white/25 bg-white/10 py-2 pl-2 pr-5 text-left backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20">
-            <span class="grid size-10 shrink-0 place-items-center rounded-full bg-lime-400 text-moss-950">${icon(glyph, 'size-5')}</span>
-            <span class="text-[15px] font-semibold leading-snug"><span class="text-lime-300">${t().today}:</span> ${bannerText(D.plans, D.nowFarm, S.lang)}</span>
-          </button>`
+        $('#hero-chip').innerHTML = ''
       }
 
       function renderStats() {
@@ -528,7 +537,6 @@
         $('#mission').innerHTML = `
           <p class="max-w-5xl text-[1.7rem] font-bold leading-[1.3] tracking-tight sm:text-4xl sm:leading-[1.25]" data-mission>
             ${words(L_.missionA)}
-            <span class="relative mx-1 inline-block h-[0.9em] w-[2.4em] translate-y-[0.1em] overflow-hidden rounded-full bg-moss-700 align-baseline">${photo('house', 400, 'size-full object-cover')}</span>
             ${words(L_.missionB, 'word soft')}
           </p>`
       }
@@ -726,7 +734,7 @@
             <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl">${L_.pagesTitle}</h2>
             <p class="mt-3 text-lg leading-relaxed text-muted">${L_.pagesSub}</p>
           </div>
-          <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">${PAGES.filter((p) => p.id !== 'home')
+          <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">${menuPages().filter((p) => p.id !== 'home')
             .map(
               (p, i) => `
             <a href="${pageHref(p.id)}" class="group flex flex-col rounded-[28px] border border-line bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-moss-700 hover:shadow-lift" data-reveal style="transition-delay:${i * 80}ms">
@@ -1619,7 +1627,7 @@
               <p class="mt-3 leading-relaxed text-muted">${L_.ctaSub}</p>
               <div class="mt-6 flex flex-wrap gap-3">
                 ${pillBtn(`${L_.ctaRotations}${icon('arrow-up', 'size-4')}`, 'data-action="goto" data-value="rotations"', 'lime')}
-                ${pillBtn(`${L_.ctaAdvice}${icon('arrow-up-right', 'size-4')}`, 'data-action="open-advice"', 'ghost')}
+                ${pillBtn(`${L_.navMyField}${icon('arrow-up', 'size-4')}`, 'data-action="goto" data-value="myfield"', 'ghost')}
                 ${pillBtn(`${icon('bot', 'size-4')}${T_.askAssistant}`, 'data-action="assistant"', 'dark')}
               </div>
             </div>
@@ -1634,7 +1642,7 @@
           <div class="mx-auto flex max-w-6xl flex-col gap-4 px-5 text-sm text-muted sm:px-8 md:flex-row md:items-start md:justify-between">
             <div>
               <div class="flex items-center gap-2.5 text-ink"><span class="grid size-8 place-items-center rounded-full bg-lime-400 text-moss-950">${icon('sprout', 'size-4')}</span><span class="font-extrabold">${appName()}</span></div>
-              <nav aria-label="${L_.navLabel}" class="mt-4 flex flex-wrap gap-x-4 gap-y-2">${PAGES.map(
+              <nav aria-label="${L_.navLabel}" class="mt-4 flex flex-wrap gap-x-4 gap-y-2">${menuPages().map(
                 (p) => `<a href="${pageHref(p.id)}" ${S.page === p.id ? 'aria-current="page"' : ''} class="font-semibold text-muted hover:text-ink aria-[current=page]:text-moss-900 aria-[current=page]:underline aria-[current=page]:underline-offset-4">${L_[p.nav]}</a>`,
               ).join('')}</nav>
             </div>
@@ -1651,10 +1659,10 @@
         $('#fab').innerHTML = `<button type="button" data-action="assistant" class="inline-flex items-center gap-2 rounded-full bg-lime-400 py-3 pl-4 pr-5 font-bold text-moss-950 shadow-lift ring-4 ring-moss-950/10 transition-all duration-300 hover:-translate-y-1 hover:bg-lime-300">${icon('bot', 'size-5')}${T_.askAssistant}</button>`
         $('#mobilebar').innerHTML = `
           <div class="flex gap-2 border-t border-line bg-white/95 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 backdrop-blur">
-            <button type="button" data-action="open-advice" class="flex flex-1 items-center justify-between rounded-full bg-lime-400 py-2 pl-5 pr-2 text-moss-950 shadow-card">
-              <span class="text-left leading-tight"><span class="block text-[17px] font-extrabold">${T_.adviceCta}</span><span class="block text-[13px] font-bold opacity-70">${T_.plot} ${S.selected}</span></span>
+            <a href="${pageHref('myfield')}" class="flex flex-1 items-center justify-between rounded-full bg-lime-400 py-2 pl-5 pr-2 text-moss-950 shadow-card">
+              <span class="text-[17px] font-extrabold">${l().navMyField}</span>
               <span class="grid size-11 place-items-center rounded-full bg-moss-950 text-lime-400">${icon('arrow-up-right', 'size-5')}</span>
-            </button>
+            </a>
             <button type="button" data-action="assistant" aria-label="${T_.askAssistant}" class="grid w-16 place-items-center rounded-full bg-moss-950 text-lime-400">${icon('bot', 'size-6')}</button>
           </div>`
       }
@@ -1848,6 +1856,7 @@
         renderStats()
         renderMission()
         renderPagesOverview()
+        renderMyField()
         renderRotations()
         renderDashboard()
         renderSolutions()
@@ -1982,6 +1991,12 @@
       }
 
       document.addEventListener('click', (e) => {
+        // Sổ bằng chứng: chạm vào một con số in bởi showValue() (site/pages/myField.js)
+        const evBtn = e.target.closest('[data-ev]')
+        if (evBtn) {
+          e.preventDefault()
+          return mfOpenLedger(evBtn)
+        }
         const termBtn = e.target.closest('[data-term]')
         if (termBtn) {
           e.preventDefault()

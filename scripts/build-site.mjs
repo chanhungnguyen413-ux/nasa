@@ -35,7 +35,21 @@ const modules = [
   'site/logic/rotationInputs.js',
   'site/logic/rotation.js',
   'site/logic/seasonStrip.js',
+  // Phase 1: trang "Ruộng của tôi" (thứ tự phụ thuộc: evidence → nguồn → logic → chữ → trang)
+  'site/core/evidence.js',
+  'site/sources/catalog.js',
+  'site/sources/power.js',
+  'site/logic/et0.js',
+  'site/logic/waterBalance.js',
+  'site/logic/suitability.js',
+  'site/i18n/fieldText.js',
+  'site/pages/myField.js',
 ]
+
+// 0. Leaflet (bản đồ) nhúng thẳng vào trang để chạy được khi mở bằng nhấp đúp. Không dùng ảnh marker của Leaflet.
+const leafletJs = read('node_modules/leaflet/dist/leaflet.js')
+const leafletCss = read('node_modules/leaflet/dist/leaflet.css')
+if (/<\/script/i.test(leafletJs)) throw new Error('leaflet.js chứa "</script": không nhúng thẳng được')
 
 // 1b. Data precomputed in Python (scripts/python/*), trimmed to what the page needs, so the demo works offline.
 const pre = (name) => JSON.parse(read(`site/data/precomputed/${name}`))
@@ -44,6 +58,7 @@ const kmeans = pre('calendar_kmeans.json')
 const comparison = pre('method_comparison.json')
 const rule = pre('calendar_rule.json')
 const ndvi = pre('ndvi_raw.json')
+const powerMonthly = pre('power_monthly.json') // scripts/fetch-power-monthly.mjs
 const ndviDates = ndvi.districts.flatMap((d) => d.series.map((r) => r.date)).sort()
 const PRECOMPUTED = {
   ndvi: {
@@ -57,6 +72,7 @@ const PRECOMPUTED = {
   kmeans: { method: kmeans.method, clusters: kmeans.clusters.map(({ cluster, members, shape }) => ({ cluster, members, shape })) },
   comparison: { overall: comparison.overall, perDistrict: comparison.perDistrict, sensitivity: comparison.sensitivity },
   rule: { params: rule.params, years: rule.years, districts: rule.districts.map(({ id, monthly, bareWindows, cyclesPerYear }) => ({ id, monthly, bareWindows, cyclesPerYear })) },
+  power: powerMonthly.districts, // khí hậu NASA POWER + độ cao cho 5 huyện: đường lui khi mất mạng
 }
 
 const logic = [`/* ---- site/data/precomputed/*.json (trimmed) ---- */\nconst PRECOMPUTED = ${JSON.stringify(PRECOMPUTED)}`]
@@ -72,7 +88,8 @@ const logic = [`/* ---- site/data/precomputed/*.json (trimmed) ---- */\nconst PR
 
 // 2. Icons: every quoted kebab-case word in the template that names a lucide icon.
 const pascal = (s) => s.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())
-const words = new Set([...template.matchAll(/'([a-z][a-z0-9]*(?:-[a-z0-9]+)*)'/g)].map((m) => m[1]))
+// Quét cả template LẪN các module (trước đây chỉ quét template, nên biểu tượng dùng trong site/pages/* bị thiếu).
+const words = new Set([...(template + logic).matchAll(/'([a-z][a-z0-9]*(?:-[a-z0-9]+)*)'/g)].map((m) => m[1]))
 const icons = {}
 for (const w of words) {
   const Comp = Lucide[pascal(w)]
@@ -114,6 +131,8 @@ const html = template
   .replace('/*__CSS__*/', () => css)
   .replace('/*__ICONS__*/ {}', () => JSON.stringify(icons))
   .replace('/*__LOGIC__*/', () => logic)
+  .replace('/*__LEAFLET_CSS__*/', () => leafletCss)
+  .replace('/*__LEAFLET_JS__*/', () => leafletJs)
 
 const out = join(root, 'index.html')
 writeFileSync(out, html)
