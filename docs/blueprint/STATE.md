@@ -6,12 +6,18 @@ File này là trí nhớ giữa các phiên. Phiên nào cũng đọc đầu ti�
 
 - **Bản gộp `nasa-merged` (14/11/2026):** gộp 4 nhánh S1 `nasa1-strategy` (Chiến thuật, Luân canh, Thuật ngữ), S2 `nasa2-map` (bản đồ ĐBSCL, lớp môi trường, Tab 3 Chi tiết), S3 `nasa3-my-garden-update` (popup thửa, sửa ranh), S4 `nasa4-UI-UX` (giao diện Vườn của tôi, Cây phù hợp, ô "Tìm ở đây"). 4 thư mục gốc giữ nguyên làm backup.
 - **4 trang (`PAGES`):** `#/` Trang chủ · `#/ruong-cua-toi` Vườn của tôi · `#/luan-canh` Luân canh · `#/thuat-ngu` Thuật ngữ. Trang Dữ liệu `#/du-lieu` đã gỡ (địa chỉ cũ mở về Trang chủ); đăng nhập/tài khoản đã gỡ hoàn toàn.
-- **Build & kiểm tra:** `npm run check:i18n` (11 bảng khớp), `npm run build` (index.html ~2,9 MB, 50 module, không trùng tên cấp cao nhất), `npm test` 150/150 pass.
+- **Build & kiểm tra:** `npm run check:i18n` (11 bảng khớp), `npm run build` (`index.html` ~3,43 MB, 51 module, không trùng tên cấp cao nhất), `npm test` 155/155 pass, `check-provenance.mjs` qua.
 
 ## Quyết định đã chốt
 
 - Toàn màn hình kiểu WaterWise cho `#/ruong-cua-toi`: desktop panel trái 380 px (thu gọn được: `MW.leftCollapsed`, nút `toggleLeftPanel`) + bản đồ; mobile bottom sheet 3 nấc.
-- Bản đồ chỉ dùng dữ liệu ranh giới S2 `site/data/mekongBoundaries.js` (13 tỉnh, `prov.code`, `MEKONG_ENV_*`): `minZoom 6`, `maxBounds`, `noWrap`, pane `dbsclEnvPane`/`dbsclBorderPane`, 9 lớp môi trường + "Không lớp", thanh "Độ rõ lớp phủ" mặc định 100 %.
+- Bản đồ chỉ dùng dữ liệu ranh giới S2 `site/data/mekongBoundaries.js` (13 tỉnh, `prov.code`, `MEKONG_ENV_*`): `minZoom 6`, `maxBounds`, `noWrap`, pane `dbsclEnvPane`/`dbsclBorderPane`, **22 lớp môi trường đủ dữ liệu 5 km** (`EM_AVAILABLE_KEYS`, chia 3 nhóm `EM_FILTER_GROUPS`: Đất & Địa hình 6, Nước & Ngập lũ 6, Cây trồng & Nhiệt 10) + "Không lớp", thanh "Độ rõ lớp phủ" mặc định 100 %, ẩn `#mw-legend` khỏi bản đồ và tích hợp phổ màu + `<details>` nguồn vào Tab 3 ("Chi tiết"). Tổng hợp đa lớp `emSynthesizeGardenStack` kết hợp cả 22 lớp + hồ sơ vườn để gợi ý chiến thuật canh tác ở Tab 3 & Tab 4.
+- **Lớp lọc môi trường ĐBSCL dùng dữ liệu công khai thực (`site/logic/envMapData.js`, `PRECOMPUTED.envMap`):**
+  - Nguồn mới bổ sung (15/11/2026): 10 lớp NASA EOSDIS GIBS WMS (`soilRoot`, `evi`, `lai`, `fpar`, `gpp`, `landCover`, `biomass`, `flood3d`, `floodHaz`, `soilTemp` qua `scripts/fetch-environment-gibs.mjs`) + 4 lớp ISRIC SoilGrids 2.0 250 m (`soilPh`, `soilSoc`, `soilClay`, `soilNitrogen` qua `scripts/fetch-isric-soilgrids.mjs`), giữ trung thực ô trống/mây che (như `#afafaf` của `flood3d` hay vùng đô thị bị mask) không nội suy bịa.
+  - Đã xóa `MF_ENV_SUB_ANCHORS`, hàm `sin` giả lập, chỉ số `(xx%)` ở `myField.js`, và loại bỏ `grace` (3° ~330 km, không đủ dữ liệu 5 km) khỏi menu lớp + Tab 3.
+  - **NASA GIBS (MODIS NDVI 2026-10-16 · 1.475/1.624 ô; GPM IMERG rain-rate 2026-11-13 · 1.118/1.624; SMAP L4 surface soil moisture 2026-11-10 · 1.624/1.624; MODIS LST Day & Night 2026-11-01 · 1.431 & 1.285/1.624) + SERVIR ESI 4-wk dry season 2026-04-30 (`fetch-mekong-esi.mjs --date 2026-04-30`, 1.406/1.624):** giữ nguyên màu PNG gốc, ô thiếu để trong suốt (không nội suy).
+  - **Dữ liệu trực tiếp ĐBSCL:** `elev` dùng DEM quốc gia 500 m PANGAEA Minderhoud et al. 2019 (`mekong_elevation_5km.json`, 1.600/1.624 ô, chuẩn Hòn Dấu); `soilType` dùng UN FAO DSMW v3.6 / Open Development Mekong (`scripts/build-mekong-soil.mjs`, `mekong_soil_5km.json`, 1.617/1.624 ô, nhóm đất FAO — ghi rõ chưa vẽ ranh mặn động g/L).
+  - **UI gọn gàng (`mapWorkspace.js`, `myField.js`):** không hiện khung chú giải màu nổi trên bản đồ (`#mw-legend`) cho các lớp lọc; hover và Tab 3 dịch màu sang nhãn ngữ nghĩa (`emDescribeCell`, không in mã `#hex` thô); Tab 3 gồm: (1) màu & ý nghĩa tại khu vực/vườn đang chọn, (2) phổ giải thích màu `emSpectrumBands`, (3) mục `<details>` đóng mặc định cho chi tiết kỹ thuật & nguồn.
 - Tách `eligibility` và `riskLevel` (`fieldStrategies.js`); ngưỡng do nhóm chọn ghi `// do nhóm chọn` (`maxFieldHa 50`, `districtRadiusKm 15`, `severeSalinityFactor 2`, `yellowSeasonPenalty 6`).
 - Trợ lý AI: mọi số trả về được đối chiếu `MF_LEDGER` (`asstVerifyReply`), số lạ bị thay bằng `fallbackAnswer`.
 - Dữ liệu người dùng chỉ ở localStorage khóa `mvm-data-v1` (`dsActiveKey()` trả thẳng `DS_KEY`); khóa khí hậu vườn `local:${id}:${lat}:${lon}`.
@@ -29,12 +35,12 @@ File này là trí nhớ giữa các phiên. Phiên nào cũng đọc đầu ti�
 
 ## Tiền tố module
 
-- `geo*` geometry · `fs*` fieldStrategies · `asst*` assistantFallback · `gm*` gardenModel · `ps*`/`mwFuzzySearchPlace`/`mwPlaceCatalog` placeSearch · `mekong*`/`MEKONG_*` mekongBoundaries.
+- `geo*` geometry · `fs*` fieldStrategies · `asst*` assistantFallback · `gm*` gardenModel · `em*`/`EM_*` envMapData · `ps*`/`mwFuzzySearchPlace`/`mwPlaceCatalog` placeSearch · `mekong*`/`MEKONG_*` mekongBoundaries.
 - `MD/md*` mapDraw · `FP/fp*` fieldPlan · `MW/mw*` mapWorkspace · `MG/mg*` myGardens · `CSM/csm*` cropSuitMap · `MF/mf*` myField · `rf*` rotationFarm · `rx*` rotationExtras · `gp*` glossaryPage.
 
 ## Việc còn dở / giới hạn đã biết (giữ trung thực khi Q&A)
 
 - Sau khi gỡ trang Dữ liệu, không còn chỗ nạp file vệ tinh (mưa/NDVI/độ ẩm) thủ công; số đo đất nhập trong Cài đặt vườn. `dataHub.js`, `authStore.js` chỉ còn trong 4 thư mục backup.
 - Khí hậu/lịch vụ tính sẵn chỉ có cho 5 huyện mẫu; tỉnh khác chỉ có NASA POWER theo tọa độ (nếu có mạng) và xám ở Tab 2.
-- Màu lớp môi trường ĐBSCL là bảng phân vùng định tính theo 6 vùng sinh thái (S2), không phải ảnh đo. CẦN XEM LẠI: `mfSampleEnvAt` (myField.js) cộng biến thiên giả lập bằng hàm sin cho từng ô 5 km và in "(xx%)" ở `#mf-env-hover` — trái bất biến 1 nếu không gắn nhãn mô phỏng. GIBS mặc định cố định ngày tham chiếu.
+- Lớp `soilType` hiện dùng bản đồ nhóm đất FAO ĐBSCL (Open Development Mekong); ranh mặn động g/L mùa khô (SIWRR / Zenodo `10.5281/zenodo.15653696`) chưa tích hợp do tệp nguồn nặng 382 MB. Lớp `grace` đã ẩn khỏi giao diện vì không đủ độ phân giải cho lưới 5 km.
 - Tài nguyên lớn vẫn giới hạn bởi dung lượng `localStorage`.

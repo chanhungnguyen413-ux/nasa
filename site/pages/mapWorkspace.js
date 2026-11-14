@@ -6,7 +6,8 @@
 import { evidence } from '../core/evidence.js'
 import { CROP_LIBRARY } from '../data/cropLibrary.js'
 import { PROVINCES } from '../data/provinces.js'
-import { MEKONG_PROVINCES_GEO, MEKONG_ENV_ZONES, MEKONG_ENV_LAYER_MAP, MEKONG_ENV_LAYER_KEYS, mekongFindProvince } from '../data/mekongBoundaries.js'
+import { MEKONG_PROVINCES_GEO, MEKONG_ENV_ZONES, MEKONG_ENV_LAYER_MAP, mekongFindProvince } from '../data/mekongBoundaries.js'
+import { EM_AVAILABLE_KEYS, EM_FILTER_GROUPS, EM_FILTER_META, emCellAt, emDescribeCell, emLayerStats, emSpectrumBands, emSynthesizeGardenStack } from '../logic/envMapData.js'
 import { REDESIGN_TEXT } from '../i18n/redesignText.js'
 import { MAP_TEXT } from '../i18n/mapText.js'
 import { ROT_TEXT } from '../i18n/rotationText.js'
@@ -151,7 +152,7 @@ function mwRenderShell() {
         </div>
 
         <!-- Hộp chọn lớp dữ liệu (gọn góc dưới phải theo khung đánh dấu) -->
-        <div id="mw-layer-menu" hidden class="mw-layer-menu-in absolute bottom-14 right-3 z-[410] max-h-[265px] w-64 overflow-y-auto rounded-2xl border border-line bg-white/95 p-2.5 shadow-lift backdrop-blur"></div>
+        <div id="mw-layer-menu" hidden class="mw-layer-menu-in absolute bottom-14 right-3 z-[410] max-h-[58vh] w-72 overflow-y-auto rounded-2xl border border-line bg-white/95 p-2.5 shadow-lift backdrop-blur"></div>
 
         <!-- Chú giải nổi góc dưới trái trên bản đồ -->
         <div id="mw-legend" class="absolute bottom-28 left-3 z-[400] max-h-[52vh] max-w-[min(360px,calc(100%-1.5rem))] overflow-y-auto lg:bottom-4"></div>
@@ -241,6 +242,25 @@ function mwRenderTopNotices() {
   el.innerHTML = msgs.join('')
 }
 
+function mwEnvBadgeClass(meta, active) {
+  if (active) return 'border-white/40 bg-white/20 text-white'
+  if (meta.status === 'insufficient') return 'border-amber-300 bg-amber-100 text-amber-950'
+  if (meta.scope === 'dbscl') return 'border-emerald-300 bg-emerald-100 text-emerald-950'
+  if (meta.scope === 'isric') return 'border-amber-300 bg-amber-50 text-amber-950'
+  return 'border-sky-300 bg-sky-100 text-sky-950'
+}
+
+function mwEnvSourcePill(meta, labelText) {
+  const tone = meta.status === 'insufficient'
+    ? 'border-amber-300 bg-amber-100 text-amber-950 hover:bg-amber-200'
+    : meta.scope === 'dbscl'
+      ? 'border-emerald-300 bg-emerald-100 text-emerald-950 hover:bg-emerald-200'
+      : meta.scope === 'isric'
+        ? 'border-amber-300 bg-amber-50 text-amber-950 hover:bg-amber-100'
+        : 'border-sky-300 bg-sky-100 text-sky-950 hover:bg-sky-200'
+  return `<a href="${esc(meta.url)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-extrabold underline-offset-2 hover:underline ${tone}">${esc(labelText)} · ${esc(meta.badge[S.lang])}</a>`
+}
+
 function mwRenderLayerMenu() {
   const el = $('#mw-layer-menu')
   // Hộp lớp mở thì ẩn nút toàn màn hình và nút trợ lý (#fab) để khỏi che hộp.
@@ -256,14 +276,23 @@ function mwRenderLayerMenu() {
   if (!MW.layersOpen) return
   const R = mfT()
   const T = mwT()
-  const btn = (val, label, active) =>
-    `<button type="button" data-mf="layer" data-value="${val}" aria-pressed="${active}" class="flex w-full items-center justify-between gap-1.5 rounded-xl border px-2.5 py-1.5 text-left text-[11px] font-bold leading-tight ${active ? 'border-moss-900 bg-moss-900 text-white' : 'border-line bg-white text-ink hover:border-moss-700'}"><span class="truncate">${esc(label)}</span>${active ? icon('check', 'size-3.5 shrink-0') : ''}</button>`
+  const btn = (val, label, active) => {
+    const meta = val !== 'none' ? EM_FILTER_META[val] : null
+    const tag = meta
+      ? `<span class="mt-0.5 inline-block rounded-full border px-1.5 py-0.5 text-[9px] font-extrabold leading-none ${mwEnvBadgeClass(meta, active)}">${esc(meta.badge[S.lang])}</span>`
+      : ''
+    return `<button type="button" data-mf="layer" data-value="${val}" aria-pressed="${active}" class="flex w-full items-center justify-between gap-1.5 rounded-xl border px-2.5 py-1.5 text-left text-[11px] font-bold leading-tight ${active ? 'border-moss-900 bg-moss-900 text-white' : 'border-line bg-white text-ink hover:border-moss-700'}"><span class="min-w-0 flex-1"><span class="block truncate">${esc(label)}</span>${tag}</span>${active ? icon('check', 'size-3.5 shrink-0') : ''}</button>`
+  }
+  const groupHtml = EM_FILTER_GROUPS.map((grp) => `
+    <div class="mt-2">
+      <p class="px-1 text-[10px] font-extrabold uppercase tracking-wide text-moss-700">${esc(R.layerGroups?.[grp.id] ?? grp.id)}</p>
+      <div class="mt-1 grid gap-1">${grp.keys.map((key) => btn(key, R.layers[key] ?? key, MF.layer === key)).join('')}</div>
+    </div>`).join('')
   el.innerHTML = `
     <div class="flex items-center justify-between gap-1"><p class="text-xs font-extrabold">${R.layersTitle}</p><button type="button" data-mw="layersToggle" aria-label="${t().closeTerm}" class="rounded-full p-0.5 hover:bg-moss-50">${icon('x', 'size-3.5')}</button></div>
-    <div class="mt-1.5 grid gap-1">
-      ${btn('none', R.layers.none, MF.layer === null)}
-      ${MEKONG_ENV_LAYER_KEYS.map((key) => btn(key, R.layers[key] ?? key, MF.layer === key)).join('')}
-    </div>
+    <p class="mt-0.5 text-[10px] font-semibold text-muted">${esc(T.legend.envFilterGroupTitle)}</p>
+    <div class="mt-1.5 grid gap-1">${btn('none', R.layers.none, MF.layer === null)}</div>
+    ${groupHtml}
     <div class="mt-2 border-t border-line pt-2">
       <div class="flex justify-between text-[11px] font-bold text-muted"><span>${T.legend.opacity}</span><span id="mw-opacity-val">${Math.round(MW.opacity * 100)}%</span></div>
       <input type="range" data-mw-opacity min="20" max="100" step="5" value="${Math.round(MW.opacity * 100)}" class="range mt-1 w-full" style="--fill:${((MW.opacity * 100 - 20) / 80) * 100}%" />
@@ -271,49 +300,125 @@ function mwRenderLayerMenu() {
 }
 
 function mwEnvChartHtml() {
-  const envKey = MF.layer ? MEKONG_ENV_LAYER_MAP[MF.layer] : null
-  if (!envKey) return ''
+  const activeKey = MF.layer && EM_AVAILABLE_KEYS.includes(MF.layer) ? MF.layer : null
+  if (!activeKey) return ''
   const T = mwT()
   const R = mfT()
-  const groups = new Map()
-  for (const prov of MEKONG_PROVINCES_GEO) {
-    const z = MEKONG_ENV_ZONES[prov.zoneId]
-    const info = z?.layers?.[envKey]
-    if (!info) continue
-    const k = `${info.color_hex}|${info.color_label}`
-    if (!groups.has(k)) groups.set(k, { hex: info.color_hex, label: info.color_label, value: info.value, provinces: [] })
-    groups.get(k).provinces.push(prov[S.lang] ?? prov.vi)
+  const envMap = typeof PRECOMPUTED !== 'undefined' ? PRECOMPUTED?.envMap : null
+  const meta = EM_FILTER_META[activeKey]
+  const stats = emLayerStats(envMap, activeKey)
+  if (!meta || !stats) return ''
+
+  const activeTitle = R.layers[activeKey] ?? activeKey
+  const g = typeof mgActiveGarden === 'function' ? mgActiveGarden() : null
+  const lat = g?.lat ?? MF.loc?.lat
+  const lon = g?.lon ?? MF.loc?.lon
+  const activeProv = lat != null && lon != null ? mekongFindProvince(lat, lon) : null
+  const placeName = g?.name || MF.loc?.name || (activeProv ? (activeProv[S.lang] ?? activeProv.vi) : null)
+  const provName = activeProv ? (activeProv[S.lang] ?? activeProv.vi) : null
+  const placeLabel = placeName && provName && placeName !== provName ? `${placeName} (${provName})` : (placeName || provName)
+  const cell = lat != null && lon != null ? emCellAt(envMap, activeKey, lat, lon) : null
+  const desc = cell ? emDescribeCell(activeKey, cell) : null
+
+  let areaHtml = ''
+  if (lat == null || lon == null) {
+    areaHtml = `<p class="mt-1.5 text-[11px] text-muted">${esc(T.legend.envNoPointHint)}</p>`
+  } else if (!cell || cell.missing || !desc) {
+    areaHtml = `
+      <div class="mt-1.5 flex items-start gap-2 rounded-2xl border border-dashed border-line bg-ground/60 p-2.5">
+        <span class="mt-0.5 size-4 shrink-0 rounded border border-dashed border-slate-400 bg-slate-100"></span>
+        <div class="min-w-0 text-[11px]">
+          <p class="font-extrabold text-ink">${esc(placeLabel || T.legend.envSelectedAreaTitle)}</p>
+          <p class="mt-0.5 text-muted">${esc(T.legend.envMissingCell)}</p>
+        </div>
+      </div>`
+  } else {
+    const tierBadge =
+      desc.bandIndex != null && desc.totalBands
+        ? `<span class="ml-auto shrink-0 rounded-full border border-moss-900/20 bg-white px-2 py-0.5 text-[10px] font-extrabold text-moss-900">${esc(
+            T.legend.envTierBadge.replace('{i}', String(desc.bandIndex + 1)).replace('{n}', String(desc.totalBands)),
+          )}</span>`
+        : ''
+    areaHtml = `
+      <div class="mt-1.5 flex items-start gap-2.5 rounded-2xl border border-moss-900/15 bg-moss-50/70 p-2.5">
+        <span class="mt-0.5 size-5 shrink-0 rounded-md border border-black/20 shadow-sm" style="background:${esc(desc.hex)}"></span>
+        <div class="min-w-0 flex-1 text-[11px] leading-snug">
+          <div class="flex flex-wrap items-center gap-1.5">
+            <p class="font-extrabold text-moss-950">${esc(placeLabel || T.legend.envSelectedAreaTitle)}</p>
+            ${tierBadge}
+          </div>
+          <p class="mt-0.5 font-bold text-ink">${esc(desc.title[S.lang])}</p>
+          <p class="mt-0.5 text-muted">${esc(desc.detail[S.lang])}</p>
+        </div>
+      </div>`
   }
-  const items = [...groups.values()]
-  const totalProvs = items.reduce((s, it) => s + it.provinces.length, 0) || 1
-  const colorBar = `<div class="mt-2 flex h-3 w-full overflow-hidden rounded-full border border-line shadow-inner">${items.map((it) => `<span style="width:${((it.provinces.length / totalProvs) * 100).toFixed(1)}%;background:${esc(it.hex)}" title="${esc(it.label)}"></span>`).join('')}</div>`
-  const rows = items
-    .map(
-      (it) => `<div class="flex items-start gap-2 text-[11px] leading-snug">
-        <span class="mt-0.5 size-3 shrink-0 rounded-sm border border-black/15" style="background:${esc(it.hex)}"></span>
-        <div><span class="font-extrabold text-ink">${esc(it.label)}</span> <span class="text-muted">(${esc(it.provinces.join(', '))})</span></div>
-      </div>`,
-    )
-    .join('')
-  const activeProv = MF.loc ? mekongFindProvince(MF.loc.lat, MF.loc.lon) : null
-  const activeZone = activeProv ? MEKONG_ENV_ZONES[activeProv.zoneId] : null
-  const activeInfo = activeZone?.layers?.[envKey] ?? null
-  const activeBox = activeInfo
-    ? `<div class="mt-2 rounded-xl border border-moss-900/20 bg-moss-50/70 p-2.5 text-[11px] leading-snug">
-        <p class="font-extrabold text-moss-950">${esc(activeProv[S.lang] ?? activeProv.vi)} · <span style="color:${esc(activeInfo.color_hex)}">● ${esc(activeInfo.color_label)}</span></p>
-        <p class="mt-0.5 font-semibold text-ink">${esc(activeInfo.value)}</p>
-        <p class="mt-0.5 text-muted">${esc(S.lang === 'en' ? activeInfo.legend_en : activeInfo.legend_vi)}</p>
-        <p class="mt-1 font-semibold text-moss-900">${esc(T.legend.dbsclRecCrop)} <span class="font-normal text-ink">${esc(activeInfo.recommended_crops)}</span></p>
+
+  const bands = emSpectrumBands(activeKey)
+  const activeIdx = desc?.bandIndex ?? -1
+  const spectrumHtml = bands.length
+    ? `<div class="mt-3 border-t border-line/70 pt-2.5">
+        <p class="text-[11px] font-extrabold text-ink">${esc(T.legend.envSpectrumTitle)}</p>
+        <div class="mt-2 flex h-3 w-full gap-0.5 overflow-hidden rounded-full border border-black/15 bg-black/5 p-0.5" role="img" aria-label="${esc(T.legend.envSpectrumTitle)}">
+          ${bands
+            .map((b, idx) => {
+              const isCur = idx === activeIdx
+              return `<span class="h-full flex-1 rounded-sm" title="${esc(`${idx + 1}. ${b.label[S.lang]}`)}" style="background:${esc(b.hex)};${isCur ? 'outline:2px solid #0f172a;outline-offset:-1px;' : ''}"></span>`
+            })
+            .join('')}
+        </div>
+        <div class="mt-2 space-y-1.5">${bands
+          .map((b, idx) => {
+            const isCur = idx === activeIdx
+            const rowCls = isCur
+              ? 'border border-moss-900/35 bg-moss-50/80 shadow-sm'
+              : 'border border-transparent bg-white/60'
+            const activePill = isCur
+              ? `<span class="ml-auto shrink-0 rounded-full bg-moss-900 px-1.5 py-0.5 text-[9px] font-extrabold text-white">${esc(T.legend.envActiveBand)}</span>`
+              : ''
+            return `<div class="flex items-start gap-2 rounded-xl px-2 py-1.5 text-[11px] leading-snug ${rowCls}">
+              <span class="mt-0.5 size-4 shrink-0 rounded-md border border-black/25 shadow-sm" style="background:${esc(b.hex)}"></span>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5">
+                  <span class="inline-flex size-4 shrink-0 items-center justify-center rounded-full bg-black/10 text-[9px] font-extrabold text-ink">${idx + 1}</span>
+                  <span class="font-bold text-ink">${esc(b.label[S.lang])}</span>
+                  ${activePill}
+                </div>
+                ${b.desc?.[S.lang] ? `<p class="mt-0.5 text-[10px] text-muted">${esc(b.desc[S.lang])}</p>` : ''}
+              </div>
+            </div>`
+          })
+          .join('')}</div>
       </div>`
     : ''
+
+  const legendExtra = stats.legendDataUrl
+    ? `<img src="${esc(stats.legendDataUrl)}" alt="${esc(R.legendAlt)}" class="mt-2 max-h-24 w-auto rounded-lg border border-line bg-white p-1" />`
+    : stats.legendUrl
+      ? `<a href="${esc(stats.legendUrl)}" target="_blank" rel="noopener noreferrer" class="mt-1.5 inline-flex items-center gap-1 font-bold text-moss-900 underline">${esc(T.legend.envOpenLegend)}</a>`
+      : ''
+
   return `
     <div class="rounded-3xl border border-line bg-white p-4 shadow-card text-xs">
-      <p class="font-extrabold text-moss-950">${esc(T.legend.dbsclEnvTitle)}</p>
-      <p class="text-[11px] font-bold text-ink">${esc(R.layers[MF.layer] ?? MF.layer)}</p>
-      ${colorBar}
-      <div class="mt-2 space-y-1.5">${rows}</div>
-      ${activeBox}
-      <p class="mt-1.5 text-[10px] font-semibold text-moss-800">${esc(T.legend.dbsclOnlyNote)}</p>
+      <div class="flex flex-wrap items-center justify-between gap-1.5">
+        <p class="font-extrabold text-moss-950">${esc(activeTitle)}</p>
+        <span class="rounded-full border px-2 py-0.5 text-[10px] font-extrabold ${mwEnvBadgeClass(meta, false)}">${esc(meta.shortOrg[S.lang])}</span>
+      </div>
+      <div class="mt-2.5">
+        <p class="text-[10px] font-extrabold uppercase tracking-wide text-moss-700">${esc(T.legend.envSelectedAreaTitle)}</p>
+        ${areaHtml}
+      </div>
+      ${spectrumHtml}
+      <details class="mt-3 border-t border-line/70 pt-2.5 text-[11px] text-muted">
+        <summary class="cursor-pointer select-none font-extrabold text-moss-900 hover:underline">${esc(T.legend.envMoreDetailsBtn)}</summary>
+        <div class="mt-2 space-y-1.5 leading-relaxed">
+          <div class="flex flex-wrap items-center gap-1.5">${mwEnvSourcePill(meta, activeTitle)}</div>
+          <p><span class="break-all font-bold text-ink">${esc(meta.datasetName)}</span> · ${esc(meta.dateLabel[S.lang])}</p>
+          <p>${esc(meta.nativeRes[S.lang])} · ${esc(T.legend.envCoverage(stats.coveredCells, stats.totalDeltaCells))}</p>
+          <p>${esc(meta.caveat[S.lang])}</p>
+          ${legendExtra}
+          <p class="text-[10px] font-semibold text-moss-800">${esc(T.legend.dbsclOnlyNote)}</p>
+        </div>
+      </details>
     </div>`
 }
 
@@ -330,7 +435,7 @@ function mwRenderLegend() {
   }
   el.hidden = false
   el.innerHTML = `
-    <div class="rounded-2xl border border-line bg-white/95 p-3 text-xs shadow-lift backdrop-blur">
+    <div class="max-w-sm rounded-2xl border border-line bg-white/95 p-3 text-xs shadow-lift backdrop-blur">
       ${MW.tilesOffline ? `<p class="mb-2 flex items-center gap-1.5 font-bold text-sun-700">${icon('wifi-off', 'size-4')}${esc(T.legend.offlineTiles)}</p>` : ''}
       ${zoneCrop ? `
         <p class="font-extrabold text-moss-900">${esc(T.legend.zoneTitle)} · ${esc(T.legend.cropPrefix)} ${esc(zoneCrop)}</p>
@@ -410,12 +515,103 @@ function mwRenderBody() {
     body.innerHTML = mwCompareHtml(data)
     return
   }
+  const g = typeof mgActiveGarden === 'function' ? mgActiveGarden() : null
   const top = res?.strategies?.find((s) => s.rank === 1) ?? res?.strategies?.[0] ?? null
   const planButton = top
     ? `<button type="button" data-mw="openPlan" data-value="${top.strategyId}" data-crop="${top.crops[1] ?? top.crops[0]}" class="rf-press mt-2 inline-flex min-h-11 w-full items-center justify-center rounded-full border border-[#173d2b] px-4 text-sm font-extrabold text-[#173d2b] hover:bg-[#edf1e4]">${esc(STRAT_TEXT[S.lang].farm.bridgeQuickPlan)}</button>`
     : ''
   body.innerHTML = `${MW.stale ? mwCompareHtml(data) : ''}${rfBridgeHtml({ evalResult: res, loc: MF.loc, planButton })}
+    ${mwEnvSynthesisHtml(g)}
     <div id="mf-zones" class="mt-4"></div>`
+}
+
+function mwEnvSynthesisHtml(g) {
+  const T = mwT()
+  const L = T.legend
+  const R = mfT()
+  const lat = g?.lat ?? MF.loc?.lat
+  const lon = g?.lon ?? MF.loc?.lon
+  if (lat == null || lon == null) {
+    return `<div class="mt-3 rounded-3xl border border-dashed border-line bg-white p-3.5 text-xs text-muted">${esc(L.synthNoPoint)}</div>`
+  }
+  const floodCount = g
+    ? (DS.marks || []).filter((m) => m.gardenId === g.id && m.type === 'flood').length
+    : (DS.marks || []).filter((m) => m.type === 'flood').length
+  const syn = emSynthesizeGardenStack(PRECOMPUTED?.envMap, lat, lon, g, floodCount, S.lang)
+  if (!syn) return ''
+  const covText = L.synthCoverage
+    .replace('{n}', String(syn.readCount))
+    .replace('{total}', String(syn.totalLayers))
+    .replace('{p}', String(syn.profileCount))
+  const domainsHtml = syn.domains
+    .map((d) => `
+      <div class="rounded-2xl border px-3 py-2 ${d.tone === 'warn' ? 'border-amber-200 bg-amber-50/60' : 'border-emerald-200 bg-emerald-50/40'}">
+        <p class="text-[11px] font-extrabold text-moss-950">${esc(d.title)}</p>
+        <p class="mt-0.5 text-[11px] leading-snug text-ink">${esc(d.summary || '—')}</p>
+      </div>`)
+    .join('')
+  const tacticsHtml = syn.tactics
+    .map((tac) => {
+      const tone = tac.priority === 'high' ? 'border-amber-300 bg-amber-50/70' : tac.priority === 'med' ? 'border-sky-200 bg-sky-50/50' : 'border-emerald-200 bg-emerald-50/50'
+      const driverBtns = (tac.drivers || [])
+        .map((k) => `<button type="button" data-mf="layer" data-value="${k}" class="rounded-full border border-moss-200 bg-white px-2 py-0.5 text-[10px] font-bold text-moss-900 hover:border-moss-700">${esc((R.layers[k] ?? k).split('(')[0].trim())}</button>`)
+        .join('')
+      return `
+        <div class="rounded-2xl border p-2.5 ${tone}">
+          <p class="text-xs font-extrabold text-moss-950">${esc(tac.title)}</p>
+          <p class="mt-1 text-[11px] leading-relaxed text-ink">${esc(tac.detail)}</p>
+          ${driverBtns ? `<div class="mt-1.5 flex flex-wrap gap-1">${driverBtns}</div>` : ''}
+        </div>`
+    })
+    .join('')
+  const groupsHtml = syn.groups
+    .map((grp) => {
+      const rows = grp.keys
+        .map((key) => {
+          const item = syn.items[key]
+          const meta = item.meta
+          const label = R.layers[key] ?? key
+          const swatch = item.hex
+            ? `<span class="mt-0.5 inline-block size-3.5 shrink-0 rounded border border-black/15" style="background:${item.hex}"></span>`
+            : `<span class="mt-0.5 inline-block size-3.5 shrink-0 rounded border border-dashed border-muted/40"></span>`
+          const reading = item.title || L.envNoDataAtPoint
+          return `
+            <div class="rounded-xl border border-line/70 bg-ground/60 p-2">
+              <div class="flex items-start justify-between gap-2">
+                <button type="button" data-mf="layer" data-value="${key}" class="flex min-w-0 flex-1 items-start gap-2 text-left hover:underline">
+                  ${swatch}
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-[11px] font-extrabold text-moss-950">${esc(label)}</span>
+                    <span class="block text-[11px] leading-snug text-ink">${esc(reading)}</span>
+                  </span>
+                </button>
+                <div class="shrink-0">${mwEnvSourcePill(meta, meta.shortOrg[S.lang])}</div>
+              </div>
+            </div>`
+        })
+        .join('')
+      return `
+        <div class="mt-2">
+          <p class="text-[10px] font-extrabold uppercase tracking-wide text-moss-700">${esc(R.layerGroups?.[grp.id] ?? grp.id)}</p>
+          <div class="mt-1 space-y-1">${rows}</div>
+        </div>`
+    })
+    .join('')
+  return `
+    <div class="mt-3 rounded-3xl border border-line bg-white p-3.5 shadow-card">
+      <div class="flex flex-wrap items-center justify-between gap-1.5">
+        <p class="text-xs font-extrabold uppercase tracking-wide text-moss-900">${esc(L.synthTitle)}</p>
+        <span class="rounded-full bg-moss-100 px-2.5 py-0.5 text-[10px] font-extrabold text-moss-900">${esc(covText)}</span>
+      </div>
+      <p class="mt-1 text-[11px] leading-snug text-muted">${esc(L.synthSubtitle)}</p>
+      <div class="mt-2.5 grid gap-1.5">${domainsHtml}</div>
+      <div class="mt-2.5 space-y-1.5">${tacticsHtml}</div>
+      <details class="mt-3 rounded-2xl border border-line bg-ground/40 p-2.5">
+        <summary class="cursor-pointer select-none text-xs font-extrabold text-moss-900">${esc(L.synthAllLayersBtn)}</summary>
+        <p class="mt-1 text-[10px] text-muted">${esc(L.synthClickHint)}</p>
+        <div class="mt-1.5 space-y-2">${groupsHtml}</div>
+      </details>
+    </div>`
 }
 
 function mwRenderDetailsHtml() {
@@ -496,6 +692,7 @@ function mwRenderDetailsHtml() {
       </div>
 
       ${envChart}
+      ${mwEnvSynthesisHtml(g)}
       ${g ? `<div class="grid gap-2 sm:grid-cols-2">
         <button type="button" data-mg="settings" data-value="${esc(g.id)}" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-moss-900 bg-white px-4 text-sm font-extrabold text-moss-900 hover:bg-moss-50">${icon('settings', 'size-4')}${esc(D.editBtn)}</button>
         <button type="button" data-mw="compare" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-moss-900 px-4 text-sm font-extrabold text-white shadow-card hover:bg-moss-800">${icon('scale', 'size-4')}${esc(D.compareBtn)}</button>

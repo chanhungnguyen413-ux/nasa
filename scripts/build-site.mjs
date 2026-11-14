@@ -13,6 +13,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import * as Lucide from 'lucide-react'
 import { compile, optimize } from '@tailwindcss/node'
 import { Scanner } from '@tailwindcss/oxide'
+import { MEKONG_OUTER_RINGS, mekongPointInRing } from '../site/data/mekongBoundaries.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const read = (p) => readFileSync(join(root, p), 'utf8')
@@ -51,6 +52,7 @@ const modules = [
   'site/logic/strategies.js',
   'site/logic/cropPriority.js',
   'site/logic/zones.js',
+  'site/logic/envMapData.js',
   'site/logic/gardenModel.js',
   'site/logic/geometry.js',
   'site/logic/placeSearch.js', // ô "Tìm ở đây": bỏ dấu + sửa lỗi chính tả cơ bản
@@ -87,7 +89,50 @@ const comparison = pre('method_comparison.json')
 const rule = pre('calendar_rule.json')
 const ndvi = pre('ndvi_raw.json')
 const powerMonthly = pre('power_monthly.json') // scripts/fetch-power-monthly.mjs
+const gibs5km = pre('environment_gibs_5km.json')
+const isric5km = pre('mekong_isric_soil_5km.json')
+const esi5km = pre('mekong_esi_5km.json')
+const elev5km = pre('mekong_elevation_5km.json')
+const soil5km = pre('mekong_soil_5km.json')
 const ndviDates = ndvi.districts.flatMap((d) => d.series.map((r) => r.date)).sort()
+
+const envGrid = gibs5km.grid
+const envInDelta = (i, j) => {
+  const lat = (i + 0.5) * envGrid.dLat
+  const lon = (j + 0.5) * envGrid.dLon
+  return MEKONG_OUTER_RINGS.some((ring) => mekongPointInRing(lat, lon, ring))
+}
+const envPackRaster = (layer) => {
+  const palette = []
+  const palIdx = new Map()
+  const cells = []
+  for (const [i, j, r, g, b, a] of layer.cells || []) {
+    if (!a || !envInDelta(i, j)) continue
+    const hex = '#' + [r, g, b].map((x) => x.toString(16).padStart(2, '0')).join('')
+    let idx = palIdx.get(hex)
+    if (idx === undefined) { idx = palette.length; palIdx.set(hex, idx); palette.push(hex) }
+    cells.push([i, j, idx])
+  }
+  return {
+    kind: 'raster',
+    coveredCells: cells.length,
+    distinctColors: palette.length,
+    legendUrl: layer.legendUrl || null,
+    legendDataUrl: layer.legendDataUrl && layer.legendDataUrl.length < 20000 ? layer.legendDataUrl : null,
+    palette,
+    cells,
+  }
+}
+const envElevCells = (elev5km.records || [])
+  .filter((rec) => envInDelta(rec.i, rec.j))
+  .map((rec) => [rec.i, rec.j, rec.elevation, rec.sampleCount])
+const envElevVals = envElevCells.map((c) => c[2])
+const envSoilClasses = (soil5km.classes || []).map(({ code, hex, labelVi, labelEn, count }) => ({ code, hex, labelVi, labelEn, count }))
+const envSoilIdx = new Map(envSoilClasses.map((c, idx) => [c.code, idx]))
+const envSoilCells = (soil5km.cells || [])
+  .filter(([i, j, code]) => envSoilIdx.has(code) && envInDelta(i, j))
+  .map(([i, j, code]) => [i, j, envSoilIdx.get(code)])
+
 const PRECOMPUTED = {
   ndvi: {
     source: ndvi.source, method: ndvi.method, years: ndvi.years, fetchedAt: ndvi.fetchedAt,
@@ -101,6 +146,52 @@ const PRECOMPUTED = {
   comparison: { overall: comparison.overall, perDistrict: comparison.perDistrict, sensitivity: comparison.sensitivity },
   rule: { params: rule.params, years: rule.years, districts: rule.districts.map(({ id, monthly, bareWindows, cyclesPerYear }) => ({ id, monthly, bareWindows, cyclesPerYear })) },
   power: powerMonthly.districts, // khí hậu NASA POWER + độ cao cho 5 huyện: đường lui khi mất mạng
+  envMap: {
+    grid: { dLat: envGrid.dLat, dLon: envGrid.dLon, totalDeltaCells: soil5km.totalDeltaCells ?? 1624 },
+    layers: {
+      ndvi: envPackRaster(gibs5km.layers.ndvi),
+      evi: envPackRaster(gibs5km.layers.evi),
+      lai: envPackRaster(gibs5km.layers.lai),
+      fpar: envPackRaster(gibs5km.layers.fpar),
+      gpp: envPackRaster(gibs5km.layers.gpp),
+      landCover: envPackRaster(gibs5km.layers.landCover),
+      biomass: envPackRaster(gibs5km.layers.biomass),
+      rain: envPackRaster(gibs5km.layers.rain),
+      soil: envPackRaster(gibs5km.layers.soil),
+      soilRoot: envPackRaster(gibs5km.layers.soilRoot),
+      soilTemp: envPackRaster(gibs5km.layers.soilTemp),
+      lst: envPackRaster(gibs5km.layers.lst),
+      cold: envPackRaster(gibs5km.layers.cold),
+      flood3d: envPackRaster(gibs5km.layers.flood3d),
+      floodHaz: envPackRaster(gibs5km.layers.floodHaz),
+      esi: envPackRaster(esi5km.layer),
+      soilPh: envPackRaster(isric5km.layers.soilPh),
+      soilSoc: envPackRaster(isric5km.layers.soilSoc),
+      soilClay: envPackRaster(isric5km.layers.soilClay),
+      soilNitrogen: envPackRaster(isric5km.layers.soilNitrogen),
+      elev: {
+        kind: 'elev',
+        coveredCells: envElevCells.length,
+        distinctColors: 5,
+        minElevM: Math.min(...envElevVals),
+        maxElevM: Math.max(...envElevVals),
+        cells: envElevCells,
+      },
+      soilType: {
+        kind: 'soilType',
+        coveredCells: envSoilCells.length,
+        distinctColors: envSoilClasses.length,
+        classes: envSoilClasses,
+        cells: envSoilCells,
+      },
+      grace: {
+        kind: 'insufficient',
+        coveredCells: 0,
+        distinctColors: 3,
+        legendUrl: gibs5km.layers.grace?.legendUrl || null,
+      },
+    },
+  },
 }
 
 const logic = [`/* ---- site/data/precomputed/*.json (trimmed) ---- */\nconst PRECOMPUTED = ${JSON.stringify(PRECOMPUTED)}`]

@@ -7,7 +7,8 @@
 // template `L` là bảng chữ của trang chủ.
 import { evidence, evIsMissing } from '../core/evidence.js'
 import { PROVINCES } from '../data/provinces.js'
-import { MEKONG_OUTER_RINGS, MEKONG_PROVINCE_BORDERS, MEKONG_PROVINCES_GEO, MEKONG_ENV_ZONES, MEKONG_ENV_LAYER_MAP, mekongFindProvince } from '../data/mekongBoundaries.js'
+import { MEKONG_OUTER_RINGS, MEKONG_PROVINCE_BORDERS, MEKONG_PROVINCES_GEO, MEKONG_ENV_LAYER_MAP, mekongFindProvince } from '../data/mekongBoundaries.js'
+import { EM_AVAILABLE_KEYS, EM_FILTER_META, emCellAt, emDescribeCell } from '../logic/envMapData.js'
 import { CROP_LIB_IDS, CROP_LIBRARY } from '../data/cropLibrary.js'
 import { P3_TEXT } from '../i18n/phase3Text.js'
 import { MAP_TEXT } from '../i18n/mapText.js'
@@ -308,92 +309,10 @@ function mfDrawDbsclBoundaries() {
   }
 }
 
-const MF_ENV_SUB_ANCHORS = [
-  { lat: 10.72, lon: 105.75, zoneId: 'ZONE_02_ACID_SULFATE_DTM' }, // Đồng Tháp Mười core
-  { lat: 10.48, lon: 104.88, zoneId: 'ZONE_04_WEST_HAU_ACID_BASIN' }, // Tứ giác Long Xuyên
-  { lat: 10.35, lon: 105.45, zoneId: 'ZONE_01_ALLUVIAL_FRESHWATER' }, // Dải phù sa sông Hậu
-  { lat: 10.32, lon: 106.05, zoneId: 'ZONE_01_ALLUVIAL_FRESHWATER' }, // Dải phù sa sông Tiền
-  { lat: 10.12, lon: 106.58, zoneId: 'ZONE_03_ORCHARD_ESTUARINE' }, // Cửa sông Bến Tre - Tiền Giang
-  { lat: 9.75, lon: 106.42, zoneId: 'ZONE_06_COASTAL_SAND_RIDGE' }, // Giồng cát Trà Vinh
-  { lat: 9.42, lon: 106.08, zoneId: 'ZONE_05_COASTAL_RICE_SHRIMP' }, // Ven biển Sóc Trăng
-  { lat: 9.05, lon: 105.12, zoneId: 'ZONE_05_COASTAL_RICE_SHRIMP' }, // Bán đảo Cà Mau
-  { lat: 9.88, lon: 105.18, zoneId: 'ZONE_04_WEST_HAU_ACID_BASIN' }, // U Minh Thượng / Hậu Giang
-  { lat: 10.22, lon: 103.96, zoneId: 'ZONE_04_WEST_HAU_ACID_BASIN' }, // Phú Quốc
-]
-
-function mfHexToRgb(hex) {
-  const h = String(hex || '#2d7a47').replace('#', '')
-  const n = parseInt(h.length === 3 ? h.split('').map((c) => c + c).join('') : h, 16)
-  return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
-}
-
 const MF_CHUNK_DLAT = 5 / 111.32 // ~5 km theo vĩ độ
 const MF_CHUNK_DLON = 5 / (111.32 * Math.cos((10 * Math.PI) / 180)) // ~5 km theo kinh độ tại 10°N
 
-function mfSnapChunk(lat, lon) {
-  const i = Math.floor(lat / MF_CHUNK_DLAT)
-  const j = Math.floor(lon / MF_CHUNK_DLON)
-  return {
-    i,
-    j,
-    lat: (i + 0.5) * MF_CHUNK_DLAT,
-    lon: (j + 0.5) * MF_CHUNK_DLON,
-    lat0: i * MF_CHUNK_DLAT,
-    lat1: (i + 1) * MF_CHUNK_DLAT,
-    lon0: j * MF_CHUNK_DLON,
-    lon1: (j + 1) * MF_CHUNK_DLON,
-  }
-}
-
-function mfSampleEnvAt(lat, lon, envKey) {
-  if (!envKey) return null
-  const chunk = mfSnapChunk(lat, lon)
-  const cLat = chunk.lat
-  const cLon = chunk.lon
-  const anchors = [
-    ...MEKONG_PROVINCES_GEO.map((p) => ({ lat: p.center[0], lon: p.center[1], zoneId: p.zoneId })),
-    ...MF_ENV_SUB_ANCHORS,
-  ]
-  let wSum = 0
-  let rSum = 0
-  let gSum = 0
-  let bSum = 0
-  let bestW = -1
-  let bestZoneId = null
-  for (const a of anchors) {
-    const info = MEKONG_ENV_ZONES[a.zoneId]?.layers?.[envKey]
-    if (!info) continue
-    const d2 = (cLat - a.lat) * (cLat - a.lat) + (cLon - a.lon) * (cLon - a.lon)
-    const w = 1 / Math.pow(d2 + 0.012, 1.55)
-    const [r, g, b] = mfHexToRgb(info.color_hex)
-    wSum += w
-    rSum += r * w
-    gSum += g * w
-    bSum += b * w
-    if (w > bestW) {
-      bestW = w
-      bestZoneId = a.zoneId
-    }
-  }
-  if (!wSum) return null
-  // Biến thiên không gian theo từng chunk 5×5 km, không đồng nhất theo tỉnh
-  const micro =
-    0.55 * Math.sin(cLat * 27.3 + cLon * 19.7) * Math.cos(cLon * 31.1 - cLat * 16.4) +
-    0.3 * Math.sin(cLat * 64.5 - cLon * 52.8) +
-    0.15 * Math.cos(cLat * 128.0 + cLon * 101.3)
-  const shift = Math.round(micro * 28)
-  const r = Math.max(0, Math.min(255, Math.round(rSum / wSum) + shift))
-  const g = Math.max(0, Math.min(255, Math.round(gSum / wSum) + Math.round(shift * 0.65)))
-  const b = Math.max(0, Math.min(255, Math.round(bSum / wSum) - Math.round(shift * 0.45)))
-  const hex = `#${[r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')}`
-  const prov = mekongFindProvince(cLat, cLon) || mekongFindProvince(lat, lon)
-  const zone = MEKONG_ENV_ZONES[bestZoneId] || (prov ? MEKONG_ENV_ZONES[prov.zoneId] : null)
-  const info = zone?.layers?.[envKey] ?? null
-  const intensityPct = Math.max(5, Math.min(98, Math.round(50 + micro * 38)))
-  return { r, g, b, hex, intensityPct, prov, zone, info, chunk }
-}
-
-function mfCreateEnvGridLayer(envKey) {
+function mfCreateEnvGridLayer(layerKey) {
   const Lf = window.L
   const EnvGrid = Lf.GridLayer.extend({
     createTile(coords) {
@@ -420,6 +339,7 @@ function mfCreateEnvGridLayer(envKey) {
       }
       ctx.clip()
 
+      const envMap = typeof PRECOMPUTED !== 'undefined' ? PRECOMPUTED?.envMap : null
       const iMin = Math.floor(Math.max(8.3, se.lat) / MF_CHUNK_DLAT)
       const iMax = Math.floor(Math.min(11.15, nw.lat) / MF_CHUNK_DLAT)
       const jMin = Math.floor(Math.max(103.35, nw.lng) / MF_CHUNK_DLON)
@@ -432,18 +352,18 @@ function mfCreateEnvGridLayer(envKey) {
           const lon0 = j * MF_CHUNK_DLON
           const lon1 = (j + 1) * MF_CHUNK_DLON
           const cLon = (lon0 + lon1) * 0.5
-          const s = mfSampleEnvAt(cLat, cLon, envKey)
-          if (!s) continue
+          const s = emCellAt(envMap, layerKey, cLat, cLon)
+          if (!s || s.missing || !s.hex) continue
           const p0 = MF.map.project([lat1, lon0], coords.z)
           const p1 = MF.map.project([lat0, lon1], coords.z)
           const x = p0.x - ox
           const y = p0.y - oy
           const w = p1.x - p0.x
           const h = p1.y - p0.y
-          ctx.fillStyle = `rgb(${s.r},${s.g},${s.b})`
+          ctx.fillStyle = s.hex
           ctx.fillRect(x, y, Math.ceil(w), Math.ceil(h))
           if (w >= 6 && h >= 6) {
-            ctx.strokeStyle = 'rgba(255,255,255,0.18)'
+            ctx.strokeStyle = 'rgba(255,255,255,0.22)'
             ctx.lineWidth = 0.6
             ctx.strokeRect(x, y, w, h)
           }
@@ -471,35 +391,47 @@ function mfHideEnvHover() {
 function mfUpdateEnvHover(latlng) {
   const el = $('#mf-env-hover')
   if (!el) return
-  const envKey = MF.layer ? MEKONG_ENV_LAYER_MAP[MF.layer] : null
-  if (!envKey || !latlng) {
+  if (!MF.layer || !EM_AVAILABLE_KEYS.includes(MF.layer) || !latlng) {
     el.hidden = true
     return
   }
-  const prov = mekongFindProvince(latlng.lat, latlng.lng)
+  const meta = EM_FILTER_META[MF.layer]
+  const prov = meta ? mekongFindProvince(latlng.lat, latlng.lng) : null
   if (!prov) {
     el.hidden = true
     return
   }
-  const s = mfSampleEnvAt(latlng.lat, latlng.lng, envKey)
-  if (!s?.info) {
-    el.hidden = true
-    return
-  }
-  const zoneName = s.zone?.name?.[S.lang] ?? s.zone?.name?.vi ?? ''
+  const T = mwT()
+  const R = mfT()
   const provName = prov[S.lang] ?? prov.vi
+  const badgeTone = meta.scope === 'dbscl'
+    ? 'bg-emerald-100 text-emerald-950 border-emerald-300'
+    : 'bg-sky-100 text-sky-950 border-sky-300'
+  const filterName = R.layers[MF.layer] ?? MF.layer
+  const sourceBadge = `<span class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-extrabold ${badgeTone}">${esc(meta.badge[S.lang])}</span>`
+
+  const envMap = typeof PRECOMPUTED !== 'undefined' ? PRECOMPUTED?.envMap : null
+  const s = emCellAt(envMap, MF.layer, latlng.lat, latlng.lng)
+  const desc = emDescribeCell(MF.layer, s)
+  const swatch = s && !s.missing && s.hex
+    ? `<span class="size-3.5 shrink-0 rounded-sm border border-black/25" style="background:${esc(s.hex)}"></span>`
+    : `<span class="size-3.5 shrink-0 rounded-sm border border-dashed border-slate-400 bg-slate-100"></span>`
+
+  const detailLine = !s || s.missing || !desc
+    ? `<span class="text-slate-700">${esc(T.legend.envMissingCell)}</span>`
+    : `<span class="font-bold text-ink">${esc(desc.title[S.lang])}</span>`
+
   el.hidden = false
   el.innerHTML = `
-    <div class="flex items-center gap-2">
-      <span class="size-3.5 shrink-0 rounded-sm border border-black/20" style="background:${esc(s.hex)}"></span>
+    <div class="flex flex-wrap items-center gap-1.5">
+      ${swatch}
       <span class="font-extrabold text-moss-950">${esc(provName)}</span>
-      <span class="text-muted">· ${esc(zoneName)}</span>
+      <span class="text-[11px] font-semibold text-muted">${esc(filterName)}</span>
+      ${sourceBadge}
     </div>
-    <div class="mt-0.5 flex flex-wrap items-center gap-x-2 text-[11px] font-semibold text-ink">
-      <span>${esc(s.info.color_label)} (${s.intensityPct}%)</span>
-      <span class="text-muted">${latlng.lat.toFixed(3)}, ${latlng.lng.toFixed(3)}</span>
-    </div>
-    <div class="mt-0.5 text-[11px] text-muted">${esc(s.info.value)}</div>`
+    <div class="mt-1 flex flex-wrap items-center gap-x-2 text-[11px] font-semibold text-ink">
+      ${detailLine}
+    </div>`
 }
 
 function mfCreateClippedGibsLayer(layer) {
@@ -572,7 +504,8 @@ function mfApplyOverlay() {
     mwRenderLegend()
     return
   }
-  const envKey = MF.layer ? MEKONG_ENV_LAYER_MAP[MF.layer] : null
+  if (MF.layer && !EM_AVAILABLE_KEYS.includes(MF.layer)) MF.layer = null
+  const envKey = MF.layer && EM_AVAILABLE_KEYS.includes(MF.layer) ? MF.layer : null
   if (envKey) {
     MF.dbsclEnvLayer = Lf.layerGroup().addTo(MF.map)
     // Làm dịu phần bản đồ ngoài ranh giới ĐBSCL để biểu đồ màu sắc nổi bật riêng cho ĐBSCL
@@ -584,13 +517,9 @@ function mfApplyOverlay() {
       fillOpacity: 0.28,
       interactive: false,
     }).addTo(MF.dbsclEnvLayer)
-    mfCreateEnvGridLayer(envKey).addTo(MF.dbsclEnvLayer)
+    mfCreateEnvGridLayer(MF.layer).addTo(MF.dbsclEnvLayer)
   } else {
     mfHideEnvHover()
-  }
-  const layer = !envKey ? GIBS_LAYERS.find((l) => l.key === MF.layer) : null
-  if (layer) {
-    MF.overlay = mfCreateClippedGibsLayer(layer).addTo(MF.map)
   }
   mwRenderLegend()
   if (MW.tab === 'cond') mwRenderBody()
