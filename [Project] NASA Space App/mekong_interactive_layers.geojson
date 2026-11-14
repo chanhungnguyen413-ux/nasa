@@ -1,0 +1,593 @@
+{
+  "type": "FeatureCollection",
+  "name": "Mekong_Delta_NASA_Interactive_AgroEcological_Layers",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "bbox": [104.5, 8.5, 106.8, 11.0],
+  "features": [
+    {
+      "type": "Feature",
+      "id": "ZONE_01_ALLUVIAL_FRESHWATER",
+      "properties": {
+        "zone_id": "ZONE_01_ALLUVIAL_FRESHWATER",
+        "zone_name_vi": "Tiểu vùng Phù sa Ngọt Trung tâm (Cần Thơ - An Giang - Vĩnh Long)",
+        "zone_name_en": "Central Freshwater Alluvial Zone (Can Tho - An Giang - Vinh Long)",
+        "provinces": ["Cần Thơ", "An Giang", "Vĩnh Long", "Đồng Tháp (Nam sông Tiền)"],
+        "layers": {
+          "1_soil_type": {
+            "value": "Đất phù sa ngọt (Fluvisols), pH = 5.6, Clay = 46%, Độ mặn < 0.5‰",
+            "color_hex": "#2E7D32",
+            "color_label": "Xanh lá đậm (Đất ngọt màu mỡ)",
+            "legend_vi": "Đất thịt phù sa ngọt quanh năm, giữ nước và dinh dưỡng rất tốt, nhưng dễ bị nén chặt tầng đế cày nếu làm 3 vụ lúa liên tiếp.",
+            "legend_en": "Nutrient-rich freshwater alluvial soil year-round; prone to plow-pan compaction under continuous triple-rice cropping.",
+            "recommended_crops": "Luân canh 2 Lúa (Đông Xuân, Thu Đông) + 1 Đậu nành/Đậu xanh/Bắp (Xuân Hè) hoặc Cây ăn trái có lên liếp."
+          },
+          "2_heat_stress": {
+            "value": "ECOSTRESS LST = 35.8°C, NASA POWER T2M_MAX = 35.5°C, VPD = 2.15 kPa (Tháng 3–4)",
+            "color_hex": "#FB8C00",
+            "color_label": "Cam nóng (Cảnh báo nắng gắt mùa khô)",
+            "legend_vi": "Mặt ruộng nóng gần 36°C vào trưa tháng 3–4; phun thuốc nhũ dầu (EC) hoặc rải Urê lúc nắng trưa dễ làm cháy lá và bốc hơi mất 40% phân đạm.",
+            "legend_en": "Midday surface temperature reaches ~36°C in Mar–Apr; applying EC pesticides or Urea at noon causes leaf burn and 40% N volatilization.",
+            "recommended_crops": "Trồng Đậu xanh, Mè (Vừng), hoặc Bắp phủ rơm gốc trong vụ Xuân Hè để hạ nhiệt mặt đất 4–5°C."
+          },
+          "3_cold_frost_risk": {
+            "value": "NASA POWER T2M_MIN = 18.5°C (Đợt lạnh đêm tháng 12 – tháng 1), MODIS LST_Night = 17.8°C",
+            "color_hex": "#00ACC1",
+            "color_label": "Xanh lơ (Đêm se lạnh kèm sương mù nhẹ)",
+            "legend_vi": "Đêm và sáng sớm dịp cuối năm trời trở lạnh dưới 19°C kèm sương mù ẩm; lúa Đông Xuân đang trổ dễ bị nghẹt đòng và nhiễm nấm đạo ôn cổ bông.",
+            "legend_en": "Nighttime lows drop below 19°C in Dec–Jan with morning fog; booting rice risks panicle choking and neck blast fungus.",
+            "recommended_crops": "Giữ mực nước ruộng 5–7 cm ban đêm để giữ ấm gốc lúa Đông Xuân; rất thuận lợi trồng Dưa hấu, Bắp cải, Rau màu vụ Tết."
+          },
+          "4_extreme_rainfall": {
+            "value": "GPM IMERG Mưa năm = 1,650 mm; Mưa cực đoan Rx1day = 72 mm/ngày (Tháng 8–10)",
+            "color_hex": "#1565C0",
+            "color_label": "Xanh dương đậm (Mưa lớn cuối vụ Hè Thu - Thu Đông)",
+            "legend_vi": "Tháng 8–10 thường có mưa dông cực to trên 60 mm/ngày làm trôi phân bón và gây ngập úng hoa màu nếu không có rãnh thoát.",
+            "legend_en": "Heavy convective storms (>60 mm/day) in Aug–Oct cause fertilizer runoff and waterlogging on upland crops.",
+            "recommended_crops": "Mùa mưa (T8–T11) ưu tiên trồng Lúa nước kết hợp thả cá ruộng; ngưng trồng khoai lang/đậu trên chân ruộng thấp."
+          },
+          "5_smap_soil_moisture": {
+            "value": "SMAP sm_surface = 0.22 m³/m³, sm_rootzone = 0.28 m³/m³ (Mùa khô T3); 0.41 m³/m³ (Mùa mưa)",
+            "color_hex": "#C0CA33",
+            "color_label": "Vàng xanh (Ẩm tầng rễ vừa đủ cho cây màu mùa khô)",
+            "legend_vi": "Cuối vụ Đông Xuân mặt đất ráo nhưng tầng rễ sâu 0–100 cm vẫn còn giữ ẩm 28%, vừa đẹp để tỉa đậu mà không tốn tiền bơm nước.",
+            "legend_en": "Post-Winter-Spring harvest soil retains 28% root-zone moisture—ideal for residual-moisture legume relay cropping.",
+            "recommended_crops": "Tỉa Đậu xanh / Đậu nành ngay sau gặt lúa Đông Xuân (sau khi cày phơi 10–14 ngày khử tồn dư thuốc cỏ Quinclorac)."
+          },
+          "6_ecostress_esi": {
+            "value": "ECOSTRESS ESI = 0.52 (Mùa khô) -> 0.81 (Mùa mưa)",
+            "color_hex": "#FBC02D",
+            "color_label": "Vàng (Thiếu nước nhẹ cuối mùa khô)",
+            "legend_vi": "Cây trồng cạn hoặc lúa Xuân Hè bắt đầu khát nước nhẹ vào tháng 4; cần tưới tiết kiệm hoặc tủ rơm giữ ẩm.",
+            "legend_en": "Moderate evaporative stress in April; mulching with rice straw is recommended to conserve root-zone moisture.",
+            "recommended_crops": "Đậu nành, Đậu phộng, Bắp ngọt tưới rãnh tiết kiệm nước."
+          },
+          "7_ndvi_bare_soil": {
+            "value": "Landsat/MODIS EVI đỉnh = 0.68; Đất trống BSI > 0.16 vào Tháng 3 và Tháng 7 (giữa 2 vụ)",
+            "color_hex": "#1B5E20",
+            "color_label": "Xanh lục đậm (3 đỉnh sinh khối cao trong năm)",
+            "legend_vi": "Cánh đồng xanh tốt quanh năm nhưng có 2 khoảng đất trống ngắn lúc vừa gặt xong; đỉnh xanh vụ 3 đang giảm nhẹ do đất mỏi mệt.",
+            "legend_en": "High vegetation vigor with two short bare-soil windows post-harvest; slight multi-year EVI decline indicates soil fatigue.",
+            "recommended_crops": "Xen 1 vụ Cây họ đậu/Cây phân xanh vào khoảng đất trống tháng 3–5 để phục hồi sức khỏe đất."
+          },
+          "8_grace_groundwater": {
+            "value": "GRACE-FO lwe_thickness = -6.5 cm (Mùa khô) đến +10.2 cm (Mùa lũ); Xu thế = -1.1 cm/năm",
+            "color_hex": "#81C784",
+            "color_label": "Xanh lá nhạt (Nguồn nước mặt & nước ngầm tương đối ổn định)",
+            "legend_vi": "Nhờ nằm gần sông Tiền và sông Hậu nên nguồn nước ngọt khá dồi dào, nhưng mùa khô mực nước vẫn rút thấp hơn trung bình 6.5 cm.",
+            "legend_en": "Relatively stable freshwater storage buffered by the Tien and Hau rivers, with moderate dry-season drawdown (-6.5 cm).",
+            "recommended_crops": "Lúa chất lượng cao (Đài Thơm 8, OM18) luân canh Đậu nành/Bắp."
+          },
+          "9_srtm_elevation": {
+            "value": "NASADEM Cao độ = 1.4 m, HAND = 1.1 m (Bình địa phù sa có đê bao)",
+            "color_hex": "#66BB6A",
+            "color_label": "Xanh lá (Bình địa trung bình, chủ động tưới tiêu)",
+            "legend_vi": "Nền đất cao trung bình 1.4 mét, có bờ bao nên dễ chủ động bơm tưới và tháo nước khi mưa lớn.",
+            "legend_en": "Medium floodplain terrace (1.4 m elevation, HAND 1.1 m) with active dike and drainage control.",
+            "recommended_crops": "Luân canh linh hoạt Lúa – Màu (Đậu, Bắp, Rau thực phẩm)."
+          }
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [105.25, 10.65],
+            [105.85, 10.65],
+            [105.95, 10.0],
+            [105.45, 9.95],
+            [105.2, 10.25],
+            [105.25, 10.65]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ZONE_02_ACID_SULFATE_DTM",
+      "properties": {
+        "zone_id": "ZONE_02_ACID_SULFATE_DTM",
+        "zone_name_vi": "Tiểu vùng Trũng Phèn Đồng Tháp Mười (Đồng Tháp - Long An)",
+        "zone_name_en": "Dong Thap Muoi Acid Sulfate Floodplain (Dong Thap - Long An)",
+        "provinces": ["Đồng Tháp (Tam Nông, Tháp Mười)", "Long An (Tân Thạnh, Mộc Hóa, Vĩnh Hưng)"],
+        "layers": {
+          "1_soil_type": {
+            "value": "Đất phèn hoạt động & tiềm tàng (Thionic Fluvisols), pH = 3.9–4.5, Fe2+/Al3+ cao",
+            "color_hex": "#8E24AA",
+            "color_label": "Tím cam (Đất phèn chua dưới sâu)",
+            "legend_vi": "Đất có tầng sinh phèn chua (pH dưới 4.5); tuyệt đối không phơi ruộng quá khô nứt nẻ mùa nắng kẻo mưa đầu mùa làm xì phèn đen rễ.",
+            "legend_en": "Active/potential acid sulfate soil (pH 3.9–4.5); severe cracking in dry season oxidizes pyrite and triggers toxic Fe/Al release.",
+            "recommended_crops": "2 vụ Lúa chịu phèn (OM5451, IR50404) + Trồng Sen / Xả lũ nuôi cá mùa nước nổi, hoặc trồng Khóm (Dứa) trên liếp."
+          },
+          "2_heat_stress": {
+            "value": "ECOSTRESS LST = 37.2°C (Khi phơi ruộng khô T4), NASA POWER T2M_MAX = 36.2°C, VPD = 2.25 kPa",
+            "color_hex": "#D32F2F",
+            "color_label": "Đỏ rực (Nắng nóng gay gắt làm bốc phèn mặt ruộng)",
+            "legend_vi": "Tháng 4–5 nắng nóng trên 37°C làm nước ruộng bốc hơi cạn, kéo độc chất phèn sắt và nhôm từ dưới sâu lên mặt bùn làm cháy rễ lúa non.",
+            "legend_en": "Extreme surface heating (>37°C) drives upward capillary rise of acidic Fe2+/Al3+ salts into the root zone.",
+            "recommended_crops": "Giữ lớp rơm rạ che phủ mặt đất và trồng Mè đen / Đậu xanh làm đất tối thiểu để giữ mát mặt ruộng."
+          },
+          "3_cold_frost_risk": {
+            "value": "NASA POWER T2M_MIN = 17.5°C (Vùng trũng nội đồng bức xạ nhiệt ban đêm mạnh vào T12–T1)",
+            "color_hex": "#1E88E5",
+            "color_label": "Xanh đậm (Lạnh ban đêm & Sương mù dày trên đồng trũng)",
+            "legend_vi": "Đồng trũng rộng nên đêm tháng Chạp lạnh xuống 17–18°C kèm sương mù dày tới 8h sáng, rất dễ bùng phát bệnh đạo ôn lá và cổ bông.",
+            "legend_en": "Open inland depression experiences strong nocturnal radiative cooling (17.5°C) and heavy morning dew, favoring rice blast.",
+            "recommended_crops": "Ngưng bón thừa đạm Urê khi trời trở lạnh đêm; bổ sung Silic và Canxi giúp lá lúa đứng và kháng nấm đạo ôn."
+          },
+          "4_extreme_rainfall": {
+            "value": "GPM IMERG Mưa đầu mùa T5 = 95–120 mm/đợt; Đỉnh mưa lũ T9–T10 = 310 mm/tháng",
+            "color_hex": "#AD1457",
+            "color_label": "Tím hồng (Mưa đầu mùa kích hoạt xì phèn & Mưa thu gây ngập lũ)",
+            "legend_vi": "Đám mưa to đầu mùa tháng 5 sau chuỗi ngày nắng hạn sẽ đẩy nước phèn chua từ bờ kênh tràn xuống ruộng; cần tháo bỏ nước đầu mùa ngay!",
+            "legend_en": "First heavy May rains flush concentrated sulfuric acid and Al3+ from canal banks into paddies; flush surface water immediately.",
+            "recommended_crops": "Bón lót Vôi + Lân nung chảy đầu mùa mưa; tháng 8–11 mở cống xả lũ đón phù sa nuôi cá/tôm càng xanh."
+          },
+          "5_smap_soil_moisture": {
+            "value": "SMAP sm_rootzone biến thiên mạnh: 0.17 m³/m³ (Tháng 4) -> 0.44 m³/m³ (Tháng 9 ngập lũ)",
+            "color_hex": "#0277BD",
+            "color_label": "Xanh biển (Ngập lũ bão hòa mùa mưa, dễ khô kiệt cuối mùa nắng)",
+            "legend_vi": "Không được để độ ẩm tầng rễ tụt xuống vùng Đỏ (< 0.18) vào mùa khô vì không khí sẽ lọt xuống đốt cháy tầng phèn ngầm.",
+            "legend_en": "Keep root-zone soil moisture above 0.22 m³/m³ in dry season to prevent oxygen penetration into the pyrite layer.",
+            "recommended_crops": "Trồng Sen lấy ngó/gương (giữ ngập ẩm quanh năm ém phèn) hoặc Đậu xanh phủ rơm giữ ẩm."
+          },
+          "6_ecostress_esi": {
+            "value": "ECOSTRESS ESI = 0.42 (Khi lúa bị ngộ độc phèn bó rễ đầu vụ Hè Thu)",
+            "color_hex": "#C62828",
+            "color_label": "Đỏ (Cây khát nước giả tạo do rễ bị bó phèn)",
+            "legend_vi": "Ruộng vẫn có nước nhưng vệ tinh báo cây bị khát (ESI Đỏ) vì rễ lúa đã bị phèn làm đen thui không hút nước được; đừng rải DAP lúc này!",
+            "legend_en": "Low ESI despite standing water indicates physiological drought caused by iron/aluminum root toxicity.",
+            "recommended_crops": "Thay nước ruộng + bón Vôi & Lân nung chảy cho lúa ra rễ trắng mới trước khi bón thúc."
+          },
+          "7_ndvi_bare_soil": {
+            "value": "Landsat MNDWI = +0.34 (Tháng 8–11 mùa nước nổi); MODIS EVI vụ 3 trong đê bao giảm 12% sau 6 năm",
+            "color_hex": "#039BE5",
+            "color_label": "Xanh lam (Vùng trữ nước mùa lũ & Rửa phèn tự nhiên)",
+            "legend_vi": "Những ô bao làm 3 vụ lúa liên tục đất đang yếu dần; mở cống cho nước nổi tràn vào 3 tháng giúp rửa sạch phèn và nhận 4 tấn phù sa/ha.",
+            "legend_en": "Seasonal flood inundation (Aug–Nov) naturally flushes acidity and deposits 3–5 tons/ha of fertile silt.",
+            "recommended_crops": "Chu kỳ 2 vụ Lúa (Đông Xuân, Hè Thu sớm) + 1 vụ Xả lũ nuôi thủy sản / Trồng Ấu, Bông súng, Sen."
+          },
+          "8_grace_groundwater": {
+            "value": "GRACE-FO lwe_thickness dao động lớn nhất ĐBSCL: -6.0 cm (Tháng 4) đến +16.4 cm (Tháng 10)",
+            "color_hex": "#1976D2",
+            "color_label": "Xanh dương (Túi trữ nước ngọt mùa lũ của toàn vùng)",
+            "legend_vi": "Vùng Đồng Tháp Mười là túi trữ nước lũ tự nhiên khổng lồ vào tháng 9–11 giúp bổ cập nước ngầm cho cả miền Tây.",
+            "legend_en": "Acts as the primary natural flood retention and groundwater recharge basin of the Mekong Delta during Sep–Nov.",
+            "recommended_crops": "Canh tác thuận thiên dựa vào lũ: Lúa – Cá/Tôm càng xanh, Sen, Tràm."
+          },
+          "9_srtm_elevation": {
+            "value": "NASADEM Cao độ = 0.8 m, HAND = 0.4 m (Lòng chảo trũng thấp)",
+            "color_hex": "#0D47A1",
+            "color_label": "Xanh chàm (Trũng ngập sâu mùa lũ, khó tiêu thoát nước đáy)",
+            "legend_vi": "Địa hình trũng như lòng chảo (chỉ cao hơn mặt kênh 4 tấc) nên nước lũ về ngập sâu và nước phèn ở đáy ruộng rất khó tháo kiệt.",
+            "legend_en": "Low-lying basin depression (HAND 0.4 m) prone to deep seasonal flooding and slow subsurface acid drainage.",
+            "recommended_crops": "Không trồng cây ăn trái mẫn cảm ngập (như sầu riêng) nếu không lên liếp đê bao cao; ưu tiên Lúa – Sen – Thủy sản."
+          }
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [105.35, 10.95],
+            [106.15, 10.95],
+            [106.15, 10.45],
+            [105.6, 10.45],
+            [105.35, 10.7],
+            [105.35, 10.95]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ZONE_03_ORCHARD_ESTUARINE",
+      "properties": {
+        "zone_id": "ZONE_03_ORCHARD_ESTUARINE",
+        "zone_name_vi": "Tiểu vùng Cây Ăn Trái Lên Liếp & Ven Sông Tiền (Tiền Giang - Bến Tre)",
+        "zone_name_en": "Upper Estuarine Orchard & Alluvial Terrace (Tien Giang - Ben Tre)",
+        "provinces": ["Tiền Giang (Cai Lậy, Châu Thành)", "Bến Tre (Chợ Lách, Châu Thành)", "Vĩnh Long (Long Hồ)"],
+        "layers": {
+          "1_soil_type": {
+            "value": "Đất phù sa cổ lên liếp vườn, Clay = 50%, pH mô đất = 4.6 (chua hóa do phân bón & Paclobutrazol), nhạy cảm mặn mùa khô",
+            "color_hex": "#2E7D32",
+            "color_label": "Xanh lá pha Vàng (Đất phù sa lên liếp nhưng nhạy cảm mặn mùa khô)",
+            "legend_vi": "Đất phù sa tốt nhưng mô liếp trồng sầu riêng/bưởi lâu năm đang bị chua hóa (pH 4.6) và chai cứng do tồn dư thuốc xử lý ra hoa Paclobutrazol.",
+            "legend_en": "Raised-bed alluvial soil suffering from acidification (pH 4.6) and root-stunting Paclobutrazol residue.",
+            "recommended_crops": "Chuyên canh Cây ăn trái (Sầu riêng, Bưởi da xanh, Chôm chôm) kết hợp trồng Cỏ lạc dại (cỏ đậu) phủ kín mặt liếp."
+          },
+          "2_heat_stress": {
+            "value": "ECOSTRESS LST = 36.6°C trên liếp cạo sạch cỏ vs 31.8°C trên liếp có cỏ đậu; VPD = 2.30 kPa",
+            "color_hex": "#FB8C00",
+            "color_label": "Cam nóng (Sốc nhiệt mặt liếp & Khô không khí gây rụng bông/trái non)",
+            "legend_vi": "Giữa mùa khô không khí rất hanh (VPD = 2.30 kPa), vườn nào cạo trọc cỏ mặt liếp bị nóng hơn 4–5°C làm sầu riêng rụng bông và trái non hàng loạt.",
+            "legend_en": "Bare soil beds heat up 4–5°C higher than cover-cropped beds under high VPD (2.30 kPa), triggering severe fruitlet drop.",
+            "recommended_crops": "Trồng thảm Cỏ lạc dại / Đậu xanh giữ mát mặt liếp + Tưới phun sương dưới tán sáng sớm và đổi thuốc nhũ dầu EC sang SC/WG."
+          },
+          "3_cold_frost_risk": {
+            "value": "NASA POWER T2M_MIN = 19.5°C (Tháng 1), chênh lệch nhiệt ngày-đêm 12°C kích thích phân hóa mầm hoa",
+            "color_hex": "#4CAF50",
+            "color_label": "Xanh lá (Tiểu khí hậu đêm mát thuận lợi kích bông cây ăn trái)",
+            "legend_vi": "Tiết trời se lạnh ban đêm tháng Chạp – tháng Giêng giúp cây ăn trái (xoài, nhãn, sầu riêng) dễ phân hóa mầm hoa tự nhiên nhưng cần ngừa nấm phấn trắng.",
+            "legend_en": "Cool nighttime temperatures (~19.5°C) in Jan aid natural floral induction in mango and durian but require powdery mildew monitoring.",
+            "recommended_crops": "Giảm phụ thuộc hóa chất Paclobutrazol, tận dụng tiết lạnh tự nhiên kết hợp Lân – Kali để làm bông an toàn."
+          },
+          "4_extreme_rainfall": {
+            "value": "GPM IMERG Mưa cực đoan tháng 9–10 = 65–80 mm/ngày làm sầu riêng dễ bị sốc nước nứt trái và thối rễ Phytophthora",
+            "color_hex": "#1565C0",
+            "color_label": "Xanh dương (Mưa dông lớn gây úng rãnh mương và nứt trái)",
+            "legend_vi": "Mưa to dồn dập sau đợt nắng làm cây hút nước đột ngột gây nứt trái, sượng cơm sầu riêng và nấm Phytophthora tấn công cổ rễ.",
+            "legend_en": "Sudden heavy downpours cause rapid water uptake, fruit cracking, wet core in durian, and Phytophthora root rot.",
+            "recommended_crops": "Xẻ rãnh xương cá trên mặt liếp thoát nước mưa nhanh và bón nấm đối kháng Trichoderma + Phosphorous acid ngừa thối rễ."
+          },
+          "5_smap_soil_moisture": {
+            "value": "SMAP sm_rootzone = 0.25 m³/m³ (Mùa khô T2–T4, cần tưới giữ ẩm đều)",
+            "color_hex": "#C0CA33",
+            "color_label": "Vàng xanh (Cần duy trì độ ẩm ổn định, tránh khô-ướt đột ngột)",
+            "legend_vi": "Cây ăn trái đang nuôi trái non cần độ ẩm tầng rễ ổn định; không để đất khô kiệt rồi mới tưới đẫm sẽ làm rụng trái.",
+            "legend_en": "Fruit trees require steady root-zone moisture during fruit setting; avoid abrupt dry-wet cycles.",
+            "recommended_crops": "Hệ thống tưới phun mưa cục bộ dưới tán kết hợp thảm cỏ họ đậu giữ ẩm."
+          },
+          "6_ecostress_esi": {
+            "value": "ECOSTRESS ESI = 0.41 (Báo động sớm khi nước mương chớm nhiễm mặn > 0.5‰ làm rễ sầu riêng ngừng hút nước)",
+            "color_hex": "#C62828",
+            "color_label": "Đỏ (Cảnh báo sớm cháy lá sầu riêng do hạn mặn)",
+            "legend_vi": "Chỉ số ESI chuyển Đỏ báo hiệu rễ sầu riêng đang bị tổn thương do mặn hoặc thiếu nước ngọt trước khi chóp lá kịp chuyển sang màu vàng cháy!",
+            "legend_en": "ESI drops below 0.45 as an early warning of salinity-induced osmotic root stress 10–14 days before leaf-tip burn appears.",
+            "recommended_crops": "Đo độ mặn nước mương trước mỗi lần tưới (< 0.3‰ cho sầu riêng); nếu thiếu nước ngọt phải tỉa bớt trái non để cứu cây mẹ."
+          },
+          "7_ndvi_bare_soil": {
+            "value": "Landsat EVI quanh năm = 0.52–0.60; giảm đột ngột về 0.42 khi bị hạn mặn lịch sử",
+            "color_hex": "#1B5E20",
+            "color_label": "Xanh lục đậm (Tán vườn cây lâu năm xanh quanh năm)",
+            "legend_vi": "Vườn cây ăn trái khỏe mạnh có màu xanh đậm ổn định quanh năm trên bản đồ; những chòm chuyển sang màu Vàng là nơi cây đang bị suy kiệt rễ.",
+            "legend_en": "Healthy perennial orchards maintain high EVI (>0.50) year-round; localized yellow patches pinpoint root rot or salinity damage.",
+            "recommended_crops": "Bón phục hồi Humic + Hữu cơ vi sinh + Vôi Dolomite ngay tại các ô vườn bị sụt giảm chỉ số xanh EVI."
+          },
+          "8_grace_groundwater": {
+            "value": "GRACE-FO lwe_thickness = -12.4 cm vào Tháng 2–4 (Đẩy ranh mặn 1–4 g/L từ biển lấn sâu 50–70 km theo sông Tiền, sông Hàm Luông)",
+            "color_hex": "#B71C1C",
+            "color_label": "Đỏ sẫm (Báo động thiếu nước ngọt mùa khô đẩy mặn xâm nhập sâu)",
+            "legend_vi": "Khi bản đồ GRACE chuyển sang màu Đỏ vào đầu mùa khô, nước mặn từ biển sẽ tràn sâu lên tới Cai Lậy – Chợ Lách sớm hơn bình thường 1 tháng!",
+            "legend_en": "Severe terrestrial water storage deficit (-12.4 cm) allows 1–4 g/L saltwater intrusion to penetrate 50–70 km inland.",
+            "recommended_crops": "Bơm trữ nước ngọt vào mương liếp/túi trữ nước bạt HDPE ngay từ tháng 11–12 và thả lục bình che mặt mương giảm bốc hơi."
+          },
+          "9_srtm_elevation": {
+            "value": "NASADEM Cao độ = 1.6 m, HAND = 1.2 m (Vùng gờ đất ven sông lên liếp)",
+            "color_hex": "#66BB6A",
+            "color_label": "Xanh lá (Chân đất cao vừa nhưng chịu ảnh hưởng thủy triều sông lớn)",
+            "legend_vi": "Vườn nằm ven sông lớn nên khi triều cường rằm tháng 9–10 âm lịch dâng cao rất dễ tràn qua bờ bao thấp.",
+            "legend_en": "Riverine levee terraces subject to semidiurnal spring-tide overtopping during Oct–Nov peak tides.",
+            "recommended_crops": "Gia cố bờ bao + van một chiều ngăn triều cường và cống đóng kín ngăn mặn mùa khô."
+          }
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [105.95, 10.45],
+            [106.55, 10.45],
+            [106.6, 10.05],
+            [106.0, 10.05],
+            [105.95, 10.45]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ZONE_04_WEST_HAU_ACID_BASIN",
+      "properties": {
+        "zone_id": "ZONE_04_WEST_HAU_ACID_BASIN",
+        "zone_name_vi": "Tiểu vùng Trũng Phèn Tây Sông Hậu & Tứ Giác Long Xuyên (Hậu Giang - Kiên Giang)",
+        "zone_name_en": "West Hau River & Long Xuyen Quadrangle Acid Basin (Hau Giang - Kien Giang)",
+        "provinces": ["Hậu Giang (Phụng Hiệp, Vị Thủy, Long Mỹ)", "Kiên Giang (Hòn Đất, Kiên Lương, Giồng Riềng)"],
+        "layers": {
+          "1_soil_type": {
+            "value": "Đất phèn tiềm tàng nông & phèn mặn (Sulfaquepts), tầng Pyrite sâu 40 cm, pH = 4.1–4.5, Clay = 50%",
+            "color_hex": "#8E24AA",
+            "color_label": "Tím cam (Đất phèn nông dễ xì phèn khi khô hạn)",
+            "legend_vi": "Ngay dưới mặt ruộng 40 cm là tầng phèn tiềm tàng; nếu cày lật sâu và phơi đất nứt nẻ mùa khô sẽ biến phèn tiềm tàng thành axit sunfuric cực độc.",
+            "legend_en": "Shallow sulfidic pyrite layer (~40 cm depth); deep plowing and dry-season desiccation trigger extreme soil acidification.",
+            "recommended_crops": "Lúa Đông Xuân sớm -> Đậu xanh/Mè (làm đất tối thiểu phủ rơm giữ ẩm) -> Lúa Hè Thu, hoặc trồng Khóm Cầu Đúc / Mía chịu phèn."
+          },
+          "2_heat_stress": {
+            "value": "ECOSTRESS LST = 35.4°C, NASA POWER T2M_MAX = 35.1°C, VPD = 1.95 kPa",
+            "color_hex": "#FDD835",
+            "color_label": "Vàng ấm (Cần che phủ rơm rạ chống nứt nẻ mặt đất phèn)",
+            "legend_vi": "Nắng mùa khô tháng 3–4 làm mặt đất sét 50% nhanh chóng nứt chân chim sâu xuống tầng phèn nếu không có rơm hay cây màu che phủ.",
+            "legend_en": "Dry-season solar heating cracks heavy clay soils (50% clay), exposing subsurface pyrite to atmospheric oxygen.",
+            "recommended_crops": "Trồng Đậu xanh / Đậu nành phủ rơm ngay trên gốc rạ ẩm không cần cày lật."
+          },
+          "3_cold_frost_risk": {
+            "value": "NASA POWER T2M_MIN = 18.8°C (Tháng 12–1)",
+            "color_hex": "#00ACC1",
+            "color_label": "Xanh lơ (Sương lạnh ban đêm đầu vụ Đông Xuân)",
+            "legend_vi": "Giai đoạn lúa Đông Xuân đẻ nhánh – làm đòng tháng 12–1 có sương lạnh sáng sớm, cần chú ý phòng bệnh đạo ôn trên chân đất phèn thiếu Silic.",
+            "legend_en": "Cool dewy nights in Dec–Jan increase rice blast susceptibility on silicon-deficient acid sulfate soils.",
+            "recommended_crops": "Bón Lân nung chảy giàu Silic và Canxi ngay từ đầu vụ Đông Xuân."
+          },
+          "4_extreme_rainfall": {
+            "value": "GPM IMERG Mưa năm = 1,950 mm; mưa dông kết hợp triều biển Tây gây ngập úng kéo dài tháng 9–11",
+            "color_hex": "#1565C0",
+            "color_label": "Xanh dương đậm (Mưa lớn tiêu thoát chậm ở vùng trũng)",
+            "legend_vi": "Lượng mưa lớn gần 2,000 mm/năm dồn về vùng trũng Phụng Hiệp – Long Mỹ làm ngập úng lâu nếu trồng cây ăn trái hoặc hoa màu mùa mưa.",
+            "legend_en": "High annual rainfall (~1,950 mm) pools in low-lying depressions with sluggish drainage during Sep–Nov.",
+            "recommended_crops": "Mùa mưa chỉ canh tác Lúa nước chịu ngập/phèn hoặc nuôi Cá đồng ruộng trũng."
+          },
+          "5_smap_soil_moisture": {
+            "value": "SMAP sm_rootzone = 0.30 m³/m³ (Cuối vụ Đông Xuân T2–T3) -> 0.43 m³/m³ (Mùa mưa)",
+            "color_hex": "#00897B",
+            "color_label": "Xanh ngọc (Đất giữ ẩm tầng rễ tốt để nhốt phèn)",
+            "legend_vi": "Độ ẩm tầng rễ cuối vụ Đông Xuân đạt 30% rất lý tưởng để gieo hạt đậu/mè vừa có thu nhập vừa giữ ẩm ém phèn dưới sâu.",
+            "legend_en": "30% root-zone moisture in Feb–Mar supports relay-cropped mungbean/sesame while keeping the underlying pyrite layer saturated.",
+            "recommended_crops": "Đậu xanh, Mè đen, Bắp nếp ngắn ngày vụ Xuân Hè."
+          },
+          "6_ecostress_esi": {
+            "value": "ECOSTRESS ESI = 0.51 (Mùa khô) -> 0.80 (Mùa mưa)",
+            "color_hex": "#FBC02D",
+            "color_label": "Vàng (Stress nhẹ cuối mùa khô ở vùng xa kênh trục)",
+            "legend_vi": "Những ruộng xa kênh chính bắt đầu thiếu nước ngọt vào cuối tháng 3–4 và bị nước phèn/mặn từ hướng Kiên Lương – Vị Thanh ép vào.",
+            "legend_en": "Moderate evaporative stress in late dry season as canal water levels drop and acidity/salinity encroaches.",
+            "recommended_crops": "Sạ Lúa Đông Xuân sớm từ tháng 10–11 để thu hoạch gọn trước cuối tháng 2."
+          },
+          "7_ndvi_bare_soil": {
+            "value": "Landsat MNDWI giảm từ +0.35 về +0.08 vào đầu tháng 11 (Báo hiệu nước rút để xuống giống Đông Xuân)",
+            "color_hex": "#1B5E20",
+            "color_label": "Xanh lục (Canh tác 2 vụ Lúa chắc ăn + 1 vụ Màu/Thủy sản)",
+            "legend_vi": "Khi bản đồ mặt nước MNDWI rút xuống vào đầu tháng 11 là thời điểm vàng để bà con xuống giống đồng loạt vụ Đông Xuân né hạn mặn cuối vụ.",
+            "legend_en": "Floodwater recession in early November (MNDWI dropping below 0.10) marks the optimal sowing window for Winter-Spring rice.",
+            "recommended_crops": "Lúa thơm ST24, ST25, Đài Thơm 8 vụ Đông Xuân sớm."
+          },
+          "8_grace_groundwater": {
+            "value": "GRACE-FO lwe_thickness = -9.1 cm (Mùa khô), xu thế giảm -2.5 cm/năm",
+            "color_hex": "#F57C00",
+            "color_label": "Cam (Suy giảm trữ lượng nước ngọt mùa khô gây nguy cơ mặn - phèn kép)",
+            "legend_vi": "Nước ngọt mùa khô đang cạn nhanh hơn các năm trước, làm cả nước phèn nội đồng và nước mặn biển Tây cùng lấn vào ruộng.",
+            "legend_en": "Declining dry-season water storage (-9.1 cm) exacerbates dual acid-saline intrusion in western basins.",
+            "recommended_crops": "Khóm (Dứa) Cầu Đúc, Mía, hoặc Luân canh Lúa – Đậu xanh / Lúa – Tôm càng xanh."
+          },
+          "9_srtm_elevation": {
+            "value": "NASADEM Cao độ = 0.7 m, HAND = 0.4 m (Trũng thấp nội đồng)",
+            "color_hex": "#0D47A1",
+            "color_label": "Xanh chàm (Vùng trũng phèn thấp, tiêu nước đáy rất chậm)",
+            "legend_vi": "Nền đất thấp chỉ 0.7 mét nên khi lên liếp trồng khóm/cây ăn trái phải giữ nước trong mương ổn định và không đắp đất phèn đáy mương lên mặt liếp.",
+            "legend_en": "Low elevation (0.7 m) requires careful ditch-and-dike water table management to prevent pyrite oxidation.",
+            "recommended_crops": "Mô hình Mương – Liếp trồng Khóm/Tràm kết hợp nuôi cá đồng."
+          }
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [104.75, 10.35],
+            [105.45, 10.15],
+            [105.75, 9.65],
+            [105.2, 9.6],
+            [104.75, 10.0],
+            [104.75, 10.35]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ZONE_05_COASTAL_RICE_SHRIMP",
+      "properties": {
+        "zone_id": "ZONE_05_COASTAL_RICE_SHRIMP",
+        "zone_name_vi": "Tiểu vùng Ven Biển Lúa – Tôm Bán Đảo Cà Mau (Bạc Liêu - Cà Mau - Sóc Trăng)",
+        "zone_name_en": "Ca Mau Peninsula Coastal Rice-Shrimp Zone (Bac Lieu - Ca Mau - Soc Trang)",
+        "provinces": ["Cà Mau (Thới Bình, U Minh)", "Bạc Liêu (Phước Long, Hồng Dân)", "Sóc Trăng (Mỹ Xuyên, Trần Đề)", "Kiên Giang (An Biên, An Minh)"],
+        "layers": {
+          "1_soil_type": {
+            "value": "Đất mặn - phèn tiềm tàng giàu mùn (Salic/Thionic Fluvisols), Clay = 54%, SOC = 3.2%, mặn mùa khô 8–25‰",
+            "color_hex": "#C62828",
+            "color_label": "Đỏ mận (Đất nhiễm mặn mùa khô, ngọt hóa mùa mưa)",
+            "legend_vi": "Đất sét giàu mùn hữu cơ dưới đáy vuông tôm; mùa khô nhiễm mặn nặng (trên 10 phần ngàn) nhưng mùa mưa rửa mặn trồng lúa ST24/ST25 cực kỳ ngon.",
+            "legend_en": "Organic-rich coastal saline clay (SOC 3.2%); brackish in dry season (8–25‰) and rain-flushed in wet season for specialty fragrant rice.",
+            "recommended_crops": "Luân canh thuận thiên: Tôm sú / Tôm thẻ / Cua (Mùa khô T1–T6) <-> Lúa ST24, ST25, Một Bụi Đỏ + Tôm càng xanh (Mùa mưa T8–T12)."
+          },
+          "2_heat_stress": {
+            "value": "ECOSTRESS LST = 37.9°C trên ruộng lúa muộn thiếu nước; 31.2°C trên vuông tôm giữ nước sâu; VPD = 2.25 kPa",
+            "color_hex": "#FB8C00",
+            "color_label": "Cam nóng (Nắng gắt làm tăng độ mặn nước vuông tôm & bốc mặn mặt ruộng)",
+            "legend_vi": "Nắng nóng tháng 2–4 làm nước trong vuông tôm bốc hơi nhanh khiến độ mặn tăng vọt và phân tầng nhiệt; nếu cố trồng lúa Đông Xuân muộn sẽ bị cháy khô lá.",
+            "legend_en": "High dry-season heat increases pond salinity via evaporation and causes fatal osmotic scorching on late dry-season rice.",
+            "recommended_crops": "Tuyệt đối không trồng lúa vụ Đông Xuân muộn (T1–T4); giữ mực nước vuông tôm sâu > 1.2 m ở mương bao để chống nóng cho tôm."
+          },
+          "3_cold_frost_risk": {
+            "value": "NASA POWER T2M_MIN = 19.0°C (Đợt gió mùa Đông Bắc tháng 12–1 làm nhiệt độ nước vuông tôm hạ thấp về đêm)",
+            "color_hex": "#00ACC1",
+            "color_label": "Xanh lơ (Đêm lạnh gió chướng làm tôm giảm ăn & dễ đốm trắng)",
+            "legend_vi": "Tháng Chạp – tháng Giêng gió chướng thổi mạnh làm nước vuông lạnh dưới 22°C về đêm, tôm giống mới thả dễ bị co cơ, bỏ ăn và bùng bệnh đốm trắng.",
+            "legend_en": "Northeast monsoon cold snaps in Dec–Jan chill shallow shrimp ponds, triggering white spot syndrome (WSSV) and reduced feeding.",
+            "recommended_crops": "Thả giống tôm ở mương ươm sâu có che lưới cản gió chướng và giảm 30–50% lượng thức ăn vào những ngày đêm lạnh."
+          },
+          "4_extreme_rainfall": {
+            "value": "GPM IMERG Mưa tích lũy 30 ngày > 200 mm (Tháng 6–7) là ngưỡng kích hoạt rửa mặn; mưa lớn đột ngột mùa khô gây sốc pH tôm",
+            "color_hex": "#1565C0",
+            "color_label": "Xanh dương đậm (Nước mưa vàng để rửa mặn trồng lúa)",
+            "legend_vi": "Vùng bán đảo Cà Mau chỉ có nước mưa để rửa mặn: Phải chờ tổng mưa GPM trên 200 mm kết hợp bón vôi đẩy muối rồi mới gieo cấy lúa để không bị hạn Bà Chằng làm chết mạ!",
+            "legend_en": "Relying 100% on rainfall for desalinization: wait until cumulative 30-day GPM rainfall exceeds 200 mm before transplanting rice.",
+            "recommended_crops": "Chỉ xuống giống Lúa ST24/ST25 khi mưa tích lũy > 200 mm và độ mặn nước mặt trảng < 2.0‰."
+          },
+          "5_smap_soil_moisture": {
+            "value": "SMAP sm_surface = 0.39 m³/m³ (Bùn đáy ướt giữ chặt tồn dư thuốc sâu vụ lúa nếu không phơi đáy)",
+            "color_hex": "#0277BD",
+            "color_label": "Xanh biển (Đất trảng ướt bùn giàu mùn giữ tồn dư hóa chất lâu)",
+            "legend_vi": "Sau khi gặt lúa tháng 1, nếu vụ lúa có xịt thuốc sâu Cypermethrin/Abamectin thì hóa chất vẫn bám chặt trong bùn ướt; phải phơi nắng mặt trảng 10–12 ngày mới được thả tôm!",
+            "legend_en": "Wet organic clay sediment strongly adsorbs pyrethroid/abamectin residues from the rice crop; 10–12 days of UV sun-drying is mandatory before stocking shrimp.",
+            "recommended_crops": "Áp dụng Lúa – Tôm sinh thái hữu cơ (chỉ dùng nấm xanh Metarhizium và men vi sinh Bacillus, 0% thuốc sâu hóa học)."
+          },
+          "6_ecostress_esi": {
+            "value": "ECOSTRESS ESI = 0.34 (Trên các ruộng cố làm lúa Đông Xuân muộn tại Trần Đề/Mỹ Xuyên bị nhiễm mặn 2.5‰)",
+            "color_hex": "#C62828",
+            "color_label": "Đỏ (Cảnh báo lúa ngộ độc mặn - Tuyệt đối ngưng rải Kali đỏ KCl & Urê)",
+            "legend_vi": "Khi lúa đang bị ngộ độc mặn (ESI Đỏ), nếu rải thêm phân Kali đỏ (KCl chứa gốc muối Clo) và Urê sẽ rút cạn nước trong rễ làm lúa cháy khô trắng đồng!",
+            "legend_en": "Applying muriate of potash (KCl) or Urea onto salt-stressed rice (ESI < 0.40) intensifies chloride toxicity and kills the crop.",
+            "recommended_crops": "Ngưng phân bón gốc, chỉ phun lá K2SO4 + Silic + Canxi; từ năm sau chuyển sang Lúa – Tôm hoặc 2 Lúa mùa mưa – 1 Màu sớm."
+          },
+          "7_ndvi_bare_soil": {
+            "value": "Chu kỳ kép trên Landsat: MNDWI > 0.25 (Mặt nước nuôi tôm T1–T6) <-> EVI > 0.55 (Thảm lúa xanh T8–T12)",
+            "color_hex": "#039BE5",
+            "color_label": "Xanh lam chuyển Xanh lục theo mùa (Chu trình Tôm – Lúa chuẩn)",
+            "legend_vi": "Bản đồ vệ tinh phân biệt rõ 6 tháng mặt nước nuôi tôm và 5 tháng ruộng lúa xanh mướt; tuyệt đối không bỏ vụ lúa vì rễ lúa giúp hút sạch chất bẩn đáy vuông tôm.",
+            "legend_en": "Distinctive bimodal spectral signature alternating between brackish aquaculture water (MNDWI) and rainfed fragrant rice (EVI).",
+            "recommended_crops": "Giữ vững luân canh 1 vụ Tôm – 1 vụ Lúa (rễ lúa làm sạch đáy ao giúp tôm vụ sau trúng mùa)."
+          },
+          "8_grace_groundwater": {
+            "value": "GRACE-FO lwe_thickness = -14.2 cm, xu thế sụt giảm -3.0 cm/năm do bơm nước ngầm pha loãng nước nuôi tôm và sinh hoạt",
+            "color_hex": "#B71C1C",
+            "color_label": "Đỏ sẫm (Báo động đỏ cạn kiệt nước ngầm & sụt lún đất ven biển)",
+            "legend_vi": "Trữ lượng nước ngầm dưới lòng đất bán đảo Cà Mau – Sóc Trăng đang rút xuống mức báo động đỏ làm mặt đất sụt lún 2–4 cm/năm!",
+            "legend_en": "Critical groundwater depletion (-14.2 cm anomaly) driving land subsidence of 2–4 cm/year across the coastal peninsula.",
+            "recommended_crops": "Không bơm nước ngầm để pha ngọt nuôi tôm hoặc tưới lúa mùa khô; tuân thủ lịch thời vụ thuận thiên theo nước trời."
+          },
+          "9_srtm_elevation": {
+            "value": "NASADEM Cao độ = 0.5–0.8 m, HAND = 0.3 m (Trũng thấp ven biển chịu triều Biển Đông & Biển Tây)",
+            "color_hex": "#0D47A1",
+            "color_label": "Xanh chàm (Vùng trũng thấp ven biển chịu tác động trực tiếp thủy triều)",
+            "legend_vi": "Đất thấp sát mực nước biển (chỉ cao 0.5–0.8 mét) nên rất thuận lợi lấy nước thủy triều nuôi tôm cua nhưng cần bờ vuông cao chống tràn khi triều cường.",
+            "legend_en": "Low coastal plain (0.5–0.8 m elevation) ideal for tidal brackish water exchange in rice-shrimp polders.",
+            "recommended_crops": "Mô hình Lúa thơm ST24/ST25 trên trảng + Tôm sú / Tôm càng xanh / Cua biển dưới mương bao."
+          }
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [104.8, 9.65],
+            [106.25, 9.65],
+            [106.15, 9.1],
+            [104.85, 8.6],
+            [104.7, 9.15],
+            [104.8, 9.65]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ZONE_06_COASTAL_SAND_RIDGE",
+      "properties": {
+        "zone_id": "ZONE_06_COASTAL_SAND_RIDGE",
+        "zone_name_vi": "Tiểu vùng Đất Giồng Cát Ven Biển (Trà Vinh - Sóc Trăng - Bến Tre)",
+        "zone_name_en": "Coastal Sand Ridge Upland Zone (Tra Vinh - Soc Trang - Ben Tre)",
+        "provinces": ["Trà Vinh (Cầu Ngang, Duyên Hải)", "Sóc Trăng (Vĩnh Châu)", "Bến Tre (Ba Tri, Thạnh Phú)"],
+        "layers": {
+          "1_soil_type": {
+            "value": "Đất cát pha giồng biển (Arenosols), Sand = 76%, Clay = 8%, SOC = 0.6% (Rất nghèo mùn, thoát nước cực nhanh)",
+            "color_hex": "#F9A825",
+            "color_label": "Vàng nghệ (Đất giồng cát cao ráo nhưng nghèo mùn, mau khô)",
+            "legend_vi": "Đất giồng có tới 76% là cát và rất ít chất mùn (0.6%), nên tưới nước hay rải phân Urê xuống chỉ 2 tiếng sau là nước và phân bị tuột thẳng xuống sâu!",
+            "legend_en": "Coastal sandy ridge soil (76% sand, 0.6% SOC) with extremely low water-holding capacity and rapid nutrient leaching.",
+            "recommended_crops": "Đậu phộng (Lạc), Hành tím Vĩnh Châu, Củ cải, Măng tây xanh, Dưa hấu kết hợp bón Than sinh học (Biochar) & phân ủ hoai."
+          },
+          "2_heat_stress": {
+            "value": "ECOSTRESS LST = 39.4°C (Mặt cát phơi nắng nóng nhất ĐBSCL lúc 13h30), MODIS biên độ nhiệt ngày-đêm = 14.8°C",
+            "color_hex": "#D32F2F",
+            "color_label": "Đỏ rực (Mặt đất cát nóng bỏng gần 40°C vào buổi trưa)",
+            "legend_vi": "Mặt cát trần buổi trưa nắng nóng tới gần 40°C! Nếu bón phân chuồng tươi chưa ủ hoai vào cát nóng sẽ sinh nhiệt đốt cháy rễ hành tím và đậu phộng.",
+            "legend_en": "Exposed sandy surface reaches 39.4°C at midday; applying uncomposted manure generates heat and fungal root rot.",
+            "recommended_crops": "Trồng Đậu phộng bò kín mặt cát + Phủ rơm rạ/màng phủ sinh học và chỉ dùng phân hữu cơ đã ủ hoai với nấm Trichoderma."
+          },
+          "3_cold_frost_risk": {
+            "value": "NASA POWER T2M_MIN = 19.2°C, cát nguội nhanh ban đêm giúp củ hành tím và củ cải phình to",
+            "color_hex": "#4CAF50",
+            "color_label": "Xanh lá (Đêm mát trên đất cát rất hợp cây lấy củ)",
+            "legend_vi": "Đất cát ban đêm nguội nhanh tạo chênh lệch nhiệt độ ngày–đêm lớn, rất thuận lợi kích thích hành tím, củ cải, khoai lang xuống củ chắc và ngọt.",
+            "legend_en": "Rapid nocturnal cooling on sandy ridges promotes bulb/tuber formation in purple shallots, radish, and sweet potato.",
+            "recommended_crops": "Hành tím, Tỏi, Củ cải trắng, Khoai lang, Đậu phộng vụ Đông Xuân."
+          },
+          "4_extreme_rainfall": {
+            "value": "GPM IMERG Mưa lớn mùa mưa > 250 mm/tháng trôi sạch phân bón trên cát nhưng mùa khô chỉ có 5 mm/tháng",
+            "color_hex": "#D7CCC8",
+            "color_label": "Nâu vàng mùa khô / Xanh đậm mùa mưa (Cần thu trữ nước mưa)",
+            "legend_vi": "Mùa mưa nước mưa thấm tuột hết, mùa khô lại không có giọt mưa nào; bà con nên lót bạt HDPE ở góc trũng để hứng trữ nước mưa mùa mưa để dành tưới mùa khô!",
+            "legend_en": "Extreme seasonal rainfall contrast; harvesting wet-season rainwater in HDPE-lined farm ponds is essential for dry-season irrigation.",
+            "recommended_crops": "Chia nhỏ lượng phân bón làm nhiều lần hoặc hòa phân tưới qua dây nhỏ giọt để chống rửa trôi."
+          },
+          "5_smap_soil_moisture": {
+            "value": "SMAP sm_surface = 0.14 m³/m³, sm_rootzone = 0.18 m³/m³ (Mùa khô T2–T4 khô kiệt rất nhanh)",
+            "color_hex": "#E65100",
+            "color_label": "Đỏ cam (Đất cát giữ ẩm kém nhất ĐBSCL)",
+            "legend_vi": "Độ ẩm đất giồng cát mùa nắng tụt xuống mức thấp nhất miền Tây (14%); tưới tràn mặt cát vừa tốn điện vừa bốc hơi mất hết 70% nước.",
+            "legend_en": "Lowest soil moisture retention in the delta (0.14 m³/m³); flood/overhead irrigation loses 70% of water to evaporation and deep percolation.",
+            "recommended_crops": "Lắp dây tưới nhỏ giọt chôn sát gốc kết hợp trồng Đậu phộng, Mè, Măng tây xanh tiết kiệm 70% nước."
+          },
+          "6_ecostress_esi": {
+            "value": "ECOSTRESS ESI = 0.36 (Trên các rẫy bắp/màu tưới giếng khoan bị hụt nước mùa khô)",
+            "color_hex": "#C62828",
+            "color_label": "Đỏ (Cây màu trên giồng cát khát nước gay gắt vào tháng 3–4)",
+            "legend_vi": "Cây bắp và rau màu trồng trên cát trần bị héo rũ buổi trưa; cần bổ sung chất giữ ẩm tự nhiên (than trấu Biochar, mụn dừa, phân trùn quế) vào rãnh trồng.",
+            "legend_en": "Severe midday wilting on unmulched sandy beds; amending planting furrows with rice-husk biochar and coco-peat boosts moisture retention by 40%.",
+            "recommended_crops": "Luân canh Bắp/Hành tím -> Đậu phộng/Đậu xanh vùi thân lá làm phân xanh giữ ẩm."
+          },
+          "7_ndvi_bare_soil": {
+            "value": "Landsat BSI = +0.26 (Phản xạ cát khô rất mạnh khi để đất trống mùa nắng)",
+            "color_hex": "#8D6E63",
+            "color_label": "Nâu sáng (Đất cát trống dễ bị gió chướng thổi bay màu đất)",
+            "legend_vi": "Để mặt giồng cát trống không vào tháng 2–4 sẽ bị gió biển thổi bay hết lớp đất mặt màu mỡ và làm nóng rẫy.",
+            "legend_en": "High Bare Soil Index (BSI +0.26) indicates exposed sand vulnerable to coastal wind erosion and thermal baking.",
+            "recommended_crops": "Trồng cây họ đậu bò sát đất (Đậu phộng, Đậu xanh, Cỏ đậu) giữ chặt lớp cát mặt."
+          },
+          "8_grace_groundwater": {
+            "value": "GRACE-FO lwe_thickness = -13.5 cm, xu thế -3.2 cm/năm (Túi nước ngầm ngọt dưới giồng cát đang cạn kiệt nhanh)",
+            "color_hex": "#B71C1C",
+            "color_label": "Đỏ sẫm (Báo động giếng khoan hụt nước & nhiễm mặn tầng ngầm)",
+            "legend_vi": "Dưới mỗi giồng cát là một túi nước ngọt mỏng nổi trên nền nước mặn; bơm giếng khoan tưới tràn quá mức sẽ hút ngược nước mặn vào làm hỏng giếng vĩnh viễn!",
+            "legend_en": "Freshwater lenses beneath coastal sand ridges are rapidly depleting (-13.5 cm); over-pumping induces irreversible saltwater upconing into wells.",
+            "recommended_crops": "Chuyển đổi sang cây siêu tiết kiệm nước (Đậu phộng, Mè, Măng tây) + Tưới nhỏ giọt + Ao bạt trữ nước mưa."
+          },
+          "9_srtm_elevation": {
+            "value": "NASADEM Cao độ = 2.5–4.0 m, HAND = 2.4 m (Giồng cát cao hình cánh cung ven biển)",
+            "color_hex": "#FFA000",
+            "color_label": "Vàng nâu (Địa hình giồng cao nhất vùng ven biển, không bao giờ ngập lũ)",
+            "legend_vi": "Đất giồng cao từ 2.5 đến 4 mét nên mưa bão không sợ ngập úng, nhưng nước mưa chảy tràn xuống trũng rất nhanh nếu không có bờ giữ nước.",
+            "legend_en": "Elevated coastal beach ridges (2.5–4.0 m) immune to flooding but subject to rapid surface runoff.",
+            "recommended_crops": "Canh tác theo đường đồng mức trên giồng cát, kết hợp đào ao lót bạt ở chân giồng để hứng nước mưa."
+          }
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [106.25, 10.05],
+            [106.7, 10.05],
+            [106.6, 9.45],
+            [106.15, 9.45],
+            [106.25, 10.05]
+          ]
+        ]
+      }
+    }
+  ]
+}

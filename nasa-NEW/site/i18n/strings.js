@@ -1,0 +1,291 @@
+// All interface copy, Vietnamese and English. Keys must match in both languages
+// (checked by scripts/check-i18n.mjs).
+
+export const T = {
+  vi: {
+    locale: 'vi-VN',
+    simulated: 'Dữ liệu mô phỏng',
+    farmMeta: 'Ruộng mẫu · 4 thửa · 2,4 ha',
+    langLabel: 'Ngôn ngữ',
+    offline: 'Ngoại tuyến · dữ liệu đã lưu',
+
+    // data source
+    sourceLabel: 'Nguồn dữ liệu',
+    sourceDemo: 'Demo',
+    sourceLive: 'NASA trực tiếp',
+    provinceLabel: 'Tỉnh',
+    liveLoading: 'Đang lấy dữ liệu NASA…',
+    liveError: 'Chưa lấy được dữ liệu trực tiếp, đang dùng dữ liệu mẫu.',
+    liveCached: (time) => `Đang dùng dữ liệu đã lưu lúc ${time}.`,
+    liveDate: (date) => `Dữ liệu NASA POWER đến ngày ${date}`,
+    demoDate: 'Cập nhật 06:12 · 21/09/2026',
+    retry: 'Thử lại',
+
+    // crops
+    cropLabel: 'Cây trồng',
+    crops: { rice: 'Lúa', coffee: 'Cà phê', veg: 'Rau màu', fruit: 'Cây ăn trái' },
+
+    // banner
+    today: 'Hôm nay',
+    whatIfOn: 'Đang giả định',
+    whatIfTag: 'Giả định',
+    demoPill: 'Dữ liệu mô phỏng · 21/9',
+    demoPillShort: 'Mô phỏng',
+    livePill: (place, date) => `${place} · NASA ${date}`,
+
+    // map
+    mapTitle: 'Bản đồ ruộng',
+    mapHint: 'Chạm vào một thửa để xem chi tiết',
+    plot: 'Thửa',
+    canal: 'Kênh tưới',
+    gate: 'Cống',
+    layerLabel: 'Lớp bản đồ',
+    layers: { moisture: 'Độ ẩm', ndvi: 'NDVI', drought: 'Hạn hán' },
+    legendTitle: { moisture: 'Độ ẩm đất', ndvi: 'Chỉ số cây xanh', drought: 'Rủi ro hạn hán' },
+    legendMoisture: (need) => [`Đủ ẩm ≥ ${need}%`, `Thấp`, `Rất thấp`],
+    legendNdvi: ['Dày, khỏe > 0,65', 'Khá 0,55–0,65', 'Yếu < 0,55'],
+    dayLabel: 'Ngày',
+    play: 'Phát lại 7 ngày',
+    pause: 'Tạm dừng',
+    pastNote: (d) => `Đang xem ngày ${d}. Gợi ý tưới chỉ dành cho hôm nay.`,
+    backToday: 'Về hôm nay',
+    plotNeed: { water: 'Cần tưới tối nay', wait: 'Chờ mưa', fine: 'Chưa cần tưới' },
+
+    // status words
+    status: { good: 'Tốt', fair: 'Khá', low: 'Thấp', veryLow: 'Rất thấp', wet: 'Đủ ẩm', sparse: 'Thưa', bare: 'Đất trống' },
+    droughtLevels: ['Thấp', 'Trung bình', 'Trung bình - Cao', 'Cao', 'Rất cao'],
+
+    // readings
+    moistureName: 'Độ ẩm đất',
+    moistureUnitSat: '% bão hòa',
+    moistureDesc: (crop, need, sat) =>
+      sat
+        ? `Độ bão hòa lớp đất mặt (NASA POWER). ${crop} cần từ ${need}% trở lên.`
+        : `Trung bình 4 thửa, lớp đất 0–5 cm. ${crop} cần từ ${need}% trở lên.`,
+    needLabel: (crop) => `${crop} cần`,
+    ndviName: 'Chỉ số cây xanh',
+    ndviDesc: (weak, good) =>
+      weak ? `Lá vẫn xanh. Thửa ${weak} đang chậm lại.` : good ? 'Lá xanh và khỏe đều ở cả 4 thửa.' : 'Cây còn thưa hoặc mới gieo; theo dõi thêm.',
+    droughtName: 'Rủi ro hạn hán',
+    droughtDesc: (dry, tMax) =>
+      dry > 0 ? `${dry} ngày chưa có mưa, nắng nóng tới ${tMax}°C.` : `Có mưa gần đây, nhiệt độ cao nhất ${tMax}°C.`,
+    ndviSimulatedTag: 'mô phỏng',
+
+    // advice
+    adviceCta: 'Gợi ý tưới tiêu',
+    adviceCtaSub: 'Dựa trên độ ẩm, NDVI, hạn hán và dự báo mưa',
+    why: 'Vì sao?',
+    steps: 'Làm thế nào?',
+    timeline: 'Lịch tưới hôm nay',
+    phases: { day: 'Ban ngày', hot: 'Bốc hơi mạnh', dusk: 'Chiều tối', night: 'Đêm' },
+    minutes: 'phút',
+    waterMethod: 'Cách tưới đề xuất',
+    schedule: (time) => `Lên lịch lúc ${time}`,
+    scheduled: (time, id) => `Đã lên lịch ${time} · thửa ${id}`,
+    undo: 'Hoàn tác',
+    close: 'Đóng',
+    share: 'Chia sẻ',
+
+    // forecast
+    forecastTitle: 'Dự báo 7 ngày',
+    forecastSource: { demo: 'mô phỏng', live: 'Open-Meteo' },
+    weekday: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+
+    // trend
+    weekTitle: 'Tuần qua và tuần tới',
+    measured: 'Đã đo',
+    rainBars: 'Mưa dự báo (mm)',
+    trendTitle: '7 ngày qua',
+    trendSub: (falling) => (falling ? 'Độ ẩm đất giảm dần, NDVI bắt đầu giảm nhẹ' : 'Độ ẩm đất ổn định'),
+    trendMoisture: 'Độ ẩm đất (%)',
+    trendNdvi: 'NDVI',
+    trendNeed: (crop, need) => `Mức ${crop.toLowerCase()} cần ${need}%`,
+    dayCol: 'Ngày',
+
+    // simulator
+    simTitle: 'Thử giả định',
+    simSub: 'Kéo thanh trượt, bản đồ và gợi ý thay đổi ngay',
+    simMoisture: 'Độ ẩm đất trung bình',
+    simDry: 'Số ngày không mưa',
+    simRain: 'Mưa trong 48 giờ tới',
+    simTemp: 'Nhiệt độ cao nhất',
+    presets: { drought: 'Mùa khô gay gắt', rain: 'Sắp mưa lớn', wet: 'Đủ nước' },
+    simClear: 'Bỏ giả định',
+    days: 'ngày',
+
+    // share
+    shareTitle: 'Chia sẻ gợi ý',
+    print: 'In / Lưu PDF',
+    copy: 'Sao chép',
+    copied: 'Đã sao chép',
+    sendNative: 'Gửi…',
+    qrTitle: 'Mở trên điện thoại',
+    qrHint: 'Điện thoại cần dùng chung Wi-Fi với máy tính này.',
+    qrUnavailable: 'Chưa có địa chỉ Wi-Fi. Hãy mở trang bằng tệp Start Dashboard.',
+    cardFooterDemo: 'Dữ liệu mô phỏng · ruộng mẫu để trình diễn',
+    cardFooterLive: (date) => `NASA POWER · MODIS (ORNL) · Open-Meteo · số liệu ngày ${date}`,
+
+    // assistant
+    askAssistant: 'Hỏi trợ lý',
+    assistantTitle: 'Trợ lý nông trại',
+    assistantIntro: 'Hỏi bất cứ điều gì về ruộng của bạn. Trợ lý dựa trên số liệu đang hiển thị.',
+    placeholder: 'Hỏi về ruộng của bạn…',
+    send: 'Gửi',
+    suggestions: ['Tháng nào thiếu nước nhất?', 'Nên chọn chiến lược luân canh nào?', 'Độ mặn đất ảnh hưởng ra sao?'],
+    sampleAnswer: 'Trả lời mẫu (chưa kết nối AI)',
+    aiAnswer: 'Trả lời bởi Gemini',
+    answering: 'Đang trả lời…',
+
+    // sources
+    sourcesTitle: 'Số liệu đến từ đâu?',
+    srcMoistureDemo: 'Số liệu mô phỏng để trình diễn, không phải số đo vệ tinh',
+    srcMoistureLive: (date) => `NASA POWER (ước tính mô hình MERRA-2, không phải số đo SMAP) · ngày ${date}`,
+    srcNdviDemo: '250 m · ảnh tổng hợp 16 ngày (mô phỏng)',
+    srcNdviLive: (date) => `250 m · MOD13Q1 · ảnh ngày ${date}`,
+    srcWeather: (live) => (live ? 'Dự báo Open-Meteo · mưa quá khứ từ NASA POWER' : 'Dự báo mô phỏng'),
+    whatMoisture: 'Độ ẩm đất',
+    whatWeather: 'Mưa & nhiệt độ',
+    simulatedNote: 'Số liệu có ghi “mô phỏng” là dữ liệu mẫu để trình diễn. Chế độ “NASA trực tiếp” dùng số liệu thật.',
+    plotSpreadNote: 'Chênh lệch giữa 4 thửa là mô phỏng; NASA đo theo ô lưới lớn.',
+    footer: 'Dự án cộng đồng dùng dữ liệu mở của NASA. Không phải sản phẩm chính thức của NASA.',
+    closeTerm: 'Đóng giải thích',
+    source: 'Nguồn',
+  },
+
+  en: {
+    locale: 'en-US',
+    simulated: 'Simulated data',
+    farmMeta: 'Demo farm · 4 plots · 2.4 ha',
+    langLabel: 'Language',
+    offline: 'Offline · saved data',
+
+    sourceLabel: 'Data source',
+    sourceDemo: 'Demo',
+    sourceLive: 'Live NASA',
+    provinceLabel: 'Province',
+    liveLoading: 'Fetching NASA data…',
+    liveError: "Couldn't fetch live data yet; showing demo data.",
+    liveCached: (time) => `Using data saved at ${time}.`,
+    liveDate: (date) => `NASA POWER data up to ${date}`,
+    demoDate: 'Updated 06:12 · 21 Sep 2026',
+    retry: 'Retry',
+
+    cropLabel: 'Crop',
+    crops: { rice: 'Rice', coffee: 'Coffee', veg: 'Vegetables', fruit: 'Fruit trees' },
+
+    today: 'Today',
+    whatIfOn: 'What-if mode',
+    whatIfTag: 'What-if',
+    demoPill: 'Simulated data · 21 Sep',
+    demoPillShort: 'Simulated',
+    livePill: (place, date) => `${place} · NASA ${date}`,
+
+    mapTitle: 'Farm map',
+    mapHint: 'Tap a plot to see its details',
+    plot: 'Plot',
+    canal: 'Irrigation canal',
+    gate: 'Gate',
+    layerLabel: 'Map layer',
+    layers: { moisture: 'Moisture', ndvi: 'NDVI', drought: 'Drought' },
+    legendTitle: { moisture: 'Soil moisture', ndvi: 'Vegetation index', drought: 'Drought risk' },
+    legendMoisture: (need) => [`Enough ≥ ${need}%`, 'Low', 'Very low'],
+    legendNdvi: ['Dense > 0.65', 'Fair 0.55–0.65', 'Weak < 0.55'],
+    dayLabel: 'Day',
+    play: 'Replay 7 days',
+    pause: 'Pause',
+    pastNote: (d) => `Viewing ${d}. Irrigation advice is for today only.`,
+    backToday: 'Back to today',
+    plotNeed: { water: 'Needs water tonight', wait: 'Wait for rain', fine: 'No watering needed' },
+
+    status: { good: 'Good', fair: 'Fair', low: 'Low', veryLow: 'Very low', wet: 'Moist', sparse: 'Sparse', bare: 'Bare soil' },
+    droughtLevels: ['Low', 'Moderate', 'Medium–High', 'High', 'Severe'],
+
+    moistureName: 'Soil moisture',
+    moistureUnitSat: '% saturation',
+    moistureDesc: (crop, need, sat) =>
+      sat
+        ? `Topsoil saturation (NASA POWER). ${crop} needs ${need}% or more.`
+        : `Average of 4 plots, top 0–5 cm of soil. ${crop} needs ${need}% or more.`,
+    needLabel: (crop) => `${crop} needs`,
+    ndviName: 'Vegetation index',
+    ndviDesc: (weak, good) =>
+      weak ? `Leaves are still green. Plot ${weak} is slowing down.` : good ? 'Leaves are green and healthy in all 4 plots.' : 'Plants are still sparse or newly sown; keep watching.',
+    droughtName: 'Drought risk',
+    droughtDesc: (dry, tMax) =>
+      dry > 0 ? `No rain for ${dry} days; heat up to ${tMax}°C.` : `Recent rain; highs of ${tMax}°C.`,
+    ndviSimulatedTag: 'simulated',
+
+    adviceCta: 'Irrigation advice',
+    adviceCtaSub: 'Based on moisture, NDVI, drought risk and the rain forecast',
+    why: 'Why?',
+    steps: 'How?',
+    timeline: "Today's watering plan",
+    phases: { day: 'Daytime', hot: 'High evaporation', dusk: 'Dusk', night: 'Night' },
+    minutes: 'min',
+    waterMethod: 'Recommended method',
+    schedule: (time) => `Schedule for ${time}`,
+    scheduled: (time, id) => `Scheduled ${time} · plot ${id}`,
+    undo: 'Undo',
+    close: 'Close',
+    share: 'Share',
+
+    forecastTitle: '7-day forecast',
+    forecastSource: { demo: 'simulated', live: 'Open-Meteo' },
+    weekday: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+
+    weekTitle: 'Last week and next week',
+    measured: 'Measured',
+    rainBars: 'Forecast rain (mm)',
+    trendTitle: 'Last 7 days',
+    trendSub: (falling) => (falling ? 'Soil moisture falling steadily; NDVI starting to dip' : 'Soil moisture holding steady'),
+    trendMoisture: 'Soil moisture (%)',
+    trendNdvi: 'NDVI',
+    trendNeed: (crop, need) => `${crop} needs ${need}%`,
+    dayCol: 'Day',
+
+    simTitle: 'What if…?',
+    simSub: 'Drag a slider and the map and advice change instantly',
+    simMoisture: 'Average soil moisture',
+    simDry: 'Days without rain',
+    simRain: 'Rain in the next 48 h',
+    simTemp: 'Max temperature',
+    presets: { drought: 'Severe dry season', rain: 'Heavy rain coming', wet: 'Well watered' },
+    simClear: 'Clear what-if',
+    days: 'days',
+
+    shareTitle: 'Share this advice',
+    print: 'Print / Save PDF',
+    copy: 'Copy text',
+    copied: 'Copied',
+    sendNative: 'Send…',
+    qrTitle: 'Open on a phone',
+    qrHint: 'The phone must be on the same Wi-Fi as this laptop.',
+    qrUnavailable: 'No Wi-Fi address yet. Open the page with the Start Dashboard file.',
+    cardFooterDemo: 'Simulated data · demo farm for presentation',
+    cardFooterLive: (date) => `NASA POWER · MODIS (ORNL) · Open-Meteo · data of ${date}`,
+
+    askAssistant: 'Ask the assistant',
+    assistantTitle: 'Farm assistant',
+    assistantIntro: 'Ask anything about your farm. The assistant uses the numbers on screen.',
+    placeholder: 'Ask about your farm…',
+    send: 'Send',
+    suggestions: ['Which months are driest?', 'Which rotation strategy fits best?', 'How does soil salinity affect crops?'],
+    sampleAnswer: 'Sample answer (AI not connected)',
+    aiAnswer: 'Answered by Gemini',
+    answering: 'Answering…',
+
+    sourcesTitle: 'Where do the numbers come from?',
+    srcMoistureDemo: 'Simulated for the demo, not a satellite measurement',
+    srcMoistureLive: (date) => `NASA POWER (MERRA-2 model estimate, not a SMAP measurement) · ${date}`,
+    srcNdviDemo: '250 m · 16-day composite (simulated)',
+    srcNdviLive: (date) => `250 m · MOD13Q1 · image of ${date}`,
+    srcWeather: (live) => (live ? 'Open-Meteo forecast · past rain from NASA POWER' : 'Simulated forecast'),
+    whatMoisture: 'Soil moisture',
+    whatWeather: 'Rain & temperature',
+    simulatedNote: 'Numbers marked “simulated” are demo data. “Live NASA” mode uses real data.',
+    plotSpreadNote: 'Differences between the 4 plots are simulated; NASA measures a large grid cell.',
+    footer: 'A community project using open NASA data. Not an official NASA product.',
+    closeTerm: 'Close explanation',
+    source: 'Source',
+  },
+}

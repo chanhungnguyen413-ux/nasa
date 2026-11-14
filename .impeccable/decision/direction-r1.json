@@ -1,0 +1,131 @@
+{
+  "title": "Choose the visual world",
+  "question": "Fresh hand. The roll assigned the Canal Level Staff. Keep it, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Canal Level Staff",
+      "kicker": "THE ROLL",
+      "lineage": "Painted water-level staffs and alarm boards on irrigation canals and river banks (báo động I / II / III)",
+      "thesis": "Every reading is a graduated staff standing in the water. You read the field the way a farmer reads the canal gauge.",
+      "palette": ["#E9EEE8", "#1F6FB2", "#0D3B5E", "#3E8E41", "#F2F2EC", "#D2412B"],
+      "materials": ["painted enamel graduations", "canal concrete", "paddy water", "alarm-level bands I / II / III"],
+      "viewport": "Three tall level staffs side by side (moisture %, NDVI 0 to 1, drought alarm I to III), each with its water line settled at today's reading, and the sluice-gate advice panel beside them.",
+      "risk": "Three staffs can read like three thermometers if the graduations and alarm bands are not crafted precisely.",
+      "raised": [
+        { "from": "challenger-dive", "raise": "Soil moisture reads down one vertical depth axis (surface, root zone, deep), so the water line has a place in the soil." },
+        { "from": "challenger-grid", "raise": "One visible graduation grid; every staff, chart and map snaps to the same tick pitch." },
+        { "from": "challenger-quote", "raise": "Alarm bands carry diagonal hazard hatching, so risk shows as a mark, not only as red." },
+        { "from": "challenger-laban", "raise": "Irrigation is drawn to exact length on the day strip: 45 minutes from 18:00 is a block of true duration." },
+        { "from": "challenger-ikeda", "raise": "All figures use tabular numerals at data density in the data-source strip." },
+        { "from": "challenger-bench", "raise": "State is a mark: the target plot gets a flag, and a finished action gets a tick stamp." }
+      ]
+    },
+    {
+      "id": "model-pick",
+      "label": "Tear-Off Lunar Calendar",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "The lịch bloc wall calendar in Vietnamese homes",
+      "thesis": "Today's field as today's calendar sheet: a giant date, the readings, and 'good for / avoid' advice.",
+      "palette": ["#F4F1EA", "#C8102E", "#16301F", "#2E7D32", "#1565C0"],
+      "materials": ["thin newsprint sheet", "red and black print", "a tear-off stub stack"],
+      "viewport": "One tall sheet: giant date numerals, the lunar date, three readings, and today's advice in the 'nên làm' slot.",
+      "risk": "A nostalgic, paper-and-red look that drifts toward the cream-and-serif default; the most familiar pick."
+    },
+    {
+      "id": "challenger-dive",
+      "label": "Soil Depth Dive",
+      "verdict": "competitive",
+      "lineage": "Technical dive computers and depth profiles",
+      "thesis": "Descend from the canopy through the root zone into the dry deep soil, one depth axis ruling the page.",
+      "palette": ["#0B2A3A", "#1E6F8A", "#6BD4E0", "#5A3B22", "#EEF4F2"],
+      "materials": ["depth axis", "dive-computer digits", "falling particles"],
+      "viewport": "A vertical profile from the NDVI canopy down to soil moisture at depth, with a scrub that changes the layers.",
+      "case": "Strong on clarity for moisture, but the ocean-dive feel confuses the farm story.",
+      "risk": "Dark ocean palette strays from the green/blue daylight brief.",
+      "hero": "https://impeccable.style/worlds/cards/rivers-tides-ocean-depths-mesophotic-deep-dive-hero.webp"
+    },
+    {
+      "id": "challenger-grid",
+      "label": "Crouwel Grid Specimen",
+      "verdict": "declined",
+      "lineage": "Gridded type specimens",
+      "thesis": "Letterforms built cell by cell on a visible grid.",
+      "palette": ["#FFFFFF", "#9CC3E6", "#1A1A1A"],
+      "materials": ["construction grid"],
+      "viewport": "Giant grid-built numerals.",
+      "case": "Graphic, but says nothing about farms or water.",
+      "risk": "Cold for a farmer story.",
+      "kept": "One visible grid everything snaps to.",
+      "hero": "https://impeccable.style/worlds/cards/crouwel-grid-specimen-hero.webp"
+    },
+    {
+      "id": "challenger-laban",
+      "label": "Labanotation Score",
+      "verdict": "declined",
+      "lineage": "Dance notation",
+      "thesis": "Shape, shading and length encode an action exactly.",
+      "palette": ["#FFFFFF", "#111111", "#BBBBBB"],
+      "materials": ["symbol blocks", "a centre staff"],
+      "viewport": "A vertical score of actions.",
+      "case": "Too abstract for judges.",
+      "risk": "Unreadable without training.",
+      "kept": "Length encodes true duration.",
+      "hero": "https://impeccable.style/worlds/cards/notation-diagram-systems-labanotation-hero.webp"
+    },
+    {
+      "id": "challenger-quote",
+      "label": "Industrial Quote Grammar",
+      "verdict": "declined",
+      "lineage": "Industrial streetwear",
+      "thesis": "Quoted caps, zip-tie tags and hazard stripes.",
+      "palette": ["#FFFFFF", "#111111", "#FF6A13"],
+      "materials": ["hazard stripes", "zip ties"],
+      "viewport": "Readings as labelled crates.",
+      "case": "Fashion register, wrong world.",
+      "risk": "Feels like merch.",
+      "kept": "Risk marked with a hazard stripe, not only colour.",
+      "hero": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-industrial-quote-grammar-hero.webp"
+    },
+    {
+      "id": "challenger-ikeda",
+      "label": "Datamatics Field",
+      "verdict": "declined",
+      "lineage": "Data-sublime installation art",
+      "thesis": "Barcode columns and sine lattices in pure black and white.",
+      "palette": ["#000000", "#FFFFFF"],
+      "materials": ["bar fields", "monospace numerals"],
+      "viewport": "A strobing data wall.",
+      "case": "Spectacle without advice; drops green/blue.",
+      "risk": "Strobing hurts readability.",
+      "kept": "Tabular numerals at data density.",
+      "hero": "https://impeccable.style/worlds/cards/ikeda-datamatics-hero.webp"
+    },
+    {
+      "id": "challenger-bench",
+      "label": "Cutting Bench Rail",
+      "verdict": "declined",
+      "lineage": "Film editing benches",
+      "thesis": "State shown as a physical mark on a perforated rail.",
+      "palette": ["#0A0A0A", "#F26B1D", "#FFFFFF"],
+      "materials": ["film grain", "tape flags"],
+      "viewport": "Readings as frames on a rail.",
+      "case": "An editor's world, not a farmer's.",
+      "risk": "Orange-on-black fights the brief.",
+      "kept": "State is a mark, not a hue.",
+      "hero": "https://impeccable.style/worlds/cards/operate-a-cutting-bench-select-rail-hero.webp"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code" },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "A clean agri-tech SaaS dashboard: cards, badges and charts, done at full craft.",
+    "palette": ["#F7FAF8", "#0F1F17", "#16A34A", "#0284C7"],
+    "materials": ["card grid", "status badges", "line charts"],
+    "viewport": "A header, three KPI cards, a chart row and an advice button.",
+    "risk": "Indistinguishable from every other hackathon dashboard, by design."
+  },
+  "steer": true
+}

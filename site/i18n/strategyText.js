@@ -1,0 +1,50 @@
+// Câu chữ VI/EN cho hàng ba thẻ chiến lược (Phase 3) và thanh nhiệt độ ở trang Luân canh.
+// Phần thân của mỗi thẻ TÁI DÙNG câu chữ của rotationParts() (site/i18n/rotationText.js); ở đây chỉ có tên chiến lược,
+// câu "vì sao được chọn làm chiến lược này" và các câu mới của thanh nhiệt độ.
+
+export const STRAT_TEXT = {
+  vi: {
+    title: 'Ba chiến lược cho ruộng của bạn',
+    sub: 'Chọn tự động bằng số đo từ bốn kiểu bên dưới: kiểu đang làm, kiểu cần ít nước nhất năm khô, và kiểu cải tạo đất nhiều nhất.',
+    currentLabel: 'Bạn đang làm kiểu nào?',
+    names: { base: 'Cơ sở: cách đang làm', water: 'Tiết kiệm nước, chống hạn', soil: 'Phục hồi đất, ngắt chu kỳ sâu bệnh' },
+    chosen: {
+      base: () => 'Đây là kiểu bạn đang làm, dùng làm mốc để so với hai chiến lược kia.',
+      water: (x) => `Trong các kiểu khác, kiểu này cần ít nước tưới nhất năm khô: khoảng ${x.dry} mm (năm thường ${x.extra} mm).`,
+      soil: (x) => `Trong các kiểu khác, kiểu này có điểm cải tạo đất cao nhất: ${x.points} điểm (mỗi vụ cây màu, cây họ đậu, cây rễ sâu được 1 điểm).`,
+    },
+    alsoWins: 'Kiểu này cũng đứng đầu về cải tạo đất, nên mang cả hai nhãn.',
+    runnerUp: 'Kiểu cải tạo đất tốt nhất đã ở ô bên cạnh; đây là kiểu kế tiếp.',
+    priority: (x) => `Ưu tiên bạn đang đặt: ${x}.`,
+    priorityItem: (name, v) => `${name} ${v}/100`,
+    parts: { why: 'Vì sao đề xuất', evidence: 'Bằng chứng dữ liệu', benefits: 'Lợi ích kỳ vọng', gaps: 'Khoảng trống và độ không chắc chắn', risks: 'Rủi ro cần nông dân và chuyên gia địa phương thẩm định' },
+    pestGap: 'Ngắt chu kỳ sâu bệnh: các nguồn đang dùng không đo sâu bệnh, nên công cụ không nói luân canh này giảm sâu bệnh bao nhiêu. Cần cán bộ bảo vệ thực vật địa phương xác nhận.',
+    detailsTitle: 'Bốn kiểu luân canh chi tiết',
+    tempLabel: 'Nhiệt độ tăng',
+    tempNote: 'Thanh nhiệt độ tác động qua nhu cầu nước: ET0 (FAO-56) được tính lại với nhiệt độ cao hơn, giữ nguyên độ ẩm thực của không khí, rồi nhu cầu nước của vụ nhân theo tỉ số ET0 mới / ET0 cũ. Không chấm theo ngưỡng chịu nóng vì chưa có nguồn ngưỡng chịu nóng riêng cho lúa, đậu xanh và ngô.',
+    tempActive: (t) => `Nhiệt độ +${t} °C: nhu cầu nước của các vụ bên dưới đã tăng theo ET0.`,
+    tempUnavailable: 'Chưa có số liệu NASA POWER tính sẵn cho huyện này nên chưa tính được tác động của nhiệt độ.',
+  },
+  en: {
+    title: 'Three strategies for your field',
+    sub: 'Picked automatically by the numbers from the four rotations below: your current practice, the one needing the least water in a dry year, and the one improving soil the most.',
+    currentLabel: 'Which rotation do you use now?',
+    names: { base: 'Baseline: current practice', water: 'Water saving, drought-resilient', soil: 'Soil restoring, pest-cycle breaking' },
+    chosen: {
+      base: () => 'This is your current practice, used as the reference for the other two strategies.',
+      water: (x) => `Among the other rotations, this one needs the least irrigation in a dry year: about ${x.dry} mm (normal year ${x.extra} mm).`,
+      soil: (x) => `Among the other rotations, this one has the highest soil score: ${x.points} points (one point per season of upland crop, legume, or deep-rooted crop).`,
+    },
+    alsoWins: 'It also ranks first for soil improvement, so it carries both labels.',
+    runnerUp: 'The best soil-improving rotation is already in the next card; this is the next one.',
+    priority: (x) => `Your current priorities: ${x}.`,
+    priorityItem: (name, v) => `${name} ${v}/100`,
+    parts: { why: 'Why it is suggested', evidence: 'Data evidence', benefits: 'Expected benefits', gaps: 'Gaps and uncertainty', risks: 'Risks for farmers and local experts to validate' },
+    pestGap: 'Pest-cycle breaking: the sources used here do not measure pests, so the tool does not say how much this rotation reduces pests. Local plant-protection officers need to confirm.',
+    detailsTitle: 'The four rotations in detail',
+    tempLabel: 'Temperature rise',
+    tempNote: 'The temperature slider acts through water need: ET0 (FAO-56) is recalculated with higher temperatures while keeping the actual air humidity, and each season’s water need is scaled by the ratio of new to old ET0. It does not score heat tolerance, because no source for crop-specific heat thresholds for rice, mung bean and maize was found.',
+    tempActive: (t) => `Temperature +${t} °C: the seasonal water needs below have risen with ET0.`,
+    tempUnavailable: 'No precomputed NASA POWER data for this district yet, so the temperature effect cannot be calculated.',
+  },
+}

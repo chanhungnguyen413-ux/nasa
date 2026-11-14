@@ -1,0 +1,49 @@
+{
+  "title": "Choose the visual world",
+  "question": "A safer, farm-first hand: pick the one that feels most like a farm and easiest for farmers.",
+  "options": [
+    {
+      "id": "farm-plan",
+      "label": "Farm From Above",
+      "lineage": "Rice paddies and plots seen from above, like a hand-drawn farm plan",
+      "thesis": "The dashboard is the farm itself: an illustrated top-down field with plots, canal and trees, and readings on little field signs.",
+      "palette": ["#EAF3E3", "#3F8F3A", "#7CB342", "#2E86C1", "#8D6E4A", "#F2B134"],
+      "materials": ["illustrated paddy plots", "canal water", "wooden field-marker signs", "soft daylight"],
+      "viewport": "A wide illustrated farm plan across the top, with plots tinted by soil moisture and a sign on each showing its numbers; three readings and the big advice button sit just below.",
+      "risk": "The illustration must be well drawn; a clumsy drawing looks childish to judges."
+    },
+    {
+      "id": "extension-leaflet",
+      "label": "Farming Advice Leaflet",
+      "lineage": "Agricultural extension leaflets and posters (tờ rơi khuyến nông)",
+      "thesis": "Written like the leaflet an extension officer hands a farmer: big pictograms, plain words, numbered steps.",
+      "palette": ["#FFFFFF", "#1B7F3B", "#E8F5E9", "#1E88E5", "#F9A825", "#212121"],
+      "materials": ["bold green header band", "large pictograms", "numbered step boxes", "tick and cross checklists"],
+      "viewport": "A green header band with the title, three big pictogram panels (water drop, leaf, sun), and advice as numbered steps.",
+      "risk": "The most plain-spoken option; it can look like a government flyer if the typography is not sharp."
+    },
+    {
+      "id": "seed-packet",
+      "label": "Seed Packet Almanac",
+      "lineage": "Printed seed packets and farm almanacs",
+      "thesis": "Each reading is a seed-packet panel: a crop illustration on the front, clear 'how to grow' facts on the back.",
+      "palette": ["#F6F8EE", "#2F7D32", "#A5D6A7", "#0277BD", "#E65100", "#3E2723"],
+      "materials": ["flat printed colour blocks", "crop illustrations", "packet-back info tables"],
+      "viewport": "Three packet-shaped cards in a row, each with a crop drawing and its number, and the advice as the 'planting instructions' panel.",
+      "risk": "Charming, but the packet metaphor can feel like a shop rather than a data tool."
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code" },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "A clean agri-tech dashboard at the craft level of Climate FieldView, OneSoil and John Deere Operations Center.",
+    "palette": ["#F7FAF8", "#0F1F17", "#16A34A", "#0284C7"],
+    "materials": ["card grid", "status badges", "field map", "line charts"],
+    "viewport": "A header, three KPI cards, a field map and trend charts, and the advice button.",
+    "risk": "Polished but looks like every other agri-tech product."
+  },
+  "steer": true,
+  "followup": false
+}
