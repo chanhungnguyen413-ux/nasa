@@ -1,0 +1,2928 @@
+{
+ "source": "MODIS MOD13Q1, 250 m, 16-day composite, via ORNL DAAC MODIS subset REST API",
+ "api": "https://modis.ornl.gov/rst/api/v1/MOD13Q1",
+ "band": "250m_16_days_NDVI",
+ "method": "median of the 9x9 block of 250 m pixels (about 2 km x 2 km) around each point",
+ "years": [
+  2021,
+  2025
+ ],
+ "fetchedAt": "2026-11-10T18:53:11+00:00",
+ "districts": [
+  {
+   "id": "cantho",
+   "name": "Cần Thơ · Cờ Đỏ",
+   "lat": 10.1,
+   "lon": 105.43,
+   "series": [
+    {
+     "date": "2021-01-01",
+     "ndvi": 0.753,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-01-17",
+     "ndvi": 0.6142,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-02-02",
+     "ndvi": 0.5945,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-02-18",
+     "ndvi": 0.5825,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-03-06",
+     "ndvi": 0.3404,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-03-22",
+     "ndvi": 0.3724,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-04-07",
+     "ndvi": 0.508,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-04-23",
+     "ndvi": 0.6517,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-05-09",
+     "ndvi": 0.639,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-05-25",
+     "ndvi": 0.6032,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-06-10",
+     "ndvi": 0.3114,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-06-26",
+     "ndvi": 0.4793,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-07-12",
+     "ndvi": 0.5529,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-07-28",
+     "ndvi": 0.5687,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-08-13",
+     "ndvi": 0.5808,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-08-29",
+     "ndvi": 0.4287,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-09-14",
+     "ndvi": 0.3872,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-09-30",
+     "ndvi": 0.2698,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-10-16",
+     "ndvi": 0.1968,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-11-01",
+     "ndvi": 0.1847,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-11-17",
+     "ndvi": 0.3092,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-12-03",
+     "ndvi": 0.6329,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-12-19",
+     "ndvi": 0.7576,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-01-01",
+     "ndvi": 0.7235,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-01-17",
+     "ndvi": 0.7077,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-02-02",
+     "ndvi": 0.5879,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-02-18",
+     "ndvi": 0.2811,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-03-06",
+     "ndvi": 0.4633,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-03-22",
+     "ndvi": 0.5043,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-04-07",
+     "ndvi": 0.5462,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-04-23",
+     "ndvi": 0.6087,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-05-09",
+     "ndvi": 0.4829,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-05-25",
+     "ndvi": 0.3998,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-06-10",
+     "ndvi": 0.4054,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-06-26",
+     "ndvi": 0.5,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-07-12",
+     "ndvi": 0.5732,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-07-28",
+     "ndvi": 0.5487,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-08-13",
+     "ndvi": 0.6026,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-08-29",
+     "ndvi": 0.4448,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-09-14",
+     "ndvi": 0.2514,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-09-30",
+     "ndvi": 0.0429,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-10-16",
+     "ndvi": 0.084,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-11-01",
+     "ndvi": 0.269,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-11-17",
+     "ndvi": 0.3162,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-12-03",
+     "ndvi": 0.6646,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-12-19",
+     "ndvi": 0.708,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-01-01",
+     "ndvi": 0.7642,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-01-17",
+     "ndvi": 0.6163,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-02-02",
+     "ndvi": 0.5113,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-02-18",
+     "ndvi": 0.3277,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-03-06",
+     "ndvi": 0.4416,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-03-22",
+     "ndvi": 0.6627,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-04-07",
+     "ndvi": 0.6855,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-04-23",
+     "ndvi": 0.6429,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-05-09",
+     "ndvi": 0.5036,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-05-25",
+     "ndvi": 0.3423,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-06-10",
+     "ndvi": 0.4856,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-06-26",
+     "ndvi": 0.6571,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-07-12",
+     "ndvi": 0.6318,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-07-28",
+     "ndvi": 0.5496,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-08-13",
+     "ndvi": 0.5969,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-08-29",
+     "ndvi": 0.3122,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-09-14",
+     "ndvi": 0.2815,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-09-30",
+     "ndvi": 0.1686,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-10-16",
+     "ndvi": 0.2398,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-11-01",
+     "ndvi": 0.2338,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-11-17",
+     "ndvi": 0.3425,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-12-03",
+     "ndvi": 0.6733,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-12-19",
+     "ndvi": 0.7437,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-01-01",
+     "ndvi": 0.7212,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-01-17",
+     "ndvi": 0.6961,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-02-02",
+     "ndvi": 0.5594,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-02-18",
+     "ndvi": 0.3041,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-03-05",
+     "ndvi": 0.4462,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-03-21",
+     "ndvi": 0.5346,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-04-06",
+     "ndvi": 0.6763,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-04-22",
+     "ndvi": 0.69,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-05-08",
+     "ndvi": 0.5857,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-05-24",
+     "ndvi": 0.5202,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-09",
+     "ndvi": 0.3577,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-25",
+     "ndvi": 0.6396,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-07-11",
+     "ndvi": 0.4411,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-07-27",
+     "ndvi": 0.6747,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-08-12",
+     "ndvi": 0.6049,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-08-28",
+     "ndvi": 0.5055,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-09-13",
+     "ndvi": 0.449,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-09-29",
+     "ndvi": 0.1826,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-10-15",
+     "ndvi": 0.1895,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-10-31",
+     "ndvi": 0.3021,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-11-16",
+     "ndvi": 0.5821,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-12-02",
+     "ndvi": 0.5234,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-12-18",
+     "ndvi": 0.7072,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-01-01",
+     "ndvi": 0.6892,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-01-17",
+     "ndvi": 0.6897,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-02-02",
+     "ndvi": 0.4947,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-02-18",
+     "ndvi": 0.3287,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-03-06",
+     "ndvi": 0.4913,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-03-22",
+     "ndvi": 0.599,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-04-07",
+     "ndvi": 0.6517,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-04-23",
+     "ndvi": 0.6629,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-05-09",
+     "ndvi": 0.5399,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-05-25",
+     "ndvi": 0.33,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-06-10",
+     "ndvi": 0.4169,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-06-26",
+     "ndvi": 0.5233,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-07-12",
+     "ndvi": 0.6423,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-07-28",
+     "ndvi": 0.6544,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-08-13",
+     "ndvi": 0.6173,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-08-29",
+     "ndvi": 0.3812,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-09-14",
+     "ndvi": 0.2952,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-09-30",
+     "ndvi": 0.2038,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-10-16",
+     "ndvi": 0.1895,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-11-01",
+     "ndvi": 0.253,
+     "validPixels": 80
+    },
+    {
+     "date": "2025-11-17",
+     "ndvi": 0.2597,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-12-03",
+     "ndvi": 0.2648,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-12-19",
+     "ndvi": 0.5833,
+     "validPixels": 81
+    }
+   ]
+  },
+  {
+   "id": "angiang",
+   "name": "An Giang · Thoại Sơn",
+   "lat": 10.3,
+   "lon": 105.26,
+   "series": [
+    {
+     "date": "2021-01-01",
+     "ndvi": 0.8324,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-01-17",
+     "ndvi": 0.8835,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-02-02",
+     "ndvi": 0.8771,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-02-18",
+     "ndvi": 0.8533,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-03-06",
+     "ndvi": 0.6926,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-03-22",
+     "ndvi": 0.5155,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-04-07",
+     "ndvi": 0.1161,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-04-23",
+     "ndvi": 0.6385,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-05-09",
+     "ndvi": 0.7309,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-05-25",
+     "ndvi": 0.8821,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-06-10",
+     "ndvi": 0.8967,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-06-26",
+     "ndvi": 0.7119,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-07-12",
+     "ndvi": 0.4282,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-07-28",
+     "ndvi": 0.1876,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-08-13",
+     "ndvi": 0.1611,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-08-29",
+     "ndvi": 0.2763,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-09-14",
+     "ndvi": 0.835,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-09-30",
+     "ndvi": 0.8703,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-10-16",
+     "ndvi": 0.7552,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-11-01",
+     "ndvi": 0.6545,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-11-17",
+     "ndvi": 0.4512,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-12-03",
+     "ndvi": 0.2124,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-12-19",
+     "ndvi": 0.5919,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-01-01",
+     "ndvi": 0.8172,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-01-17",
+     "ndvi": 0.8515,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-02-02",
+     "ndvi": 0.906,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-02-18",
+     "ndvi": 0.7134,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-03-06",
+     "ndvi": 0.5929,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-03-22",
+     "ndvi": 0.3175,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-04-07",
+     "ndvi": 0.2904,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-04-23",
+     "ndvi": 0.6684,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-05-09",
+     "ndvi": 0.8201,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-05-25",
+     "ndvi": 0.846,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-06-10",
+     "ndvi": 0.8482,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-06-26",
+     "ndvi": 0.6455,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-07-12",
+     "ndvi": 0.2437,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-07-28",
+     "ndvi": 0.1688,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-08-13",
+     "ndvi": 0.4254,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-08-29",
+     "ndvi": 0.5871,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-09-14",
+     "ndvi": 0.6832,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-09-30",
+     "ndvi": 0.5532,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-10-16",
+     "ndvi": 0.4811,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-11-01",
+     "ndvi": 0.3415,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-11-17",
+     "ndvi": 0.1083,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-12-03",
+     "ndvi": 0.3797,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-12-19",
+     "ndvi": 0.7869,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-01-01",
+     "ndvi": 0.9123,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-01-17",
+     "ndvi": 0.8754,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-02-02",
+     "ndvi": 0.8802,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-02-18",
+     "ndvi": 0.6665,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-03-06",
+     "ndvi": 0.4284,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-03-22",
+     "ndvi": 0.2605,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-04-07",
+     "ndvi": 0.2397,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-04-23",
+     "ndvi": 0.8128,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-05-09",
+     "ndvi": 0.8669,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-05-25",
+     "ndvi": 0.8753,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-06-10",
+     "ndvi": 0.6492,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-06-26",
+     "ndvi": 0.5289,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-07-12",
+     "ndvi": 0.198,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-07-28",
+     "ndvi": 0.1125,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-08-13",
+     "ndvi": 0.3576,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-08-29",
+     "ndvi": 0.6376,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-09-14",
+     "ndvi": 0.6744,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-09-30",
+     "ndvi": 0.739,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-10-16",
+     "ndvi": 0.7122,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-11-01",
+     "ndvi": 0.4281,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-11-17",
+     "ndvi": 0.1695,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-12-03",
+     "ndvi": 0.1957,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-12-19",
+     "ndvi": 0.3824,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-01-01",
+     "ndvi": 0.8216,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-01-17",
+     "ndvi": 0.9101,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-02-02",
+     "ndvi": 0.7991,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-02-18",
+     "ndvi": 0.6818,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-03-05",
+     "ndvi": 0.4676,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-03-21",
+     "ndvi": 0.2526,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-04-06",
+     "ndvi": 0.2161,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-04-22",
+     "ndvi": 0.8072,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-05-08",
+     "ndvi": 0.8758,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-05-24",
+     "ndvi": 0.8881,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-09",
+     "ndvi": 0.821,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-25",
+     "ndvi": 0.5764,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-07-11",
+     "ndvi": 0.1294,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-07-27",
+     "ndvi": 0.161,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-08-12",
+     "ndvi": 0.6585,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-08-28",
+     "ndvi": 0.7593,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-09-13",
+     "ndvi": 0.7084,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-09-29",
+     "ndvi": 0.7695,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-10-15",
+     "ndvi": 0.7476,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-10-31",
+     "ndvi": 0.3644,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-11-16",
+     "ndvi": 0.1447,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-12-02",
+     "ndvi": 0.487,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-12-18",
+     "ndvi": 0.8451,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-01-01",
+     "ndvi": 0.8901,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-01-17",
+     "ndvi": 0.8992,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-02-02",
+     "ndvi": 0.8781,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-02-18",
+     "ndvi": 0.7002,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-03-06",
+     "ndvi": 0.4826,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-03-22",
+     "ndvi": 0.1536,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-04-07",
+     "ndvi": 0.7065,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-04-23",
+     "ndvi": 0.8066,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-05-09",
+     "ndvi": 0.7384,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-05-25",
+     "ndvi": 0.7129,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-06-10",
+     "ndvi": 0.7097,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-06-26",
+     "ndvi": 0.5012,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-07-12",
+     "ndvi": 0.2835,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-07-28",
+     "ndvi": 0.2776,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-08-13",
+     "ndvi": 0.6521,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-08-29",
+     "ndvi": 0.7289,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-09-14",
+     "ndvi": 0.7803,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-09-30",
+     "ndvi": 0.7074,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-10-16",
+     "ndvi": 0.5846,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-11-01",
+     "ndvi": 0.176,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-11-17",
+     "ndvi": -0.0241,
+     "validPixels": 76
+    },
+    {
+     "date": "2025-12-03",
+     "ndvi": 0.008,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-12-19",
+     "ndvi": 0.2179,
+     "validPixels": 81
+    }
+   ]
+  },
+  {
+   "id": "soctrang",
+   "name": "Sóc Trăng · Mỹ Tú",
+   "lat": 9.62,
+   "lon": 105.83,
+   "series": [
+    {
+     "date": "2021-01-01",
+     "ndvi": 0.3282,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-01-17",
+     "ndvi": 0.6472,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-02-02",
+     "ndvi": 0.8537,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-02-18",
+     "ndvi": 0.86,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-03-06",
+     "ndvi": 0.8383,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-03-22",
+     "ndvi": 0.6596,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-04-07",
+     "ndvi": 0.3781,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-04-23",
+     "ndvi": 0.3436,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-05-09",
+     "ndvi": 0.2836,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-05-25",
+     "ndvi": 0.4899,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-06-10",
+     "ndvi": 0.7679,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-06-26",
+     "ndvi": 0.7814,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-07-12",
+     "ndvi": 0.9234,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-07-28",
+     "ndvi": 0.7337,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-08-13",
+     "ndvi": 0.5194,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-08-29",
+     "ndvi": 0.2426,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-09-14",
+     "ndvi": 0.1534,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-09-30",
+     "ndvi": 0.2777,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-10-16",
+     "ndvi": 0.7518,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-11-01",
+     "ndvi": 0.8307,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-11-17",
+     "ndvi": 0.6862,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-12-03",
+     "ndvi": 0.6831,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-12-19",
+     "ndvi": 0.3352,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-01-01",
+     "ndvi": 0.359,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-01-17",
+     "ndvi": 0.6112,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-02-02",
+     "ndvi": 0.798,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-02-18",
+     "ndvi": 0.857,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-03-06",
+     "ndvi": 0.8241,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-03-22",
+     "ndvi": 0.6395,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-04-07",
+     "ndvi": 0.3904,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-04-23",
+     "ndvi": 0.2613,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-05-09",
+     "ndvi": 0.2716,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-05-25",
+     "ndvi": 0.5231,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-06-10",
+     "ndvi": 0.7923,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-06-26",
+     "ndvi": 0.7659,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-07-12",
+     "ndvi": 0.8067,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-07-28",
+     "ndvi": 0.7475,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-08-13",
+     "ndvi": 0.5775,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-08-29",
+     "ndvi": 0.289,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-09-14",
+     "ndvi": 0.3253,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-09-30",
+     "ndvi": 0.2371,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-10-16",
+     "ndvi": 0.3903,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-11-01",
+     "ndvi": 0.5435,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-11-17",
+     "ndvi": 0.4514,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-12-03",
+     "ndvi": 0.3855,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-12-19",
+     "ndvi": 0.461,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-01-01",
+     "ndvi": 0.7804,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-01-17",
+     "ndvi": 0.8744,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-02-02",
+     "ndvi": 0.8326,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-02-18",
+     "ndvi": 0.7568,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-03-06",
+     "ndvi": 0.5548,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-03-22",
+     "ndvi": 0.3682,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-04-07",
+     "ndvi": 0.3239,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-04-23",
+     "ndvi": 0.333,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-05-09",
+     "ndvi": 0.4245,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-05-25",
+     "ndvi": 0.6628,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-06-10",
+     "ndvi": 0.8464,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-06-26",
+     "ndvi": 0.841,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-07-12",
+     "ndvi": 0.5631,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-07-28",
+     "ndvi": 0.4653,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-08-13",
+     "ndvi": 0.349,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-08-29",
+     "ndvi": 0.3566,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-09-14",
+     "ndvi": 0.4443,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-09-30",
+     "ndvi": 0.7273,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-10-16",
+     "ndvi": 0.6945,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-11-01",
+     "ndvi": 0.6631,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-11-17",
+     "ndvi": 0.3947,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-12-03",
+     "ndvi": 0.2418,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-12-19",
+     "ndvi": 0.2997,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-01-01",
+     "ndvi": 0.6947,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-01-17",
+     "ndvi": 0.9006,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-02-02",
+     "ndvi": 0.8229,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-02-18",
+     "ndvi": 0.7148,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-03-05",
+     "ndvi": 0.4612,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-03-21",
+     "ndvi": 0.3223,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-04-06",
+     "ndvi": 0.3425,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-04-22",
+     "ndvi": 0.2621,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-05-08",
+     "ndvi": 0.2528,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-05-24",
+     "ndvi": 0.714,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-09",
+     "ndvi": 0.7911,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-25",
+     "ndvi": 0.8481,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-07-11",
+     "ndvi": 0.4198,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-07-27",
+     "ndvi": 0.5928,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-08-12",
+     "ndvi": 0.3088,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-08-28",
+     "ndvi": 0.2343,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-09-13",
+     "ndvi": 0.4297,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-09-29",
+     "ndvi": 0.3446,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-10-15",
+     "ndvi": 0.8469,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-10-31",
+     "ndvi": 0.7466,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-11-16",
+     "ndvi": 0.5083,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-12-02",
+     "ndvi": 0.1403,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-12-18",
+     "ndvi": 0.2555,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-01-01",
+     "ndvi": 0.5546,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-01-17",
+     "ndvi": 0.5745,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-02-02",
+     "ndvi": 0.7782,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-02-18",
+     "ndvi": 0.818,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-03-06",
+     "ndvi": 0.6696,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-03-22",
+     "ndvi": 0.6502,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-04-07",
+     "ndvi": 0.3193,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-04-23",
+     "ndvi": 0.3068,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-05-09",
+     "ndvi": 0.2923,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-05-25",
+     "ndvi": 0.729,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-06-10",
+     "ndvi": 0.7717,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-06-26",
+     "ndvi": 0.7759,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-07-12",
+     "ndvi": 0.6979,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-07-28",
+     "ndvi": 0.607,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-08-13",
+     "ndvi": 0.287,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-08-29",
+     "ndvi": 0.2486,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-09-14",
+     "ndvi": 0.4917,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-09-30",
+     "ndvi": 0.8031,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-10-16",
+     "ndvi": 0.7787,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-11-01",
+     "ndvi": 0.7377,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-11-17",
+     "ndvi": 0.5823,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-12-03",
+     "ndvi": 0.4821,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-12-19",
+     "ndvi": 0.0931,
+     "validPixels": 81
+    }
+   ]
+  },
+  {
+   "id": "dongthap",
+   "name": "Đồng Tháp · Tháp Mười",
+   "lat": 10.55,
+   "lon": 105.83,
+   "series": [
+    {
+     "date": "2021-01-01",
+     "ndvi": 0.7257,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-01-17",
+     "ndvi": 0.6252,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-02-02",
+     "ndvi": 0.3478,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-02-18",
+     "ndvi": 0.4164,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-03-06",
+     "ndvi": 0.6205,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-03-22",
+     "ndvi": 0.7637,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-04-07",
+     "ndvi": 0.7923,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-04-23",
+     "ndvi": 0.7778,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-05-09",
+     "ndvi": 0.7104,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-05-25",
+     "ndvi": 0.5753,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-06-10",
+     "ndvi": 0.2943,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-06-26",
+     "ndvi": 0.6135,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-07-12",
+     "ndvi": 0.5599,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-07-28",
+     "ndvi": 0.7822,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-08-13",
+     "ndvi": 0.7909,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-08-29",
+     "ndvi": 0.5663,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-09-14",
+     "ndvi": 0.4956,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-09-30",
+     "ndvi": 0.3742,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-10-16",
+     "ndvi": 0.3775,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-11-01",
+     "ndvi": 0.5528,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-11-17",
+     "ndvi": 0.8657,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-12-03",
+     "ndvi": 0.8245,
+     "validPixels": 81
+    },
+    {
+     "date": "2021-12-19",
+     "ndvi": 0.7922,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-01-01",
+     "ndvi": 0.7922,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-01-17",
+     "ndvi": 0.5657,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-02-02",
+     "ndvi": 0.2889,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-02-18",
+     "ndvi": 0.5449,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-03-06",
+     "ndvi": 0.7889,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-03-22",
+     "ndvi": 0.812,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-04-07",
+     "ndvi": 0.7972,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-04-23",
+     "ndvi": 0.7471,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-05-09",
+     "ndvi": 0.5211,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-05-25",
+     "ndvi": 0.3419,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-06-10",
+     "ndvi": 0.526,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-06-26",
+     "ndvi": 0.5976,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-07-12",
+     "ndvi": 0.7633,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-07-28",
+     "ndvi": 0.7176,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-08-13",
+     "ndvi": 0.8052,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-08-29",
+     "ndvi": 0.5699,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-09-14",
+     "ndvi": 0.5518,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-09-30",
+     "ndvi": 0.1272,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-10-16",
+     "ndvi": 0.3084,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-11-01",
+     "ndvi": 0.5763,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-11-17",
+     "ndvi": 0.828,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-12-03",
+     "ndvi": 0.7963,
+     "validPixels": 81
+    },
+    {
+     "date": "2022-12-19",
+     "ndvi": 0.6908,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-01-01",
+     "ndvi": 0.4371,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-01-17",
+     "ndvi": 0.3459,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-02-02",
+     "ndvi": 0.5306,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-02-18",
+     "ndvi": 0.7766,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-03-06",
+     "ndvi": 0.7961,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-03-22",
+     "ndvi": 0.7838,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-04-07",
+     "ndvi": 0.747,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-04-23",
+     "ndvi": 0.686,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-05-09",
+     "ndvi": 0.4117,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-05-25",
+     "ndvi": 0.3558,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-06-10",
+     "ndvi": 0.573,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-06-26",
+     "ndvi": 0.7956,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-07-12",
+     "ndvi": 0.666,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-07-28",
+     "ndvi": 0.7711,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-08-13",
+     "ndvi": 0.6704,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-08-29",
+     "ndvi": 0.5517,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-09-14",
+     "ndvi": 0.1971,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-09-30",
+     "ndvi": 0.1299,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-10-16",
+     "ndvi": 0.3406,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-11-01",
+     "ndvi": 0.6596,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-11-17",
+     "ndvi": 0.8452,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-12-03",
+     "ndvi": 0.8564,
+     "validPixels": 81
+    },
+    {
+     "date": "2023-12-19",
+     "ndvi": 0.8159,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-01-01",
+     "ndvi": 0.6393,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-01-17",
+     "ndvi": 0.4785,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-02-02",
+     "ndvi": 0.352,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-02-18",
+     "ndvi": 0.4548,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-03-05",
+     "ndvi": 0.7845,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-03-21",
+     "ndvi": 0.8248,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-04-06",
+     "ndvi": 0.835,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-04-22",
+     "ndvi": 0.6549,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-05-08",
+     "ndvi": 0.6276,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-05-24",
+     "ndvi": 0.5538,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-09",
+     "ndvi": 0.3925,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-25",
+     "ndvi": 0.6349,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-07-11",
+     "ndvi": 0.5813,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-07-27",
+     "ndvi": 0.7951,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-08-12",
+     "ndvi": 0.7606,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-08-28",
+     "ndvi": 0.7056,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-09-13",
+     "ndvi": 0.2945,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-09-29",
+     "ndvi": 0.2477,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-10-15",
+     "ndvi": 0.432,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-10-31",
+     "ndvi": 0.4807,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-11-16",
+     "ndvi": 0.8027,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-12-02",
+     "ndvi": 0.8071,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-12-18",
+     "ndvi": 0.8113,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-01-01",
+     "ndvi": 0.6656,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-01-17",
+     "ndvi": 0.5552,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-02-02",
+     "ndvi": 0.3572,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-02-18",
+     "ndvi": 0.5271,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-03-06",
+     "ndvi": 0.748,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-03-22",
+     "ndvi": 0.7878,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-04-07",
+     "ndvi": 0.711,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-04-23",
+     "ndvi": 0.6671,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-05-09",
+     "ndvi": 0.4689,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-05-25",
+     "ndvi": 0.3461,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-06-10",
+     "ndvi": 0.4958,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-06-26",
+     "ndvi": 0.7247,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-07-12",
+     "ndvi": 0.7863,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-07-28",
+     "ndvi": 0.7658,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-08-13",
+     "ndvi": 0.7001,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-08-29",
+     "ndvi": 0.5474,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-09-14",
+     "ndvi": 0.2163,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-09-30",
+     "ndvi": 0.3345,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-10-16",
+     "ndvi": 0.3608,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-11-01",
+     "ndvi": 0.75,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-11-17",
+     "ndvi": 0.8419,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-12-03",
+     "ndvi": 0.8078,
+     "validPixels": 81
+    },
+    {
+     "date": "2025-12-19",
+     "ndvi": 0.7821,
+     "validPixels": 81
+    }
+   ]
+  },
+  {
+   "id": "bentre",
+   "name": "Bến Tre · Chợ Lách",
+   "lat": 10.25,
+   "lon": 106.13,
+   "series": [
+    {
+     "date": "2021-01-01",
+     "ndvi": 0.7111,
+     "validPixels": 60
+    },
+    {
+     "date": "2021-01-17",
+     "ndvi": 0.6474,
+     "validPixels": 68
+    },
+    {
+     "date": "2021-02-02",
+     "ndvi": 0.6659,
+     "validPixels": 76
+    },
+    {
+     "date": "2021-02-18",
+     "ndvi": 0.6949,
+     "validPixels": 60
+    },
+    {
+     "date": "2021-03-06",
+     "ndvi": 0.638,
+     "validPixels": 76
+    },
+    {
+     "date": "2021-03-22",
+     "ndvi": 0.6056,
+     "validPixels": 66
+    },
+    {
+     "date": "2021-04-07",
+     "ndvi": 0.5212,
+     "validPixels": 66
+    },
+    {
+     "date": "2021-04-23",
+     "ndvi": 0.6366,
+     "validPixels": 68
+    },
+    {
+     "date": "2021-05-09",
+     "ndvi": 0.6914,
+     "validPixels": 76
+    },
+    {
+     "date": "2021-05-25",
+     "ndvi": 0.6564,
+     "validPixels": 78
+    },
+    {
+     "date": "2021-06-10",
+     "ndvi": 0.5486,
+     "validPixels": 72
+    },
+    {
+     "date": "2021-06-26",
+     "ndvi": 0.6553,
+     "validPixels": 66
+    },
+    {
+     "date": "2021-07-12",
+     "ndvi": 0.4883,
+     "validPixels": 78
+    },
+    {
+     "date": "2021-07-28",
+     "ndvi": 0.6301,
+     "validPixels": 68
+    },
+    {
+     "date": "2021-08-13",
+     "ndvi": 0.6692,
+     "validPixels": 76
+    },
+    {
+     "date": "2021-08-29",
+     "ndvi": 0.4779,
+     "validPixels": 72
+    },
+    {
+     "date": "2021-09-14",
+     "ndvi": 0.464,
+     "validPixels": 72
+    },
+    {
+     "date": "2021-09-30",
+     "ndvi": 0.6129,
+     "validPixels": 78
+    },
+    {
+     "date": "2021-10-16",
+     "ndvi": 0.5711,
+     "validPixels": 68
+    },
+    {
+     "date": "2021-11-01",
+     "ndvi": 0.5374,
+     "validPixels": 68
+    },
+    {
+     "date": "2021-11-17",
+     "ndvi": 0.3998,
+     "validPixels": 72
+    },
+    {
+     "date": "2021-12-03",
+     "ndvi": 0.7053,
+     "validPixels": 70
+    },
+    {
+     "date": "2021-12-19",
+     "ndvi": 0.7176,
+     "validPixels": 74
+    },
+    {
+     "date": "2022-01-01",
+     "ndvi": 0.7142,
+     "validPixels": 72
+    },
+    {
+     "date": "2022-01-17",
+     "ndvi": 0.6777,
+     "validPixels": 74
+    },
+    {
+     "date": "2022-02-02",
+     "ndvi": 0.6556,
+     "validPixels": 68
+    },
+    {
+     "date": "2022-02-18",
+     "ndvi": 0.6956,
+     "validPixels": 64
+    },
+    {
+     "date": "2022-03-06",
+     "ndvi": 0.598,
+     "validPixels": 69
+    },
+    {
+     "date": "2022-03-22",
+     "ndvi": 0.6643,
+     "validPixels": 70
+    },
+    {
+     "date": "2022-04-07",
+     "ndvi": 0.4957,
+     "validPixels": 72
+    },
+    {
+     "date": "2022-04-23",
+     "ndvi": 0.5512,
+     "validPixels": 66
+    },
+    {
+     "date": "2022-05-09",
+     "ndvi": 0.6479,
+     "validPixels": 68
+    },
+    {
+     "date": "2022-05-25",
+     "ndvi": 0.6764,
+     "validPixels": 70
+    },
+    {
+     "date": "2022-06-10",
+     "ndvi": 0.6236,
+     "validPixels": 64
+    },
+    {
+     "date": "2022-06-26",
+     "ndvi": 0.6058,
+     "validPixels": 74
+    },
+    {
+     "date": "2022-07-12",
+     "ndvi": 0.5552,
+     "validPixels": 74
+    },
+    {
+     "date": "2022-07-28",
+     "ndvi": 0.581,
+     "validPixels": 74
+    },
+    {
+     "date": "2022-08-13",
+     "ndvi": 0.5848,
+     "validPixels": 64
+    },
+    {
+     "date": "2022-08-29",
+     "ndvi": 0.6116,
+     "validPixels": 60
+    },
+    {
+     "date": "2022-09-14",
+     "ndvi": 0.6197,
+     "validPixels": 70
+    },
+    {
+     "date": "2022-09-30",
+     "ndvi": 0.4254,
+     "validPixels": 72
+    },
+    {
+     "date": "2022-10-16",
+     "ndvi": 0.2355,
+     "validPixels": 72
+    },
+    {
+     "date": "2022-11-01",
+     "ndvi": 0.4372,
+     "validPixels": 64
+    },
+    {
+     "date": "2022-11-17",
+     "ndvi": 0.726,
+     "validPixels": 74
+    },
+    {
+     "date": "2022-12-03",
+     "ndvi": 0.6082,
+     "validPixels": 71
+    },
+    {
+     "date": "2022-12-19",
+     "ndvi": 0.6892,
+     "validPixels": 74
+    },
+    {
+     "date": "2023-01-01",
+     "ndvi": 0.701,
+     "validPixels": 74
+    },
+    {
+     "date": "2023-01-17",
+     "ndvi": 0.7029,
+     "validPixels": 66
+    },
+    {
+     "date": "2023-02-02",
+     "ndvi": 0.6438,
+     "validPixels": 72
+    },
+    {
+     "date": "2023-02-18",
+     "ndvi": 0.6569,
+     "validPixels": 76
+    },
+    {
+     "date": "2023-03-06",
+     "ndvi": 0.7036,
+     "validPixels": 76
+    },
+    {
+     "date": "2023-03-22",
+     "ndvi": 0.5986,
+     "validPixels": 72
+    },
+    {
+     "date": "2023-04-07",
+     "ndvi": 0.5397,
+     "validPixels": 78
+    },
+    {
+     "date": "2023-04-23",
+     "ndvi": 0.6649,
+     "validPixels": 76
+    },
+    {
+     "date": "2023-05-09",
+     "ndvi": 0.6682,
+     "validPixels": 68
+    },
+    {
+     "date": "2023-05-25",
+     "ndvi": 0.6351,
+     "validPixels": 74
+    },
+    {
+     "date": "2023-06-10",
+     "ndvi": 0.6955,
+     "validPixels": 56
+    },
+    {
+     "date": "2023-06-26",
+     "ndvi": 0.5911,
+     "validPixels": 78
+    },
+    {
+     "date": "2023-07-12",
+     "ndvi": 0.4998,
+     "validPixels": 70
+    },
+    {
+     "date": "2023-07-28",
+     "ndvi": 0.5756,
+     "validPixels": 74
+    },
+    {
+     "date": "2023-08-13",
+     "ndvi": 0.6445,
+     "validPixels": 68
+    },
+    {
+     "date": "2023-08-29",
+     "ndvi": 0.5492,
+     "validPixels": 74
+    },
+    {
+     "date": "2023-09-14",
+     "ndvi": 0.387,
+     "validPixels": 74
+    },
+    {
+     "date": "2023-09-30",
+     "ndvi": 0.6268,
+     "validPixels": 72
+    },
+    {
+     "date": "2023-10-16",
+     "ndvi": 0.5867,
+     "validPixels": 66
+    },
+    {
+     "date": "2023-11-01",
+     "ndvi": 0.6812,
+     "validPixels": 70
+    },
+    {
+     "date": "2023-11-17",
+     "ndvi": 0.7052,
+     "validPixels": 76
+    },
+    {
+     "date": "2023-12-03",
+     "ndvi": 0.6771,
+     "validPixels": 79
+    },
+    {
+     "date": "2023-12-19",
+     "ndvi": 0.7287,
+     "validPixels": 60
+    },
+    {
+     "date": "2024-01-01",
+     "ndvi": 0.7016,
+     "validPixels": 68
+    },
+    {
+     "date": "2024-01-17",
+     "ndvi": 0.6814,
+     "validPixels": 74
+    },
+    {
+     "date": "2024-02-02",
+     "ndvi": 0.6809,
+     "validPixels": 74
+    },
+    {
+     "date": "2024-02-18",
+     "ndvi": 0.6725,
+     "validPixels": 66
+    },
+    {
+     "date": "2024-03-05",
+     "ndvi": 0.6425,
+     "validPixels": 76
+    },
+    {
+     "date": "2024-03-21",
+     "ndvi": 0.6701,
+     "validPixels": 76
+    },
+    {
+     "date": "2024-04-06",
+     "ndvi": 0.7068,
+     "validPixels": 78
+    },
+    {
+     "date": "2024-04-22",
+     "ndvi": 0.6308,
+     "validPixels": 70
+    },
+    {
+     "date": "2024-05-08",
+     "ndvi": 0.559,
+     "validPixels": 70
+    },
+    {
+     "date": "2024-05-24",
+     "ndvi": 0.5977,
+     "validPixels": 68
+    },
+    {
+     "date": "2024-06-09",
+     "ndvi": 0.66,
+     "validPixels": 81
+    },
+    {
+     "date": "2024-06-25",
+     "ndvi": 0.6976,
+     "validPixels": 66
+    },
+    {
+     "date": "2024-07-11",
+     "ndvi": 0.5488,
+     "validPixels": 70
+    },
+    {
+     "date": "2024-07-27",
+     "ndvi": 0.6433,
+     "validPixels": 74
+    },
+    {
+     "date": "2024-08-12",
+     "ndvi": 0.6017,
+     "validPixels": 74
+    },
+    {
+     "date": "2024-08-28",
+     "ndvi": 0.6332,
+     "validPixels": 78
+    },
+    {
+     "date": "2024-09-13",
+     "ndvi": 0.5603,
+     "validPixels": 66
+    },
+    {
+     "date": "2024-09-29",
+     "ndvi": 0.5813,
+     "validPixels": 70
+    },
+    {
+     "date": "2024-10-15",
+     "ndvi": 0.6393,
+     "validPixels": 70
+    },
+    {
+     "date": "2024-10-31",
+     "ndvi": 0.6254,
+     "validPixels": 62
+    },
+    {
+     "date": "2024-11-16",
+     "ndvi": 0.6696,
+     "validPixels": 68
+    },
+    {
+     "date": "2024-12-02",
+     "ndvi": 0.5888,
+     "validPixels": 72
+    },
+    {
+     "date": "2024-12-18",
+     "ndvi": 0.6772,
+     "validPixels": 68
+    },
+    {
+     "date": "2025-01-01",
+     "ndvi": 0.6984,
+     "validPixels": 74
+    },
+    {
+     "date": "2025-01-17",
+     "ndvi": 0.6896,
+     "validPixels": 66
+    },
+    {
+     "date": "2025-02-02",
+     "ndvi": 0.7056,
+     "validPixels": 70
+    },
+    {
+     "date": "2025-02-18",
+     "ndvi": 0.6549,
+     "validPixels": 67
+    },
+    {
+     "date": "2025-03-06",
+     "ndvi": 0.6542,
+     "validPixels": 70
+    },
+    {
+     "date": "2025-03-22",
+     "ndvi": 0.5896,
+     "validPixels": 78
+    },
+    {
+     "date": "2025-04-07",
+     "ndvi": 0.4585,
+     "validPixels": 64
+    },
+    {
+     "date": "2025-04-23",
+     "ndvi": 0.6746,
+     "validPixels": 66
+    },
+    {
+     "date": "2025-05-09",
+     "ndvi": 0.6736,
+     "validPixels": 66
+    },
+    {
+     "date": "2025-05-25",
+     "ndvi": 0.6705,
+     "validPixels": 76
+    },
+    {
+     "date": "2025-06-10",
+     "ndvi": 0.6116,
+     "validPixels": 68
+    },
+    {
+     "date": "2025-06-26",
+     "ndvi": 0.62,
+     "validPixels": 76
+    },
+    {
+     "date": "2025-07-12",
+     "ndvi": 0.6372,
+     "validPixels": 64
+    },
+    {
+     "date": "2025-07-28",
+     "ndvi": 0.674,
+     "validPixels": 66
+    },
+    {
+     "date": "2025-08-13",
+     "ndvi": 0.674,
+     "validPixels": 66
+    },
+    {
+     "date": "2025-08-29",
+     "ndvi": 0.6073,
+     "validPixels": 64
+    },
+    {
+     "date": "2025-09-14",
+     "ndvi": 0.2755,
+     "validPixels": 68
+    },
+    {
+     "date": "2025-09-30",
+     "ndvi": 0.684,
+     "validPixels": 72
+    },
+    {
+     "date": "2025-10-16",
+     "ndvi": 0.6882,
+     "validPixels": 66
+    },
+    {
+     "date": "2025-11-01",
+     "ndvi": 0.6619,
+     "validPixels": 74
+    },
+    {
+     "date": "2025-11-17",
+     "ndvi": 0.6389,
+     "validPixels": 66
+    },
+    {
+     "date": "2025-12-03",
+     "ndvi": 0.7086,
+     "validPixels": 72
+    },
+    {
+     "date": "2025-12-19",
+     "ndvi": 0.6897,
+     "validPixels": 73
+    }
+   ]
+  }
+ ]
+}

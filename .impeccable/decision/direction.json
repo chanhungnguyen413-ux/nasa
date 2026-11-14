@@ -1,0 +1,129 @@
+{
+  "title": "Choose the visual world",
+  "question": "The roll assigned the Field Survey Sheet. Keep it, take an alternate, or re-roll.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Field Survey Sheet",
+      "kicker": "THE ROLL",
+      "lineage": "Topographic and cadastral field survey maps",
+      "thesis": "The farm read as one surveyed map sheet: the satellite readings become the map, and the legend explains every term.",
+      "palette": ["#E6ECDD", "#2F6B3A", "#1E5AA0", "#8A5A2B", "#1B2620", "#C4481F"],
+      "materials": ["map sheet with a title block", "contour lines and hatching", "parcel outlines", "a legend and scale bar"],
+      "viewport": "A title block banner, a large field-parcel map shaded by soil moisture, and three readings set as map annotations, with the irrigation advice stamped onto the target parcel.",
+      "risk": "Map conventions can read as bureaucratic if the type is timid or the hatching is too fine to see on a projector.",
+      "raised": [
+        { "from": "challenger-six-pack", "raise": "Every reading carries its 7-day trend next to its value, so it can be cross-checked like instruments." },
+        { "from": "challenger-one-bit", "raise": "Moisture zones use a hatching pattern as well as colour, so colour is never the only signal." },
+        { "from": "challenger-cyclorama", "raise": "The advice sits on a day-phase strip (dawn, noon, dusk, night) with 18:00 marked as a labelled cue." },
+        { "from": "challenger-rain-garden", "raise": "The legend stays fixed and level; everything else on the sheet is explained through it." }
+      ]
+    },
+    {
+      "id": "model-pick",
+      "label": "False-Colour Satellite Tile",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Landsat and MODIS false-colour scenes",
+      "thesis": "The field seen from orbit: an NDVI-ramped image tile, with readings as overlays.",
+      "palette": ["#0E1A14", "#7A2E1C", "#D9B44A", "#3FA34D", "#0B6E4F", "#6FB7E0"],
+      "materials": ["pixel-grid imagery", "NDVI colour ramp", "overlay crosshairs"],
+      "viewport": "A full-width satellite tile of the field, with the three readings as overlay tags and advice in a side panel.",
+      "risk": "Also where most NASA hackathon dashboards land; familiar to judges and easy to forget."
+    },
+    {
+      "id": "challenger-six-pack",
+      "label": "Night-Flight Six-Pack",
+      "verdict": "competitive",
+      "lineage": "Aircraft night instrument panels",
+      "thesis": "Field health as a cockpit panel: the readings are gauges you cross-check.",
+      "palette": ["#0B0D0C", "#1A1F1C", "#E9EFE9", "#57E389", "#F2A93B", "#E0463A"],
+      "materials": ["round SVG dials", "luminous tick scales", "caution lamps"],
+      "viewport": "Six dials in two rows (moisture, NDVI, drought, rain, temperature, evapotranspiration) with a caution lamp that opens the advice.",
+      "case": "Clear to read and shows trends, but a cockpit tells a pilot's story, not a farmer's.",
+      "risk": "Dark cockpit mode fights the requested green/blue nature tone and can feel like a game.",
+      "hero": "https://impeccable.style/worlds/cards/signals-instruments-night-flight-six-pack-hero.webp"
+    },
+    {
+      "id": "challenger-cyclorama",
+      "label": "Cyclorama Dawn",
+      "verdict": "declined",
+      "lineage": "Theatre lighting cycloramas",
+      "thesis": "The day as horizon bands, from night to dawn to day.",
+      "palette": ["#07080C", "#1D3FA8", "#D46A8C", "#F5F3EE"],
+      "materials": ["light bands", "cue timeline"],
+      "viewport": "Horizon bands stacked from dark to light, with readings as lighting cues.",
+      "case": "Beautiful, but it hides the field; judges would see stage lighting, not a farm.",
+      "risk": "Farm meaning gets lost in the theatre.",
+      "kept": "Discrete time phases, each labelled.",
+      "hero": "https://impeccable.style/worlds/cards/stagecraft-theater-lighting-cyclorama-dawn-hero.webp"
+    },
+    {
+      "id": "challenger-one-bit",
+      "label": "One-Bit Desktop",
+      "verdict": "declined",
+      "lineage": "Early one-bit desktop computers",
+      "thesis": "Dithered patterns stand in for every tone.",
+      "palette": ["#000000", "#FFFFFF"],
+      "materials": ["ordered dither", "pixel window chrome"],
+      "viewport": "Overlapping windows for each reading.",
+      "case": "A retro novelty, and it drops the green/blue brief.",
+      "risk": "Reads as a joke to judges.",
+      "kept": "Pattern as well as tone, so colour is never the only signal.",
+      "hero": "https://impeccable.style/worlds/cards/medium-native-one-bit-desktop-hero.webp"
+    },
+    {
+      "id": "challenger-rain-garden",
+      "label": "Gravity-Rain Garden",
+      "verdict": "declined",
+      "lineage": "Surreal impossible worlds",
+      "thesis": "Rain falls according to each cloud's own gravity.",
+      "palette": ["#3E4A44", "#3D6FD1", "#C2433A", "#101010"],
+      "materials": ["vector-field rain", "bent baselines"],
+      "viewport": "A garden with painted clouds.",
+      "case": "Whimsical; hides the numbers and the advice.",
+      "risk": "Product clarity collapses.",
+      "kept": "A fixed, level legend that everything else is read through.",
+      "hero": "https://impeccable.style/worlds/cards/dream-surreal-impossible-worlds-gravity-rain-garden-hero.webp"
+    },
+    {
+      "id": "challenger-zine",
+      "label": "Copy-Shop Zine",
+      "verdict": "declined",
+      "lineage": "Photocopied zine interiors",
+      "thesis": "One typed column on coloured copier paper.",
+      "palette": ["#E3B23C", "#1A1A1A", "#6F8F3A"],
+      "materials": ["copier grain", "typewriter type"],
+      "viewport": "A single typed column of readings.",
+      "case": "Punk register, wrong for a science demo.",
+      "risk": "Undercuts NASA-data credibility.",
+      "kept": "A strict one-column measure for the advice text.",
+      "hero": "https://impeccable.style/worlds/cards/rw-copy-shop-zine-interior-hero.webp"
+    },
+    {
+      "id": "challenger-leather",
+      "label": "Leather Studio",
+      "verdict": "declined",
+      "lineage": "Skeuomorphic app era",
+      "thesis": "Digital things as loved physical objects.",
+      "palette": ["#9A6A3A", "#E8E1D3", "#5A3B22"],
+      "materials": ["stitched leather", "linen", "wood"],
+      "viewport": "Readings on a stitched leather shelf.",
+      "case": "Nostalgic app chrome; no connection to farms or satellites.",
+      "risk": "Dated.",
+      "kept": "Every section is an object you handle.",
+      "hero": "https://impeccable.style/worlds/cards/digital-design-canon-skeuomorph-leather-studio-hero.webp"
+    }
+  ],
+  "reroll": { "registers": ["safer", "bolder"] },
+  "buildPath": { "value": "code" },
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "A clean agri-tech SaaS dashboard: cards, badges and charts, done at full craft.",
+    "palette": ["#F7FAF8", "#0F1F17", "#16A34A", "#0284C7"],
+    "materials": ["card grid", "status badges", "line charts"],
+    "viewport": "A header, three KPI cards, a chart row and an advice button.",
+    "risk": "Indistinguishable from every other hackathon dashboard, by design."
+  },
+  "steer": true
+}
