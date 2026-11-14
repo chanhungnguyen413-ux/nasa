@@ -42,3 +42,4 @@ Chủ project là sinh viên năm nhất: file nhỏ, tên rõ, comment tiếng 
 ## Kết thúc mỗi phiên
 
 `npm run build && npm test && npm run check:i18n`, commit, cập nhật `docs/blueprint/STATE.md`.
+- **Không tự `git push`**: Tuyệt đối không tự động chạy `git push`; chủ project sẽ tự push thủ công.
