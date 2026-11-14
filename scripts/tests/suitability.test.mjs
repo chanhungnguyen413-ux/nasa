@@ -148,3 +148,50 @@ test('số đo "cả ruộng" vẫn thuộc ruộng sau khi khoanh thửa không
   const other = fiSoilForField([{ id: 'b', date: '2026-11-01', where: 'point', lat: point[0], lon: point[1], ph: 6 }], far)
   assert.equal(other.ph.kind, 'missing', 'số đo tại MỘT điểm ngoài thửa thì không tính cho thửa')
 })
+
+/* ---------------- Phase 3: thư viện cây, nhiệt độ và pH theo ECOCROP ---------------- */
+import { CROP_LIBRARY } from '../../site/data/cropLibrary.js'
+import { suitBand } from '../../site/logic/suitability.js'
+
+const climateT = (tmax, tmin) => ({
+  months: Array.from({ length: 12 }, (_, i) => ({ month: i + 1, rain: ev(200), rainDry: ev(150), gwetroot: ev(0.5, '0–1'), tmax: ev(tmax, '°C'), tmin: ev(tmin, '°C') })),
+})
+
+test('khoảng ECOCROP: tối ưu → Xanh, chịu được → Vàng, ngoài khoảng → Đỏ', () => {
+  const band = { optimal: [20, 27], absolute: [7, 35] }
+  assert.equal(suitBand(24, band), 'green')
+  assert.equal(suitBand(30, band), 'yellow')
+  assert.equal(suitBand(36, band), 'red')
+})
+
+test('nhiệt độ: trung bình (Tmax+Tmin)/2 trong vụ so với ECOCROP; bắp cải ở 28 °C là Vàng, cà chua là Vàng, lúa là Xanh', () => {
+  const climate = climateT(33, 23) // trung bình 28 °C
+  const at = (crop) => suitAssess({ crop, window: suitWindow({ ...ndvi([1, 2, 3, 4, 5]), crop }), climate }).criteria.find((c) => c.key === 'temperature')
+  assert.equal(at('cabbage').grade, 'yellow') // tối ưu 15–24, chịu được 7–32
+  assert.equal(at('tomato').grade, 'yellow') // tối ưu 20–27, chịu được 7–35
+  assert.equal(at('rice').grade, 'green') // tối ưu 20–30
+  assert.equal(at('rice').evidence[0].value, 28)
+  assert.ok(at('rice').evidence.some((e) => e.kind === 'reference' && e.source === 'ecocrop'))
+})
+
+test('pH: chưa đo thì Xám và việc cần làm là đo; đo được thì so với khoảng ECOCROP', () => {
+  const climate = climateT(32, 24)
+  const w = suitWindow({ ...ndvi([1, 2, 3, 4]), crop: 'tomato' })
+  const none = suitAssess({ crop: 'tomato', window: w, climate }).criteria.find((c) => c.key === 'ph')
+  assert.equal(none.grade, 'gray')
+  assert.equal(none.reason, 'phNeedMeasure')
+  const acid = evidence({ value: 4.0, unit: '', kind: 'ground', label: 'phField' })
+  assert.equal(suitAssess({ crop: 'tomato', window: w, climate, ph: acid }).criteria.find((c) => c.key === 'ph').grade, 'red') // chịu được 5–7,5
+})
+
+test('thư viện: 9 cây, cây nào cũng có nhu cầu nước và độ dài vụ; tìm được bằng tên VI/EN; cây ngoài thư viện → null', () => {
+  assert.equal(Object.keys(CROP_LIBRARY).length, 9)
+  for (const crop of Object.values(CROP_LIBRARY)) {
+    assert.equal(crop.waterMm.length, 2)
+    assert.equal(crop.cycleDays.length, 2)
+  }
+  assert.equal(suitFindCrop('Đậu phộng'), 'groundnut')
+  assert.equal(suitFindCrop('tomato'), 'tomato')
+  assert.equal(suitFindCrop('sầu riêng'), null)
+  assert.equal(suitAssess({ crop: 'durian', window: { months: [1] }, climate: climateT(30, 22) }).known, false)
+})

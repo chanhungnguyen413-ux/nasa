@@ -71,13 +71,16 @@ export function hzField({ point = null, polygon = null, params = HARMONIZE_PARAM
     const cells = []
     const dLat = cellM / m.lat
     const dLon = cellM / m.lon
-    for (let lat = b.minLat + dLat / 2; lat < b.maxLat; lat += dLat) {
-      for (let lon = b.minLon + dLon / 2; lon < b.maxLon; lon += dLon) {
-        if (hzPointInPolygon([lat, lon], polygon)) cells.push({ i: cells.length, lat, lon })
+    // r, c: hàng và cột của ô trong lưới, để biết hai ô có nằm cạnh nhau không (gộp ô thành vùng ở Phase 3).
+    let r = 0
+    for (let lat = b.minLat + dLat / 2; lat < b.maxLat; lat += dLat, r++) {
+      let c = 0
+      for (let lon = b.minLon + dLon / 2; lon < b.maxLon; lon += dLon, c++) {
+        if (hzPointInPolygon([lat, lon], polygon)) cells.push({ i: cells.length, r, c, lat, lon })
       }
     }
     // Ruộng nhỏ hơn một ô: vẫn có ít nhất một ô ở tâm.
-    if (cells.length === 0) cells.push({ i: 0, lat: center[0], lon: center[1] })
+    if (cells.length === 0) cells.push({ i: 0, r: 0, c: 0, lat: center[0], lon: center[1] })
     if (cells.length <= params.maxCells) return { kind: 'polygon', point, center, extentM, cellM, cells, polygon }
     cellM += 5
   }

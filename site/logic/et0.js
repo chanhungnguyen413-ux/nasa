@@ -79,9 +79,12 @@ export function et0Months(months, { lat, elevation }) {
       tMean(prev) === null || tMean(next) === null
         ? evMissing({ reason: evText('thiếu nhiệt độ tháng trước hoặc tháng sau (cần cho dòng nhiệt vào đất G)', 'temperature of the previous or next month is missing (needed for soil heat flux G)'), need: 'retry', label: 'soilHeat' })
         : { ...evDerive({ inputs: { tmaxPrev: prev.tmax, tminPrev: prev.tmin, tmaxNext: next.tmax, tminNext: next.tmin }, compute: (v) => et0SoilHeat((v.tmaxPrev + v.tminPrev) / 2, null, (v.tmaxNext + v.tminNext) / 2), unit: 'MJ/m²/ngày', formula: evText('G = 0,07 × (T tháng sau − T tháng trước) (FAO-56, phương trình 43)', 'G = 0.07 × (T next month − T previous month) (FAO-56, equation 43)'), label: 'soilHeat' }) }
+    // Độ ẩm: mặc định từ độ ẩm tương đối (phương trình 19). Khi giả định nhiệt độ (site/logic/whatIf.js) thì
+    // tháng mang sẵn áp suất hơi nước thực `ea`, để GIỮ NGUYÊN ea khi nhiệt độ tăng (blueprint 4.3).
+    const humid = row.ea ? { ea: row.ea } : { rh: row.rh }
     const daily = evDerive({
-      inputs: { tmax: row.tmax, tmin: row.tmin, rh: row.rh, ws: row.ws, rs: row.rs, g: neighbours, lat, elevation },
-      compute: (v) => et0Compute({ tmax: v.tmax, tmin: v.tmin, rhMean: v.rh, u2: v.ws, rs: v.rs, g: v.g, z: v.elevation, latDeg: v.lat, j: et0MidMonthDay(row.month) }).et0,
+      inputs: { tmax: row.tmax, tmin: row.tmin, ...humid, ws: row.ws, rs: row.rs, g: neighbours, lat, elevation },
+      compute: (v) => et0Compute({ tmax: v.tmax, tmin: v.tmin, ea: v.ea ?? null, rhMean: v.rh ?? null, u2: v.ws, rs: v.rs, g: v.g, z: v.elevation, latDeg: v.lat, j: et0MidMonthDay(row.month) }).et0,
       unit: 'mm/ngày',
       formula: ET0_FORMULA,
       label: 'et0Day',

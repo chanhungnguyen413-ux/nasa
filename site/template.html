@@ -281,7 +281,8 @@
         rotPriorities: store.get('naf-rot-priorities', { ...DEFAULT_PRIORITIES }, (v) =>
           ['water', 'soil', 'income', 'risk'].every((k) => Number.isFinite(v?.[k]) && v[k] >= 0 && v[k] <= 100),
         ),
-        rotWhatIf: { ...DEFAULT_WHAT_IF }, // giả định không lưu lại: mở lại trang là về số liệu thật
+        rotWhatIf: { ...DEFAULT_WHAT_IF, deltaT: 0 }, // giả định không lưu lại: mở lại trang là về số liệu thật
+        rotCurrent: 'A', // kiểu luân canh nông dân đang làm (thẻ chiến lược Cơ sở, Phase 3)
         crop: store.get('naf-crop', 'rice', (v) => CROP_IDS.includes(v)),
         log: store.get('naf-log', [], Array.isArray).filter((e) => !e.seeded), // drop old sample rows
         layer: 'moisture',
@@ -819,11 +820,11 @@
       }
 
       // Một thanh trượt sáng màu (dùng chung class .range của trang).
-      function rotSlider(attr, key, label, value, min, max, unit) {
+      function rotSlider(attr, key, label, value, min, max, unit, step = 10) {
         return `
           <div>
             <div class="flex items-baseline justify-between gap-3"><label for="rot-${key}" class="text-sm font-semibold text-ink">${label}</label><output id="rot-out-${key}" class="tabular text-base font-extrabold text-moss-900">${value}${unit}</output></div>
-            <input id="rot-${key}" ${attr}="${key}" data-unit="${unit}" type="range" min="${min}" max="${max}" step="10" value="${value}" class="range mt-1 w-full" style="--fill:${((value - min) / (max - min)) * 100}%" />
+            <input id="rot-${key}" ${attr}="${key}" data-unit="${unit}" type="range" min="${min}" max="${max}" step="${step}" value="${value}" class="range mt-1 w-full" style="--fill:${((value - min) / (max - min)) * 100}%" />
           </div>`
       }
 
@@ -832,6 +833,7 @@
         const climate = PRECOMPUTED.climate.districts.find((d) => d.id === S.rotDistrict).months
         const dry = dryMonths(climate).map((m) => R.months[m - 1]).join(', ')
         const pct = S.rotWhatIf.dryRainPct
+        const active = pct !== 0 || S.rotWhatIf.deltaT !== 0
         $('#rot-controls').innerHTML = `
           <div class="rounded-[28px] border border-line bg-white p-6 shadow-card sm:p-7">
             <div class="flex flex-wrap items-center justify-between gap-3">
@@ -843,14 +845,14 @@
               .map((k) => rotSlider('data-rot-weight', k, R.criteria[k], S.rotPriorities[k], 0, 100, ''))
               .join('')}</div>
           </div>
-          <div class="rounded-[28px] border bg-white p-6 shadow-card sm:p-7 ${pct !== 0 ? 'border-dashed border-sun-400' : 'border-line'}">
+          <div class="rounded-[28px] border bg-white p-6 shadow-card sm:p-7 ${active ? 'border-dashed border-sun-400' : 'border-line'}">
             <div class="flex flex-wrap items-center justify-between gap-3">
-              <h3 class="flex items-center gap-2 text-lg font-extrabold">${R.whatIfTitle} ${pct !== 0 ? whatIfTag() : ''}</h3>
-              ${pct !== 0 ? `<button type="button" data-action="rot-reset-whatif" class="rounded-full px-3 py-1.5 text-sm font-bold text-muted underline underline-offset-2 hover:text-ink">${R.resetWhatIf}</button>` : ''}
+              <h3 class="flex items-center gap-2 text-lg font-extrabold">${R.whatIfTitle} ${active ? whatIfTag() : ''}</h3>
+              ${active ? `<button type="button" data-action="rot-reset-whatif" class="rounded-full px-3 py-1.5 text-sm font-bold text-muted underline underline-offset-2 hover:text-ink">${R.resetWhatIf}</button>` : ''}
             </div>
-            <div class="mt-4">${rotSlider('data-rot-whatif', 'dryRainPct', R.dryRainLabel, pct, -50, 50, '%')}</div>
+            <div class="mt-4 grid gap-3">${rotSlider('data-rot-whatif', 'dryRainPct', R.dryRainLabel, pct, -50, 50, '%')}${rotSlider('data-rot-whatif', 'deltaT', STRAT_TEXT[S.lang].tempLabel, S.rotWhatIf.deltaT, 0, 4, ' °C', 0.5)}</div>
             <p class="mt-3 text-sm leading-relaxed text-muted">${R.dryRainHint(dry || '–')}</p>
-            <p class="mt-2 text-sm leading-relaxed text-muted">${R.noTempNote}</p>
+            ${rxTempNoteHtml()}
           </div>`
       }
 
@@ -858,7 +860,7 @@
         const R = ROT_TEXT[S.lang]
         const district = PROVINCES.find((p) => p.id === S.rotDistrict)
         const inputs = districtInputs(PRECOMPUTED, district.id)
-        const result = rankRotations({ ...inputs, priorities: S.rotPriorities, whatIf: S.rotWhatIf })
+        const result = rankRotations({ ...inputs, priorities: S.rotPriorities, whatIf: rxWhatIf() }) // rxWhatIf: site/pages/rotationExtras.js
         const box = $('#rot-results')
         if (!result.rankable) {
           box.innerHTML = `<p class="rounded-[28px] border border-dashed border-sun-400 bg-sun-100 p-6 text-[15px] font-semibold leading-relaxed text-sun-700">${esc(R.notRankable(district.name, result.reason.peaks))}</p>`
@@ -873,7 +875,8 @@
             ${icon('calendar-range', 'size-5 text-moss-700')}<span>${R.calendarLead} (${SOURCES.modis.short}): ${calendar}</span>
             ${badge(CONF_TONE[result.calendarConfidence], R.levels[result.calendarConfidence])}
           </div>
-          <p class="mt-4 text-sm text-muted">${R.scoreNote}${S.rotWhatIf.dryRainPct !== 0 ? ` ${whatIfTag()} ${R.whatIfActive(S.rotWhatIf.dryRainPct)}` : ''}</p>
+          <p class="mt-4 text-sm text-muted">${R.scoreNote}${S.rotWhatIf.dryRainPct !== 0 || S.rotWhatIf.deltaT !== 0 ? ` ${whatIfTag()} ${S.rotWhatIf.dryRainPct !== 0 ? R.whatIfActive(S.rotWhatIf.dryRainPct) : ''}${rxActiveNote()}` : ''}</p>
+          ${rxStrategiesHtml(result)}
           <div class="mt-6 grid gap-5 lg:grid-cols-2">${result.rotations
             .map((rot) => {
               // Hạng = 1 + số kiểu có điểm CAO HƠN. Bằng điểm thì đồng hạng.
@@ -2038,7 +2041,7 @@
             renderRotationControls()
             return renderRotationResults()
           case 'rot-reset-whatif':
-            S.rotWhatIf = { ...DEFAULT_WHAT_IF }
+            S.rotWhatIf = { ...DEFAULT_WHAT_IF, deltaT: 0 }
             renderRotationControls()
             return renderRotationResults()
           case 'goto':
@@ -2181,7 +2184,7 @@
           return renderRotationResults()
         }
         if (e.target.dataset?.rotWhatif) {
-          S.rotWhatIf = { ...S.rotWhatIf, dryRainPct: updateRotSlider(e.target) }
+          S.rotWhatIf = { ...S.rotWhatIf, [e.target.dataset.rotWhatif]: updateRotSlider(e.target) }
           return renderRotationResults()
         }
         if (e.target.id === 'day-slider') {

@@ -7,7 +7,9 @@
 // template `L` là bảng chữ của trang chủ.
 import { evidence, evIsMissing } from '../core/evidence.js'
 import { PROVINCES } from '../data/demo.js'
-import { ROTATION_CROPS } from '../data/rotationCrops.js'
+import { CROP_LIB_IDS, CROP_LIBRARY } from '../data/cropLibrary.js'
+import { P3_TEXT } from '../i18n/phase3Text.js'
+import { cpSort } from '../logic/cropPriority.js'
 import { DATA_TEXT } from '../i18n/dataText.js'
 import { FIELD_TEXT } from '../i18n/fieldText.js'
 import { et0Months } from '../logic/et0.js'
@@ -19,7 +21,7 @@ import { wbMonthly } from '../logic/waterBalance.js'
 import { GIBS_LAYERS, catalogSource, gibsTileTemplate } from '../sources/catalog.js'
 import { powerClimate, powerElevationEvidence, powerFetchElevation, powerFetchRecord, powerReadCache, powerWriteCache } from '../sources/power.js'
 
-const MF_CROPS = ['rice', 'mungbean', 'maize']
+const MF_CROPS = CROP_LIB_IDS // Phase 3: cả thư viện cây (site/data/cropLibrary.js)
 const MF = {
   loc: null, // { lat, lon, id?, name? }
   record: null, // bản ghi POWER đã gộp tháng (có .elevation)
@@ -34,6 +36,7 @@ const MF = {
   irrigation: null,
   openWhy: new Set(),
   cropQuery: null,
+  priority: null, // ưu tiên của nông dân: null | 'water' | 'market' | 'soil' (chỉ sắp thứ tự trong cùng hạng)
   geo: null, // null | 'locating' | thông báo lỗi
   map: null,
   base: null,
@@ -69,10 +72,10 @@ const MF_KIND_STYLE = {
 const mfTxt = (x) => (x && typeof x === 'object' ? x[S.lang] ?? x.vi : x ?? '')
 /** Đơn vị viết trong logic bằng tiếng Việt (vd. 'ngày') → đơn vị của ngôn ngữ đang chọn. */
 const mfUnit = (u) => mfT().units[u] ?? u ?? ''
-const mfLabel = (ev) => (ev?.label ? mfT().evLabels[ev.label] ?? ev.label : ev?.inputName ?? '')
+const mfLabel = (ev) => (ev?.label ? mfT().evLabels[ev.label] ?? P3_TEXT[S.lang].evLabels[ev.label] ?? ev.label : ev?.inputName ?? '')
 
 /** Số chữ số thập phân vừa với độ lớn: 0,82 (ẩm vùng rễ) cần 2 chữ số, 304 mm thì không cần. */
-const mfDigits = (ev) => (evIsMissing(ev) || Number.isInteger(ev.value) ? 0 : Math.abs(ev.value) < 1 ? 2 : Math.abs(ev.value) < 10 ? 1 : 0)
+const mfDigits = (ev) => (evIsMissing(ev) || Number.isInteger(ev.value) ? 0 : ev.unit === '°C' || Math.abs(ev.value) >= 1 && Math.abs(ev.value) < 10 ? 1 : Math.abs(ev.value) < 1 ? 2 : 0)
 
 function showValue(ev, { digits = 0, compact = false, unit = true } = {}) {
   const id = `ev${++mfLedgerSeq}`
@@ -123,10 +126,16 @@ function mfOpenLedger(btn) {
  * ================================================================ */
 function mfCompute() {
   if (!MF.record) return null
-  const climate = powerClimate(MF.record, { origin: MF.origin })
+  const realClimate = powerClimate(MF.record, { origin: MF.origin })
   const lat = evidence({ value: MF.loc.lat, unit: '°', kind: 'farmer', source: 'location', label: mfT().latLabel })
-  const et0 = et0Months(climate.months, { lat, elevation: powerElevationEvidence(MF.elevation) })
+  const elevation = powerElevationEvidence(MF.elevation)
+  // Phase 3 (site/pages/myFieldWhatIf.js): giả định mưa ±%, nhiệt độ +°C, phát lại năm khô nhất.
+  const scenario = mfwScenario(realClimate)
+  const climate = scenario.climate
+  const et0 = et0Months(climate.months, { lat, elevation })
   const wb = wbMonthly({ climate, et0 })
+  // Số liệu thật để vẽ nét mờ so sánh khi đang giả định.
+  const base = scenario.active ? { climate: realClimate, wb: wbMonthly({ climate: realClimate, et0: et0Months(realClimate.months, { lat, elevation }) }) } : null
   let windows = null
   let strip = null
   if (MF.loc.id) {
@@ -145,7 +154,7 @@ function mfCompute() {
     return suitAssess({ crop, window: suitWindow({ ndviWindow, sowingMonth: MF.sowing, crop }), climate, irrigation: MF.irrigation, ...extra })
   })
   const uploadRain = user?.uploads.find((u) => u.upload.passport.variable === 'rain' && u.months)?.months ?? null
-  return { climate, et0, wb, windows, strip, results, user, uploadRain }
+  return { climate, et0, wb, windows, strip, results, user, uploadRain, scenario, base }
 }
 
 /* ================================================================
@@ -193,6 +202,7 @@ function renderMyField() {
         </div>
         <div id="mf-layer-info" class="mt-3"></div>
         <div id="mf-tools" class="mt-5"></div>
+        <div id="mf-zones" class="mt-5"></div>
         <div id="mf-selected" class="mt-5"></div>
       </section>
 
@@ -356,6 +366,7 @@ function mfRenderDynamic() {
   }
   const data = mfCompute()
   mfdRenderTools()
+  mfzRefresh(data) // Phase 3: bản đồ vùng trồng (site/pages/myFieldZones.js)
   $('#mf-selected').innerHTML = mfSelectedHtml()
   $('#mf-water').innerHTML = mfWaterHtml(data)
   $('#mf-crops').innerHTML = mfCropsHtml(data)
@@ -394,8 +405,35 @@ function mfStatusHtml() {
 function mfWaterHtml(data) {
   const R = mfT()
   if (!data) return mfStatusHtml()
+  return `
+    ${mfStatusHtml()}
+    <div class="mt-4 rounded-[28px] border border-line bg-white p-5 shadow-card sm:p-7">
+      <div id="mf-chartbody">${mfChartBodyHtml(data)}</div>
+      ${mfwPanelHtml(data)}
+    </div>
+    <div id="mf-tablebox">${mfTableHtml(data)}</div>
+    <div id="mf-series">${mfdSeriesHtml(data)}</div>`
+}
+
+/** Phần biểu đồ (vẽ lại mỗi lần kéo thanh trượt giả định). */
+function mfChartBodyHtml(data) {
+  const R = mfT()
   const deficits = data.wb.filter((m) => m.deficit).map((m) => R.months[m.month - 1])
-  const years = `${data.climate.years[0]}–${data.climate.years[1]}`
+  const years = data.climate.replayYear ? String(data.climate.replayYear) : `${data.climate.years[0]}–${data.climate.years[1]}`
+  return `
+      ${mfwBannerHtml(data)}
+      <h4 class="text-xl font-extrabold">${R.chartTitle}</h4>
+      <p class="mt-1 text-base leading-relaxed text-muted">${R.chartSub(years)}</p>
+      <div class="mt-4">${mfRainChart(data)}</div>
+      <div class="mt-2">${mfTempChart(data)}</div>
+      ${mfLegendHtml(Boolean(data.strip), Boolean(data.uploadRain))}
+      <p class="mt-3 text-base font-semibold">${deficits.length ? R.deficitSummary(deficits.join(', ')) : R.noDeficit}</p>
+      <p class="mt-1 text-base text-muted">${data.strip ? R.stripNote : R.noCalendar}</p>`
+}
+
+/** Bảng 12 tháng (vẽ lại mỗi lần kéo thanh trượt giả định). */
+function mfTableHtml(data) {
+  const R = mfT()
   const rows = [
     ['rain', (m) => m.rain, 0],
     ['rainDry', (m) => m.rainDry, 0],
@@ -404,16 +442,6 @@ function mfWaterHtml(data) {
     ['tmax', (m, i) => data.climate.months[i].tmax, 1],
   ]
   return `
-    ${mfStatusHtml()}
-    <div class="mt-4 rounded-[28px] border border-line bg-white p-5 shadow-card sm:p-7">
-      <h4 class="text-xl font-extrabold">${R.chartTitle}</h4>
-      <p class="mt-1 text-base leading-relaxed text-muted">${R.chartSub(years)}</p>
-      <div class="mt-4">${mfRainChart(data)}</div>
-      <div class="mt-2">${mfTempChart(data)}</div>
-      ${mfLegendHtml(Boolean(data.strip), Boolean(data.uploadRain))}
-      <p class="mt-3 text-base font-semibold">${deficits.length ? R.deficitSummary(deficits.join(', ')) : R.noDeficit}</p>
-      <p class="mt-1 text-base text-muted">${data.strip ? R.stripNote : R.noCalendar}</p>
-    </div>
     <div class="mt-5 rounded-[28px] border border-line bg-white shadow-card">
       <p class="px-5 pt-5 text-base font-extrabold sm:px-7">${R.tableTitle}</p>
       <div class="mt-3 overflow-x-auto pb-4">
@@ -430,8 +458,7 @@ function mfWaterHtml(data) {
             .join('')}</tbody>
         </table>
       </div>
-    </div>
-    ${mfdSeriesHtml(data)}`
+    </div>`
 }
 
 function mfLegendHtml(hasStrip, hasUploadRain = false) {
@@ -464,7 +491,7 @@ function mfRainChart(data) {
   const plotH = H - top - bottom
   const step = (W - padL - padR) / 12
   const val = (ev) => (evIsMissing(ev) ? null : ev.value)
-  const peaks = data.wb.flatMap((m, i) => [val(m.et0), data.climate.months[i].rain.spread?.p90 ?? val(m.rain)]).filter((v) => v !== null)
+  const peaks = [...data.wb, ...(data.base?.wb ?? [])].flatMap((m) => [val(m.et0), m.rain.spread?.p90 ?? val(m.rain)]).filter((v) => v !== null)
   const tick = Math.max(...peaks) > 400 ? 100 : 50
   const maxY = Math.ceil((Math.max(...peaks, 1) * 1.05) / tick) * tick
   const y = (v) => top + (1 - v / maxY) * plotH
@@ -497,6 +524,7 @@ function mfRainChart(data) {
     parts.push(`<polyline points="${pts.map((p) => p.join(',')).join(' ')}" fill="none" stroke="#0f3d24" stroke-width="3" stroke-linejoin="round"/>`)
     for (const [px, py] of pts) parts.push(`<circle cx="${px}" cy="${py}" r="4.5" fill="#0f3d24" stroke="#fff" stroke-width="2"/>`)
   }
+  if (data.base) parts.push(...mfwBaseOverlay(data.base, { cx, y, step })) // số liệu thật, nét mờ để so
   if (data.uploadRain) parts.push(...mfdRainOverlay(data.uploadRain, { cx, y })) // mưa của file tải lên: chuỗi riêng có nhãn
   return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${R.chartAria}" class="block h-auto w-full">${parts.join('')}</svg>`
 }
@@ -555,8 +583,23 @@ function mfCropsHtml(data) {
         ${query}
       </form>
     </div>
-    <div class="mt-5 grid gap-5 lg:grid-cols-3">${data.results.map((r) => mfCropCard(r)).join('')}</div>
+    ${mfwCropsBannerHtml(data)}
+    ${mfPriorityHtml()}
+    <div class="mt-5 grid gap-5 lg:grid-cols-3">${cpSort(data.results, MF.priority).map((r) => mfCropCard(r)).join('')}</div>
     <p class="mt-4 text-sm leading-relaxed text-muted">${R.teamParams({ limit: mfNum(SUIT_PARAMS.limitedIrrigationMm), tol: SUIT_PARAMS.cycleToleranceDays, wet: mfNum(SUIT_PARAMS.wetRootFlag, 2), share: S.lang === 'vi' ? 'một nửa' : 'half' })}</p>`
+}
+
+/** Ba nút ưu tiên (ít nước / dễ bán / cải tạo đất). Chỉ sắp thứ tự trong cùng hạng (site/logic/cropPriority.js). */
+function mfPriorityHtml() {
+  const X = P3_TEXT[S.lang].priority
+  const note = MF.priority ? `<p class="mt-2 text-base ${MF.priority === 'market' ? 'font-semibold text-sun-700' : 'text-muted'}">${MF.priority === 'market' ? X.marketGap : X[MF.priority]}</p>` : ''
+  return `<div class="mt-5">
+      <p class="text-base font-bold">${X.title}</p>
+      <p class="text-sm text-muted">${X.hint}</p>
+      <div class="mt-2 flex flex-wrap gap-2">${mfPill('data-mf="priority" data-value=""', X.none, !MF.priority)}${['water', 'market', 'soil'].map((k) => mfPill(`data-mf="priority" data-value="${k}"`, X.labels[k], MF.priority === k)).join('')}</div>
+      ${note}
+      <p class="mt-2 text-sm text-muted">${P3_TEXT[S.lang].cropsMore(MF_CROPS.length)}</p>
+    </div>`
 }
 
 function mfCropCard(r) {
@@ -569,8 +612,9 @@ function mfCropCard(r) {
   else summary = R.summary.limiting(names)
   const reasonFor = (c) => {
     const n = c.numbers ?? {}
-    const fmt = { normal: mfNum(n.deficitNormal ?? 0), dry: mfNum(n.deficitDry ?? 0), limit: mfNum(SUIT_PARAMS.limitedIrrigationMm), window: mfNum(n.window ?? 0), cycleMin: n.cycleMin, cycleMax: n.cycleMax, wet: mfNum(n.wet ?? 0, 2), flag: mfNum(n.flag ?? 0, 2) }
-    return R.reasons[c.reason](fmt)
+    const d1 = (v) => mfNum(v ?? 0, Number.isInteger(v) ? 0 : 1)
+    const fmt = { normal: mfNum(n.deficitNormal ?? 0), dry: mfNum(n.deficitDry ?? 0), limit: mfNum(SUIT_PARAMS.limitedIrrigationMm), window: mfNum(n.window ?? 0), cycleMin: n.cycleMin, cycleMax: n.cycleMax, wet: mfNum(n.wet ?? 0, 2), flag: mfNum(n.flag ?? 0, 2), t: mfNum(n.t ?? 0, 1), ph: d1(n.ph), o1: d1(n.o1), o2: d1(n.o2), a1: d1(n.a1), a2: d1(n.a2) }
+    return (R.reasons[c.reason] ?? P3_TEXT[S.lang].reasons[c.reason])(fmt)
   }
   const whyTable = open
     ? `<ul class="mt-4 divide-y divide-line border-t border-line">${r.criteria
@@ -584,7 +628,7 @@ function mfCropCard(r) {
         .join('')}</ul>`
     : ''
   return `<article class="flex flex-col rounded-[28px] border border-line bg-white p-6 shadow-card">
-    <div class="flex items-center justify-between gap-3"><h4 class="text-2xl font-extrabold tracking-tight">${R.cropNames[r.crop]}</h4>${icon('sprout', 'size-6 text-moss-700')}</div>
+    <div class="flex items-center justify-between gap-3"><h4 class="text-2xl font-extrabold tracking-tight">${CROP_LIBRARY[r.crop].name[S.lang]}</h4>${icon('sprout', 'size-6 text-moss-700')}</div>
     <div class="mt-4">${mfGradeBadge(r.overall, r.overall === 'gray' ? R.overallGray : R.grades[r.overall], true)}</div>
     <p class="mt-4 text-lg leading-relaxed">${esc(summary)}</p>
     <p class="mt-2 text-base text-muted">${R.graded(r.gradedCount, r.totalCount)} · ${R.windowText(mfMonthsText(r.window.months), mfNum(r.window.days))}</p>
@@ -652,6 +696,9 @@ document.addEventListener('click', (e) => {
       if (MF.openWhy.has(v)) MF.openWhy.delete(v)
       else MF.openWhy.add(v)
       return mfRenderDynamic()
+    case 'priority':
+      MF.priority = v || null
+      return mfRenderDynamic()
     case 'retry':
       return MF.loc && mfSelect(MF.loc)
   }
@@ -662,7 +709,7 @@ document.addEventListener('submit', (e) => {
   e.preventDefault()
   const text = String(new FormData(e.target).get('crop') ?? '').trim()
   if (!text) return
-  MF.cropQuery = { text, known: Boolean(suitFindCrop(text) && ROTATION_CROPS[suitFindCrop(text)]) }
+  MF.cropQuery = { text, known: Boolean(suitFindCrop(text) && CROP_LIBRARY[suitFindCrop(text)]) }
   mfRenderDynamic()
 })
 

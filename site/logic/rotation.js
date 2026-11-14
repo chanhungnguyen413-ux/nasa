@@ -12,6 +12,8 @@ export const ROTATION_PARAMS = {
   calendarMedium: 1.5, // <= 1.5: trung bình; lớn hơn: thấp
 }
 export const DEFAULT_PRIORITIES = { water: 50, soil: 50, income: 50, risk: 50 }
+// et0 (Phase 3, tuỳ chọn): { base: [12], adj: [12] } ET0 tháng gốc và khi tăng nhiệt độ (site/logic/whatIf.js, wiEt0Pair).
+// Không có et0 thì nhu cầu nước giữ nguyên: kết quả y hệt trước Phase 3 (test hồi quy không đổi).
 export const DEFAULT_WHAT_IF = { dryRainPct: 0 }
 
 const LEVELS = ['low', 'medium', 'high']
@@ -65,7 +67,9 @@ function seasonDetails(rotation, windows, climate, whatIf) {
   return windows.map((w, i) => {
     const crop = rotation.crops[i]
     const info = ROTATION_CROPS[crop]
-    const needMm = mid(info.waterMm)
+    // Giả định nhiệt độ: nhu cầu nước vụ × (ET0 mới / ET0 gốc) cộng trên các tháng của vụ (blueprint 4.3).
+    const et0Factor = whatIf.et0 ? w.months.reduce((s, m) => s + whatIf.et0.adj[m - 1], 0) / w.months.reduce((s, m) => s + whatIf.et0.base[m - 1], 0) : 1
+    const needMm = mid(info.waterMm) * et0Factor
     const rainMm = seasonRain(w.months, climate, 'mean', whatIf)
     const rainDryMm = seasonRain(w.months, climate, 'p10', whatIf) // năm khô: mưa mỗi tháng ở mức p10
     const rootWetness = w.months.reduce((s, m) => s + climate[m - 1].rootWetness.mean, 0) / w.months.length

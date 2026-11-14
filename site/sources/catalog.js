@@ -2,6 +2,7 @@
 // Các nguồn tra bảng (FAO, Linh et al.) đã có trong SOURCES của site/data/rotationCrops.js: ở đây chỉ tham chiếu sang,
 // không chép lại. Mọi dữ kiện về API lấy từ docs/API_STATUS.md (dò ngày 13/11/2026).
 import { SOURCES } from '../data/rotationCrops.js'
+import { CROP_SOURCES } from '../data/cropLibrary.js'
 
 export const CATALOG = {
   powerDaily: {
@@ -113,7 +114,8 @@ export const gibsTileTemplate = (layer) =>
 export function catalogSource(id) {
   if (CATALOG[id]) return CATALOG[id]
   if (CATALOG_DYNAMIC.has(id)) return CATALOG_DYNAMIC.get(id)
-  const s = SOURCES[id]
+  // Nguồn tra bảng: SOURCES của trang Luân canh, rồi CROP_SOURCES của thư viện cây (vd. ECOCROP).
+  const s = SOURCES[id] ?? CROP_SOURCES[id]
   if (!s) return null
   return { name: { vi: s.short, en: s.short }, provider: s.short, kind: 'reference', resolution: null, url: s.url, credit: s.short, cite: s.cite }
 }

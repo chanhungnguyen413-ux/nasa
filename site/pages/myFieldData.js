@@ -71,7 +71,7 @@ function mfdCollect(climate) {
 /** Đầu vào thêm cho suitAssess từ số đo đất và đánh dấu. */
 function mfdSuitInputs(user) {
   if (!user) return {}
-  return { salinityEce: evIsMissing(user.soil.ec) ? null : user.soil.ec, salinityType: user.soil.ecType, floodMarks: user.marks.flood }
+  return { salinityEce: evIsMissing(user.soil.ec) ? null : user.soil.ec, salinityType: user.soil.ecType, floodMarks: user.marks.flood, ph: user.soil.ph }
 }
 
 /* ---------------- Bản đồ: khoanh thửa và đánh dấu ---------------- */

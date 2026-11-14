@@ -30,6 +30,7 @@ const modules = [
   'site/logic/adviceText.js',
   'site/logic/assistantFallback.js',
   'site/data/rotationCrops.js',
+  'site/data/cropLibrary.js',
   'site/i18n/rotationText.js',
   'site/i18n/sourcesText.js',
   'site/logic/rotationInputs.js',
@@ -47,11 +48,20 @@ const modules = [
   'site/logic/waterBalance.js',
   'site/logic/suitability.js',
   'site/logic/fieldData.js',
+  'site/logic/whatIf.js',
+  'site/logic/strategies.js',
+  'site/logic/cropPriority.js',
+  'site/logic/zones.js',
   'site/i18n/fieldText.js',
   'site/i18n/dataText.js',
+  'site/i18n/strategyText.js',
+  'site/i18n/phase3Text.js',
   'site/pages/myField.js',
   'site/pages/myFieldData.js',
+  'site/pages/myFieldWhatIf.js',
+  'site/pages/myFieldZones.js',
   'site/pages/dataHub.js',
+  'site/pages/rotationExtras.js',
 ]
 
 // 0. Leaflet (bản đồ) nhúng thẳng vào trang để chạy được khi mở bằng nhấp đúp. Không dùng ảnh marker của Leaflet.

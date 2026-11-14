@@ -5,6 +5,8 @@ import { ROT_TEXT } from '../site/i18n/rotationText.js'
 import { SRC_TEXT } from '../site/i18n/sourcesText.js'
 import { FIELD_TEXT } from '../site/i18n/fieldText.js'
 import { DATA_TEXT } from '../site/i18n/dataText.js'
+import { STRAT_TEXT } from '../site/i18n/strategyText.js'
+import { P3_TEXT } from '../site/i18n/phase3Text.js'
 
 function keys(obj, prefix = '') {
   return Object.entries(obj).flatMap(([k, v]) =>
@@ -20,6 +22,8 @@ for (const [name, table] of [
   ['sources', SRC_TEXT],
   ['field', FIELD_TEXT],
   ['data', DATA_TEXT],
+  ['strategy', STRAT_TEXT],
+  ['phase3', P3_TEXT],
 ]) {
   const vi = new Set(keys(table.vi))
   const en = new Set(keys(table.en))

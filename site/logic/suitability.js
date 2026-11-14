@@ -1,8 +1,9 @@
 // Chấm mức phù hợp của một cây theo YẾU TỐ HẠN CHẾ NHẤT (khung đánh giá đất đai FAO; mục 4.4 của blueprint).
 // Không cộng điểm có trọng số: kết quả chung = hạng xấu nhất trong các tiêu chí chấm được.
-// Chỉ dùng số đã có nguồn trong ROTATION_CROPS (site/data/rotationCrops.js). Thiếu ngưỡng có nguồn → Xám.
+// Chỉ dùng số đã có nguồn trong CROP_LIBRARY (site/data/cropLibrary.js; cổng nguồn gốc kiểm tra trong npm test).
+// Thiếu ngưỡng có nguồn → Xám.
 import { evDerive, evIsMissing, evMissing, evText, evidence } from '../core/evidence.js'
-import { ROTATION_CROPS } from '../data/rotationCrops.js'
+import { CROP_LIBRARY } from '../data/cropLibrary.js'
 import { ROTATION_PARAMS } from './rotation.js'
 
 // Ngưỡng DO NHÓM CHỌN (không phải hằng số khoa học); trang in nguyên văn với nhãn "ngưỡng do nhóm chọn".
@@ -26,7 +27,17 @@ const suitSum = (evs, label) => evDerive({ inputs: Object.fromEntries(evs.map((e
 /** Tìm id cây từ tên người dùng gõ (VI/EN). Không có trong thư viện → null. */
 export function suitFindCrop(text) {
   const t = String(text ?? '').trim().toLowerCase().normalize('NFC')
-  const names = { rice: ['lúa', 'lua', 'rice', 'lúa nước'], mungbean: ['đậu xanh', 'dau xanh', 'mung bean', 'mungbean', 'green gram'], maize: ['ngô', 'ngo', 'bắp', 'bap', 'maize', 'corn'] }
+  const names = {
+    rice: ['lúa', 'lua', 'rice', 'lúa nước'],
+    mungbean: ['đậu xanh', 'dau xanh', 'mung bean', 'mungbean', 'green gram'],
+    maize: ['ngô', 'ngo', 'bắp', 'bap', 'maize', 'corn'],
+    soybean: ['đậu nành', 'dau nanh', 'đậu tương', 'dau tuong', 'soybean', 'soya', 'soy'],
+    groundnut: ['đậu phộng', 'dau phong', 'lạc', 'lac', 'groundnut', 'peanut'],
+    cabbage: ['bắp cải', 'bap cai', 'cải bắp', 'cai bap', 'cabbage'],
+    tomato: ['cà chua', 'ca chua', 'tomato'],
+    chili: ['ớt', 'ot', 'chili', 'chilli', 'chili pepper', 'pepper'],
+    onion: ['hành', 'hanh', 'hành củ', 'hành tím', 'hanh tim', 'onion', 'shallot'],
+  }
   return Object.keys(names).find((id) => names[id].includes(t)) ?? null
 }
 
@@ -36,7 +47,7 @@ export function suitFindCrop(text) {
  */
 export function suitWindow({ ndviWindow = null, sowingMonth = null, crop }) {
   if (ndviWindow) return { months: ndviWindow.months, days: Math.round(ndviWindow.months.length * 30.4), source: 'ndvi', season: ndviWindow.season }
-  const count = Math.ceil(suitMid(ROTATION_CROPS[crop].cycleDays) / 30.4)
+  const count = Math.ceil(suitMid(CROP_LIBRARY[crop].cycleDays) / 30.4)
   const months = Array.from({ length: count }, (_, i) => ((sowingMonth - 1 + i) % 12) + 1)
   return { months, days: Math.round(count * 30.4), source: 'sowing' }
 }
@@ -113,18 +124,73 @@ function suitSalinity(info, salinity, salinityType) {
   return { key: 'salinity', grade, reason: `salinity_${grade}`, evidence: [threshold, measured] }
 }
 
+/** Xếp một giá trị vào khoảng của ECOCROP: trong khoảng tối ưu → Xanh; trong khoảng chịu được → Vàng; ngoài → Đỏ (blueprint 4.4). */
+export function suitBand(value, band) {
+  const [o1, o2] = band.optimal
+  const [a1, a2] = band.absolute
+  if (value >= o1 && value <= o2) return 'green'
+  if (value >= a1 && value <= a2) return 'yellow'
+  return 'red'
+}
+
+// Bốn mốc của một khoảng ECOCROP thành bốn Evidence 'reference', để sổ bằng chứng mở được nguồn của từng mốc.
+const suitBandRefs = (band, unit, src, prefix) => [
+  suitRef(band.optimal[0], unit, src, `${prefix}OptLow`),
+  suitRef(band.optimal[1], unit, src, `${prefix}OptHigh`),
+  suitRef(band.absolute[0], unit, src, `${prefix}AbsLow`),
+  suitRef(band.absolute[1], unit, src, `${prefix}AbsHigh`),
+]
+const suitBandNumbers = (band) => ({ o1: band.optimal[0], o2: band.optimal[1], a1: band.absolute[0], a2: band.absolute[1] })
+
+/**
+ * Nhiệt độ. Cách hiểu DO NHÓM CHỌN: so nhiệt độ trung bình ngày (Tmax + Tmin)/2 của NASA POWER, lấy trung bình trên các
+ * tháng của cửa sổ vụ, với khoảng 'Temperature requirement' của ECOCROP (trang ECOCROP không ghi rõ là trung bình gì).
+ */
+function suitTemperature(info, window, climate) {
+  if (!info.tempC) return suitNoTable('temperature')
+  const refs = suitBandRefs(info.tempC, '°C', info.tempSrc, 'temp')
+  const rows = window.months.map((m) => climate.months[m - 1])
+  const inputs = {}
+  rows.forEach((r, i) => {
+    inputs[`tmax${i}`] = r.tmax
+    inputs[`tmin${i}`] = r.tmin
+  })
+  const tSeason = evDerive({
+    inputs,
+    compute: (v) => rows.reduce((s, _, i) => s + (v[`tmax${i}`] + v[`tmin${i}`]) / 2, 0) / rows.length,
+    unit: '°C',
+    formula: evText('trung bình (Tmax + Tmin)/2 của các tháng trong cửa sổ vụ', 'mean of (Tmax + Tmin)/2 over the season months'),
+    label: 'tempSeason',
+  })
+  if (evIsMissing(tSeason)) return { key: 'temperature', grade: 'gray', reason: 'missingClimate', evidence: [tSeason, ...refs] }
+  const grade = suitBand(tSeason.value, info.tempC)
+  return { key: 'temperature', grade, reason: `temp_${grade}`, evidence: [tSeason, ...refs], numbers: { t: tSeason.value, ...suitBandNumbers(info.tempC) } }
+}
+
+/** pH: số đo pH tại ruộng (Evidence 'ground') so với khoảng pH đất của ECOCROP. Chưa đo → Xám, việc cần làm là đo. */
+function suitPh(info, ph) {
+  if (!info.ph) return suitNoTable('ph')
+  const refs = suitBandRefs(info.ph, '', info.phSrc, 'ph')
+  if (!ph || evIsMissing(ph)) {
+    return { key: 'ph', grade: 'gray', reason: 'phNeedMeasure', evidence: [ph ?? evMissing({ reason: evText('chưa có số đo pH của ruộng', 'no pH measurement for this field yet'), need: 'measure', label: 'phField' }), ...refs] }
+  }
+  const grade = suitBand(ph.value, info.ph)
+  return { key: 'ph', grade, reason: `ph_${grade}`, evidence: [ph, ...refs], numbers: { ph: ph.value, ...suitBandNumbers(info.ph) } }
+}
+
 const suitNoTable = (key) => ({ key, grade: 'gray', reason: 'noSourcedTable', evidence: [evMissing({ reason: evText('thiếu bảng chỉ tiêu có nguồn cho tiêu chí này', 'no sourced crop table for this criterion yet'), need: 'source', label: key })] })
 
 /**
- * Chấm một cây. crop: id trong ROTATION_CROPS · window: suitWindow() · climate: powerClimate()
+ * Chấm một cây. crop: id trong CROP_LIBRARY · window: suitWindow() · climate: powerClimate()
  * irrigation: 'yes' | 'limited' | 'no' | null
  * salinityEce: số đo (dS/m) hoặc Evidence 'ground', hoặc null · salinityType: kiểu số đo EC (chỉ 'ece' mới chấm)
  * floodMarks: Evidence 'farmer' đếm số điểm 'Hay ngập' nông dân đánh dấu trong ruộng, hoặc null
+ * ph: Evidence pH đo tại ruộng (biểu mẫu đất) hoặc null
  */
-export function suitAssess({ crop, window, climate, irrigation = null, salinityEce = null, salinityType = null, floodMarks = null }) {
-  const info = ROTATION_CROPS[crop]
+export function suitAssess({ crop, window, climate, irrigation = null, salinityEce = null, salinityType = null, floodMarks = null, ph = null }) {
+  const info = CROP_LIBRARY[crop]
   if (!info) return { crop, known: false }
-  const criteria = [suitWater(info, window, climate, irrigation), suitCycle(info, window), suitWaterlogging(info, window, climate, floodMarks), suitSalinity(info, salinityEce, salinityType), suitNoTable('temperature'), suitNoTable('ph')]
+  const criteria = [suitWater(info, window, climate, irrigation), suitCycle(info, window), suitWaterlogging(info, window, climate, floodMarks), suitSalinity(info, salinityEce, salinityType), suitTemperature(info, window, climate), suitPh(info, ph)]
   const graded = criteria.filter((c) => c.grade !== 'gray')
   const worst = graded.reduce((acc, c) => (SUIT_GRADES.indexOf(c.grade) > SUIT_GRADES.indexOf(acc) ? c.grade : acc), 'green')
   const enough = graded.length >= SUIT_PARAMS.minGradedShare * criteria.length
