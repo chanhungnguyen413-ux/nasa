@@ -101,11 +101,18 @@ function mfzDrawLayer(field, z) {
     const dLon = field.cellM / 2 / (MFZ_M_PER_DEG * Math.cos((c.cell.lat * Math.PI) / 180))
     const grade = c.result.overall
     const zone = zoneOfCell.get(c.cell.i)
-    Lf.rectangle([[c.cell.lat - dLat, c.cell.lon - dLon], [c.cell.lat + dLat, c.cell.lon + dLon]], { stroke: false, fillColor: MFZ_FILL[grade], fillOpacity: MFZ.focus === zone.id ? 0.75 : 0.45 })
+    const opac = typeof MW !== 'undefined' ? MW.opacity : 0.6
+    const fillOpacity = MFZ.focus === zone.id ? Math.min(0.9, opac + 0.2) : grade === 'gray' ? Math.max(0.35, opac * 0.65) : opac
+    Lf.rectangle([[c.cell.lat - dLat, c.cell.lon - dLon], [c.cell.lat + dLat, c.cell.lon + dLon]], {
+      color: grade === 'gray' ? '#5a6b61' : MFZ_FILL[grade],
+      weight: grade === 'gray' ? 1 : 0,
+      dashArray: grade === 'gray' ? '3 3' : null,
+      fillColor: MFZ_FILL[grade],
+      fillOpacity,
+    })
       .on('click', (e) => {
         Lf.DomEvent.stopPropagation(e)
-        // Đang khoanh thửa hoặc đặt dấu: cú chạm thuộc về công cụ đó, không phải để chọn vùng.
-        if (MFD.mode) return mfdMapClick(e.latlng)
+        if ((typeof mdActive === 'function' && mdActive()) || MFD.mode) return mfdMapClick(e.latlng)
         MFZ.focus = zone.id
         mfRenderDynamic()
       })

@@ -77,18 +77,13 @@ function mfdSuitInputs(user) {
 /* ---------------- Bản đồ: khoanh thửa và đánh dấu ---------------- */
 /** Gọi từ sự kiện chạm bản đồ. Trả về true nếu chế độ khoanh/đánh dấu đã xử lý cú chạm. */
 function mfdMapClick(latlng) {
-  // Chạm vào bên trong thửa đã khoanh: giữ nguyên ruộng (không coi là chọn điểm mới, để ranh thửa không bị mất).
+  if (typeof mdHandleMapClick === 'function' && mdHandleMapClick(latlng)) return true
+  // Khi không ở chế độ chọn chỗ mới và đã có ruộng rồi: chạm bản đồ KHÔNG làm mất ranh thửa cũ (sửa lỗi STATE.md).
+  if (!MFD.mode && MF.loc && typeof MW !== 'undefined' && !MW.picking) return true
   const poly = mfdPolygon()
   if (!MFD.mode && poly && hzPointInPolygon([latlng.lat, latlng.lng], poly)) return true
   if (!MFD.mode) return false
   const p = [Math.round(latlng.lat * 1e6) / 1e6, Math.round(latlng.lng * 1e6) / 1e6]
-  if (MFD.mode === 'draw') {
-    MFD.draft.push(p)
-    MFD.note = null
-    mfdDrawLayers()
-    mfdRenderTools()
-    return true
-  }
   if (!MF.loc) {
     MFD.note = mfdT().tools.needPoint
     mfdRenderTools()
@@ -96,6 +91,7 @@ function mfdMapClick(latlng) {
   }
   dsAdd('marks', { type: MFD.mode.slice(5), lat: p[0], lon: p[1], date: fiToday() })
   mfdDrawLayers()
+  mwOnInputsChanged()
   mfRenderDynamic()
   return true
 }
@@ -118,6 +114,7 @@ function mfdDrawLayers() {
       .bindTooltip(esc(`${R.tools.markTypes[m.type]} · ${m.date}`))
       .addTo(MFD.layers)
   }
+  if (typeof mdDrawHandles === 'function') mdDrawHandles()
 }
 
 function mfdToolsHtml() {
@@ -163,7 +160,7 @@ function mfdToolsHtml() {
 
 function mfdRenderTools() {
   const el = $('#mf-tools')
-  if (el) el.innerHTML = mfdToolsHtml()
+  if (el) el.innerHTML = typeof mdToolsHtml === 'function' ? mdToolsHtml() : mfdToolsHtml()
 }
 
 /* ---------------- Bước 2: chuỗi tải lên và so hai nguồn mưa ---------------- */

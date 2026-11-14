@@ -39,17 +39,10 @@
       <!-- Mọi trang con: đệm trên = chiều cao thanh menu (4.5rem), rồi tiêu đề trang cách thêm pt-16 / sm:pt-20,
            để tiêu đề của cả bốn trang nằm cùng một độ cao. -->
       <div data-page="myfield" hidden class="pt-[4.5rem]">
-        <section id="myfield" class="pb-20 pt-16 sm:pb-24 sm:pt-20"></section>
+        <section id="myfield"></section>
       </div>
       <div data-page="rotations" hidden class="pt-[4.5rem]">
         <section id="rotations" class="mx-auto max-w-6xl px-5 pb-20 pt-16 sm:px-8 sm:pb-24 sm:pt-20"></section>
-      </div>
-      <div data-page="field" hidden class="pt-[4.5rem]">
-        <section id="dashboard" class="mx-auto max-w-6xl px-5 pb-20 pt-16 sm:px-8 sm:pt-20"></section>
-        <section id="solutions" class="overflow-hidden bg-white py-20 sm:py-24"></section>
-      </div>
-      <div data-page="weather" hidden class="bg-moss-950 pt-[4.5rem]">
-        <section id="weather" class="bg-moss-950 pb-20 pt-16 text-white sm:pb-24 sm:pt-20"></section>
       </div>
       <div data-page="sources" hidden class="bg-white pt-[4.5rem]">
         <section id="datahub" class="bg-white pt-16 sm:pt-20"></section>
@@ -114,8 +107,8 @@
           scrollDown: 'Cuộn xuống bảng điều khiển',
           stats: [
             { value: 2, label: 'Nguồn dữ liệu NASA', note: 'MODIS · NASA POWER' },
-            { value: 5, label: 'Huyện ĐBSCL có dữ liệu trực tiếp', note: 'Từ Cần Thơ đến Bến Tre' },
-            { value: 7, unit: ' ngày', label: 'Dự báo mưa và nắng', note: 'Cập nhật mỗi lần mở trang' },
+            { value: 5, label: 'Huyện ĐBSCL có lịch mùa vụ', note: 'Từ Cần Thơ đến Bến Tre' },
+            { value: 25, unit: ' năm', label: 'Khí hậu hằng ngày NASA POWER', note: 'Tính cân bằng nước P − ET0' },
           ],
           missionA: 'Chúng tôi biến dữ liệu vệ tinh NASA thành',
           missionB: 'lịch mùa vụ, rủi ro theo tháng và so sánh luân canh dễ hiểu, để nông dân và cán bộ khuyến nông cùng cân nhắc trước khi quyết định.',
@@ -147,7 +140,7 @@
           ctaRotations: 'So sánh luân canh',
           ctaSub: 'Đây là công cụ hỗ trợ quyết định, không thay thế kinh nghiệm của nông dân và cán bộ khuyến nông. Mọi con số đều ghi nguồn hoặc ghi rõ là mô phỏng.',
           ctaAdvice: 'Xem gợi ý hôm nay',
-          footerSources: 'Dữ liệu: MODIS (qua ORNL DAAC), NASA POWER (ước tính mô hình) và dự báo Open-Meteo.',          credits: 'Ảnh: Unsplash',
+          footerSources: 'Dữ liệu: MODIS (qua ORNL DAAC), NASA POWER (ước tính mô hình), Open-Meteo Elevation và bản đồ nền Esri / OpenStreetMap.',          credits: 'Ảnh: Unsplash',
           servedOnly: 'Mở trang bằng tệp Start Dashboard để có mã QR và trợ lý AI.',
           skip: 'Đến bảng điều khiển',
         },
@@ -178,8 +171,8 @@
           scrollDown: 'Scroll to the dashboard',
           stats: [
             { value: 2, label: 'NASA data sources', note: 'MODIS · NASA POWER' },
-            { value: 5, label: 'Mekong districts with live data', note: 'From Cần Thơ to Bến Tre' },
-            { value: 7, unit: ' days', label: 'Rain and heat forecast', note: 'Refreshed every visit' },
+            { value: 5, label: 'Mekong districts with crop calendars', note: 'From Cần Thơ to Bến Tre' },
+            { value: 25, unit: ' yrs', label: 'Daily NASA POWER climate', note: 'For P − ET0 water balance' },
           ],
           missionA: 'We turn NASA satellite data into',
           missionB: 'a crop calendar, month-by-month risks and plain rotation comparisons, so farmers and extension officers can weigh them together before deciding.',
@@ -211,7 +204,7 @@
           ctaRotations: 'Compare rotations',
           ctaSub: 'This is a decision-support tool. It supports, and never replaces, the judgment of farmers and extension officers. Every number shows its source or is marked as simulated.',
           ctaAdvice: "See today's advice",
-          footerSources: 'Data: MODIS (via ORNL DAAC), NASA POWER (model estimate) and the Open-Meteo forecast.',          credits: 'Photos: Unsplash',
+          footerSources: 'Data: MODIS (via ORNL DAAC), NASA POWER (model estimate), Open-Meteo Elevation, and Esri / OpenStreetMap basemaps.',          credits: 'Photos: Unsplash',
           servedOnly: 'Open the page with the Start Dashboard file to get the QR code and the AI assistant.',
           skip: 'Skip to dashboard',
         },
@@ -275,45 +268,17 @@
        * ================================================================ */
       const S = {
         lang: store.get('naf-lang', 'vi', (v) => v === 'vi' || v === 'en'),
-        source: store.get('naf-source', 'demo', (v) => v === 'demo' || v === 'live'),
-        provinceId: store.get('naf-province', 'cantho', (v) => PROVINCES.some((p) => p.id === v)),
         rotDistrict: store.get('naf-rot-district', 'angiang', (v) => PROVINCES.some((p) => p.id === v)),
         rotPriorities: store.get('naf-rot-priorities', { ...DEFAULT_PRIORITIES }, (v) =>
           ['water', 'soil', 'income', 'risk'].every((k) => Number.isFinite(v?.[k]) && v[k] >= 0 && v[k] <= 100),
         ),
         rotWhatIf: { ...DEFAULT_WHAT_IF, deltaT: 0 }, // giả định không lưu lại: mở lại trang là về số liệu thật
         rotCurrent: 'A', // kiểu luân canh nông dân đang làm (thẻ chiến lược Cơ sở, Phase 3)
-        crop: store.get('naf-crop', 'rice', (v) => CROP_IDS.includes(v)),
-        log: store.get('naf-log', [], Array.isArray).filter((e) => !e.seeded), // drop old sample rows
-        layer: 'moisture',
-        day: null,
-        playing: false,
-        selected: 'B',
-        scenario: null,
-        preset: null,
-        showAdvice: false,
-        flowing: null,
-        live: { status: 'idle', data: null },
-        signK: 1,
-        flowShown: null,
         chat: [],
         busy: false,
         dialog: null, // 'share' | 'assistant'
-        page: 'home', // trang đang mở: home | rotations | field | weather | sources
+        page: 'home', // trang đang mở: home | myfield | rotations | sources
         menuOpen: false, // menu trên điện thoại
-      }
-      let D
-
-      function derive() {
-        const eff = S.source === 'live' && S.live.data ? 'live' : 'demo'
-        const base = { source: eff, live: S.live.data, crop: S.crop }
-        const farm = deriveFarm({ ...base, day: S.day, scenario: S.scenario })
-        const nowFarm = farm.isToday ? farm : deriveFarm({ ...base, day: null, scenario: S.scenario })
-        const realToday = deriveFarm({ ...base, day: null, scenario: null })
-        const plans = farmPlans(nowFarm)
-        const byId = Object.fromEntries(plans.map((p) => [p.plot.id, p]))
-        const plan = byId[S.selected]
-        return { eff, farm, nowFarm, realToday, plans, byId, plan, text: adviceText(plan, nowFarm, S.lang) }
       }
       const t = () => T[S.lang]
       const l = () => L[S.lang]
@@ -373,14 +338,11 @@
        * "#/luan-canh" opens a whole page and scrolls to its top.
        * "#dashboard" (a plain element id) opens the page that holds that element and scrolls to it.
        * ================================================================ */
-      // `menu: false`: trang vẫn mở được bằng địa chỉ, nhưng không hiện trên menu và thẻ trang chủ.
-      // Phase 1 ẩn hai trang dùng 4 thửa mô phỏng ("Ruộng hôm nay", "Thời tiết"); Phase 4 sẽ xoá hẳn.
+      // Phase 4: xoá 2 trang 4 thửa mô phỏng cũ ("Ruộng hôm nay", "Thời tiết"); địa chỉ cũ tự mở sang "Ruộng của tôi".
       const PAGES = [
         { id: 'home', slug: '', nav: 'navHome', icon: 'house' },
-        { id: 'myfield', slug: 'ruong-cua-toi', nav: 'navMyField', icon: 'map-pin' },
+        { id: 'myfield', slug: 'ruong-cua-toi', aliases: ['ruong-hom-nay', 'thoi-tiet'], nav: 'navMyField', icon: 'map-pin' },
         { id: 'rotations', slug: 'luan-canh', nav: 'navRotations', icon: 'refresh-cw' },
-        { id: 'field', slug: 'ruong-hom-nay', nav: 'navDash', icon: 'map', menu: false },
-        { id: 'weather', slug: 'thoi-tiet', nav: 'navWeather', icon: 'cloud-sun', menu: false },
         // Phase 2: mục "Nguồn dữ liệu" thành trang "Dữ liệu"; địa chỉ cũ vẫn mở được (aliases).
         { id: 'sources', slug: 'du-lieu', aliases: ['nguon-du-lieu'], nav: 'navSources', icon: 'database' },
       ]
@@ -397,12 +359,12 @@
         document.title = id === 'home' ? `${appName()} · ${l().heroTitle}` : `${l()[page.nav]} · ${appName()}`
         renderNav()
         renderFooter() // đánh dấu trang đang mở ở menu chân trang
+        $('#footer').hidden = id === 'myfield'
+        $('#mobilebar').hidden = id === 'myfield'
+        $('#fab').classList.toggle('bottom-12', id === 'myfield')
+        $('#fab').classList.toggle('bottom-6', id !== 'myfield')
         $('#nav').dataset.solid = String(id !== 'home' || scrollY > 40)
-        if (changed) {
-          closeTerm()
-          updateCarouselArrows() // hàng thẻ chỉ đo được kích thước khi trang đang hiện
-          if (id === 'field') renderMapCard() // bản đồ đo lại cỡ chữ khi hiện ra
-        }
+        if (changed) closeTerm()
         if (id === 'myfield') myFieldOnShow() // bản đồ Leaflet chỉ khởi tạo được khi khung đang hiện (site/pages/myField.js)
         if (id === 'sources') dataHubOnShow() // trang Dữ liệu: chọn lại ruộng đã lưu (site/pages/dataHub.js)
       }
@@ -543,189 +505,6 @@
             ${words(L_.missionA)}
             ${words(L_.missionB, 'word soft')}
           </p>`
-      }
-
-      /* ================================================================
-       * Farm plan (SVG)
-       * ================================================================ */
-      /* Modern "digital farm" plan: dark moss ground with a survey grid, glossy plots that
-         cast soft shadows, floating data chips, a glowing selection and a glowing water line. */
-      const DROUGHT = ['#7ccf45', '#c9cf52', '#f2b134', '#e07b2a', '#d9552f']
-      const PLOT_FILL = {
-        moisture: { good: '#7ccf45', wet: '#7ccf45', low: '#bfd154', veryLow: '#dccb8c' },
-        ndvi: (v) => (v > 0.65 ? '#3fae4a' : v >= 0.55 ? '#9fd55a' : '#dccb8c'),
-      }
-      function plotLook(p) {
-        if (S.layer === 'ndvi') return { fill: PLOT_FILL.ndvi(p.ndvi), over: '' }
-        if (S.layer === 'drought') return { fill: DROUGHT[p.level], over: p.level >= 3 ? 'url(#hatch)' : '' }
-        const k = p.mStatus.key
-        return { fill: PLOT_FILL.moisture[k], over: k === 'veryLow' ? 'url(#dryDense)' : k === 'low' ? 'url(#drySparse)' : '' }
-      }
-      // This page draws the plots wider than the shared geometry (about 72% of the canvas).
-      const LAYOUT = {
-        A: { x: 170, y: 120, w: 420, h: 175, flow: 'M600 90V207H578' },
-        B: { x: 610, y: 120, w: 420, h: 175, flow: 'M600 90V207H622' },
-        C: { x: 170, y: 318, w: 420, h: 175, flow: 'M600 90V405H578' },
-        D: { x: 610, y: 318, w: 420, h: 175, flow: 'M600 90V405H622' },
-      }
-      // Flat, low-contrast canopy clusters at the edges: context, not decoration.
-      const GROVES = [
-        [58, 150, 30], [96, 128, 22], [70, 300, 36], [108, 332, 24], [62, 450, 30], [100, 478, 20],
-        [1138, 160, 32], [1100, 136, 20], [1130, 300, 26], [1146, 440, 34], [1106, 470, 22],
-        // tree line along the bottom edge, inside the phone view of the map
-        [186, 548, 22], [236, 560, 16], [312, 552, 24], [388, 562, 15], [468, 550, 21], [548, 561, 14],
-        [652, 551, 22], [726, 562, 15], [800, 549, 24], [880, 560, 17], [958, 551, 22], [1020, 562, 14],
-      ]
-      // Tree canopies: solid green with a lighter crown and a soft shadow, so they read clearly on the dark ground.
-      const grove = ([x, y, r]) =>
-        `<circle cx="${x + r * 0.12}" cy="${y + r * 0.2}" r="${r}" fill="#000" opacity=".22"/>` +
-        `<circle cx="${x}" cy="${y}" r="${r}" fill="#3f9a4a"/>` +
-        `<circle cx="${x - r * 0.22}" cy="${y - r * 0.24}" r="${r * 0.58}" fill="#6cc25a"/>`
-      const RAIN = Array.from({ length: 70 }, (_, i) => [((i * 173) % 1200) - 20, ((i * 97) % 520) - 40, 0.2 + ((i * 37) % 10) / 20])
-
-      function farmSvg() {
-        const { farm } = D
-        const T_ = t()
-        const W = wide()
-        const k = S.signK
-        const texture = CROPS[farm.crop].texture
-        const plans = farm.isToday ? D.byId : null
-        const flagged = S.log.filter((e) => e.date === todayIso() && e.status === 'planned').map((e) => e.plot)
-
-        const plots = farm.plots
-          .map((src) => {
-            const p = { ...src, ...LAYOUT[src.id] }
-            const sel = S.selected === p.id
-            const wet = S.flowing === p.id
-            const look = plotLook(p)
-            const compact = k > 1.15
-            const main = S.layer === 'ndvi' ? fmt(p.ndvi, S.lang) : S.layer === 'drought' ? `${p.level + 1}/5` : `${p.moisture}%`
-            const sub = S.layer === 'ndvi' ? `${T_.layers.moisture} ${p.moisture}%` : `NDVI ${fmt(p.ndvi, S.lang)}`
-            // Every plot that needs water shows its chip at every size; on phones the unselected ones are short.
-            const full = plans?.[p.id]
-            const short = !W && !sel
-            const pl = full && !(short && full.type === 'fine') ? full : null
-            const action = pl
-              ? pl.type === 'water'
-                ? short
-                  ? `${pl.minutes}′`
-                  : `${hhmm(pl.start)} · ${pl.minutes}′`
-                : T_.plotNeed[pl.type]
-              : ''
-            const cw = compact ? 132 : 176
-            const ch = compact ? 44 : 60
-            // Word pills ("No watering needed") grow with their text so it never runs past the pill.
-            const aw = short && pl?.type === 'water' ? 84 : compact ? (pl && pl.type !== 'water' ? Math.max(150, Math.round(action.length * 9.5 + 26)) : 150) : Math.max(176, Math.round(action.length * 9 + 24))
-            const actionFill = pl ? (pl.type === 'water' ? '#b8e55a' : pl.type === 'wait' ? '#8cc0e3' : '#ffffff') : ''
-            const r = 26
-            return `
-              <g role="button" tabindex="0" data-plot="${p.id}" aria-pressed="${sel}" aria-label="${T_.plot} ${p.id}: ${p.moisture}% · NDVI ${fmt(p.ndvi, S.lang)} · ${T_.status[p.mStatus.key]}" class="cursor-pointer outline-none">
-                ${sel ? `<rect x="${p.x - 7}" y="${p.y - 7}" width="${p.w + 14}" height="${p.h + 14}" rx="${r + 7}" fill="none" stroke="#b8e55a" stroke-width="5" filter="url(#glow)" class="sel-ring"/>` : ''}
-                <rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="${r}" fill="${wet && S.layer === 'moisture' ? '#62c04a' : look.fill}" filter="url(#lift)" style="transition:fill .5s"/>
-                <rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="${r}" fill="url(#${texture})"/>
-                ${!wet && look.over ? `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="${r}" fill="${look.over}"/>` : ''}
-                <rect class="wet-overlay" data-wet="${p.id}" data-on="${wet && S.flowShown === p.id}" x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="${r}" fill="url(#sheen)"/>
-                <rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="${r}" fill="url(#gloss)"/>
-                <rect x="${p.x + 1.5}" y="${p.y + 1.5}" width="${p.w - 3}" height="${p.h - 3}" rx="${r - 1.5}" fill="none" stroke="#fff" stroke-opacity="${sel ? 0.55 : 0.28}" stroke-width="2"/>
-                <g transform="translate(${p.x + (k > 1.6 ? 10 : 16)} ${p.y + (k > 1.6 ? 8 : 16)}) scale(${k})">
-                  <rect x="0" y="4" width="${cw}" height="${ch}" rx="${ch / 2}" fill="#000" opacity=".18"/>
-                  <rect width="${cw}" height="${ch}" rx="${ch / 2}" fill="#fff"/>
-                  <circle cx="${ch / 2}" cy="${ch / 2}" r="${ch / 2 - 6}" fill="${sel ? '#b8e55a' : '#0b2e1b'}"/>
-                  <text x="${ch / 2}" y="${ch / 2 + 6.5}" fill="${sel ? '#0b2e1b' : '#fff'}" font-size="${compact ? 17 : 19}" font-weight="800" text-anchor="middle">${p.id}</text>
-                  <text x="${ch + 2}" y="${compact ? 30 : 29}" fill="#10231a" font-size="${compact ? 23 : 25}" font-weight="800" class="tabular">${main}</text>
-                  ${compact ? '' : `<text x="${ch + 2}" y="48" fill="#5a6b61" font-size="14" font-weight="600" class="tabular">${sub}</text>`}
-                  ${
-                    pl
-                      ? `<g transform="translate(0 ${ch + 8})"><rect width="${aw}" height="30" rx="15" fill="${actionFill}"/>${
-                          pl.type === 'water' ? `<path d="M19 8c-3.5 4.4-5.2 7.3-5.2 9.2a5.2 5.2 0 0 0 10.4 0c0-1.9-1.7-4.8-5.2-9.2z" fill="#0b2e1b"/>` : ''
-                        }<text x="${pl.type === 'water' ? 32 : aw / 2}" y="${short ? 21.5 : 20.5}" font-size="${short ? 18 : 15}" font-weight="800" fill="#0b2e1b" text-anchor="${pl.type === 'water' ? 'start' : 'middle'}" class="tabular">${action}</text></g>`
-                      : ''
-                  }
-                </g>
-                ${
-                  flagged.includes(p.id)
-                    ? `<g class="pop-in" transform="translate(${p.x + p.w - 30} ${p.y + p.h - 30})"><circle r="17" fill="#b8e55a" stroke="#0b2e1b" stroke-width="3"/><path d="M-7 0l4.5 4.5L7-5" fill="none" stroke="#0b2e1b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></g>`
-                    : ''
-                }
-              </g>`
-          })
-          .join('')
-
-        const flows = farm.plots
-          .map(
-            (p) =>
-              `<g pointer-events="none"><path class="flow-path" data-flow="${p.id}" data-on="${S.flowing === p.id && S.flowShown === p.id}" d="${LAYOUT[p.id].flow}" fill="none" stroke="#8cc0e3" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" filter="url(#waterGlow)"/>${
-                S.flowing === p.id && S.flowShown === p.id ? `<path class="water-run" d="${LAYOUT[p.id].flow}" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-dasharray="6 16"/>` : ''
-              }</g>`,
-          )
-          .join('')
-
-        const rain =
-          farm.weather.rain48h >= 10
-            ? `<g class="rain" pointer-events="none"><rect x="-1200" y="-200" width="3600" height="920" fill="#0b2e1b" opacity=".18"/>${RAIN.map(
-                ([x, y, o]) => `<line x1="${x}" y1="${y}" x2="${x - 8}" y2="${y + 26}" stroke="#8cc0e3" stroke-width="2" stroke-linecap="round" opacity="${o}"/>`,
-              ).join('')}</g>`
-            : ''
-
-        return `
-          <svg id="farm-svg" viewBox="${W ? '0 0 1200 520' : '150 24 900 560'}" preserveAspectRatio="xMidYMid meet" class="block size-full" role="group" aria-label="${T_.mapTitle}">
-            <defs>
-              <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.4" fill="#ffffff" opacity=".09"/></pattern>
-              <pattern id="rows" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(-8)"><path d="M0 7H14" stroke="#0b2e1b" stroke-width="1.6" opacity=".16"/></pattern>
-              <pattern id="trees" width="30" height="30" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="5.5" fill="#0b2e1b" opacity=".22"/><circle cx="23" cy="23" r="5.5" fill="#0b2e1b" opacity=".22"/></pattern>
-              <pattern id="beds" width="22" height="18" patternUnits="userSpaceOnUse"><rect y="2" width="22" height="8" rx="4" fill="#0b2e1b" opacity=".16"/></pattern>
-              <pattern id="drySparse" width="18" height="18" patternUnits="userSpaceOnUse"><circle cx="5" cy="6" r="1.7" fill="#5b4527" opacity=".45"/></pattern>
-              <pattern id="dryDense" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.6" fill="#5b4527" opacity=".55"/><circle cx="8" cy="8" r="1.2" fill="#5b4527" opacity=".4"/></pattern>
-              <pattern id="hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="5" height="12" fill="#fff" opacity=".3"/></pattern>
-              <pattern id="sheen" width="46" height="46" patternUnits="userSpaceOnUse" patternTransform="rotate(-20)"><rect width="46" height="46" fill="#2e86c1" opacity=".42"/><path d="M4 12h20M26 32h14" stroke="#dcecf7" stroke-width="2.5" stroke-linecap="round" opacity=".75"/></pattern>
-              <linearGradient id="gloss" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".12"/></linearGradient>
-              <linearGradient id="canal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b5a86"/><stop offset=".5" stop-color="#2e86c1"/><stop offset="1" stop-color="#1b5a86"/></linearGradient>
-              <radialGradient id="vignette" cx=".5" cy=".45" r=".85"><stop offset=".7" stop-color="#0b2e1b" stop-opacity="0"/><stop offset="1" stop-color="#0b2e1b" stop-opacity=".35"/></radialGradient>
-              <filter id="lift" x="-15%" y="-15%" width="130%" height="150%"><feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000" flood-opacity=".38"/></filter>
-              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-              <filter id="waterGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            </defs>
-
-            <rect x="-1200" y="-200" width="3600" height="920" fill="#0f3d24"/>
-            <rect x="-1200" y="-200" width="3600" height="920" fill="url(#grid)"/>
-
-            <!-- canal with a moving shimmer -->
-            <rect x="-1200" y="42" width="3600" height="44" fill="url(#canal)"/>
-            <path class="ripple" d="M-1200 56H2400" stroke="#8cc0e3" stroke-width="2.5" stroke-dasharray="36 84" stroke-linecap="round" opacity=".7"/>
-            <path class="ripple" d="M-1240 72H2400" stroke="#dcecf7" stroke-width="2" stroke-dasharray="22 98" stroke-linecap="round" opacity=".55"/>
-            <g transform="translate(${W ? 330 : 450} 64) scale(${W ? k : 2.2})"><rect x="${S.lang === 'vi' ? -58 : -82}" y="-14" width="${S.lang === 'vi' ? 116 : 164}" height="28" rx="14" fill="#0b2e1b" opacity=".85"/><text y="6" fill="#dcecf7" font-size="16" font-weight="700" text-anchor="middle">${T_.canal}</text></g>
-
-            <!-- the farm parcel, the ditch from the gate, and the dike path -->
-            <rect x="150" y="102" width="900" height="408" rx="36" fill="#155030" stroke="#ffffff" stroke-opacity=".07" stroke-width="2"/>
-            <rect x="595" y="86" width="10" height="410" rx="5" fill="#1b5a86" opacity=".75"/>
-            <rect x="160" y="300" width="880" height="14" rx="7" fill="#ffffff" opacity=".05"/>
-            ${GROVES.map(grove).join('')}
-
-            ${flows}
-            ${plots}
-
-            <!-- the canal gate, labelled on a pill clear of the ditch -->
-            <g transform="translate(600 92)"><circle r="11" fill="#b8e55a" stroke="#0b2e1b" stroke-width="3"/><rect x="-4" y="-4" width="8" height="8" rx="2" fill="#0b2e1b"/></g>
-            <g transform="translate(${W ? (S.lang === 'vi' ? 552 : 548) : 720} ${W ? 92 : 64}) scale(${W ? k : 2.2})"><rect x="-38" y="-13" width="${S.lang === 'vi' ? 58 : 62}" height="26" rx="13" fill="#0b2e1b"/><text x="${S.lang === 'vi' ? -9 : -7}" y="5" fill="#ffffff" font-size="14" font-weight="800" text-anchor="middle">${T_.gate}</text></g>
-
-            ${rain}
-            <rect x="-1200" y="-200" width="3600" height="920" fill="url(#vignette)" pointer-events="none"/>
-          </svg>`
-      }
-
-      // Signs grow when the plan is drawn small so their text stays at 12px or more (on wide maps, the 15px action text sets the scale).
-      function measureSigns() {
-        const svg = $('#farm-svg')
-        if (!svg) return
-        const r = svg.getBoundingClientRect()
-        const [vw, vh] = wide() ? [1200, 520] : [900, 560]
-        const s = Math.min(r.width / vw, r.height / vh)
-        if (!s) return
-        const k = Math.min(wide() ? 1.45 : 2.1, Math.max(1, 12 / ((wide() ? 15 : 17) * s)))
-        if (Math.abs(k - S.signK) > 0.02) {
-          S.signK = k
-          $('#farm').innerHTML = farmSvg()
-        }
       }
 
       /* ================================================================
@@ -989,569 +768,6 @@
       }
 
       /* ================================================================
-       * Dashboard section
-       * ================================================================ */
-      function renderDashboard() {
-        const L_ = l()
-        const T_ = t()
-        $('#dashboard').innerHTML = `
-          <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
-            <div class="max-w-2xl">
-              <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl">${L_.dashTitle}</h2>
-              <p class="mt-3 text-lg leading-relaxed text-muted">${L_.dashSub}</p>
-            </div>
-            <div id="dash-controls" class="flex flex-wrap items-center gap-2"></div>
-          </div>
-          <div id="live-note" class="mt-4"></div>
-          <div class="mt-8" data-reveal style="transition-delay:120ms">
-            <div id="map-card"></div>
-            <div id="readings" class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
-          </div>
-          <div id="advice" class="mt-6"></div>`
-        renderDashControls()
-        renderLiveNote()
-        renderMapCard()
-        renderReadings()
-        renderAdvice()
-      }
-
-      function renderDashControls() {
-        const T_ = t()
-        $('#dash-controls').innerHTML = `
-          ${segmented('source', S.source, [
-            { value: 'demo', label: T_.sourceDemo },
-            { value: 'live', label: T_.sourceLive },
-          ])}
-          ${S.source === 'live' ? selectBox('province', T_.provinceLabel, S.provinceId, PROVINCES.map((p) => ({ value: p.id, label: p.name })), 'map-pin') : ''}
-          ${selectBox('crop', T_.cropLabel, S.crop, CROP_IDS.map((c) => ({ value: c, label: T_.crops[c] })), 'sprout')}`
-      }
-
-      function renderLiveNote() {
-        const T_ = t()
-        const box = $('#live-note')
-        if (S.source !== 'live') return (box.innerHTML = '')
-        if (S.live.status === 'loading' && !S.live.data)
-          return (box.innerHTML = `<p class="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-moss-800 shadow-card">${icon('refresh-cw', 'size-4 animate-spin')}${T_.liveLoading}</p>`)
-        if (S.live.status === 'error' || S.live.status === 'cached')
-          return (box.innerHTML = `<p class="inline-flex flex-wrap items-center gap-2 rounded-full bg-sun-100 px-4 py-2 text-sm font-semibold text-sun-700">${
-            S.live.status === 'error' ? T_.liveError : T_.liveCached(new Date(S.live.data.fetchedAt).toLocaleString(T_.locale))
-          }<button type="button" data-action="retry" class="font-bold underline underline-offset-2">${T_.retry}</button></p>`)
-        box.innerHTML = ''
-      }
-
-      const LEGEND = {
-        moisture: [['#7ccf45'], ['#bfd154', 1], ['#dccb8c', 2]],
-        ndvi: [['#3fae4a'], ['#9fd55a'], ['#dccb8c']],
-        drought: [['#7ccf45'], ['#c9cf52'], ['#f2b134'], ['#e07b2a', 0, 1], ['#d9552f', 0, 1]],
-      }
-      const swatch = ([fill, dots, hatch]) =>
-        `<svg viewBox="0 0 16 16" class="size-4 shrink-0 rounded-full" aria-hidden="true"><rect width="16" height="16" fill="${fill}"/>${
-          dots === 1 ? '<circle cx="5" cy="6" r="1.6" fill="#6f5436" opacity=".55"/>' : ''
-        }${dots === 2 ? '<circle cx="4" cy="4" r="1.5" fill="#6f5436" opacity=".6"/><circle cx="11" cy="11" r="1.5" fill="#6f5436" opacity=".6"/>' : ''}${
-          hatch ? '<path d="M-2 6 6 -2M-2 14 14 -2M6 18 18 6" stroke="#fff" stroke-width="2.5" opacity=".45"/>' : ''
-        }</svg>`
-
-      function renderMapCard() {
-        const T_ = t()
-        const { farm } = D
-        const last = farm.days.length - 1
-        const labels = S.layer === 'moisture' ? T_.legendMoisture(farm.need) : S.layer === 'ndvi' ? T_.legendNdvi : T_.droughtLevels
-        const dayText = farm.isToday && D.eff !== 'live' ? T_.today : dayLabel(farm.days[farm.dayIndex], S.lang)
-        const pillData =
-          D.eff === 'live'
-            ? `<span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white/95 px-3 py-1.5 text-[13px] font-bold text-moss-900 shadow-card">${icon('satellite', 'size-3.5')}${T_.livePill(PROVINCES.find((p) => p.id === S.provinceId).name, shortDate(farm.dataDate))}</span>`
-            : `<span class="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-sun-100 px-3 py-1.5 text-[13px] font-bold text-sun-700 shadow-card">${icon('flask-conical', 'size-3.5')}<span class="sm:hidden">${T_.demoPillShort}</span><span class="max-sm:hidden">${T_.demoPill}</span></span>`
-        $('#map-card').innerHTML = `
-          <div class="overflow-hidden rounded-[28px] border bg-moss-900 shadow-card transition-shadow duration-300 hover:shadow-lift ${
-            farm.whatIf ? 'border-sun-400 outline-2 outline-offset-2 outline-dashed outline-sun-400' : 'border-line'
-          }">
-            <div class="relative flex flex-col-reverse xl:block">
-              <div id="farm" class="aspect-[900/560] w-full sm:aspect-[1200/520]">${farmSvg()}</div>
-              <div class="flex items-center justify-between gap-2 border-b border-line bg-white px-3 py-2 xl:pointer-events-none xl:absolute xl:inset-x-3 xl:top-3 xl:items-start xl:border-0 xl:bg-transparent xl:p-0">
-                <div class="flex shrink-0 flex-wrap gap-1.5">${pillData}${
-                  farm.whatIf ? `<span class="whitespace-nowrap rounded-full border border-dashed border-sun-400 bg-sun-100 px-3 py-1.5 text-[13px] font-bold text-sun-700">${T_.whatIfOn}</span>` : ''
-                }</div>
-                <div class="no-scrollbar min-w-0 overflow-x-auto pr-1 xl:pointer-events-auto xl:pr-0">${segmented('layer', S.layer, ['moisture', 'ndvi', 'drought'].map((v) => ({ value: v, label: T_.layers[v] })), { size: 'sm' })}</div>
-              </div>
-            </div>
-            <div class="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-line bg-white px-4 py-3">
-              <div class="flex min-w-0 flex-1 basis-72 items-center gap-3">
-                <button type="button" data-action="play" aria-label="${S.playing ? T_.pause : T_.play}" class="grid size-10 shrink-0 place-items-center rounded-full bg-lime-400 text-moss-950 transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-300">${icon(S.playing ? 'pause' : 'play', 'size-4')}</button>
-                <label for="day-slider" class="sr-only">${T_.dayLabel}</label>
-                <input id="day-slider" type="range" min="0" max="${last}" value="${farm.dayIndex}" class="range min-w-0 flex-1" style="--fill:${(farm.dayIndex / last) * 100}%" />
-                <span class="tabular w-[4.5rem] shrink-0 text-right text-sm font-bold ${farm.isToday ? 'text-ink' : 'text-moss-700'}">${dayText}</span>
-              </div>
-              <div class="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-[13px] font-medium text-muted">
-                <span class="font-bold text-ink">${term(S.layer === 'moisture' ? 'moisture' : S.layer, T_.legendTitle[S.layer])}</span>
-                ${LEGEND[S.layer].map((s, i) => `<span class="flex items-center gap-1.5">${swatch(s)}${labels[i]}</span>`).join('')}
-              </div>
-            </div>
-            ${
-              farm.isToday
-                ? ''
-                : `<p class="flex flex-wrap items-center justify-between gap-2 border-t border-line bg-lime-100 px-4 py-2.5 text-sm font-semibold text-moss-900">${T_.pastNote(dayLabel(farm.days[farm.dayIndex], S.lang))}<button type="button" data-action="today" class="rounded-full px-2 font-bold underline underline-offset-2">${T_.backToday}</button></p>`
-            }
-          </div>
-          <p class="sr-only" aria-live="polite">${T_.plot} ${S.selected}: ${farm.plots.find((p) => p.id === S.selected).moisture}%</p>`
-        requestAnimationFrame(measureSigns)
-        runFlow()
-      }
-
-      // The water line starts empty and runs from the gate once per watering; later re-renders show it full.
-      function runFlow() {
-        if (!S.flowing) return (S.flowShown = null)
-        if (S.flowShown === S.flowing) return
-        const id = S.flowing
-        requestAnimationFrame(() =>
-          requestAnimationFrame(() => {
-            document.querySelectorAll(`[data-flow="${id}"],[data-wet="${id}"]`).forEach((el) => (el.dataset.on = 'true'))
-            S.flowShown = id
-          }),
-        )
-      }
-
-      function readingCard(inner, whatIf) {
-        return `<div class="relative rounded-3xl border border-line bg-white p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift">${
-          whatIf ? `<div class="mb-2.5">${whatIfTag()}</div>` : ''
-        }${inner}</div>`
-      }
-
-      function renderReadings() {
-        const T_ = t()
-        const { farm } = D
-        const crop = T_.crops[farm.crop]
-        const mSt = moistureStatus(farm.avg.moisture, farm.need)
-        const nSt = ndviStatus(farm.avg.ndvi)
-        const max = farm.unit === 'sat' ? 100 : 60
-        const needPct = (farm.need / max) * 100
-        const weak = farm.plots.reduce((a, b) => (b.ndvi < a.ndvi ? b : a))
-        const dTone = farm.level >= 3 ? 'bad' : farm.level >= 1 ? 'warn' : 'good'
-        const moisture = readingCard(
-          `<h3 class="flex items-center gap-2 text-[15px] font-bold">${icon('droplets', 'size-5 text-water-500')}${term('moisture', T_.moistureName)}</h3>
-          <div class="mt-3 flex items-end justify-between gap-2">
-            <p class="tabular text-5xl font-extrabold leading-none tracking-tight">${farm.avg.moisture}<span class="text-2xl font-bold text-muted">%</span></p>
-            ${badge(mSt.tone, T_.status[mSt.key])}
-          </div>
-          <div class="relative mt-5 h-2.5 rounded-full bg-moss-100"><div class="h-full rounded-full bg-water-500 transition-[width] duration-700" style="width:${Math.min(100, (farm.avg.moisture / max) * 100)}%"></div><div class="absolute -top-1.5 h-5.5 w-0.5 rounded bg-moss-950" style="left:${needPct}%"></div></div>
-          <p class="mt-2 text-sm leading-relaxed text-muted">${T_.moistureDesc(crop, farm.need, farm.unit === 'sat')}</p>`,
-          farm.whatIf,
-        )
-        const ndvi = readingCard(
-          `<h3 class="flex items-center gap-2 text-[15px] font-bold">${icon('leaf', 'size-5 text-moss-700')}<span>${T_.ndviName} (${term('ndvi', 'NDVI')})</span></h3>
-          <div class="mt-3 flex items-end justify-between gap-2">
-            <p class="tabular text-5xl font-extrabold leading-none tracking-tight">${fmt(farm.avg.ndvi, S.lang)}${
-              farm.ndviSimulated && farm.unit === 'sat' ? `<span class="ml-1.5 align-middle text-xs font-bold text-sun-700">${T_.ndviSimulatedTag}</span>` : ''
-            }</p>
-            ${badge(nSt.tone, T_.status[nSt.key])}
-          </div>
-          <div class="relative mt-5"><div class="h-2.5 rounded-full" style="background:linear-gradient(90deg,#b59a74,#d3c887 25%,#a9c94f 50%,#4c9a2e 75%,#0f3d24)"></div><div class="absolute -top-1.5 size-5.5 -translate-x-1/2 rounded-full border-[3px] border-white bg-moss-950 shadow-card transition-[left] duration-700" style="left:${farm.avg.ndvi * 100}%"></div></div>
-          <p class="mt-2 text-sm leading-relaxed text-muted">${T_.ndviDesc(weak.ndvi < farm.avg.ndvi - 0.05 ? weak.id : null, farm.avg.ndvi >= 0.6)}</p>`,
-          false,
-        )
-        const drought = readingCard(
-          `<h3 class="flex items-center gap-2 text-[15px] font-bold">${icon('sun', 'size-5 text-sun-400')}${term('drought', T_.droughtName)}</h3>
-          <div class="mt-3 flex items-end justify-between gap-2">
-            <p class="min-w-0 text-2xl font-extrabold leading-tight tracking-tight">${T_.droughtLevels[farm.level]}</p>
-            ${badge(dTone, `${farm.level + 1}/5`)}
-          </div>
-          <div class="mt-4 grid grid-cols-5 gap-1">${DROUGHT.map(
-            (c, i) =>
-              `<div class="h-2.5 rounded-full transition-opacity duration-500 ${i > farm.level ? 'opacity-25' : ''}" style="background:${i >= 3 ? `repeating-linear-gradient(135deg,${c} 0 5px,#ffffff99 5px 7px),${c}` : c}"></div>`,
-          ).join('')}</div>
-          <p class="mt-3 text-sm leading-relaxed text-muted">${T_.droughtDesc(farm.weather.dryDays, farm.weather.tMax)}</p>`,
-          farm.whatIf,
-        )
-        const cta = `
-          <button type="button" data-action="open-advice" aria-expanded="${S.showAdvice}" class="group flex flex-col justify-between gap-6 rounded-3xl bg-lime-400 p-5 text-left text-moss-950 shadow-card transition-all duration-300 hover:-translate-y-1 hover:bg-lime-300 hover:shadow-lift max-sm:hidden sm:col-span-2 lg:col-span-1">
-            <span class="flex items-start justify-between gap-3">
-              <span class="grid size-11 place-items-center rounded-full bg-moss-950/10">${icon('droplets', 'size-5')}</span>
-              <span class="grid size-12 place-items-center rounded-full bg-moss-950 text-lime-400 transition-transform duration-300 group-hover:rotate-45">${icon('arrow-up-right', 'size-5')}</span>
-            </span>
-            <span class="leading-tight"><span class="block text-2xl font-extrabold tracking-tight">${T_.adviceCta}</span><span class="mt-1 block text-[15px] font-bold opacity-75">${T_.plot} ${S.selected} · ${T_.adviceCtaSub}</span></span>
-          </button>`
-        $('#readings').innerHTML = moisture + ndvi + drought + cta
-      }
-
-      /* ================================================================
-       * Advice panel
-       * ================================================================ */
-      const REASON_ICON = { drop: 'droplets', sun: 'sun', leaf: 'leaf', clock: 'calendar-clock', cloud: 'cloud-rain' }
-
-      function timeline(plan) {
-        const T_ = t()
-        const from = 5 * 60
-        const to = 23 * 60
-        const pct = (m) => ((m - from) / (to - from)) * 100
-        const bands = [
-          [5, 7, '#fdf1d3'],
-          [7, 11, '#eef4ef', T_.phases.day],
-          [11, 15, '#f6ddd2', T_.phases.hot, true],
-          [15, 17, '#eef4ef'],
-          [17, 19, '#dcecf7'],
-          [19, 23, '#dfe5ee', T_.phases.night],
-        ]
-        const s = plan.start
-        const e = plan.start + plan.minutes
-        return `
-          <div class="relative h-7"><span class="tabular absolute bottom-1 -translate-x-1/2 whitespace-nowrap rounded-full bg-moss-900 px-2.5 py-0.5 text-xs font-bold text-white" style="left:${(pct(s) + pct(e)) / 2}%">${T_.phases.dusk} · ${plan.minutes}′</span></div>
-          <div class="relative h-14 overflow-hidden rounded-2xl border border-line">
-            ${bands
-              .map(
-                ([a, b, bg, label, hatch]) =>
-                  `<div class="absolute inset-y-0" style="left:${pct(a * 60)}%;width:${pct(b * 60) - pct(a * 60)}%;background:${bg};${
-                    hatch ? 'background-image:repeating-linear-gradient(135deg,#c4481f22 0 6px,transparent 6px 12px)' : ''
-                  }">${label ? `<span class="absolute left-1.5 top-1.5 hidden whitespace-nowrap text-xs font-semibold text-muted sm:block">${label}</span>` : ''}</div>`,
-              )
-              .join('')}
-            <div class="absolute inset-y-1.5 rounded-lg bg-moss-900" style="left:${pct(s)}%;width:${pct(e) - pct(s)}%"></div>
-          </div>
-          <div class="tabular relative mt-1.5 h-5 text-xs font-medium text-muted">${[6, 9, 12, 15, 18, 21]
-            .map((h) => `<span class="absolute -translate-x-1/2" style="left:${pct(h * 60)}%">${h}:00</span>`)
-            .join('')}</div>
-          <p class="tabular mt-1 text-sm font-bold text-moss-800">${hhmm(s)} – ${hhmm(e)} · ${plan.minutes} ${T_.minutes}</p>`
-      }
-
-      function renderAdvice() {
-        const box = $('#advice')
-        if (!S.showAdvice) return (box.innerHTML = '')
-        const T_ = t()
-        const { plan, text } = D
-        const meth = methodInfo(plan.method, S.lang)
-        const today = todayIso()
-        const scheduled = S.log.some((e) => e.date === today && e.plot === plan.plot.id && e.status === 'planned')
-        const head = plan.type === 'fine' ? 'bg-moss-800' : 'bg-moss-950'
-        box.innerHTML = `
-          <article id="advice-panel" tabindex="-1" aria-labelledby="advice-title" class="panel-in scroll-mt-24 overflow-hidden rounded-[28px] bg-white shadow-lift outline-none">
-            <div class="${head} px-6 py-6 text-white sm:px-8 sm:py-7">
-              <div class="flex items-start justify-between gap-4">
-                <div class="flex items-start gap-4">
-                  <span class="mt-1 hidden size-12 shrink-0 place-items-center rounded-full bg-lime-400 text-moss-950 sm:grid">${icon(plan.type === 'water' ? 'droplets' : plan.type === 'wait' ? 'cloud-rain' : 'check', 'size-6')}</span>
-                  <h2 id="advice-title" class="max-w-3xl text-2xl font-extrabold leading-snug tracking-tight sm:text-3xl">${text.headline}</h2>
-                </div>
-                <div class="flex shrink-0 items-center gap-1">
-                  <button type="button" data-action="share" class="inline-flex items-center gap-1.5 rounded-full border border-white/30 px-3.5 py-2 text-sm font-bold text-white transition-colors hover:bg-white/10">${icon('share-2', 'size-4')}<span class="max-sm:sr-only">${T_.share}</span></button>
-                  <button type="button" data-action="close-advice" aria-label="${T_.close}" class="rounded-full p-2 text-white transition-colors hover:bg-white/10">${icon('x', 'size-5')}</button>
-                </div>
-              </div>
-              <p class="mt-4 max-w-[70ch] text-base leading-relaxed text-white">${text.summary}</p>
-            </div>
-            <div class="grid gap-10 px-6 py-7 sm:px-8 ${plan.type === 'water' ? 'lg:grid-cols-[1.1fr_1fr]' : ''}">
-              <div>
-                <h3 class="text-lg font-extrabold">${T_.why}</h3>
-                <ul class="mt-3 space-y-3">${text.reasons
-                  .map(
-                    (r) =>
-                      `<li class="flex gap-3 leading-relaxed"><span class="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-lime-100 text-moss-800">${icon(REASON_ICON[r.icon], 'size-4')}</span><span>${r.text} ${
-                        r.term ? term(r.term, GLOSSARY[S.lang][r.term].title) : ''
-                      }</span></li>`,
-                  )
-                  .join('')}</ul>
-                <h3 class="mt-8 text-lg font-extrabold">${T_.steps}</h3>
-                <ol class="mt-3 space-y-2.5">${text.steps
-                  .map(
-                    (s, i) =>
-                      `<li class="flex gap-3 leading-relaxed"><span class="tabular grid size-7 shrink-0 place-items-center rounded-full bg-moss-900 text-sm font-bold text-lime-400">${i + 1}</span><span class="pt-0.5">${s}</span></li>`,
-                  )
-                  .join('')}</ol>
-                ${plan.type === 'water' ? `<p class="mt-4 text-sm text-muted">${T_.waterMethod}: ${term(meth.term, GLOSSARY[S.lang][meth.term].title, 'text-ink')}</p>` : ''}
-              </div>
-              ${
-                plan.type === 'water'
-                  ? `<div class="space-y-7">
-                <div><h3 class="text-lg font-extrabold">${T_.timeline}</h3><div class="mt-3">${timeline(plan)}</div></div>
-                <div class="flex flex-wrap items-center gap-3 border-t border-line pt-5">${
-                  scheduled
-                    ? `<span role="status" class="inline-flex items-center gap-2 rounded-full bg-lime-100 px-4 py-2.5 font-bold text-moss-900">${icon('check', 'size-5')}${T_.scheduled(hhmm(plan.start), plan.plot.id)}</span><button type="button" data-action="unschedule" class="inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-bold text-muted hover:bg-moss-50 hover:text-ink">${icon('undo-2', 'size-4')}${T_.undo}</button>`
-                    : pillBtn(`${icon('calendar-clock', 'size-5')}${T_.schedule(hhmm(plan.start))}`, 'data-action="schedule"', 'dark')
-                }</div>
-              </div>`
-                  : ''
-              }
-            </div>
-          </article>`
-      }
-
-      /* ================================================================
-       * Solutions carousel
-       * ================================================================ */
-      function renderSolutions() {
-        const L_ = l()
-        $('#solutions').innerHTML = `
-          <div class="mx-auto max-w-6xl px-5 sm:px-8">
-            <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
-              <div class="max-w-2xl">
-                <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl">${L_.solTitle}</h2>
-                <p class="mt-3 text-lg text-muted">${L_.solSub}</p>
-              </div>
-              <div class="flex gap-2 lg:hidden">
-                <button type="button" id="car-prev" data-action="carousel" data-value="-1" aria-label="${L_.prev}" class="grid size-12 place-items-center rounded-full border border-line text-ink transition-all duration-300 hover:-translate-y-0.5 hover:border-moss-700 disabled:pointer-events-none disabled:opacity-35">${icon('arrow-left', 'size-5')}</button>
-                <button type="button" id="car-next" data-action="carousel" data-value="1" aria-label="${L_.next}" class="grid size-12 place-items-center rounded-full bg-lime-400 text-moss-950 transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-300 disabled:pointer-events-none disabled:opacity-35">${icon('arrow-right', 'size-5')}</button>
-              </div>
-            </div>
-          </div>
-          <!-- Dưới 1024 px: hàng cuộn ngang. Từ 1024 px: 5 thẻ thành lưới vừa khung, không cuộn. -->
-          <div id="carousel" class="no-scrollbar mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-5 pb-4 sm:px-[max(2rem,calc((100vw_-_72rem)/2_+_2rem))] lg:mx-auto lg:grid lg:max-w-6xl lg:grid-cols-5 lg:overflow-visible lg:px-8">
-            ${L_.solutions
-              .map(
-                (c, i) => `
-              <button type="button" data-action="solution" data-value="${c.key}" data-reveal style="transition-delay:${i * 80}ms" class="group w-[78vw] max-w-[320px] shrink-0 snap-start self-start text-left sm:w-[300px] lg:w-auto lg:max-w-none">
-                <span class="relative block h-56 overflow-hidden rounded-3xl bg-moss-800 lg:h-44">
-                  ${photo(c.photo, 700, 'size-full object-cover transition-transform duration-700 group-hover:scale-105')}
-                  <span class="absolute right-3 top-3 grid size-10 place-items-center rounded-full bg-lime-400 text-moss-950 shadow-card transition-transform duration-300 group-hover:rotate-45">${icon('arrow-up-right', 'size-5')}</span>
-                </span>
-                <span class="mt-4 block text-lg font-extrabold transition-colors duration-300 group-hover:text-moss-700">${c.title}</span>
-                <span class="mt-1 block text-[15px] leading-relaxed text-muted">${c.desc}</span>
-              </button>`,
-              )
-              .join('')}
-          </div>`
-        const c = $('#carousel')
-        c.addEventListener('scroll', updateCarouselArrows, { passive: true })
-        updateCarouselArrows()
-      }
-
-      // Mờ nút ← khi đang ở đầu hàng, mờ nút → khi đã tới cuối (không còn gì để cuộn).
-      function updateCarouselArrows() {
-        const c = $('#carousel')
-        const prev = $('#car-prev')
-        const next = $('#car-next')
-        if (!c || !prev || !next) return
-        prev.disabled = c.scrollLeft <= 2
-        next.disabled = c.scrollLeft + c.clientWidth >= c.scrollWidth - 2
-      }
-
-      /* ================================================================
-       * Weather section (dark)
-       * ================================================================ */
-      /* The week just measured and the week ahead on one clean chart.
-         Soil moisture bars (lime = below what the crop needs), the need line, forecast rain bars,
-         weather icons and highs on top, dates and NDVI values in their own rows underneath.
-         Nothing is drawn on top of anything else. */
-      function weekChart() {
-        const T_ = t()
-        const { farm } = D
-        const forecast = D.realToday.forecast
-        const W = wide()
-        const Wd = W ? 1040 : 340
-        const fs = W ? 14 : 13
-        const pad = { l: W ? 52 : 40, r: W ? 16 : 8, t: W ? 80 : 66, b: W ? 70 : 64 }
-        const ih = W ? 220 : 190
-        const H = pad.t + ih + pad.b
-        const past = farm.days.length
-        const future = forecast?.length ?? 0
-        const n = past + future
-        const iw = Wd - pad.l - pad.r
-        const slot = iw / n
-        const bw = slot * (W ? 0.56 : 0.62)
-        const cx = (i) => pad.l + slot * (i + 0.5)
-        const max = farm.unit === 'sat' ? 100 : 60
-        const ticks = farm.unit === 'sat' ? [0, 50, 100] : [0, 20, 40, 60]
-        const ym = (v) => pad.t + ih - (Math.min(v, max) / max) * ih
-        // Rain bars scale to the wettest day and stop 26 units below the top, so their labels stay inside the chart.
-        const rainMax = Math.max(20, ...(forecast || []).map((d) => d.rain))
-        const yr = (mm) => pad.t + ih - (Math.min(mm, rainMax) / rainMax) * (ih - 26)
-        const { moisture, ndvi } = farm.history
-        const divider = pad.l + slot * past
-        const every = W ? 1 : 2
-        const yDate = pad.t + ih + 26
-        const yNdvi = pad.t + ih + 54
-        const glyph = (d) => (d.rain >= 10 ? 'cloud-rain' : d.rain >= 1 ? 'cloud-drizzle' : d.prob >= 40 ? 'cloud' : 'sun')
-        const g = W ? 24 : 18
-        const svgIcon = (name, x, y, color) => (ICONS[name] || '').replace('<svg ', `<svg x="${x}" y="${y}" width="${g}" height="${g}" color="${color}" `)
-        const dayText = (iso, i) => {
-          if (i === past - 1 && D.eff !== 'live') return W ? T_.today : new Date(`${iso}T00:00:00`).getDate()
-          return W ? shortDate(iso) : new Date(`${iso}T00:00:00`).getDate()
-        }
-        return `
-          <svg viewBox="0 0 ${Wd} ${H}" class="w-full" role="img" aria-label="${L[S.lang].wxTitle}">
-            <!-- day being viewed (time-lapse), and the forecast side on a faint water wash -->
-            <rect x="${cx(farm.dayIndex) - slot / 2}" y="${pad.t - 6}" width="${slot}" height="${ih + 44}" rx="10" fill="#ffffff" opacity=".07"/>
-            ${future ? `<rect x="${divider}" y="${pad.t - 6}" width="${slot * future}" height="${ih + 6}" rx="10" fill="#2e86c1" opacity=".12"/>` : ''}
-
-            <!-- section labels -->
-            <text x="${pad.l}" y="18" font-size="${fs}" font-weight="800" fill="#cff08a">${T_.measured}</text>
-            ${future ? `<text x="${divider + 10}" y="18" font-size="${fs}" font-weight="800" fill="#8cc0e3">${T_.forecastTitle}</text>` : ''}
-
-            <!-- moisture axis -->
-            ${ticks
-              .map(
-                (v) =>
-                  `<line x1="${pad.l}" x2="${divider}" y1="${ym(v)}" y2="${ym(v)}" stroke="#ffffff" opacity=".1"/><text x="${pad.l - 8}" y="${ym(v) + 5}" font-size="${fs}" fill="#ffffffb3" text-anchor="end" class="tabular">${v}%</text>`,
-              )
-              .join('')}
-
-            <!-- measured week: moisture bars -->
-            ${moisture
-              .map((v, i) => {
-                const low = v < farm.need
-                return `<rect x="${cx(i) - bw / 2}" y="${ym(v)}" width="${bw}" height="${ym(0) - ym(v)}" rx="7" fill="${low ? '#b8e55a' : '#5fae52'}"/>${
-                  W ? `<text x="${cx(i)}" y="${ym(0) - 12}" font-size="${fs}" font-weight="800" fill="#0b2e1b" text-anchor="middle" class="tabular">${v}</text>` : ''
-                }`
-              })
-              .join('')}
-            <line x1="${pad.l}" x2="${divider}" y1="${ym(farm.need)}" y2="${ym(farm.need)}" stroke="#fdf1d3" stroke-width="2.5" stroke-dasharray="7 6"/>
-
-            <!-- today divider -->
-            ${future ? `<line x1="${divider}" x2="${divider}" y1="${pad.t - 6}" y2="${pad.t + ih}" stroke="#ffffff" stroke-opacity=".55" stroke-width="2" stroke-dasharray="4 5"/>` : ''}
-
-            <!-- forecast week: icon and high on top, rain bars below -->
-            ${!W && future ? `<text x="${divider - 6}" y="${58}" font-size="${fs}" font-weight="700" fill="#ffffffb3" text-anchor="end">°C</text>` : ''}
-            ${(forecast || [])
-              .map((d, k) => {
-                const i = past + k
-                return `${svgIcon(glyph(d), cx(i) - g / 2, W ? 26 : 24, d.rain >= 1 ? '#8cc0e3' : d.prob >= 40 ? '#ffffffb3' : '#f2b134')}
-                  <text x="${cx(i)}" y="${W ? 68 : 58}" font-size="${fs}" font-weight="800" fill="#ffffff" text-anchor="middle" class="tabular">${W ? `${d.tMax}°` : d.tMax}</text>
-                  ${
-                    d.rain > 0
-                      ? `<rect x="${cx(i) - bw / 2}" y="${yr(d.rain)}" width="${bw}" height="${yr(0) - yr(d.rain)}" rx="7" fill="#8cc0e3"/><text x="${cx(i)}" y="${yr(d.rain) - 8}" font-size="${fs}" font-weight="800" fill="#dcecf7" text-anchor="middle" class="tabular">${d.rain}</text>`
-                      : ''
-                  }`
-              })
-              .join('')}
-            <line x1="${pad.l}" x2="${Wd - pad.r}" y1="${ym(0)}" y2="${ym(0)}" stroke="#ffffff" opacity=".3"/>
-
-            <!-- rows under the chart: dates, then NDVI for the measured days -->
-            ${farm.days
-              .map((iso, i) =>
-                i % every === (past - 1) % every
-                  ? `<text x="${cx(i)}" y="${yDate}" font-size="${fs}" font-weight="${i === farm.dayIndex ? 800 : 500}" fill="${i === farm.dayIndex ? '#ffffff' : '#ffffffb3'}" text-anchor="middle" class="tabular">${dayText(iso, i)}</text>`
-                  : '',
-              )
-              .join('')}
-            ${(forecast || [])
-              .map((d, k) =>
-                k % every === 0
-                  ? `<text x="${cx(past + k)}" y="${yDate}" font-size="${fs}" font-weight="500" fill="#ffffffb3" text-anchor="middle" class="tabular">${W ? shortDate(d.date) : new Date(`${d.date}T00:00:00`).getDate()}</text>`
-                  : '',
-              )
-              .join('')}
-            <text x="${pad.l - 8}" y="${yNdvi}" font-size="${fs - 1}" font-weight="800" fill="#cff08a" text-anchor="end">NDVI</text>
-            ${ndvi
-              .map((v, i) =>
-                i % every === (past - 1) % every
-                  ? `<text x="${cx(i)}" y="${yNdvi}" font-size="${fs - 1}" font-weight="700" fill="#cff08a" text-anchor="middle" class="tabular">${fmt(v, S.lang)}</text>`
-                  : '',
-              )
-              .join('')}
-          </svg>`
-      }
-
-      function renderWeather() {
-        const L_ = l()
-        const T_ = t()
-        const { farm } = D
-        const crop = T_.crops[farm.crop]
-        $('#weather').innerHTML = `
-          <div class="mx-auto max-w-6xl px-5 sm:px-8">
-            <div class="max-w-2xl" data-reveal>
-              <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl">${L_.wxTitle}</h2>
-              <p class="mt-3 text-lg leading-relaxed text-white/70">${L_.wxSub}</p>
-            </div>
-            <div class="mt-10 rounded-[28px] bg-moss-900 p-5 sm:p-7" data-reveal style="transition-delay:100ms">
-              <div class="flex flex-wrap gap-x-5 gap-y-1.5 text-[13px] font-medium text-white/75">
-                <span class="flex items-center gap-1.5"><span class="size-3 rounded-full bg-lime-400"></span>${L_.legendLow}</span>
-                <span class="flex items-center gap-1.5"><span class="size-3 rounded-full bg-[#5fae52]"></span>${L_.legendEnough}</span>
-                <span class="flex items-center gap-1.5"><span class="font-extrabold text-lime-300">0,68</span>${term('ndvi', L_.legendNdvi)}</span>
-                <span class="flex items-center gap-1.5"><span class="w-4 border-t-2 border-dashed border-sun-100"></span>${T_.trendNeed(crop, farm.need)}</span>
-                <span class="flex items-center gap-1.5"><span class="size-3 rounded-full bg-water-300"></span>${term('forecast', T_.rainBars)} · ${T_.forecastSource[D.eff]}</span>
-              </div>
-              <div id="week-chart" class="mt-5">${weekChart()}</div>
-            </div>
-            <div class="mt-6 grid gap-6 lg:grid-cols-2 lg:items-start">
-              <article class="group overflow-hidden rounded-[28px] bg-moss-900 transition-all duration-300 hover:-translate-y-1" data-reveal style="transition-delay:120ms">
-                <div class="h-52 overflow-hidden bg-moss-800">${photo('soil', 1000, 'size-full object-cover transition-transform duration-700 group-hover:scale-105')}</div>
-                <div class="p-6 sm:p-7">
-                  <h3 class="text-2xl font-extrabold tracking-tight">${L_.soilTitle}</h3>
-                  <p class="mt-2 leading-relaxed text-white/70">${L_.soilDesc}</p>
-                  <div class="mt-5 flex flex-wrap gap-2">${['modis', 'power', 'ndvi', 'saturation', 'drip']
-                    .map(
-                      (id) =>
-                        `<span class="rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-sm font-bold text-white transition-colors hover:border-lime-400">${term(id, GLOSSARY[S.lang][id].title.split(' – ')[0])}</span>`,
-                    )
-                    .join('')}</div>
-                  <ul class="mt-6 divide-y divide-white/10 border-t border-white/10">${[
-                    ['satellite', D.eff === 'live' ? 'NASA POWER' : T_.simulated, T_.whatMoisture, D.eff === 'live' ? T_.srcMoistureLive(shortDate(farm.dataDate)) : T_.srcMoistureDemo],
-                    ['leaf', 'MODIS', 'NDVI', D.eff === 'live' && !farm.ndviSimulated ? T_.srcNdviLive(shortDate(farm.ndviDate)) : T_.srcNdviDemo],
-                    ['cloud-rain', T_.forecastTitle, T_.whatWeather, T_.srcWeather(D.eff === 'live')],
-                  ]
-                    .map(
-                      ([ic, label, what, meta]) =>
-                        `<li class="flex items-start gap-3 py-3.5"><span class="mt-0.5 grid size-9 shrink-0 place-items-center rounded-full bg-lime-400 text-moss-950">${icon(ic, 'size-4')}</span><span class="min-w-0"><span class="block font-bold">${label} <span class="font-medium text-white/70">→ ${what}</span></span><span class="tabular block text-sm text-moss-100/70">${meta}</span></span></li>`,
-                    )
-                    .join('')}</ul>
-                </div>
-              </article>
-              <article id="whatif" class="group scroll-mt-24 overflow-hidden rounded-[28px] bg-moss-900 transition-all duration-300 hover:-translate-y-1 ${farm.whatIf ? 'outline-2 outline-dashed outline-sun-400' : ''}" data-reveal style="transition-delay:200ms"></article>
-            </div>
-          </div>`
-        renderWhatIf()
-      }
-
-      function renderWhatIf() {
-        const L_ = l()
-        const T_ = t()
-        const base = {
-          moisture: D.realToday.avg.moisture,
-          dryDays: D.realToday.weather.dryDays,
-          rain48h: D.realToday.weather.rain48h,
-          tMax: D.realToday.weather.tMax,
-        }
-        const s = S.scenario ?? base
-        const need = D.farm.need
-        const presets = presetValues(base, need)
-        const mRange = D.farm.unit === 'sat' ? [20, 100] : [10, 70]
-        const slider = (key, label, value, min, max, unit) => `
-          <div>
-            <div class="flex items-baseline justify-between gap-3"><label for="sim-${key}" class="text-sm font-semibold text-white/85">${label}</label><output id="out-${key}" class="tabular text-base font-extrabold text-lime-300">${value} <span class="text-sm font-bold text-white/60">${unit}</span></output></div>
-            <input id="sim-${key}" data-sim="${key}" data-unit="${unit}" type="range" min="${min}" max="${max}" value="${value}" class="range mt-1 w-full" style="--fill:${((value - min) / (max - min)) * 100}%;--track-off:rgb(255 255 255 / .15)" />
-          </div>`
-        $('#whatif').innerHTML = `
-          <div class="relative h-52 overflow-hidden bg-moss-800">${photo('storm', 1000, 'size-full object-cover transition-transform duration-700 group-hover:scale-105')}
-            <span class="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-lime-400 px-3.5 py-1.5 text-sm font-bold text-moss-950">${icon('sliders-horizontal', 'size-4')}${T_.simTitle}</span>
-          </div>
-          <div class="p-6 sm:p-7">
-            <p class="leading-relaxed text-white/70">${L_.whatIfDesc}</p>
-            <div class="mt-4 flex flex-wrap gap-2">
-              ${Object.keys(presets)
-                .map(
-                  (k) =>
-                    `<button type="button" data-action="preset" data-value="${k}" aria-pressed="${S.preset === k}" class="rounded-full border border-white/25 px-3.5 py-1.5 text-sm font-bold text-white transition-colors hover:border-lime-400 aria-pressed:border-lime-400 aria-pressed:bg-lime-400 aria-pressed:text-moss-950">${T_.presets[k]}</button>`,
-                )
-                .join('')}
-              ${S.scenario ? `<button type="button" data-action="clear-sim" class="rounded-full px-3 py-1.5 text-sm font-bold text-white/80 underline underline-offset-2 hover:text-white">${T_.simClear}</button>` : ''}
-            </div>
-            <div class="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
-              ${slider('moisture', T_.simMoisture, s.moisture, mRange[0], mRange[1], '%')}
-              ${slider('dryDays', T_.simDry, s.dryDays, 0, 20, T_.days)}
-              ${slider('rain48h', T_.simRain, s.rain48h, 0, 40, 'mm')}
-              ${slider('tMax', T_.simTemp, s.tMax, 26, 40, '°C')}
-            </div>
-            <div id="whatif-result" class="mt-5"></div>
-          </div>`
-        renderWhatIfResult()
-      }
-
-      function renderWhatIfResult() {
-        const box = $('#whatif-result')
-        if (!box) return
-        const top = D.plans[0]
-        box.innerHTML = `
-          <a href="#dashboard" class="flex items-center gap-3 rounded-2xl bg-white/10 p-3.5 transition-colors hover:bg-white/15">
-            <span class="grid size-10 shrink-0 place-items-center rounded-full bg-lime-400 text-moss-950">${icon(top.type === 'water' ? 'droplets' : top.type === 'wait' ? 'cloud-rain' : 'check', 'size-5')}</span>
-            <span class="min-w-0 text-sm leading-snug"><span class="block font-bold text-lime-300">${L[S.lang].whatIfResult} · ${t().droughtName}: ${t().droughtLevels[D.nowFarm.level]}</span><span class="block font-semibold text-white">${bannerText(D.plans, D.nowFarm, S.lang)}</span></span>
-            <span class="ml-auto shrink-0 text-white/70">${icon('arrow-up', 'size-5')}</span>
-          </a>`
-      }
-
-      function presetValues(base, need) {
-        return {
-          drought: { moisture: Math.round(need * 0.55), dryDays: 16, rain48h: 0, tMax: 38 },
-          rain: { ...base, rain48h: 30, tMax: Math.max(28, base.tMax - 3) },
-          wet: { moisture: Math.round(need * 1.25), dryDays: 0, rain48h: 5, tMax: 31 },
-        }
-      }
-
-      /* ================================================================
        * Data sources: each dataset, what it is used for, period, resolution, limits
        * (words from site/i18n/sourcesText.js, dates from PRECOMPUTED)
        * ================================================================ */
@@ -1578,7 +794,15 @@
           { tag: 'evidence', x: X.fao, period: X.fao.period, links: links(['faoManual3', 'fao56', 'fao29', 'faoPulses']) },
           {
             tag: 'other', x: X.openmeteo, period: X.openmeteo.period,
-            links: `<a href="https://open-meteo.com/en/docs" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-semibold text-moss-700 underline underline-offset-2 hover:text-ink">Open-Meteo${icon('arrow-up-right', 'size-3.5')}</a>`,
+            links: `<a href="https://open-meteo.com/en/docs/elevation-api" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-semibold text-moss-700 underline underline-offset-2 hover:text-ink">Open-Meteo Elevation${icon('arrow-up-right', 'size-3.5')}</a>`,
+          },
+          {
+            tag: 'other', x: X.esri, period: X.esri.period,
+            links: `<a href="https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-semibold text-moss-700 underline underline-offset-2 hover:text-ink">Esri World Imagery${icon('arrow-up-right', 'size-3.5')}</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-semibold text-moss-700 underline underline-offset-2 hover:text-ink">OpenStreetMap${icon('arrow-up-right', 'size-3.5')}</a>`,
+          },
+          {
+            tag: 'other', x: X.libs, period: X.libs.period,
+            links: `<a href="https://leafletjs.com/" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-semibold text-moss-700 underline underline-offset-2 hover:text-ink">Leaflet${icon('arrow-up-right', 'size-3.5')}</a> · <a href="https://lucide.dev/" target="_blank" rel="noopener" class="inline-flex items-center gap-1 font-semibold text-moss-700 underline underline-offset-2 hover:text-ink">Lucide${icon('arrow-up-right', 'size-3.5')}</a>`,
           },
         ]
         const row = (label, value) => `<div class="grid gap-1 py-2.5 sm:grid-cols-[7.5rem_1fr] sm:gap-3"><dt class="text-sm font-bold text-muted">${label}</dt><dd class="text-[15px] leading-relaxed">${value}</dd></div>`
@@ -1717,10 +941,50 @@
         else renderAssistant(root)
       }
 
+      function shareSnapshot() {
+        const vi = S.lang === 'vi'
+        const MT = MAP_TEXT[S.lang]
+        const RT = ROT_TEXT[S.lang]
+        if (MF.loc) {
+          const poly = typeof mfdPolygon === 'function' ? mfdPolygon() : null
+          const areaHa = poly && typeof geoAreaM2 === 'function' ? (geoAreaM2(poly) / 10000).toFixed(2) : null
+          const place = MF.loc.name || `${MF.loc.lat.toFixed(4)}, ${MF.loc.lon.toFixed(4)}`
+          const elig = (MW.evalResult?.strategies ?? []).filter((s) => s.eligibility === 'eligible').sort((a, b) => (a.rank ?? 99) - (b.rank ?? 99))
+          const top = elig[0]
+          const summary = top
+            ? vi
+              ? `Chiến lược dẫn đầu: ${top.strategyId} (${top.crops.map((c) => RT.crops[c]).join(' – ')}) · ${top.score}/100 · Rủi ro: ${MT.strat.risk[top.riskLevel]}.`
+              : `Top strategy: ${top.strategyId} (${top.crops.map((c) => RT.crops[c]).join(' – ')}) · ${top.score}/100 · Risk: ${MT.strat.risk[top.riskLevel]}.`
+            : vi
+              ? 'Chưa đủ điều kiện xếp hạng chiến lược tại điểm này; xem chi tiết các tiêu chí và mục thiếu thông tin trên bản đồ.'
+              : 'Not yet rankable at this point; review criteria and missing local inputs in My field.'
+          const steps = [
+            areaHa ? (vi ? `Diện tích khoanh thửa: ${areaHa} ha` : `Drawn boundary: ${areaHa} ha`) : null,
+            MW.evalResult?.evaluationId ? `${MT.plan.evalTag}: ${MW.evalResult.evaluationId}` : null,
+            vi ? 'Trao đổi với cán bộ khuyến nông địa phương trước khi xuống giống.' : 'Review with a local extension officer before sowing.',
+          ].filter(Boolean)
+          return { headline: `${place}`, summary, steps, footer: 'NASA POWER · MODIS · Open-Meteo Elevation' }
+        }
+        const rotRes = rankRotations(districtInputs(PRECOMPUTED, S.rotDistrict), S.rotPriorities, S.rotWhatIf)
+        const dName = PROVINCES.find((p) => p.id === S.rotDistrict)?.name ?? S.rotDistrict
+        const best = rotRes.ranked?.[0]
+        return {
+          headline: dName,
+          summary: best
+            ? vi
+              ? `Luân canh đứng đầu theo ưu tiên hiện tại: ${best.id} (${best.crops.map((c) => RT.crops[c]).join(' – ')}) · ${best.total}/100.`
+              : `Top rotation for current priorities: ${best.id} (${best.crops.map((c) => RT.crops[c]).join(' – ')}) · ${best.total}/100.`
+            : vi
+              ? 'Chưa rõ lịch 3 vụ ổn định từ NDVI MODIS cho huyện này.'
+              : 'No clear 3-crop NDVI calendar for this district yet.',
+          steps: [vi ? 'Mở mục Ruộng của tôi để khoanh thửa và nhập độ mặn/pH thực tế.' : 'Open My field to draw your field boundary and enter salinity/pH.'],
+          footer: 'MODIS MOD13Q1 · NASA POWER · Linh et al. · FAO',
+        }
+      }
+
       function renderShare(root) {
         const T_ = t()
-        const { plan, text } = D
-        const footer = D.eff === 'live' ? T_.cardFooterLive(shortDate(D.nowFarm.dataDate)) : T_.cardFooterDemo
+        const snap = shareSnapshot()
         root.innerHTML = `
           <div class="scrim-in fixed inset-0 z-50 grid place-items-center overflow-y-auto bg-moss-950/60 p-4" data-scrim>
             <div role="dialog" aria-modal="true" aria-labelledby="share-title" class="panel-in w-full max-w-2xl rounded-[28px] bg-ground p-5 shadow-lift sm:p-7">
@@ -1728,11 +992,10 @@
               <div class="mt-5 grid gap-5 sm:grid-cols-[1fr_auto]">
                 <article id="print-card" class="rounded-3xl bg-white p-6 shadow-card">
                   <div class="flex items-center gap-2.5"><span class="grid size-8 place-items-center rounded-full bg-lime-400 text-moss-950">${icon('sprout', 'size-4')}</span><span class="text-sm font-extrabold">${appName()}</span></div>
-                  <p class="mt-4 text-xl font-extrabold leading-snug tracking-tight text-moss-900">${text.headline}</p>
-                  <p class="mt-2 text-sm leading-relaxed">${text.summary}</p>
-                  <ol class="mt-3 space-y-1.5 text-sm">${text.steps.map((s, i) => `<li class="flex gap-2"><span class="tabular font-bold text-moss-700">${i + 1}.</span><span>${s}</span></li>`).join('')}</ol>
-                  ${plan.type === 'water' ? `<p class="tabular mt-4 rounded-full bg-lime-100 px-4 py-2 text-sm font-bold text-moss-900">${plan.minutes} ${T_.minutes}</p>` : ''}
-                  <p class="mt-4 text-xs font-bold ${D.eff === 'live' ? 'text-moss-700' : 'text-sun-700'}">${footer}</p>
+                  <p class="mt-4 text-xl font-extrabold leading-snug tracking-tight text-moss-900">${esc(snap.headline)}</p>
+                  <p class="mt-2 text-sm leading-relaxed">${esc(snap.summary)}</p>
+                  <ol class="mt-3 space-y-1.5 text-sm">${snap.steps.map((s, i) => `<li class="flex gap-2"><span class="tabular font-bold text-moss-700">${i + 1}.</span><span>${esc(s)}</span></li>`).join('')}</ol>
+                  <p class="mt-4 text-xs font-bold text-moss-700">${esc(snap.footer)}</p>
                   <p class="mt-1 text-xs text-muted">${T_.footer}</p>
                 </article>
                 <div id="qr-box" class="flex flex-col items-center gap-2 rounded-3xl bg-white p-5 text-center shadow-card sm:w-60">
@@ -1764,8 +1027,8 @@
 
       function shareText() {
         const T_ = t()
-        const footer = D.eff === 'live' ? T_.cardFooterLive(shortDate(D.nowFarm.dataDate)) : T_.cardFooterDemo
-        return [D.text.headline, '', D.text.summary, '', ...D.text.steps.map((s, i) => `${i + 1}. ${s}`), '', `${appName()} · ${footer}`, T_.footer].join('\n')
+        const snap = shareSnapshot()
+        return [snap.headline, '', snap.summary, '', ...snap.steps.map((s, i) => `${i + 1}. ${s}`), '', `${appName()} · ${snap.footer}`, T_.footer].join('\n')
       }
 
       function renderAssistant(root) {
@@ -1818,6 +1081,20 @@
         S.chat = [...history, { role: 'model', text: '', source: 'ai', pending: true }]
         renderOverlay()
         const last = () => S.chat[S.chat.length - 1]
+        const data = typeof mfCompute === 'function' ? mfCompute() : null
+        const poly = typeof mfdPolygon === 'function' ? mfdPolygon() : null
+        const areaM2 = poly && typeof geoAreaM2 === 'function' ? geoAreaM2(poly) : 0
+        const rotResult = rankRotations(districtInputs(PRECOMPUTED, S.rotDistrict), S.rotPriorities, S.rotWhatIf)
+        const ctx = assistantContext({
+          loc: typeof MF !== 'undefined' ? MF.loc : null,
+          data,
+          evalResult: typeof MW !== 'undefined' ? MW.evalResult : null,
+          rotDistrict: S.rotDistrict,
+          rotResult,
+          areaM2,
+          polygon: poly,
+        })
+        const allowed = asstLedgerNumbers(ctx, typeof MF_LEDGER !== 'undefined' ? MF_LEDGER : null)
         let answer = null
         if (served) {
           try {
@@ -1826,7 +1103,7 @@
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 lang: S.lang,
-                context: assistantContext({ farm: D.nowFarm, plans: D.plans, source: D.eff, provinceName: PROVINCES.find((p) => p.id === S.provinceId).name }),
+                context: ctx,
                 messages: history.slice(-10).map((m) => ({ role: m.role, text: m.text })),
               }),
             })
@@ -1841,13 +1118,15 @@
                 last().text = text
                 renderOverlay()
               }
-              answer = text.trim() || null
+              const trimmed = text.trim()
+              const check = trimmed ? asstVerifyReply(trimmed, allowed) : { ok: false }
+              answer = check.ok ? trimmed : null
             }
           } catch {
             answer = null
           }
         }
-        Object.assign(last(), answer ? { text: answer, pending: false } : { text: fallbackAnswer(q, { farm: D.nowFarm, plans: D.plans, selectedText: D.text }, S.lang), source: 'sample', pending: false })
+        Object.assign(last(), answer ? { text: answer, pending: false } : { text: fallbackAnswer(q, ctx, S.lang), source: 'sample', pending: false })
         S.busy = false
         renderOverlay()
       }
@@ -1856,7 +1135,6 @@
        * Render orchestration
        * ================================================================ */
       function renderAll() {
-        D = derive()
         document.documentElement.lang = S.lang
         renderNav()
         renderHero()
@@ -1866,9 +1144,6 @@
         renderPagesOverview()
         renderMyField()
         renderRotations()
-        renderDashboard()
-        renderSolutions()
-        renderWeather()
         renderDataHub() // trang Dữ liệu (Phase 2): site/pages/dataHub.js
         renderSources()
         renderCta()
@@ -1880,123 +1155,15 @@
         wireMotion()
       }
 
-      // Updates what depends on farm numbers, leaving the sliders being dragged untouched.
-      function renderLive({ sliders = false } = {}) {
-        D = derive()
-        renderHeroChip()
-        renderLiveNote()
-        renderMapCard()
-        renderReadings()
-        renderAdvice()
-        $('#week-chart').innerHTML = weekChart()
-        const wi = $('#whatif')
-        wi.classList.toggle('outline-2', D.farm.whatIf)
-        wi.classList.toggle('outline-dashed', D.farm.whatIf)
-        wi.classList.toggle('outline-sun-400', D.farm.whatIf)
-        if (sliders) renderWhatIf()
-        else renderWhatIfResult()
-        renderFloating()
-      }
       const revealNow = (sel) => document.querySelectorAll(sel).forEach((el) => el.classList.add('is-in'))
 
       /* ================================================================
        * Actions
        * ================================================================ */
-      let playTimer = null
-      let flowTimer = null
       const persist = () => {
         store.set('naf-lang', S.lang)
-        store.set('naf-source', S.source)
-        store.set('naf-province', S.provinceId)
         store.set('naf-rot-district', S.rotDistrict)
         store.set('naf-rot-priorities', S.rotPriorities)
-        store.set('naf-crop', S.crop)
-        store.set('naf-log', S.log)
-      }
-
-      function resetView() {
-        S.scenario = null
-        S.preset = null
-        S.day = null
-        stopPlay()
-      }
-      function stopPlay() {
-        S.playing = false
-        clearInterval(playTimer)
-      }
-
-      function openAdvice(plotId = S.selected) {
-        clearTimeout(flowTimer)
-        stopPlay()
-        S.day = null
-        S.selected = plotId
-        D = derive()
-        const p = D.byId[plotId]
-        S.showAdvice = false
-        S.flowing = p.type === 'water' ? plotId : null
-        renderLive()
-        openPageOf($('#dashboard')) // gợi ý tưới nằm ở trang "Ruộng hôm nay"
-        document.getElementById('dashboard').scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' })
-        flowTimer = setTimeout(
-          () => {
-            S.showAdvice = true
-            renderAdvice()
-            renderReadings()
-            const panel = $('#advice-panel')
-            panel?.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' })
-            panel?.focus({ preventScroll: true })
-          },
-          reduced() || p.type !== 'water' ? 60 : 900,
-        )
-      }
-
-      async function loadLive() {
-        const province = PROVINCES.find((p) => p.id === S.provinceId)
-        const cached = readCachedLive(province.id)
-        S.live = { status: 'loading', data: cached }
-        renderLive({ sliders: true })
-        try {
-          S.live = { status: 'ok', data: await fetchLive(province) }
-        } catch {
-          S.live = { status: cached ? 'cached' : 'error', data: cached }
-        }
-        resetView()
-        renderAll()
-      }
-
-      function solution(key) {
-        const go = goTo // mở đúng trang rồi cuộn tới phần cần xem
-        if (key === 'plot') go('dashboard')
-        if (key === 'whatif') go('whatif')
-        if (key === 'share') ((S.dialog = 'share'), renderOverlay())
-        if (key === 'assistant') ((S.dialog = 'assistant'), renderOverlay())
-        if (key === 'replay') {
-          go('dashboard')
-          setTimeout(togglePlay, reduced() ? 0 : 700)
-        }
-      }
-
-      function togglePlay() {
-        if (S.playing) {
-          stopPlay()
-          return renderMapCard()
-        }
-        S.scenario = null
-        S.preset = null
-        S.showAdvice = false
-        S.flowing = null
-        S.day = 0
-        S.playing = true
-        renderLive({ sliders: true })
-        playTimer = setInterval(() => {
-          const last = D.farm.days.length - 1
-          const next = (S.day ?? -1) + 1
-          if (next >= last) {
-            S.day = null
-            stopPlay()
-          } else S.day = next
-          renderLive()
-        }, 750)
       }
 
       document.addEventListener('click', (e) => {
@@ -2016,8 +1183,6 @@
           S.dialog = null
           return renderOverlay()
         }
-        const plot = e.target.closest('[data-plot]')
-        if (plot) return selectPlot(plot.dataset.plot)
         const a = e.target.closest('[data-action]')
         if (!a) return
         const v = a.dataset.value
@@ -2026,15 +1191,6 @@
             S.lang = v
             persist()
             return renderAll()
-          case 'source':
-            S.source = v
-            persist()
-            resetView()
-            if (v === 'live') return loadLive()
-            return renderAll()
-          case 'layer':
-            S.layer = v
-            return renderMapCard()
           case 'rot-reset-weights':
             S.rotPriorities = { ...DEFAULT_PRIORITIES }
             persist()
@@ -2049,44 +1205,6 @@
           case 'menu':
             S.menuOpen = !S.menuOpen
             return renderNav()
-          case 'open-advice':
-            return openAdvice(v || S.selected)
-          case 'close-advice':
-            S.showAdvice = false
-            S.flowing = null
-            return renderLive()
-          case 'schedule':
-            S.log = [...S.log, { id: `u${Date.now()}`, date: todayIso(), plot: D.plan.plot.id, minutes: D.plan.minutes, status: 'planned' }]
-            persist()
-            return renderLive()
-          case 'unschedule':
-            S.log = S.log.filter((x) => !(x.date === todayIso() && x.plot === D.plan.plot.id && x.status === 'planned'))
-            persist()
-            return renderLive()
-          case 'play':
-            return togglePlay()
-          case 'today':
-            stopPlay()
-            S.day = null
-            return renderLive()
-          case 'preset': {
-            const base = { moisture: D.realToday.avg.moisture, dryDays: D.realToday.weather.dryDays, rain48h: D.realToday.weather.rain48h, tMax: D.realToday.weather.tMax }
-            stopPlay()
-            S.day = null
-            S.scenario = presetValues(base, D.farm.need)[v]
-            S.preset = v
-            return renderLive({ sliders: true })
-          }
-          case 'clear-sim':
-            S.scenario = null
-            S.preset = null
-            return renderLive({ sliders: true })
-          case 'carousel': {
-            const c = $('#carousel')
-            return c.scrollBy({ left: Number(v) * (c.firstElementChild.offsetWidth + 20), behavior: reduced() ? 'auto' : 'smooth' })
-          }
-          case 'solution':
-            return solution(v)
           case 'share':
             S.dialog = 'share'
             return renderOverlay()
@@ -2109,36 +1227,15 @@
             return navigator.share({ title: appName(), text: shareText() }).catch(() => {})
           case 'ask':
             return ask(v)
-          case 'retry':
-            return loadLive()
         }
       })
 
-      function selectPlot(id) {
-        S.selected = id
-        if (S.showAdvice) {
-          D = derive()
-          S.flowing = D.byId[id].type === 'water' ? id : null
-        }
-        renderLive()
-      }
-
       document.addEventListener('keydown', (e) => {
-        const plot = e.target.closest?.('[data-plot]')
-        if (plot && (e.key === 'Enter' || e.key === ' ')) {
-          e.preventDefault()
-          return selectPlot(plot.dataset.plot)
-        }
         if (e.key !== 'Escape') return
         if (openTermEl) return closeTerm()
         if (S.dialog) {
           S.dialog = null
           return renderOverlay()
-        }
-        if (S.showAdvice) {
-          S.showAdvice = false
-          S.flowing = null
-          renderLive()
         }
       })
 
@@ -2147,22 +1244,11 @@
         if (e.target.dataset?.rotWhatif) return renderRotationControls()
         const sel = e.target.closest('[data-select]')
         if (!sel) return
-        if (sel.dataset.select === 'crop') {
-          S.crop = sel.value
-          persist()
-          resetView()
-          return renderAll()
-        }
         if (sel.dataset.select === 'rotDistrict') {
           S.rotDistrict = sel.value
           persist()
           renderRotations()
           return revealNow('#rotations [data-reveal]')
-        }
-        if (sel.dataset.select === 'province') {
-          S.provinceId = sel.value
-          persist()
-          return loadLive()
         }
       })
 
@@ -2187,31 +1273,6 @@
           S.rotWhatIf = { ...S.rotWhatIf, [e.target.dataset.rotWhatif]: updateRotSlider(e.target) }
           return renderRotationResults()
         }
-        if (e.target.id === 'day-slider') {
-          const last = D.farm.days.length - 1
-          const v = Number(e.target.value)
-          stopPlay()
-          S.scenario = null
-          S.preset = null
-          S.day = v === last ? null : v
-          return renderLive({ sliders: true })
-        }
-        const key = e.target.dataset?.sim
-        if (!key) return
-        const base = { moisture: D.realToday.avg.moisture, dryDays: D.realToday.weather.dryDays, rain48h: D.realToday.weather.rain48h, tMax: D.realToday.weather.tMax }
-        const value = Number(e.target.value)
-        stopPlay()
-        S.day = null
-        S.scenario = { ...(S.scenario ?? base), [key]: value }
-        if (S.preset) {
-          S.preset = null
-          document.querySelectorAll('[data-action="preset"]').forEach((b) => b.setAttribute('aria-pressed', 'false'))
-        }
-        const min = Number(e.target.min)
-        const max = Number(e.target.max)
-        e.target.style.setProperty('--fill', `${((value - min) / (max - min)) * 100}%`)
-        $(`#out-${key}`).innerHTML = `${value} <span class="text-sm font-bold text-white/60">${e.target.dataset.unit}</span>`
-        renderLive()
       })
 
       document.addEventListener('submit', (e) => {
@@ -2279,11 +1340,7 @@
       let resizeTimer
       addEventListener('resize', () => {
         clearTimeout(resizeTimer)
-        resizeTimer = setTimeout(() => {
-          renderMapCard()
-          $('#week-chart').innerHTML = weekChart()
-          closeTerm()
-        }, 150)
+        resizeTimer = setTimeout(closeTerm, 150)
       })
 
       /* ================================================================
@@ -2292,8 +1349,6 @@
       renderAll()
       route() // mở đúng trang theo địa chỉ, vd. tải lại ở #/luan-canh thì vẫn ở trang Luân canh
       requestAnimationFrame(() => revealNow('#hero [data-reveal]'))
-      if (S.source === 'live') loadLive()
-      if (location.hash === '#advice') openAdvice('B')
     </script>
   </body>
 </html>

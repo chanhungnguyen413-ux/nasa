@@ -63,6 +63,14 @@ export const CATALOG = {
     url: 'https://www.openstreetmap.org/copyright',
     credit: '© OpenStreetMap contributors',
   },
+  esriImagery: {
+    name: { vi: 'Nền ảnh vệ tinh Esri World Imagery (để nhìn bờ ruộng)', en: 'Esri World Imagery satellite basemap (to see field bunds)' },
+    provider: 'Esri, Maxar, Earthstar Geographics, GIS User Community',
+    kind: 'satellite',
+    resolution: { vi: 'dưới 1 m ở nhiều vùng (chỉ để nhìn bờ thửa)', en: 'sub-metre in many areas (visual reference for field bunds)' },
+    url: 'https://www.arcgis.com/home/item.html?id=10df2279f9684e4a9f6a7f08febac2a9',
+    credit: 'Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community',
+  },
   soilForm: {
     name: { vi: 'Số đo đất bạn nhập (trang Dữ liệu)', en: 'Soil measurement you entered (Data page)' },
     provider: '—',

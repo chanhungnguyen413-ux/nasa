@@ -3,7 +3,7 @@
 // Vì sao: build nhúng file này vào index.html, nên demo 5 huyện vẫn chạy khi mất mạng.
 // Dùng CHÍNH module site/sources/power.js mà trang web dùng, để hai nơi không bao giờ tính khác nhau.
 import { writeFileSync } from 'node:fs'
-import { PROVINCES } from '../site/data/demo.js'
+import { PROVINCES } from '../site/data/provinces.js'
 import { powerFetchElevation, powerFetchRecord, powerLastFullYear } from '../site/sources/power.js'
 
 const OUT = new URL('../site/data/precomputed/power_monthly.json', import.meta.url)

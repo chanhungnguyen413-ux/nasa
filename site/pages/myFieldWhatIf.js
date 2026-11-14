@@ -90,11 +90,12 @@ function mfwLive() {
   closeTerm()
   MF_LEDGER.clear()
   const data = mfCompute()
-  $('#mf-chartbody').innerHTML = mfChartBodyHtml(data)
-  $('#mf-tablebox').innerHTML = mfTableHtml(data)
-  $('#mf-series').innerHTML = mfdSeriesHtml(data)
-  $('#mf-crops').innerHTML = mfCropsHtml(data)
+  if ($('#mf-chartbody')) $('#mf-chartbody').innerHTML = mfChartBodyHtml(data)
+  if ($('#mf-tablebox')) $('#mf-tablebox').innerHTML = mfTableHtml(data)
+  if ($('#mf-series')) $('#mf-series').innerHTML = mfdSeriesHtml(data)
+  if ($('#mf-crops')) $('#mf-crops').innerHTML = mfCropsHtml(data)
   if (typeof mfzRefresh === 'function') mfzRefresh(data)
+  if (typeof mwOnInputsChanged === 'function') mwOnInputsChanged()
 }
 
 document.addEventListener('input', (e) => {

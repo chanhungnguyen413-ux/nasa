@@ -8,7 +8,7 @@ import { analysePowerMonthly, monthlyMeaning, rainUnitCheck } from './probe/powe
 import { VERDICT, buildReport, table } from './probe/report.mjs'
 import { LIMIT_MS, SLOW_LIMIT_MS, corsAllows, originHeaderIsSent, parseJson, probe, timedFetch } from './probe/request.mjs'
 
-const POINT = { name: 'Cần Thơ · Cờ Đỏ', lat: 10.1, lon: 105.43 } // cùng toạ độ với PROVINCES trong site/data/demo.js
+const POINT = { name: 'Cần Thơ · Cờ Đỏ', lat: 10.1, lon: 105.43 } // cùng toạ độ với PROVINCES trong site/data/provinces.js
 const FAR_POINT = { name: 'một điểm ở Đắk Lắk, ngoài ĐBSCL', lat: 12.67, lon: 108.04 }
 const LAST_YEAR = new Date().getFullYear() - 1 // "năm đủ gần nhất" dự kiến; script kiểm tra lại bằng số liệu
 const POWER_PARAMS = ['T2M', 'T2M_MAX', 'T2M_MIN', 'RH2M', 'WS2M', 'ALLSKY_SFC_SW_DWN', 'PRECTOTCORR', 'GWETROOT', 'GWETTOP']

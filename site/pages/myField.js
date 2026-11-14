@@ -6,9 +6,10 @@
 // vì build gộp mọi module vào cùng một phạm vi. Leaflet là biến toàn cục: luôn gọi qua `window.L`, vì trong
 // template `L` là bảng chữ của trang chủ.
 import { evidence, evIsMissing } from '../core/evidence.js'
-import { PROVINCES } from '../data/demo.js'
+import { PROVINCES } from '../data/provinces.js'
 import { CROP_LIB_IDS, CROP_LIBRARY } from '../data/cropLibrary.js'
 import { P3_TEXT } from '../i18n/phase3Text.js'
+import { MAP_TEXT } from '../i18n/mapText.js'
 import { cpSort } from '../logic/cropPriority.js'
 import { DATA_TEXT } from '../i18n/dataText.js'
 import { FIELD_TEXT } from '../i18n/fieldText.js'
@@ -164,64 +165,11 @@ const mfPill = (attrs, label, active = false, extra = '') =>
   `<button type="button" ${attrs} aria-pressed="${active}" class="inline-flex min-h-12 items-center gap-2 rounded-full border px-5 text-base font-bold transition-colors ${active ? 'border-moss-900 bg-moss-900 text-white' : 'border-line bg-white text-ink hover:border-moss-700'} ${extra}">${label}</button>`
 
 function renderMyField() {
-  const R = mfT()
   if (MF.map) {
     MF.map.remove() // khung trang được vẽ lại (vd. đổi ngôn ngữ): bản đồ cũ gắn với phần tử đã mất
     Object.assign(MF, { map: null, base: null, marker: null, overlay: null })
   }
-  // Nút (không phải liên kết #…): địa chỉ #… là của bộ định tuyến trang, đổi nó sẽ mở trang trống.
-  // Điện thoại hẹp: nhãn ngắn để ba bước nằm gọn một hàng; màn rộng: nhãn đầy đủ.
-  const stepLink = (n, id, key) => `<button type="button" data-mf="step" data-value="${id}" class="flex min-h-12 shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-3 text-[15px] font-bold text-ink hover:bg-moss-50"><span class="grid size-7 shrink-0 place-items-center rounded-full bg-moss-900 text-sm text-lime-400">${n}</span><span class="sm:hidden">${R.stepsShort[key]}</span><span class="hidden sm:inline">${R.steps[key]}</span></button>`
-  const stepHead = (n, label) => `<h3 class="flex items-center gap-3 text-2xl font-extrabold tracking-tight sm:text-3xl"><span class="grid size-10 shrink-0 place-items-center rounded-full bg-moss-900 text-lg text-lime-400">${n}</span>${label}</h3>`
-  $('#myfield').innerHTML = `
-    <div class="mx-auto max-w-6xl px-5 text-lg sm:px-8">
-      <div class="max-w-3xl" data-reveal>
-        <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl">${R.title}</h2>
-        <p class="mt-3 text-lg leading-relaxed text-muted">${R.sub}</p>
-      </div>
-      <nav aria-label="${R.title}" class="sticky top-[4.5rem] z-30 mt-6 flex gap-1 overflow-x-auto rounded-full border border-line bg-white/95 p-1 shadow-card backdrop-blur">
-        ${stepLink(1, 'mf-step1', 'where')}${stepLink(2, 'mf-step2', 'water')}${stepLink(3, 'mf-step3', 'crops')}
-      </nav>
-
-      <section id="mf-step1" class="mt-10 scroll-mt-40">
-        ${stepHead(1, R.steps.where)}
-        <p class="mt-3 max-w-3xl leading-relaxed text-muted">${R.whereHint}</p>
-        <div class="mt-5 flex flex-wrap gap-3">
-          ${mfPill('data-mf="tapmap"', `${icon('mouse-pointer-click', 'size-5')}${R.tapMap}`)}
-          ${mfPill('data-mf="mylocation"', `${icon('locate-fixed', 'size-5')}${R.myLocation}`)}
-        </div>
-        <p class="mt-5 text-base font-bold text-muted">${R.districts}</p>
-        <div class="mt-2 flex flex-wrap gap-2">${PROVINCES.map((p) => mfPill(`data-mf="district" data-value="${p.id}"`, esc(p.name), MF.loc?.id === p.id)).join('')}</div>
-        <div id="mf-geo" class="mt-3 text-base" aria-live="polite"></div>
-        <div id="mf-map" role="application" aria-label="${R.mapLabel}" class="mt-5 h-[360px] overflow-hidden rounded-[28px] border border-line bg-moss-50 shadow-card sm:h-[440px]"></div>
-        <div id="mf-map-note" class="mt-2 text-base" aria-live="polite"></div>
-        <p class="mt-5 text-base font-bold text-muted">${R.layersTitle}</p>
-        <div class="mt-2 flex flex-wrap gap-2">
-          ${mfPill('data-mf="layer" data-value="none"', `${icon('eye-off', 'size-4')}${R.layers.none}`, MF.layer === null)}
-          ${GIBS_LAYERS.map((l) => mfPill(`data-mf="layer" data-value="${l.key}"`, `${icon('layers', 'size-4')}${R.layers[l.key]}`, MF.layer === l.key)).join('')}
-        </div>
-        <div id="mf-layer-info" class="mt-3"></div>
-        <div id="mf-tools" class="mt-5"></div>
-        <div id="mf-zones" class="mt-5"></div>
-        <div id="mf-selected" class="mt-5"></div>
-      </section>
-
-      <section id="mf-step2" class="mt-14 scroll-mt-40">
-        ${stepHead(2, R.steps.water)}
-        <div class="mt-4 flex flex-wrap items-center gap-2"><span class="text-base font-bold text-muted">${R.termsLabel}</span>${['et0', 'wbalance', 'dryyear', 'modelsat', 'ndvi']
-          .map((id) => `<span class="rounded-full border border-line bg-white px-4 py-2 text-base font-bold text-ink hover:border-moss-700">${term(id, GLOSSARY[S.lang][id].title.split(' – ')[0])}</span>`)
-          .join('')}</div>
-        <div id="mf-water" class="mt-5"></div>
-      </section>
-
-      <section id="mf-step3" class="mt-14 scroll-mt-40">
-        ${stepHead(3, R.steps.crops)}
-        <p class="mt-3 max-w-3xl leading-relaxed text-muted">${R.cropsHint}</p>
-        <div id="mf-crops" class="mt-5"></div>
-      </section>
-
-      <p class="mt-10 rounded-[28px] border border-line bg-white p-6 text-lg font-semibold leading-relaxed text-ink shadow-card">${R.reminder}</p>
-    </div>`
+  mwRenderShell()
   mfRenderDynamic()
 }
 
@@ -237,44 +185,63 @@ function mfInitMap() {
   const el = $('#mf-map')
   if (!el) return
   if (!Lf) return ($('#mf-map-note').innerHTML = `<p class="font-semibold text-sun-700">${mfT().noLeaflet}</p>`)
-  MF.map = Lf.map(el, { scrollWheelZoom: false }).setView(MF.loc ? [MF.loc.lat, MF.loc.lon] : [10.2, 105.75], MF.loc ? 10 : 8)
-  mfUseBase(0)
+  MF.map = Lf.map(el, { scrollWheelZoom: true, zoomControl: false }).setView(MF.loc ? [MF.loc.lat, MF.loc.lon] : [10.2, 105.75], MF.loc ? 12 : 8)
+  mfUseBase(MW.basemap === 'street' ? 1 : 0)
   for (const p of PROVINCES) {
     Lf.circleMarker([p.lat, p.lon], { radius: 7, color: '#0f3d24', weight: 2, fillColor: '#ffffff', fillOpacity: 1 })
       .bindTooltip(esc(p.name))
       .on('click', (e) => {
         Lf.DomEvent.stopPropagation(e)
+        MW.picking = false
+        MW.confirmGeo = false
         mfSelect({ lat: p.lat, lon: p.lon, id: p.id, name: p.name })
       })
       .addTo(MF.map)
   }
-  MF.map.on('click', (e) => mfdMapClick(e.latlng) || mfSelect({ lat: Math.round(e.latlng.lat * 1e4) / 1e4, lon: Math.round(e.latlng.lng * 1e4) / 1e4 }))
+  MF.map.on('click', (e) => {
+    if (mfdMapClick(e.latlng)) return
+    MW.picking = false
+    MW.confirmGeo = false
+    mfSelect({ lat: Math.round(e.latlng.lat * 1e4) / 1e4, lon: Math.round(e.latlng.lng * 1e4) / 1e4 })
+  })
+  MF.map.on('mousemove', (e) => typeof mdHandleMouseMove === 'function' && mdHandleMouseMove(e.latlng))
   mfApplyOverlay()
   mfApplyMarker()
 }
 
-// Bản đồ nền: OpenStreetMap trước. Lúc thử (14/11/2026) máy chủ ảnh của OSM từ chối kết nối từ mạng của nhóm,
-// nên khi một nền lỗi liên tiếp 3 ô ảnh thì tự chuyển sang nền kế tiếp; hết nền thì báo mất bản đồ.
+// Bản đồ nền: Ảnh vệ tinh Esri (nhìn rõ bờ ruộng) mặc định khi khoanh thửa → OpenStreetMap → OpenTopoMap.
+// Khi một nền lỗi liên tiếp 3 ô ảnh thì tự lùi sang nền kế tiếp; hết nền thì vẫn dùng ranh thửa và số liệu lưu sẵn.
 const MF_BASES = [
-  { url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' },
-  { url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', maxZoom: 17, attribution: 'Map data: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, SRTM | Map style: © <a href="https://opentopomap.org">OpenTopoMap</a> (CC-BY-SA)' },
+  { key: 'sat', url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', maxZoom: 18, attribution: 'Tiles © Esri — Esri, Maxar, Earthstar Geographics' },
+  { key: 'street', url: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', maxZoom: 19, attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' },
+  { key: 'topo', url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', maxZoom: 17, attribution: 'Map data: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>, SRTM | © <a href="https://opentopomap.org">OpenTopoMap</a>' },
 ]
 
 function mfUseBase(index) {
   const Lf = window.L
+  if (!MF.map || !Lf) return
   if (MF.base) MF.base.remove()
   MF.base = null
   MF.tileErrors = 0
+  MW.tilesOffline = false
   const def = MF_BASES[index]
-  if (!def) return ($('#mf-map-note').innerHTML = `<p class="flex items-center gap-2 font-semibold text-sun-700">${icon('wifi-off', 'size-5')}${mfT().mapOffline}</p>`)
+  if (!def) {
+    MW.tilesOffline = true
+    mwRenderLegend()
+    return ($('#mf-map-note').innerHTML = `<p class="flex items-center gap-2 text-sm font-semibold text-sun-700">${icon('wifi-off', 'size-4')}${MAP_TEXT[S.lang].legend.offlineTiles}</p>`)
+  }
   let loaded = false
   MF.base = Lf.tileLayer(def.url, { maxZoom: def.maxZoom, attribution: def.attribution }).addTo(MF.map)
   MF.base.bringToBack()
-  MF.base.on('tileload', () => (loaded = true))
+  MF.base.on('tileload', () => {
+    loaded = true
+    MW.tilesOffline = false
+  })
   MF.base.on('tileerror', () => {
     MF.tileErrors += 1
     if (!loaded && MF.tileErrors === 3) mfUseBase(index + 1)
   })
+  mwRenderLegend()
 }
 
 function mfApplyMarker() {
@@ -282,7 +249,7 @@ function mfApplyMarker() {
   if (!MF.map || !Lf) return
   if (MF.marker) MF.marker.remove()
   if (!MF.loc) return
-  MF.marker = Lf.circleMarker([MF.loc.lat, MF.loc.lon], { radius: 11, color: '#0b2e1b', weight: 3, fillColor: '#b8e55a', fillOpacity: 1 }).addTo(MF.map)
+  MF.marker = Lf.circleMarker([MF.loc.lat, MF.loc.lon], { radius: 9, color: '#0b2e1b', weight: 3, fillColor: '#b8e55a', fillOpacity: 1 }).addTo(MF.map)
   mfdDrawLayers() // ranh thửa và đánh dấu của nông dân
 }
 
@@ -292,16 +259,9 @@ function mfApplyOverlay() {
   MF.overlay = null
   const layer = GIBS_LAYERS.find((l) => l.key === MF.layer)
   if (MF.map && Lf && layer) {
-    MF.overlay = Lf.tileLayer(gibsTileTemplate(layer), { maxNativeZoom: layer.maxZoom, maxZoom: 19, opacity: 0.75, attribution: 'NASA EOSDIS GIBS' }).addTo(MF.map)
+    MF.overlay = Lf.tileLayer(gibsTileTemplate(layer), { maxNativeZoom: layer.maxZoom, maxZoom: 19, opacity: MW.opacity, attribution: 'NASA EOSDIS GIBS' }).addTo(MF.map)
   }
-  const R = mfT()
-  $('#mf-layer-info').innerHTML = layer
-    ? `<div class="rounded-[28px] border border-line bg-white p-5 shadow-card">
-        <p class="text-base font-bold">${esc(R.layerInfo(layer.title, layer.date, R.kinds[layer.kind]))}</p>
-        <img src="${layer.legend}" alt="${R.legendAlt}" class="mt-3 h-auto w-full max-w-md" loading="lazy" />
-        <p class="mt-2 text-base text-muted">${R.layerNote}</p>
-      </div>`
-    : ''
+  mwRenderLegend()
 }
 
 /* ================================================================
@@ -351,25 +311,11 @@ function mfRenderDistrictButtons() {
  * Phần thay đổi theo điểm đang chọn
  * ================================================================ */
 function mfRenderDynamic() {
-  if (!$('#mf-water')) return
+  if (!$('#mw-panel-body')) return
   closeTerm()
   MF_LEDGER.clear()
-  const R = mfT()
-  const geo = MF.geo === 'locating' ? R.locating : MF.geo ? R.geoError(MF.geo) : ''
-  $('#mf-geo').innerHTML = geo ? `<p class="font-semibold text-muted">${esc(geo)}</p>` : ''
-  if (!MF.loc) {
-    const empty = `<p class="rounded-[28px] border border-dashed border-line bg-white p-6 text-muted">${R.pickFirst}</p>`
-    $('#mf-selected').innerHTML = ''
-    $('#mf-water').innerHTML = empty
-    $('#mf-crops').innerHTML = empty
-    return
-  }
-  const data = mfCompute()
-  mfdRenderTools()
-  mfzRefresh(data) // Phase 3: bản đồ vùng trồng (site/pages/myFieldZones.js)
-  $('#mf-selected').innerHTML = mfSelectedHtml()
-  $('#mf-water').innerHTML = mfWaterHtml(data)
-  $('#mf-crops').innerHTML = mfCropsHtml(data)
+  mwRenderBody()
+  mwRenderLegend()
 }
 
 function mfSelectedHtml() {
@@ -652,45 +598,49 @@ document.addEventListener('click', (e) => {
       break
     case 'district': {
       const p = PROVINCES.find((x) => x.id === v)
-      MF.map?.setView([p.lat, p.lon], 11)
+      MW.picking = false
+      MW.confirmGeo = false
+      MF.map?.setView([p.lat, p.lon], 12)
       return mfSelect({ lat: p.lat, lon: p.lon, id: p.id, name: p.name })
     }
     case 'tapmap':
-      $('#mf-map')?.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'center' })
-      return ($('#mf-map-note').innerHTML = `<p class="font-semibold text-moss-900">${mfT().tapMapHint}</p>`)
+      MW.picking = true
+      mwRenderTopNotices()
+      return ($('#mf-map-note').innerHTML = `<p class="font-semibold text-moss-900">${MAP_TEXT[S.lang].search.pickingHint}</p>`)
     case 'mylocation':
       if (!navigator.geolocation) return ((MF.geo = 'geolocation is not available'), mfRenderDynamic())
       MF.geo = 'locating'
-      mfRenderDynamic()
+      mwRenderTopNotices()
       return navigator.geolocation.getCurrentPosition(
         (pos) => {
           MF.geo = null
+          MW.picking = false
+          MW.confirmGeo = true
           const loc = { lat: Math.round(pos.coords.latitude * 1e4) / 1e4, lon: Math.round(pos.coords.longitude * 1e4) / 1e4 }
-          MF.map?.setView([loc.lat, loc.lon], 12)
+          MF.map?.setView([loc.lat, loc.lon], 14)
           mfSelect(loc)
         },
         (err) => {
           MF.geo = err.message || 'không rõ lý do'
-          mfRenderDynamic()
+          mwRenderTopNotices()
         },
         { timeout: 10000 },
       )
     case 'layer':
       MF.layer = v === 'none' ? null : v
-      document.querySelectorAll('[data-mf="layer"]').forEach((x) => {
-        const on = (x.dataset.value === 'none' && MF.layer === null) || x.dataset.value === MF.layer
-        x.setAttribute('aria-pressed', String(on))
-        x.className = x.className.replace(/border-moss-900 bg-moss-900 text-white|border-line bg-white text-ink hover:border-moss-700/, on ? 'border-moss-900 bg-moss-900 text-white' : 'border-line bg-white text-ink hover:border-moss-700')
-      })
+      mwRenderLayerMenu()
       return mfApplyOverlay()
     case 'season':
       MF.season = v
+      mwOnInputsChanged()
       return mfRenderDynamic()
     case 'sowing':
       MF.sowing = Number(v)
+      mwOnInputsChanged()
       return mfRenderDynamic()
     case 'irrigation':
       MF.irrigation = v
+      mwOnInputsChanged()
       return mfRenderDynamic()
     case 'why':
       if (MF.openWhy.has(v)) MF.openWhy.delete(v)
@@ -698,6 +648,7 @@ document.addEventListener('click', (e) => {
       return mfRenderDynamic()
     case 'priority':
       MF.priority = v || null
+      mwOnInputsChanged()
       return mfRenderDynamic()
     case 'retry':
       return MF.loc && mfSelect(MF.loc)

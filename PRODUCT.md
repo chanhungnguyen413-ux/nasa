@@ -8,63 +8,33 @@ web
 
 ## Stack
 
-Delegated to Claude; the user is a first-year CS student and the team's AI engineer, new to web development. Node and npm are installed; Python 3 is installed for the data work.
-- **The website is one self-contained file, `index.html`** (user-confirmed). It contains the HTML, compiled Tailwind CSS v4, the inlined Be Vietnam Pro font, inlined lucide icons, all JavaScript and a trimmed copy of the precomputed data, and it works when double-clicked and offline.
-- **Pages inside the one file (hash router in `site/template.html`):** Home `#/`, Rotations `#/luan-canh`, Today's field `#/ruong-hom-nay`, Weather `#/thoi-tiet`, Data sources `#/nguon-du-lieu`. Each page is a `<div data-page>`; only the open one is shown. The browser Back button, reloads and shared links keep the page; a plain `#id` (e.g. `#dashboard`) opens the page holding that element and scrolls to it. Separate HTML files were not used because each would have to carry its own ~600 KB of fonts and CSS and the offline, double-click file would be lost.
-- **Sources:** everything is edited in `site/` (`template.html`, `styles.css`, `logic/`, `data/`, `i18n/`). `npm run build` (`scripts/build-site.mjs`) regenerates `index.html`. `npm run check:i18n` checks that every string table has the same keys in VI and EN.
-- **Data pipeline (Python, `scripts/python/`):** `fetch_ndvi.py` (MODIS NDVI) → `calendar_rule.py` (rule-based crop calendar) → `calendar_kmeans.py` (k-means calendar) → `compare_methods.py` (agreement and sensitivity) and `fetch_power_climate.py` (NASA POWER monthly climate). They write JSON to `site/data/precomputed/` and sanity-check plots to `scripts/python/output/`. The build inlines the JSON, so the page never needs these APIs during a demo.
-- **Node checks:** `scripts/test-rotation.mjs`, `scripts/test-rotation-text.mjs` and `scripts/test-season-strip.mjs` print or verify the scoring, the VI/EN sentences and the 12-month strip without a browser.
-- **Server:** `server/server.mjs` is a tiny Node server started by `Start Dashboard.bat` or `npm start`. It serves `index.html`, `/api/assistant` (Gemini, key in `.env.local`, server-side only), `/api/lan-qr` (phone QR code), and `/sw.js`, which removes the old design's offline service worker from browsers that had it.
-- **Hosting:** laptop only for now, reachable by phones on the same Wi-Fi.
+- **The website is one self-contained file, `index.html`**: contains HTML, compiled Tailwind CSS v4, inlined Be Vietnam Pro font, inlined Lucide icons, Leaflet (inlined), all JavaScript modules, and precomputed NASA climate/NDVI JSONs so it works when double-clicked and offline.
+- **Hash router (`site/template.html`):** Home `#/`, My field `#/ruong-cua-toi` (map workspace; aliases `#/ruong-hom-nay` and `#/thoi-tiet`), Rotations `#/luan-canh` (district-level comparison), Data `#/du-lieu` (uploads, soil input, sources & provenance; alias `#/nguon-du-lieu`).
+- **Sources (`site/`):** pure logic (`site/core/`, `site/logic/`), sourced crop & district data (`site/data/`), data connectors (`site/sources/`), VI/EN string tables (`site/i18n/`), and workspace pages (`site/pages/`). `node scripts/build-site.mjs` regenerates `index.html`; `node scripts/check-i18n.mjs` verifies VI/EN key parity; `node --test scripts/tests/` runs all pure-logic, provenance, syntax, and assistant verification tests.
+- **Server (`server/server.mjs`):** local Node server serving `index.html`, `/api/assistant` (Gemini grounded strictly in page state & evidence ledger), `/api/lan-qr`, and `/sw.js`.
 
 ## Users
 
-- **Primary: hackathon judges watching a demo** of the NASA Space Apps 2026 challenge "Field Shift: Adapting Farms with NASA Data". They have a few minutes to understand the idea, see that it works, and judge how well NASA data is used. They may not know agronomy or remote sensing.
-- **Depicted end users: Mekong Delta farmers and extension officers** deciding together which rotation to try over the next seasons. They are the persona being illustrated, not a confirmed audience of this build.
+- **Primary: hackathon judges evaluating a demo** of the NASA Space Apps 2026 challenge "Field Shift: Adapting Farms with NASA Data".
+- **Depicted end users: Mekong Delta farmers and local extension officers** weighing field boundary context, water-balance risk, and 3-strategy crop transitions together.
 
 ## Product Purpose
 
-A decision-support tool that helps a farmer and an extension officer explore crop-rotation strategies for a Mekong Delta district. It combines NASA Earth observations (MODIS NDVI, NASA POWER climate) with crop characteristics (FAO tables), a local 10-year rotation trial (Linh et al.) and the farmer's own priorities. For each of four rotations it shows why it was suggested, the evidence, the benefits, the information gaps and the risks that need local review, with a confidence tag. Success means a judge understands, in about a minute, the path from satellite data to crop calendar to a ranked, explained comparison.
+A field-centered decision-support workspace combining NASA Earth observations (MODIS MOD13Q1 NDVI crop calendars, NASA POWER 2001–2025 daily climate for FAO-56 ET0 and `P − ET0` water balance, NASA GIBS overlays), FAO tables (Manual 3, FAO-56, FAO-29, ECOCROP), Linh et al. (10-year Mekong Delta trial), and the farmer's own field boundary, soil measurements (ECe, pH), irrigation setup, and risk marks.
 
-## Positioning
+## Capabilities
 
-It compares and explains; it does not prescribe. The ranking moves with the farmer's priorities, every number names its source or is marked as an estimate, and the page says plainly what it does not know (one trial site, no market prices, model climate). It supports, and never replaces, farmer and extension-officer judgment.
+1. **Map-first Field Workspace (`#/ruong-cua-toi`):**
+   - Full-screen WaterWise-inspired layout: 380 px guided 3-step left panel (desktop) or 3-detent bottom sheet (mobile), 48 px map controls, Esri World Imagery satellite basemap with automatic OSM/OpenTopoMap/offline fallback, GIBS overlays with opacity slider & resolution disclosure, and geolocation confirmation.
+   - Polygon & rectangle field boundary drawer (`site/pages/mapDraw.js` + `site/logic/geometry.js`): close-on-first-vertex, undo/redo, draggable vertex handles, midpoint vertex insertion, live area (`ha` & `m²`) and edge lengths, self-intersection/max-area validation (`50 ha` team threshold), GeoJSON import/export, and picking-mode safety so idle map clicks never erase a drawn boundary.
+   - **Separated `eligibility` vs `riskLevel` 3-strategy evaluator (`site/logic/fieldStrategies.js`):** ranks eligible options (Baseline, Water-saving, Soil-building), explains unmet constraints without turning ineligibility into false risk, shows `insufficient_data` with `missingFields` checklists outside the 5 NDVI calendar districts or when irrigation/climate is missing, detects stale results (`fsInputKey`) when field inputs change, and opens an evaluation-linked printable/copyable Action Plan (`fieldPlan.js`).
+   - **What-if stress tests, crop zones, and evidence ledger:** dry-year replay, rain ±% and temperature +°C (ET0 scaling), sub-field crop-zone map grid (gray-hatch for unverified uniform climate grid), and tap-any-number evidence popovers.
+2. **District Rotation Explorer (`#/luan-canh`):** 12-month MODIS NDVI + POWER season strip and 4-rotation comparison with priority weights and temperature/rain what-if sliders.
+3. **Data & Transparency Hub (`#/du-lieu`):** CSV/JSON/GeoJSON upload parser with physical bounds & provenance passport, manual ECe/pH entry, dataset limits (including Esri basemap & client libraries), and two-method calendar agreement metrics.
+4. **Grounded Assistant:** Gemini chat drawer + rule-based offline fallback; all streamed AI numbers are verified against `MF_LEDGER` and context (`asstVerifyReply`), rejecting hallucinated figures and always reminding users to consult local extension officers.
 
-## Operating Context
+## Positioning & Commitments
 
-- Shown live at a hackathon, on a laptop or projector, and possibly on a phone.
-- 60-second demo path: Home → "So sánh luân canh" (opens the Rotations page) → pick a district → read the 12-month season strip (crop calendar, bare months, vulnerable months) → look at the four rotation cards → drag a priority slider and watch the ranking change → open one card's evidence and risks → tap a term (e.g. luân canh, NDVI) → open the Data sources page from the menu.
-- Bilingual audience: Vietnamese and English.
-
-## Capabilities and Constraints
-
-- **Rotation comparison (main feature):** four rotations, Đông Xuân / Hè Thu / Thu Đông: A rice–rice–rice (current practice), B rice–mung bean–rice, C rice–maize–rice, D rice–mung bean–maize. Scores 0–100 for water, soil, income and dry-year risk, a weighted total, each criterion's contribution, and a High / Medium / Low confidence with reasons. Logic in `site/logic/rotation.js`, sourced crop facts in `site/data/rotationCrops.js`, sentences in `site/i18n/rotationText.js`.
-- **Crop calendar from NDVI:** two methods (rule-based peaks and k-means) compared; the calendar comes from each district's own NDVI peaks. Chợ Lách shows no clear three-crop calendar and is not ranked; the page says so.
-- **12-month season strip:** season, NDVI, bare/flooded months, rain, days ≥ 35 °C, root-zone wetness, and vulnerable months (dry and hot; team-chosen thresholds shown on the page).
-- **Sliders:** four priority sliders (remembered), a dry-season rain what-if (−50% to +50%) and a temperature what-if (0 to +4 °C), neither remembered. The temperature slider acts only through water need: FAO-56 ET0 is recalculated with actual vapour pressure held constant, and each season's water need is scaled by the new/old ET0 ratio. Heat tolerance itself is not scored: no source for crop-specific heat thresholds was found.
-- **Data-sources section:** each dataset with use, period, resolution and limits; the two-method comparison; what is not used yet; AI disclosure.
-- **Glossary:** on-demand explanations, including luân canh, cây họ đậu, cố định đạm, NDVI and bốc thoát hơi nước.
-- **Secondary irrigation dashboard** (from the earlier version): demo or live NASA POWER / MODIS / Open-Meteo readings for four plots, per-plot watering advice, map layers, 7-day replay, what-if simulator, share card with QR code, and a Gemini farm assistant that may only use the numbers on the page and falls back to rule-based sample answers without a key. The split of one grid-cell value across the four plots is simulated and labelled.
-- **Constraint:** the user is a beginner, so code stays simple and readable, with small, clearly named files and comments that explain why.
-
-## Brand Commitments
-
-- Name: temporary "Mùa Vụ Mekong" / "Mekong Seasons" (the team will pick the final name; change `APP_NAME` in `site/template.html` and the assistant prompt in `server/server.mjs`). The old name "NASA Adapting Farms" was dropped so the product does not read as an official NASA product.
-- Removed for honesty (FIELD_SHIFT_PIVOT.md step 1): illustrative farmer stories, Partnership / Meet farmers buttons, the pilot-partner CTA, the unsourced "30–50% water saved" figure, the water-savings log (its "85 m³" came from sample rows) and the drip-vs-flood volume comparison (an unsourced ×1.67 factor). No SMAP data is fetched; soil moisture is labelled "NASA POWER (model estimate)".
-- Visual system: lime and moss on a pale ground, documented in `DESIGN.md`.
-
-## Evidence on Hand
-
-- No real field data from the team, farmer users, testimonials, pilots, or partnerships exist. Future work must not invent any of these.
-- Evidence used: Linh et al. 2014 and 2015 (10-year trial at Cai Lậy, Tiền Giang, on alluvial clay; the abstracts give results for the upland rotations as a group, not per rotation), FAO Training Manual 3, FAO-56, FAO-29 and FAO "Soils and pulses". Mung bean has no row in several FAO tables; borrowed values are marked.
-- The "three rice crops per year" expectation comes from the project brief and still needs an official source before it is quoted as fact.
-- The irrigation demo values are placeholders and are shown as simulated.
-- There is no official NASA endorsement. The project uses public NASA data sources and must not imply NASA branding or affiliation beyond that.
-
-## Product Principles
-
-1. **Compare, explain, never prescribe.** Show options, reasons and uncertainty; leave the decision to farmers and extension officers.
-2. **Every number has a source or an "estimate" tag.** Thresholds the team chose are labelled as such on the page.
-3. **Say what is unknown.** Information gaps and risks needing local review are first-class parts of every card, not footnotes.
-4. **Demo in a minute.** District → season strip → rotation cards → priorities must be obvious without a guided tour.
-5. **Two languages, equal quality.** Vietnamese and English are both complete, never a partial translation.
+- **Compare, explain, never prescribe.** Supports farmer and extension-officer judgment; never presents NASA data as an official NASA endorsement.
+- **Honest units & thresholds:** Area is reported strictly in `ha` and `m²` (local "công" varies by district and is not guessed); team-chosen thresholds (50 ha max field, 15 km borrowed calendar radius, 5-point close-score band, 150 mm limited irrigation) are labeled cleanly.
+- **Two languages, equal quality:** VI and EN match across every i18n table (`node scripts/check-i18n.mjs`).

@@ -18,7 +18,7 @@ import requests
 # Phần 1: cấu hình
 # ---------------------------------------------------------------------------
 
-# Toạ độ chép từ site/data/demo.js (PROVINCES). Sửa ở đó thì sửa cả ở đây.
+# Toạ độ chép từ site/data/provinces.js (PROVINCES). Sửa ở đó thì sửa cả ở đây.
 DISTRICTS = [
     {"id": "cantho", "name": "Cần Thơ · Cờ Đỏ", "lat": 10.1, "lon": 105.43},
     {"id": "angiang", "name": "An Giang · Thoại Sơn", "lat": 10.3, "lon": 105.26},
