@@ -1,0 +1,6 @@
+# Cài một lần: python -m pip install -r scripts/python/requirements.txt
+requests      # gọi API (bước 1)
+matplotlib    # vẽ biểu đồ (bước 2)
+numpy         # tính toán mảng số (bước 3, 4)
+scipy         # làm mượt Savitzky-Golay, tìm đỉnh (bước 3)
+scikit-learn  # k-means (bước 4)
