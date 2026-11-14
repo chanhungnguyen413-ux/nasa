@@ -9,41 +9,60 @@ const DS_KEY = 'mvm-data-v1'
 export const DS = { field: null, gardens: [], activeGardenId: null, uploads: [], soil: [], marks: [], saved: true }
 
 const dsStore = () => (typeof localStorage === 'undefined' ? null : localStorage)
+const dsActiveKey = () => (typeof auStorageKey === 'function' ? auStorageKey() : DS_KEY)
 
-export function dsLoad() {
+export function dsSnapshot() {
+  return {
+    field: DS.field,
+    gardens: DS.gardens,
+    activeGardenId: DS.activeGardenId,
+    uploads: DS.uploads,
+    soil: DS.soil,
+    marks: DS.marks,
+  }
+}
+
+export function dsApplySnapshot(data = null) {
+  Object.assign(DS, {
+    field: data?.field ?? null,
+    gardens: Array.isArray(data?.gardens) ? data.gardens : [],
+    activeGardenId: data?.activeGardenId ?? null,
+    uploads: Array.isArray(data?.uploads) ? data.uploads : [],
+    soil: Array.isArray(data?.soil) ? data.soil : [],
+    marks: Array.isArray(data?.marks) ? data.marks : [],
+  })
+  return DS
+}
+
+export function dsResetToDefault() {
+  dsApplySnapshot(null)
   try {
-    const raw = dsStore()?.getItem(DS_KEY)
-    if (!raw) return DS
-    const data = JSON.parse(raw)
-    Object.assign(DS, {
-      field: data.field ?? null,
-      gardens: Array.isArray(data.gardens) ? data.gardens : [],
-      activeGardenId: data.activeGardenId ?? null,
-      uploads: data.uploads ?? [],
-      soil: data.soil ?? [],
-      marks: data.marks ?? [],
-    })
+    dsStore()?.removeItem(DS_KEY)
+    DS.saved = true
   } catch {
-    /* dữ liệu hỏng: bắt đầu lại từ rỗng, không làm chết trang */
+    DS.saved = false
   }
   return DS
 }
 
-/** Ghi kho xuống máy. Trả về true nếu lưu được. */
+export function dsLoad() {
+  try {
+    const raw = dsStore()?.getItem(dsActiveKey())
+    if (!raw) return dsApplySnapshot(null)
+    dsApplySnapshot(JSON.parse(raw))
+  } catch {
+    /* dữ liệu hỏng: bắt đầu lại từ rỗng, không làm chết trang */
+    dsApplySnapshot(null)
+  }
+  return DS
+}
+
+/** Ghi kho xuống máy và đồng bộ lên tài khoản (nếu đã đăng nhập). Trả về true nếu lưu được. */
 export function dsSave() {
   try {
-    dsStore()?.setItem(
-      DS_KEY,
-      JSON.stringify({
-        field: DS.field,
-        gardens: DS.gardens,
-        activeGardenId: DS.activeGardenId,
-        uploads: DS.uploads,
-        soil: DS.soil,
-        marks: DS.marks,
-      }),
-    )
+    dsStore()?.setItem(dsActiveKey(), JSON.stringify(dsSnapshot()))
     DS.saved = true
+    if (typeof auSyncToCloud === 'function') auSyncToCloud()
   } catch {
     DS.saved = false
   }

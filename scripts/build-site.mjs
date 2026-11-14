@@ -39,6 +39,7 @@ const modules = [
   'site/sources/upload.js',
   'site/sources/farmerInput.js',
   'site/sources/dataStore.js',
+  'site/sources/authStore.js',
   'site/sources/power.js',
   'site/logic/et0.js',
   'site/logic/waterBalance.js',

@@ -13,6 +13,7 @@ import { dsSetField } from '../sources/dataStore.js'
 
 const MD = {
   mode: 'idle', // 'idle' | 'draw_poly' | 'draw_rect' | 'edit'
+  closed: false, // true sau khi click điểm bắt đầu để khép hình & xem diện tích trước khi Lưu
   draft: [], // mảng [lat, lon] đang vẽ hoặc sửa
   rectStart: null,
   cursor: null,
@@ -36,6 +37,7 @@ function mdPushHistory() {
 
 function mdSetMode(mode, { reset = true } = {}) {
   MD.mode = mode
+  MD.closed = false
   MD.error = null
   MD.info = null
   MD.selectedIdx = null
@@ -51,10 +53,41 @@ function mdSetMode(mode, { reset = true } = {}) {
   else MF.map?.doubleClickZoom?.enable()
   mdDrawHandles()
   mdUpdateLiveArea()
+  if (typeof mgRefreshBox === 'function') mgRefreshBox()
   mfdRenderTools()
 }
 
-function mdCommit(poly) {
+function mdCloseDrawing() {
+  if (MD.draft.length < 3) {
+    MD.error = mdT().errTooFew
+    if (typeof mgRefreshBox === 'function') mgRefreshBox()
+    mfdRenderTools()
+    return false
+  }
+  const v = geoValidate(MD.draft)
+  if (!v.ok || v.areaM2 < 1) {
+    MD.error =
+      !v.ok && v.problem === 'selfIntersect'
+        ? mdT().errSelfIntersect
+        : !v.ok && v.problem === 'tooBig'
+          ? mdT().errTooBig(GEO_PARAMS.maxFieldHa)
+          : mdT().errTooFew
+    if (typeof mgRefreshBox === 'function') mgRefreshBox()
+    mfdRenderTools()
+    return false
+  }
+  MD.closed = true
+  MD.cursor = null
+  MD.error = null
+  MF.map?.getContainer()?.classList.remove('mw-crosshair')
+  mdDrawHandles()
+  mdUpdateLiveArea()
+  if (typeof mgRefreshBox === 'function') mgRefreshBox()
+  mfdRenderTools()
+  return true
+}
+
+function mdCommit(poly, { skipNameModal = false } = {}) {
   const v = geoValidate(poly)
   if (!v.ok || v.areaM2 < 1) {
     MD.error =
@@ -63,18 +96,36 @@ function mdCommit(poly) {
         : !v.ok && v.problem === 'tooBig'
           ? mdT().errTooBig(GEO_PARAMS.maxFieldHa)
           : mdT().errTooFew
+    if (typeof mgRefreshBox === 'function') mgRefreshBox()
     mfdRenderTools()
     $('#mf-tools')?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
     return false
   }
+  if (!skipNameModal && typeof mgOpenNameModal === 'function' && MD.mode === 'draw_poly') {
+    MD.closed = true
+    MD.cursor = null
+    mdDrawHandles()
+    mgOpenNameModal(poly.map((p) => [...p]))
+    return true
+  }
   const hadLoc = Boolean(MF.loc)
   const loc = MF.loc ?? (() => {
     const [lat, lon] = geoCentroid(poly)
-    return { lat: Math.round(lat * 1e4) / 1e4, lon: Math.round(lon * 1e4) / 1e4 }
+    return { lat: Math.round(lat * 1e6) / 1e6, lon: Math.round(lon * 1e6) / 1e6 }
   })()
   MF.loc = loc
-  dsSetField({ ...(DS.field ?? {}), lat: loc.lat, lon: loc.lon, id: loc.id ?? null, name: loc.name ?? null, polygon: poly.map((p) => [...p]) })
+  const savedPoly = poly.map((p) => [...p])
+  if (MD.mode === 'edit' && DS.activeGardenId && typeof dsSaveGarden === 'function') {
+    const active = DS.gardens.find((g) => g.id === DS.activeGardenId)
+    if (active) {
+      const areaHa = Math.round((geoAreaM2(savedPoly) / 1e4) * 100) / 100
+      dsSaveGarden({ ...active, polygon: savedPoly, areaHa })
+    }
+  } else {
+    dsSetField({ ...(DS.field ?? {}), lat: loc.lat, lon: loc.lon, id: loc.id ?? null, name: loc.name ?? null, polygon: savedPoly })
+  }
   MD.mode = 'idle'
+  MD.closed = false
   MD.draft = []
   MD.rectStart = null
   MD.cursor = null
@@ -94,14 +145,15 @@ function mdCommit(poly) {
 
 function mdHandleMapClick(latlng) {
   if (!mdActive()) return false
+  if (MD.mode === 'draw_poly' && MD.closed) return true
   const pt = [Math.round(latlng.lat * 1e6) / 1e6, Math.round(latlng.lng * 1e6) / 1e6]
   MD.error = null
   MD.info = null
   if (MD.mode === 'draw_poly') {
     if (MF.map && MD.draft.length) {
       const clickPx = MF.map.latLngToContainerPoint(latlng)
-      if (MD.draft.length >= 3 && clickPx.distanceTo(MF.map.latLngToContainerPoint(MD.draft[0])) < 14) {
-        return mdCommit(MD.draft)
+      if (MD.draft.length >= 3 && clickPx.distanceTo(MF.map.latLngToContainerPoint(MD.draft[0])) < 16) {
+        return mdCloseDrawing()
       }
       const last = MD.draft[MD.draft.length - 1]
       if (clickPx.distanceTo(MF.map.latLngToContainerPoint(last)) < 4) return true
@@ -110,6 +162,7 @@ function mdHandleMapClick(latlng) {
     MD.draft.push(pt)
     mdDrawHandles()
     mdUpdateLiveArea()
+    if (typeof mgRefreshBox === 'function') mgRefreshBox()
     mfdRenderTools()
     return true
   }
@@ -120,13 +173,13 @@ function mdHandleMapClick(latlng) {
       mfdRenderTools()
       return true
     }
-    return mdCommit(geoRectangle(MD.rectStart, pt))
+    return mdCommit(geoRectangle(MD.rectStart, pt), { skipNameModal: true })
   }
   return true
 }
 
 function mdHandleMouseMove(latlng) {
-  if (MD.mode !== 'draw_poly' && MD.mode !== 'draw_rect') return
+  if ((MD.mode !== 'draw_poly' || MD.closed) && MD.mode !== 'draw_rect') return
   MD.cursor = [Math.round(latlng.lat * 1e6) / 1e6, Math.round(latlng.lng * 1e6) / 1e6]
   mdDrawPreview()
   mdUpdateLiveArea()
@@ -134,24 +187,29 @@ function mdHandleMouseMove(latlng) {
 
 function mdLiveDraftPoly() {
   if (MD.mode === 'draw_rect' && MD.rectStart && MD.cursor) return geoRectangle(MD.rectStart, MD.cursor)
-  if (MD.mode === 'draw_poly') return MD.cursor ? [...MD.draft, MD.cursor] : MD.draft
+  if (MD.mode === 'draw_poly') return !MD.closed && MD.cursor ? [...MD.draft, MD.cursor] : MD.draft
   return MD.draft
 }
 
 function mdUpdateLiveArea() {
-  const el = $('#md-live-area')
-  if (!el) return
   const pts = mdLiveDraftPoly()
+  const targets = [$('#md-live-area'), $('#mg-live-area')].filter(Boolean)
+  if (!targets.length) return
   if (pts.length < 3) {
-    el.textContent = ''
-    el.className = 'mt-1.5 text-sm font-bold text-moss-800'
+    targets.forEach((el) => {
+      el.textContent = ''
+      el.className = 'mt-1.5 text-sm font-bold text-moss-800'
+    })
     return
   }
   const m2 = geoAreaM2(pts)
   const ha = m2 / 1e4
   const tooBig = ha > GEO_PARAMS.maxFieldHa
-  el.className = `mt-1.5 text-sm font-bold ${tooBig ? 'text-clay-700' : 'text-moss-800'}`
-  el.textContent = mdT().liveArea(mfNum(ha, 2), mfNum(Math.round(m2))) + (tooBig ? mdT().liveTooBig(GEO_PARAMS.maxFieldHa) : '')
+  const text = mdT().liveArea(mfNum(ha, 2), mfNum(Math.round(m2))) + (tooBig ? mdT().liveTooBig(GEO_PARAMS.maxFieldHa) : '')
+  targets.forEach((el) => {
+    el.className = `mt-1.5 text-sm font-bold ${tooBig ? 'text-clay-700' : 'text-moss-800'}`
+    el.textContent = text
+  })
 }
 
 function mdDrawPreview() {
@@ -162,7 +220,7 @@ function mdDrawPreview() {
   MD.previewLayer.clearLayers()
   if (MD.mode === 'draw_rect' && MD.rectStart && MD.cursor) {
     Lf.polygon(geoRectangle(MD.rectStart, MD.cursor), { color: '#0f3d24', weight: 2, dashArray: '6 6', fillColor: '#b8e55a', fillOpacity: 0.2, interactive: false }).addTo(MD.previewLayer)
-  } else if (MD.mode === 'draw_poly' && MD.draft.length && MD.cursor) {
+  } else if (MD.mode === 'draw_poly' && !MD.closed && MD.draft.length && MD.cursor) {
     const pts = [MD.draft[MD.draft.length - 1], MD.cursor]
     if (MD.draft.length >= 2) pts.push(MD.draft[0])
     Lf.polyline(pts, { color: '#0f3d24', weight: 2, dashArray: '6 5', interactive: false }).addTo(MD.previewLayer)
@@ -189,13 +247,16 @@ function mdDrawHandles() {
 
   if (!mdActive()) return
   if (MD.draft.length >= 2) {
-    const cls = MD.mode === 'edit' ? Lf.polygon(MD.draft, { color: '#0f3d24', weight: 3, fillColor: '#b8e55a', fillOpacity: 0.22, interactive: false }) : Lf.polyline(MD.draft, { color: '#0f3d24', weight: 2.5, dashArray: '6 5', interactive: false })
+    const showFilled = MD.mode === 'edit' || (MD.mode === 'draw_poly' && MD.closed)
+    const cls = showFilled
+      ? Lf.polygon(MD.draft, { color: '#0f3d24', weight: 3, fillColor: '#b8e55a', fillOpacity: 0.32, interactive: false })
+      : Lf.polyline(MD.draft, { color: '#0f3d24', weight: 2.5, dashArray: '6 5', interactive: false })
     cls.addTo(MD.layer)
   }
 
   if (MD.mode === 'draw_poly') {
     activePts.forEach((pt, idx) => {
-      const closeReady = idx === 0 && activePts.length >= 3
+      const closeReady = idx === 0 && activePts.length >= 3 && !MD.closed
       const m = Lf.marker(pt, {
         draggable: false,
         icon: Lf.divIcon({ className: '', html: `<div class="md-handle ${closeReady ? 'md-first-pulse' : ''}" style="width:${closeReady ? 26 : 18}px;height:${closeReady ? 26 : 18}px;margin:-${closeReady ? 13 : 9}px 0 0 -${closeReady ? 13 : 9}px"></div>` }),
@@ -204,7 +265,7 @@ function mdDrawHandles() {
         m.bindTooltip(esc(mdT().closeFirst))
         m.on('click', (e) => {
           Lf.DomEvent.stopPropagation(e)
-          mdCommit(MD.draft)
+          mdCloseDrawing()
         })
       }
       m.addTo(MD.layer)
@@ -272,9 +333,11 @@ function mdUndo() {
   if (!MD.history.length) return
   MD.redoStack.push(MD.draft.map((p) => [...p]))
   MD.draft = MD.history.pop()
+  MD.closed = false
   MD.error = null
   mdDrawHandles()
   mdUpdateLiveArea()
+  if (typeof mgRefreshBox === 'function') mgRefreshBox()
   mfdRenderTools()
 }
 
@@ -282,9 +345,11 @@ function mdRedo() {
   if (!MD.redoStack.length) return
   MD.history.push(MD.draft.map((p) => [...p]))
   MD.draft = MD.redoStack.pop()
+  MD.closed = false
   MD.error = null
   mdDrawHandles()
   mdUpdateLiveArea()
+  if (typeof mgRefreshBox === 'function') mgRefreshBox()
   mfdRenderTools()
 }
 
@@ -326,10 +391,11 @@ function mdToolsHtml() {
   const DT = DATA_TEXT[S.lang].tools
   const poly = mfdPolygon()
   const field = mfdCurrentField()
+  if (MD.mode === 'draw_poly') return ''
   let drawHtml = ''
-  if (MD.mode === 'draw_poly' || MD.mode === 'draw_rect' || MD.mode === 'edit') {
-    const hint = MD.mode === 'draw_poly' ? `${T.hintPoly} (${T.corners(MD.draft.length)})` : MD.mode === 'draw_rect' ? T.hintRect : T.hintEdit
-    const needZoom = (MD.mode === 'draw_poly' || MD.mode === 'draw_rect') && MF.map && MF.map.getZoom() < 14
+  if (MD.mode === 'draw_rect' || MD.mode === 'edit') {
+    const hint = MD.mode === 'draw_rect' ? T.hintRect : T.hintEdit
+    const needZoom = MD.mode === 'draw_rect' && MF.map && MF.map.getZoom() < 14
     drawHtml = `
       <p class="text-[15px] font-semibold leading-snug text-moss-900">${esc(hint)}</p>
       <p id="md-live-area" class="mt-1.5 text-sm font-bold text-moss-800"></p>
@@ -345,7 +411,6 @@ function mdToolsHtml() {
   } else {
     drawHtml = `
       <div class="flex flex-wrap gap-2">
-        ${mfPill('data-md="drawPoly"', `${icon('pen-line', 'size-4')}${T.polyBtn}`)}
         ${mfPill('data-md="drawRect"', `${icon('square', 'size-4')}${T.rectBtn}`)}
         ${poly ? mfPill('data-md="edit"', `${icon('sliders-horizontal', 'size-4')}${T.editBtn}`) : ''}
         ${poly ? mfPill('data-md="clear"', `${icon('trash-2', 'size-4')}${T.clearBtn}`) : ''}

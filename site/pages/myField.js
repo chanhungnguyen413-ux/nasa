@@ -208,6 +208,8 @@ function mfInitMap() {
   MF.map.on('mousemove', (e) => typeof mdHandleMouseMove === 'function' && mdHandleMouseMove(e.latlng))
   mfApplyOverlay()
   mfApplyMarker()
+  const initPoly = typeof mfdPolygon === 'function' ? mfdPolygon() : null
+  if (initPoly && typeof mgFitGardenOnMap === 'function') mgFitGardenOnMap({ lat: MF.loc.lat, lon: MF.loc.lon, polygon: initPoly })
 }
 
 // Bản đồ nền: Ảnh vệ tinh Esri (nhìn rõ bờ ruộng) mặc định khi khoanh thửa → OpenStreetMap → OpenTopoMap.
@@ -603,6 +605,11 @@ document.addEventListener('click', (e) => {
       const p = PROVINCES.find((x) => x.id === v)
       MW.picking = false
       MW.confirmGeo = false
+      if (typeof mdActive === 'function' && mdActive()) {
+        MF.map?.setView([p.lat, p.lon], 15)
+        if (typeof mgRefreshBox === 'function') mgRefreshBox()
+        return
+      }
       MF.map?.setView([p.lat, p.lon], 12)
       return mfSelect({ lat: p.lat, lon: p.lon, id: p.id, name: p.name })
     }

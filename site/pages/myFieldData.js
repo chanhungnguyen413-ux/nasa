@@ -60,6 +60,11 @@ function mfdOnSelect(loc) {
 /** Gọi khi trang hiện ra: lần đầu mở lại trang thì chọn lại ruộng đã lưu. */
 function mfdRestore() {
   if (!MF.loc && DS.field) mfSelect({ lat: DS.field.lat, lon: DS.field.lon, id: DS.field.id ?? undefined, name: DS.field.name ?? undefined })
+  else if (MF.loc) {
+    mfdDrawLayers()
+    const poly = mfdPolygon()
+    if (poly && typeof mgFitGardenOnMap === 'function') mgFitGardenOnMap({ lat: MF.loc.lat, lon: MF.loc.lon, polygon: poly })
+  }
 }
 
 /** Dữ liệu người dùng cho ruộng đang xem (dùng trong mfCompute). */
@@ -103,7 +108,7 @@ function mfdDrawLayers() {
   if (!MFD.layers) MFD.layers = Lf.layerGroup().addTo(MF.map)
   MFD.layers.clearLayers()
   const poly = mfdPolygon()
-  if (poly) Lf.polygon(poly, { color: '#0b2e1b', weight: 3, fillColor: '#b8e55a', fillOpacity: 0.18, interactive: false }).addTo(MFD.layers)
+  if (poly) Lf.polygon(poly, { color: '#0f3d24', weight: 3, fillColor: '#b8e55a', fillOpacity: 0.3, interactive: false }).addTo(MFD.layers)
   if (MFD.draft.length) {
     Lf.polyline(MFD.draft, { color: '#0b2e1b', weight: 2, dashArray: '6 6', interactive: false }).addTo(MFD.layers)
     MFD.draft.forEach((pt) => Lf.circleMarker(pt, { radius: 6, color: '#0b2e1b', weight: 2, fillColor: '#ffffff', fillOpacity: 1, interactive: false }).addTo(MFD.layers))

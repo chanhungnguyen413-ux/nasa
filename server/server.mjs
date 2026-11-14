@@ -156,6 +156,20 @@ const server = http.createServer(async (req, res) => {
       const svg = await QRCode.toString(target, { type: 'svg', margin: 1, color: { dark: '#0b2e1b', light: '#ffffff' } })
       return res.end(JSON.stringify({ url: target, svg }))
     }
+    if (req.method === 'GET' && url === '/api/firebase-config') {
+      res.setHeader('Content-Type', 'application/json')
+      res.setHeader('Cache-Control', 'no-store')
+      const cfg = {
+        apiKey: env.FIREBASE_API_KEY?.trim() || '',
+        authDomain: env.FIREBASE_AUTH_DOMAIN?.trim() || '',
+        projectId: env.FIREBASE_PROJECT_ID?.trim() || '',
+        storageBucket: env.FIREBASE_STORAGE_BUCKET?.trim() || '',
+        messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID?.trim() || '',
+        appId: env.FIREBASE_APP_ID?.trim() || '',
+      }
+      const configured = Boolean(cfg.apiKey && cfg.projectId && cfg.appId)
+      return res.end(JSON.stringify({ configured, config: configured ? cfg : null }))
+    }
     if (req.method === 'POST' && url === '/api/assistant') return assistant(req, res)
     res.statusCode = 404
     res.end('not found')

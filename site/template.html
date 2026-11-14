@@ -341,7 +341,7 @@
       // Phase 4: xoá 2 trang 4 thửa mô phỏng cũ ("Ruộng hôm nay", "Thời tiết"); địa chỉ cũ tự mở sang "Ruộng của tôi".
       const PAGES = [
         { id: 'home', slug: '', nav: 'navHome', icon: 'house' },
-        { id: 'myfield', slug: 'ruong-cua-toi', aliases: ['ruong-hom-nay', 'thoi-tiet'], nav: 'navMyField', icon: 'map-pin' },
+        { id: 'myfield', slug: 'ruong-cua-toi', aliases: ['vuon-cua-toi', 'ruong-hom-nay', 'thoi-tiet'], nav: 'navMyField', icon: 'map-pin' },
         { id: 'rotations', slug: 'luan-canh', nav: 'navRotations', icon: 'refresh-cw' },
         // Phase 2: mục "Nguồn dữ liệu" thành trang "Dữ liệu"; địa chỉ cũ vẫn mở được (aliases).
         { id: 'sources', slug: 'du-lieu', aliases: ['nguon-du-lieu'], nav: 'navSources', icon: 'database' },
@@ -412,6 +412,20 @@
        * ================================================================ */
       function renderNav() {
         const L_ = l()
+        const AT = MAP_TEXT[S.lang]?.auth ?? MAP_TEXT.vi.auth
+        const curUser = typeof AU !== 'undefined' ? AU.user : null
+        const authDesktop = curUser
+          ? `<div class="hidden items-center gap-1.5 sm:flex">
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold text-white group-data-[solid=true]:bg-moss-50 group-data-[solid=true]:text-moss-950">${icon('user', 'size-3.5')}${esc(curUser.displayName || curUser.email)}</span>
+              <button type="button" data-au="logout" class="inline-flex items-center gap-1 rounded-full border border-white/40 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/15 group-data-[solid=true]:border-line group-data-[solid=true]:text-ink group-data-[solid=true]:hover:bg-ground">${icon('log-out', 'size-3.5')}${AT.logoutBtn}</button>
+            </div>`
+          : `<button type="button" data-au="openModal" class="hidden items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold text-moss-950 transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-400 sm:inline-flex group-data-[solid=true]:bg-moss-900 group-data-[solid=true]:text-white group-data-[solid=true]:hover:bg-moss-800">${icon('user', 'size-4')}${AT.loginBtn}</button>`
+        const authMobile = curUser
+          ? `<div class="mt-1 flex items-center justify-between gap-2 border-t border-line px-3 pt-2.5 pb-1">
+              <span class="inline-flex items-center gap-1.5 text-xs font-bold text-moss-950">${icon('user', 'size-4')}${esc(curUser.displayName || curUser.email)}</span>
+              <button type="button" data-au="logout" class="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1.5 text-xs font-bold text-ink">${icon('log-out', 'size-3.5')}${AT.logoutBtn}</button>
+            </div>`
+          : `<button type="button" data-au="openModal" class="mt-1 flex w-full items-center gap-3 rounded-2xl border-t border-line px-4 py-3 text-[15px] font-bold text-moss-900 hover:bg-moss-50"><span class="grid size-9 place-items-center rounded-full bg-moss-900 text-white">${icon('user', 'size-4')}</span>${AT.loginBtn}</button>`
         const link = (p) =>
           `<a href="${pageHref(p.id)}" ${S.page === p.id ? 'aria-current="page"' : ''} class="rounded-full px-3 py-2 text-sm font-semibold text-white/85 transition-colors hover:text-white aria-[current=page]:bg-white/15 aria-[current=page]:text-white group-data-[solid=true]:text-muted group-data-[solid=true]:hover:text-ink group-data-[solid=true]:aria-[current=page]:bg-moss-50 group-data-[solid=true]:aria-[current=page]:text-moss-900">${L_[p.nav]}</a>`
         const mobileLink = (p) =>
@@ -434,13 +448,13 @@
                   )
                   .join('')}
               </div>
-              <a href="${pageHref('rotations')}" class="hidden rounded-full bg-white px-4 py-2 text-sm font-bold text-moss-950 transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-400 sm:inline-flex group-data-[solid=true]:bg-moss-900 group-data-[solid=true]:text-white group-data-[solid=true]:hover:bg-moss-800">${L_.contact}</a>
+              ${authDesktop}
               <button type="button" data-action="menu" aria-expanded="${S.menuOpen}" aria-controls="mobile-menu" aria-label="${L_.menu}" class="grid size-10 place-items-center rounded-full border border-white/40 text-white lg:hidden group-data-[solid=true]:border-line group-data-[solid=true]:text-ink">${icon(S.menuOpen ? 'x' : 'menu', 'size-5')}</button>
             </div>
           </nav>
           ${
             S.menuOpen
-              ? `<div id="mobile-menu" class="mx-5 mb-3 rounded-[28px] border border-line bg-white p-2 shadow-lift sm:mx-8 lg:hidden">${menuPages().map(mobileLink).join('')}</div>`
+              ? `<div id="mobile-menu" class="mx-5 mb-3 rounded-[28px] border border-line bg-white p-2 shadow-lift sm:mx-8 lg:hidden">${menuPages().map(mobileLink).join('')}${authMobile}</div>`
               : ''
           }`
       }
@@ -1348,6 +1362,7 @@
        * ================================================================ */
       renderAll()
       route() // mở đúng trang theo địa chỉ, vd. tải lại ở #/luan-canh thì vẫn ở trang Luân canh
+      if (typeof auInit === 'function') auInit()
       requestAnimationFrame(() => revealNow('#hero [data-reveal]'))
     </script>
   </body>
