@@ -23,6 +23,9 @@ export const GARDEN_TEXT = {
     dataSource: 'Khí hậu NASA POWER · Lịch MODIS nếu có · Chỉ số bạn nhập', advisory: 'Kết hợp kết quả với kinh nghiệm và cán bộ khuyến nông.',
     localSave: 'Đã lưu trên trình duyệt này.', saveFailed: 'Chưa lưu được xuống máy. Thay đổi chỉ còn trong phiên này.', localHint: 'Dữ liệu lưu trên trình duyệt này; tài khoản đã đăng nhập dùng kho riêng.',
     activeGarden: 'Vườn đang chọn', noSelected: 'Chọn vườn để xem hoặc mở cài đặt.', cropNoData: 'Cây chưa có trong thư viện.', needsProfile: 'Thông tin vườn',
+    contextGarden: 'Bấm để xem chi tiết', contextHint: 'Các vườn khác vẫn hiện màu xám với viền theo nhóm. Bấm vào vườn để chọn và xem giải thích.',
+    popupGreen: 'Các tiêu chí đang có dữ liệu phù hợp với cây đã chọn.', popupLimits: names=>`Yếu tố cần lưu ý: ${names}.`, popupLocal: 'Vùng tại vị trí đang bấm',
+    editHint: 'Kéo góc để sửa ranh. Bấm hoặc kéo chấm giữa cạnh để thêm góc; chọn một góc để xóa.', editing: 'Đang sửa ranh giới', redo: 'Làm lại', deleteVertex: 'Xóa góc đã chọn', editWrongGarden: 'Hãy kết thúc sửa ranh vườn đang chọn trước khi lưu vườn khác.',
   },
   en: {
     title: 'Your garden groups', sub: 'Organize gardens into groups. Follow each piece of land.',
@@ -48,5 +51,8 @@ export const GARDEN_TEXT = {
     dataSource: 'NASA POWER climate · MODIS calendar where available · Your measurements', advisory: 'Review results with farming experience and a local extension officer.',
     localSave: 'Saved in this browser.', saveFailed: 'Could not save on this device. Changes are only kept for this session.', localHint: 'Stored in this browser; signed-in accounts use their own storage.',
     activeGarden: 'Selected garden', noSelected: 'Choose a garden to view it or open settings.', cropNoData: 'Crop not present in the library.', needsProfile: 'Garden information',
+    contextGarden: 'Click to view details', contextHint: 'Other gardens stay gray with their group-colored outlines. Click a garden to select it and see a short explanation.',
+    popupGreen: 'The criteria with available data fit the selected crop.', popupLimits: names=>`Factors to review: ${names}.`, popupLocal: 'Zone at the clicked location',
+    editHint: 'Drag corners to edit the boundary. Click or drag an edge midpoint to add a corner; select a corner to remove it.', editing: 'Editing boundary', redo: 'Redo', deleteVertex: 'Remove selected corner', editWrongGarden: 'Finish editing the selected garden before saving a different garden.',
   },
 }

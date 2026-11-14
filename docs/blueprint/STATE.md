@@ -6,7 +6,7 @@ File này là trí nhớ giữa các phiên. Phiên nào cũng đọc đầu ti�
 
 - **Phase đã xong:** 0, 1, 2, 3, 4 (14/11/2026). Tất cả trang mô phỏng 4 thửa cũ (`ruong-hom-nay`, `thoi-tiet`, `crops.js`, `demo.js`, `live.js`, `engine.js`, `adviceText.js`) đã được xóa hoàn toàn; `#/ruong-hom-nay` và `#/thoi-tiet` chuyển hướng về `#/ruong-cua-toi`.
 - **Nhánh phát hành:** `NEW` của repository `chanhungnguyen413-ux/nasa`; giữ lịch sử Git hiện có.
-- **Build & kiểm tra:** `npm run build` tạo index.html (~2,6 MB, nhúng thêm ảnh); `npm test` (131 ca), `npm run check:i18n` (11 bảng, gồm cả mảng) và cổng nguồn gốc đều pass. Lệnh test đã sửa để chạy trên Windows/Node 24.
+- **Build & kiểm tra:** `npm run build` tạo index.html (~2,6 MB, nhúng thêm ảnh); `npm test` (133 ca), `npm run check:i18n` (11 bảng, gồm cả mảng) và cổng nguồn gốc đều pass. Lệnh test đã sửa để chạy trên Windows/Node 24.
 
 ## Quyết định đã chốt
 
@@ -52,6 +52,12 @@ File này là trí nhớ giữa các phiên. Phiên nào cũng đọc đầu ti�
 - Môi trường theo vườn/tọa độ, giữ ổn định khi lưu/đổi lựa chọn; cache POWER v2 không chung khóa 0,01°. Phản hồi mạng chậm đọc hồ sơ mới nhất. Một snapshot kết quả dùng chung cho map/list/card, khóa đầu vào đổi thì tính lại.
 - Không tô nền tổng phía dưới các ô zone; lớp cũ bị thay thế khi lưu. Thêm “Căn cứ màu vùng” và giá trị/bằng chứng; ghi rõ hữu cơ/loại đất/ghi chú chưa đổi màu khi chưa có quy tắc kiểm chứng.
 - 131 tests qua. Chrome bấm nút Lưu thật với lịch sử đo mới ngày hơn: ph 3→7,2→6 đổi đỏ→vàng→xanh ngay; không gọi lại nguồn môi trường khi lưu; kiểm tra cell layer, xóa cây→xám, reload và phản hồi môi trường chậm đều qua.
+## Giữ vườn ngữ cảnh và sửa ranh (14/11/2026)
+
+- Bộ chọn chỉ quyết định phần cần tô chi tiết. Luôn vẽ mọi vườn đã có ranh; vườn ngoài lựa chọn tô xám, giữ viền màu nhóm và vẫn bấm được. Chọn riêng một vườn bằng hàng bên trái hoặc bấm hình trên bản đồ.
+- Bấm vườn đang chọn mở popup ngắn (tên, cây, mức phù hợp, yếu tố cần lưu ý); không mở tooltip/chú giải thường trực. Bỏ hộp “Mức phù hợp theo từng ô” cũ; giữ chú giải nguồn vệ tinh khi bật lớp GIBS.
+- Sửa ranh gắn owner gardenId; ẩn ranh đã lưu khi hiện bản nháp; cập nhật Undo/Redo/Xóa góc sau kéo/chèn/chọn đỉnh. Lưu giữ profile và cập nhật ranh/diện tích, hủy giữ ranh cũ. Bản nháp không bị nhầm là zone thật.
+- 133 tests qua; Chrome kiểm tra đủ vườn khi chọn, màu viền các nhóm, popup trên máy tính/điện thoại, kéo góc, undo/redo, chèn/xóa góc, lưu/hủy và tải lại. Mã huyện cũ không tồn tại được tra theo tọa độ để tránh làm trắng bản đồ.
 ## Việc còn dở / giới hạn đã biết (giữ trung thực khi Q&A)
 
 - Chưa có dữ liệu SoilGrids / SMAP tự gọi theo vùng nếu không nạp file qua `#/du-lieu`; lớp GIBS mặc định cố định ngày tham chiếu (`2026-11-13`).

@@ -64,7 +64,7 @@ function fsRiskFromAssessments(assessments) {
  */
 export function fsCalendarSource(loc, provinces, radiusKm = FIELD_STRAT_PARAMS.districtRadiusKm) {
   if (!loc) return { mode: 'none', districtId: null, distanceKm: null }
-  if (loc.id) return { mode: 'direct', districtId: loc.id, distanceKm: 0 }
+  if (loc.id && provinces.some(p=>p.id===loc.id)) return { mode: 'direct', districtId: loc.id, distanceKm: 0 }
   const near = geoNearestPlace([loc.lat, loc.lon], provinces, radiusKm)
   if (!near) return { mode: 'none', districtId: null, distanceKm: null }
   return { mode: 'borrowed', districtId: near.id, distanceKm: Math.round(near.km * 10) / 10 }

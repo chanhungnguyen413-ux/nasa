@@ -1,6 +1,6 @@
 // Nhóm vườn là nhận diện; chỉ số và cây được lưu riêng trong từng vườn con.
 import { GARDEN_TEXT } from '../i18n/gardenText.js'
-import { GARDEN_COLORS, GARDEN_GRADES, gmAssessGarden, gmAssessmentKey, gmColor, gmHasBoundary, gmProfileDefaults, gmVisibleGardens } from '../logic/gardenModel.js'
+import { GARDEN_COLORS, GARDEN_GRADES, gmAssessGarden, gmAssessmentKey, gmColor, gmHasBoundary, gmMapPresentation, gmProfileDefaults, gmVisibleGardens } from '../logic/gardenModel.js'
 import { geoAreaM2, geoCentroid, geoNearestPlace } from '../logic/geometry.js'
 import { PROVINCES } from '../data/provinces.js'
 import { CROP_LIB_IDS, CROP_LIBRARY } from '../data/cropLibrary.js'
@@ -11,7 +11,7 @@ import { districtInputs } from '../logic/rotationInputs.js'
 import { seasonWindows } from '../logic/rotation.js'
 import { fsCalendarSource } from '../logic/fieldStrategies.js'
 
-const MG = { formOpen: false, notice: null, layer: null, pendingPoly: null, selector: null, modal: null, returnFocus: null, climate: new Map(), requests: new Map(), assessments: new Map() }
+const MG = { formOpen: false, notice: null, layer: null, pendingPoly: null, selector: null, modal: null, returnFocus: null, popup:null, popupGardenId:null, popupPoint:null, climate: new Map(), requests: new Map(), assessments: new Map() }
 const mgT = () => GARDEN_TEXT[S.lang]
 const mgActiveGarden = () => DS.gardens.find(g => g.id === DS.activeGardenId) ?? null
 const mgVisible = () => gmVisibleGardens(DS.gardens, DS.gardenView)
@@ -20,6 +20,8 @@ const mgGroupColor = g => gmColor(mgGroup(g)?.color)
 const mgClimateKey = g => `${typeof auStorageKey==='function'?auStorageKey():'local'}:${g.id}:${g.lat}:${g.lon}`
 
 function mgClearCurrent() {
+  mgClosePopup()
+  if(mdActive())mdSetMode('idle')
   ++MF.seq
   Object.assign(MF, { loc: null, record: null, elevation: null, origin: null, status: 'idle', error: null, irrigation: null, season: null, sowing: null, cropQuery: null })
   MF.marker?.remove()
@@ -32,6 +34,8 @@ function mgClearCurrent() {
 }
 
 function mgSelectGarden(id, { fit = true } = {}) {
+  if(mdActive() && MD.gardenId!==id)mdSetMode('idle')
+  mgClosePopup()
   const g = dsSelectGarden(id)
   if (!g) return
   const p = g.profile ?? gmProfileDefaults()
@@ -60,18 +64,19 @@ function mgSelectGarden(id, { fit = true } = {}) {
 }
 
 function mgSelectView(mode, id) {
+  mgClosePopup()
   MG.selector = null
   if (mdActive()) mdSetMode('idle')
   DS.gardenView = { mode, id }
   const visible = mgVisible()
   const active = visible.find(g => g.id === DS.activeGardenId) ?? visible[0]
   DS.activeGardenId = active?.id ?? null
-  if (active) mgSelectGarden(active.id, { fit: mode === 'garden' })
+  if (active) mgSelectGarden(active.id, { fit: false })
   else { DS.field = null; mgClearCurrent() }
   dsSave()
   mwRenderBody()
   mgDrawAllGardens()
-  if (mode === 'group') mgFitVisible()
+  mgFitVisible()
 }
 
 function mgFitGardenOnMap(g) {
@@ -80,7 +85,7 @@ function mgFitGardenOnMap(g) {
 }
 
 function mgFitVisible() {
-  const pts = mgVisible().filter(gmHasBoundary).flatMap(g => g.polygon)
+  const pts = DS.gardens.filter(gmHasBoundary).flatMap(g => g.polygon)
   if (pts.length && MF.map) requestAnimationFrame(() => MF.map.fitBounds(pts, { padding: [40,40], maxZoom: 17 }))
 }
 
@@ -142,6 +147,54 @@ function mgAssessment(g) {
 
 function mgBuildSnapshot() { return new Map(mgVisible().map(g=>[g.id,mgAssessment(g)])) }
 
+function mgFocusGarden(id,{fit=false}={}) {
+  if(mdActive())mdSetMode('idle')
+  DS.gardenView={mode:'garden',id}
+  mgSelectGarden(id,{fit:false})
+  if(fit)mgFitVisible()
+}
+
+function mgClosePopup() {
+  const popup=MG.popup
+  MG.popup=null;MG.popupGardenId=null;MG.popupPoint=null
+  popup?.remove()
+}
+
+function mgPopupHtml(g,point=null) {
+  const T=mgT(), a=mgAssessment(g)
+  let result=a.result, grade=a.grade, local=false
+  if(point && a.zones && !a.zones.uniform) {
+    const dlat=a.field.cellM/2/111320
+    const dlon=dlat/Math.cos(point.lat*Math.PI/180)
+    const cell=a.zones.cells.find(c=>Math.abs(c.cell.lat-point.lat)<=dlat && Math.abs(c.cell.lon-point.lng)<=dlon)
+    if(cell){result=cell.result;grade=result.overall;local=true}
+  }
+  const limits=result?.limiting.map(k=>mfT().criteria[k]).join(', ')
+  const reason=grade==='gray'?T.reasons[a.reason==='assessed'?'missingData':a.reason]:grade==='green'?T.popupGreen:limits?T.popupLimits(limits):T.reasons.assessed
+  return `<div class="gm-map-summary"><strong>${esc(g.name)}</strong><div class="gm-map-crop">${esc(g.profile.cropId?CROP_LIBRARY[g.profile.cropId].name[S.lang]:T.noCrop)}</div><span class="gm-grade"><i style="background:${GARDEN_GRADES[grade]}"></i>${T.grades[grade]}</span>${local?`<small>${T.popupLocal}</small>`:''}<p>${esc(reason)}</p></div>`
+}
+
+function mgOpenPopup(id,point=null) {
+  const g=DS.gardens.find(g=>g.id===id)
+  if(!g || !gmHasBoundary(g) || !MF.map || mdActive())return
+  mgClosePopup()
+  if(!mwDesktop()){MW.sheet='peek';mwSyncSheetStyle()}
+  const at=point ?? {lat:g.lat,lng:g.lon}
+  const panelHeight=!mwDesktop()?$('#mw-panel')?.getBoundingClientRect().height??0:0
+  const popup=window.L.popup({className:'gm-map-popup',maxWidth:mwDesktop()?290:230,minWidth:mwDesktop()?210:180,autoPanPaddingTopLeft:[16,110],autoPanPaddingBottomRight:[65,panelHeight+16]})
+    .setLatLng(at).setContent(mgPopupHtml(g,at)).openOn(MF.map)
+  MG.popup=popup;MG.popupGardenId=id;MG.popupPoint=at
+  popup.on('remove',()=>{if(MG.popup===popup){MG.popup=null;MG.popupGardenId=null;MG.popupPoint=null}})
+}
+
+function mgMapClick(id,e) {
+  window.L.DomEvent.stopPropagation(e)
+  if(mdActive() || MFD.mode)return mfdMapClick(e.latlng)
+  const selected=DS.activeGardenId===id && DS.gardenView.mode==='garden' && DS.gardenView.id===id
+  if(!selected)mgFocusGarden(id)
+  mgOpenPopup(id,e.latlng)
+}
+
 function mgDrawAllGardens(snapshot=mgBuildSnapshot()) {
   if (!MF.map || !window.L) return
   if (MG.layer && !MF.map.hasLayer(MG.layer)) MG.layer = null
@@ -149,24 +202,24 @@ function mgDrawAllGardens(snapshot=mgBuildSnapshot()) {
   MG.layer.clearLayers()
   // Tab tìm vùng cho cây có lớp bản đồ riêng; không trộn hai loại kết quả.
   if (MW.tab !== 'field') return
-  for (const g of mgVisible().filter(gmHasBoundary)) {
-    const result = snapshot.get(g.id)
+  const editingId=mdActive()?MD.gardenId:null
+  for (const {garden:g,focused,editing} of gmMapPresentation(DS.gardens,DS.gardenView,editingId)) {
+    if(editing)continue // Bản nháp là lớp duy nhất của vườn đang sửa; không chồng ranh đã lưu lên trên.
+    const result = focused ? snapshot.get(g.id) : null
+    const grade=focused?result.grade:'gray'
     const active = g.id === DS.activeGardenId
     const color = mgGroupColor(g)
-    const click = e => {
-      window.L.DomEvent.stopPropagation(e)
-      if (mdActive() || MFD.mode) return mfdMapClick(e.latlng)
-      mgSelectGarden(g.id, { fit:false })
-    }
-    const split=Boolean(result.zones && !result.zones.uniform)
-    const shape = window.L.polygon(g.polygon, { color, weight:active ? 4 : 2.5, fill:!split, fillColor:GARDEN_GRADES[result.grade], fillOpacity:.55, dashArray:result.grade === 'gray' ? '6 4' : null })
-    shape.bindTooltip(`${esc(g.name)} · ${esc(mgT().grades[result.grade])}`).on('click',click).addTo(MG.layer)
+    const click=e=>mgMapClick(g.id,e)
+    const split=Boolean(focused && result.zones && !result.zones.uniform)
+    const shape = window.L.polygon(g.polygon, { color, weight:active ? 4 : 2.5, fill:!split, fillColor:GARDEN_GRADES[grade], fillOpacity:focused ? 0.55 : 0.3, dashArray:null })
+    const description=focused?mgT().grades[grade]:mgT().contextGarden
+    shape.on('click',click).addTo(MG.layer)
     const path=shape.getElement()
     if(path) {
-      path.dataset.mapGarden=g.id; path.dataset.grade=result.grade
-      path.setAttribute('aria-label',`${g.name} · ${mgT().grades[result.grade]}`)
+      path.dataset.mapGarden=g.id; path.dataset.grade=grade;path.dataset.mapFocus=focused?'detail':'context'
+      path.setAttribute('aria-label',`${g.name} · ${description}`)
       path.setAttribute('role','button'); path.setAttribute('tabindex','0')
-      path.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' ') { e.preventDefault(); mgSelectGarden(g.id,{fit:false}) } })
+      path.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' ') { e.preventDefault();mgFocusGarden(g.id);mgOpenPopup(g.id) } })
     }
     if (split) {
       for (const cell of result.zones.cells) {
@@ -179,6 +232,11 @@ function mgDrawAllGardens(snapshot=mgBuildSnapshot()) {
       window.L.polygon(g.polygon, { color, weight:active ? 4 : 2.5, fill:false, interactive:false }).addTo(MG.layer)
     }
   }
+  if(MG.popup && MG.popupGardenId===DS.activeGardenId) {
+    const selected=mgActiveGarden()
+    if(selected)MG.popup.setContent(mgPopupHtml(selected,MG.popupPoint))
+  }
+  if(mdActive())MD.layer?.eachLayer(layer=>layer.bringToFront?.())
 }
 
 // Cắt ô màu theo đúng đường bao, tránh tô vượt ra ngoài vườn.
@@ -218,7 +276,7 @@ function mgSelectorHtml() {
 function mgDrawingHtml() {
   if (!mdActive()) return ''
   const T=mgT()
-  return `<div class="gm-drawing"><strong>${icon('pen-line','size-4')}${T.drawing} · ${esc(mgActiveGarden()?.name ?? '')}</strong><p>${T.drawHint}</p><p id="mg-live-area"></p>${MD.error?`<p role="alert" class="gm-error">${esc(MD.error)}</p>`:''}<div class="gm-action-row"><button type="button" data-md="save" class="gm-primary">${T.saveBoundary}</button><button type="button" data-md="undo" class="gm-secondary" ${MD.history.length?'':'disabled'}>${icon('undo-2','size-4')}${T.undo}</button><button type="button" data-md="cancel" class="gm-secondary">${T.stopDrawing}</button></div></div>`
+  return `<div class="gm-drawing"><strong>${icon('pen-line','size-4')}${MD.mode==='edit'?T.editing:T.drawing} · ${esc(mgActiveGarden()?.name ?? '')}</strong><p>${MD.mode==='edit'?T.editHint:T.drawHint}</p><p id="mg-live-area"></p>${MD.error?`<p role="alert" class="gm-error">${esc(MD.error)}</p>`:''}<div class="gm-action-row"><button type="button" data-md="save" class="gm-primary">${T.saveBoundary}</button><button type="button" data-md="undo" class="gm-secondary" ${MD.history.length?'':'disabled'}>${icon('undo-2','size-4')}${T.undo}</button><button type="button" data-md="redo" class="gm-secondary" ${MD.redoStack.length?'':'disabled'}>${T.redo}</button>${MD.mode==='edit'&&MD.selectedIdx!==null&&MD.draft.length>3?`<button type="button" data-md="delVertex" class="gm-secondary">${T.deleteVertex}</button>`:''}<button type="button" data-md="cancel" class="gm-secondary">${T.stopDrawing}</button></div></div>`
 }
 
 function mgGardensInnerHtml(snapshot=mgBuildSnapshot()) {
@@ -226,7 +284,7 @@ function mgGardensInnerHtml(snapshot=mgBuildSnapshot()) {
   if (!DS.gardenGroups.length) return `<div class="gm-empty"><span class="gm-empty-icon">${icon('folder-plus','size-8')}</span><h2>${T.emptyTitle}</h2><p>${T.emptySub}</p><button type="button" data-mg="addGroup" class="gm-primary">${icon('plus','size-4')}${T.addGroup}</button></div>`
   const visible=mgVisible(), ids=new Set(visible.map(g=>g.groupId))
   const groups=DS.gardenGroups.filter(group=>DS.gardenView.mode==='group'?(DS.gardenView.id==='*'||group.id===DS.gardenView.id):ids.has(group.id))
-  return `<div class="gm-heading"><div><h2>${T.title}</h2><p>${T.sub}</p></div><button type="button" data-mg="addGroup" class="gm-icon-button" title="${T.addGroup}" aria-label="${T.addGroup}">${icon('folder-plus','size-5')}</button></div>${mgSelectorHtml()}
+  return `<div class="gm-heading"><div><h2>${T.title}</h2><p>${T.sub}</p></div><button type="button" data-mg="addGroup" class="gm-icon-button" title="${T.addGroup}" aria-label="${T.addGroup}">${icon('folder-plus','size-5')}</button></div>${mgSelectorHtml()}<p class="gm-local-note">${T.contextHint}</p>
     <div class="gm-groups">${groups.map(group=>`<section class="gm-group" style="--group-color:${gmColor(group.color)}"><header><span class="gm-folder">${icon('folder-open','size-5')}</span><div><h3>${esc(group.name)}</h3><small>${T.gardenCount(DS.gardens.filter(g=>g.groupId===group.id).length)}</small></div><button type="button" data-mg="addChild" data-value="${esc(group.id)}" class="gm-icon-button" title="${T.addGarden}" aria-label="${T.addGarden}: ${esc(group.name)}">${icon('plus','size-5')}</button><button type="button" data-mg="editGroup" data-value="${esc(group.id)}" class="gm-icon-button" title="${T.editGroup}" aria-label="${T.editGroup}: ${esc(group.name)}">${icon('settings-2','size-4')}</button></header><div class="gm-children">${visible.filter(g=>g.groupId===group.id).map(g=>{
       const a=snapshot.get(g.id)
       return `<div class="gm-child ${g.id===DS.activeGardenId?'is-active':''}" data-garden-id="${esc(g.id)}"><button type="button" class="gm-child-select" data-mg="select" data-value="${esc(g.id)}" aria-pressed="${g.id===DS.activeGardenId}"><i class="gm-dot"></i><span><strong>${esc(g.name)}</strong><small>${g.profile.cropId?esc(CROP_LIBRARY[g.profile.cropId].name[S.lang]):T.noCrop}${gmHasBoundary(g)?` · ${mfNum(g.areaHa??geoAreaM2(g.polygon)/1e4,2)} ha`:` · ${T.noBoundary}`}</small></span><i class="gm-status-dot" style="background:${GARDEN_GRADES[a.grade]}" title="${T.grades[a.grade]}"></i></button><button type="button" class="gm-icon-button" data-mg="settings" data-value="${esc(g.id)}" aria-label="${T.settings}: ${esc(g.name)}" title="${T.settings}">${icon('settings','size-4')}</button></div>`
@@ -261,6 +319,7 @@ function mgWorkspaceHtml() {
 }
 
 function mgOpenDialog(kind,id=null) {
+  mgClosePopup()
   MG.returnFocus=document.activeElement
   MG.modal={kind,id}
   MG.selector=null
@@ -296,7 +355,7 @@ function mgCommitBoundary(poly) {
   const entry=dsSaveGarden({ ...g, lat, lon, districtId:place?.id??null, districtName:place?.name??null, polygon:poly.map(p=>[...p]), areaM2:geoAreaM2(poly), areaHa:geoAreaM2(poly)/1e4 })
   mdSetMode('idle')
   MG.notice=DS.saved?mgT().localSave:mgT().saveFailed
-  mgSelectGarden(entry.id)
+  mgSelectGarden(entry.id,{fit:false})
   return true
 }
 
@@ -319,7 +378,7 @@ document.addEventListener('click',e=>{
     case 'closeDialog': return mgCloseNameModal()
     case 'selector': MG.selector=MG.selector===id?null:id; return mgRefreshBox()
     case 'view': return mgSelectView(b.dataset.mode,id)
-    case 'select': if(mdActive())mdSetMode('idle'); return mgSelectGarden(id,{fit:true})
+    case 'select': return mgFocusGarden(id,{fit:true})
     case 'settings': return mgOpenDialog('garden',id)
     case 'retryEnvironment': {
       const garden=DS.gardens.find(g=>g.id===id)
@@ -330,7 +389,7 @@ document.addEventListener('click',e=>{
     }
     case 'delete': return mgOpenDialog('delete',id)
     case 'draw': {
-      if (DS.activeGardenId!==id) mgSelectGarden(id,{fit:false})
+      mgFocusGarden(id,{fit:false})
       MFD.mode=null; MW.picking=false
       if (!mwDesktop()) MW.sheet='peek'
       mdSetMode(gmHasBoundary(mgActiveGarden())?'edit':'draw_poly')

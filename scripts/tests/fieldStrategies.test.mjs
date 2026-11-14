@@ -25,6 +25,9 @@ test('lịch vụ: điểm trực tiếp của huyện → direct; điểm trong
   assert.equal(fsCalendarSource(codo, PROVINCES).mode, 'direct')
   assert.equal(fsCalendarSource({ lat: codo.lat + 0.02, lon: codo.lon }, PROVINCES).mode, 'borrowed')
   assert.equal(fsCalendarSource({ lat: 11.5, lon: 105.6 }, PROVINCES).mode, 'none')
+  const legacy=fsCalendarSource({id:'old-district-id',lat:codo.lat,lon:codo.lon},PROVINCES)
+  assert.equal(legacy.mode,'borrowed')
+  assert.equal(legacy.districtId,codo.id)
 })
 
 test('hộ "Không đổi cây" → hai phương án thay thế thành ineligible có lý do, KHÔNG bị ép thành riskLevel high; A vẫn được chấm', () => {

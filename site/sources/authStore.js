@@ -119,7 +119,7 @@ function auRefreshAppUI({ restoreGarden = false, resetMap = false } = {}) {
       if (typeof MD !== 'undefined') {
         MD.layer?.clearLayers()
         MD.previewLayer?.clearLayers()
-        Object.assign(MD, { mode: 'idle', draft: [], closed: false, rectStart: null, cursor: null, selectedIdx: null, error: null, info: null })
+        Object.assign(MD, { mode: 'idle', gardenId:null, draft: [], closed: false, rectStart: null, cursor: null, selectedIdx: null, error: null, info: null })
         MF.map?.getContainer()?.classList.remove('mw-crosshair')
         MF.map?.doubleClickZoom?.enable()
       }

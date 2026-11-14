@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { evidence } from '../../site/core/evidence.js'
-import { gmAssessGarden, gmAssessmentKey, gmMigrateRecords, gmNormalizeSnapshot, gmProfileDefaults, gmProfileSoil, gmVisibleGardens } from '../../site/logic/gardenModel.js'
+import { gmAssessGarden, gmAssessmentKey, gmMapPresentation, gmMigrateRecords, gmNormalizeSnapshot, gmProfileDefaults, gmProfileSoil, gmVisibleGardens } from '../../site/logic/gardenModel.js'
 import { DS, dsAdd, dsApplySnapshot, dsSaveGroup, dsSaveGarden, dsSelectGarden, dsDeleteGarden, dsSnapshot } from '../../site/sources/dataStore.js'
 import { fiBelongs } from '../../site/sources/farmerInput.js'
 import { fdField } from '../../site/logic/fieldData.js'
@@ -31,6 +31,25 @@ test('bộ chọn nhóm chỉ trả vườn trong nhóm; bộ chọn vườn ch�
   assert.equal(gmVisibleGardens(gardens,{mode:'group',id:'*'}).length,2)
   const restored=gmNormalizeSnapshot({gardens,gardenGroups:[{id:'g1',name:'A',color:'#627cdb'},{id:'g2',name:'B',color:'#238d9b'}],gardenView:{mode:'garden',id:'removed'}})
   assert.deepEqual(restored.gardenView,{mode:'group',id:'g1'})
+})
+
+test('chọn một vườn không làm mất vườn khác trên bản đồ; các vườn còn lại là ngữ cảnh',()=>{
+  const gardens=[garden('a'),garden('b'),{...garden('c'),groupId:'g2'}]
+  const map=gmMapPresentation(gardens,{mode:'garden',id:'b'})
+  assert.equal(map.length,3)
+  assert.deepEqual(map.filter(p=>p.focused).map(p=>p.garden.id),['b'])
+  assert.deepEqual(map.filter(p=>!p.focused).map(p=>p.garden.id),['a','c'])
+  assert.equal(map.at(-1).garden.id,'b','vườn được chọn được vẽ sau để dễ bấm')
+})
+
+test('chọn nhóm giữ vườn nhóm khác và đánh dấu đúng vườn có bản nháp sửa ranh',()=>{
+  const gardens=[garden('a'),garden('b'),{...garden('c'),groupId:'g2'}, {...garden('no-shape'),polygon:null}]
+  const map=gmMapPresentation(gardens,{mode:'group',id:'g1'},'b')
+  assert.equal(map.length,3)
+  assert.deepEqual(map.filter(p=>p.focused).map(p=>p.garden.id),['a','b'])
+  assert.equal(map.find(p=>p.garden.id==='c').focused,false)
+  assert.equal(map.find(p=>p.garden.id==='b').editing,true)
+  assert.equal(map.filter(p=>p.editing).length,1)
 })
 test('chưa chọn cây luôn là xám, kể cả đã có đủ đất và khí hậu',()=>{
   const r=gmAssessGarden({ garden:garden('a',{cropId:null}),climate })

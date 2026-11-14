@@ -107,7 +107,16 @@
 .gm-explanation li > div:first-child { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 10px; }
 .gm-explanation strong { font-weight: 600; }
 .gm-criterion-value { margin-top: 6px; font-size: 11px; }
+.gm-map-popup .leaflet-popup-content-wrapper { border-radius: 12px; background: #fbfcf8; box-shadow: 0 7px 30px #173d2b30; }
+.gm-map-popup .leaflet-popup-tip { background: #fbfcf8; }
+.gm-map-popup .leaflet-popup-content { margin: 17px 22px 17px 17px; min-width: 200px; }
+.gm-map-summary { font-family: 'Be Vietnam Pro',sans-serif; color: #29462e; line-height: 1.7; }
+.gm-map-summary > strong { display: block; font-size: 14px; font-weight: 650; overflow-wrap: anywhere; }
+.gm-map-crop { font-size: 11px; color: #77876a; margin: 4px 0 9px; }
+.gm-map-summary > small { display: block; font-size: 9px; color: #869277; margin-top: 7px; }
+.gm-map-summary > p { font-size: 11px; line-height: 1.8; color: #66795a; margin: 9px 0 0; }
 @media (max-width:639px) {
+  .gm-map-popup .leaflet-popup-content { min-width: 180px; }
   .gm-heading { margin-bottom: 16px; }
   .gm-empty { padding-block: 26px; }
   .gm-heading h2 { font-size: 17px; }

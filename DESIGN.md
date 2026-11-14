@@ -77,3 +77,11 @@ Cài đặt hiện hành của vườn là đầu vào chính cho cây, vụ/th�
 Mỗi vườn giữ bộ môi trường nhất quán theo tài khoản, gardenId và tọa độ. Lưu settings không làm tải lại hay hoán đổi nguồn môi trường. Nếu đang chờ tải, phản hồi đến sẽ đánh giá với hồ sơ mới nhất. Bộ nhớ POWER v2 theo tọa độ chính xác đến 6 chữ số thập phân; cache v1 chỉ được nhận nếu chính tọa độ bản ghi khớp.
 
 Map, danh sách và thẻ chi tiết dùng cùng snapshot kết quả có khóa đầu vào. Chỉ khi đầu vào thực đổi mới tính lại. Với zone cục bộ, không có lớp màu tổng bên dưới để tránh pha màu ngoài bốn trạng thái. Mục “Căn cứ màu vùng” nêu các tiêu chí và số liệu/bằng chứng đang dùng. Hữu cơ, loại đất và ghi chú vẫn lưu lại nhưng hiện chưa dùng đổi màu; thông tin này hiển thị ngay trong cài đặt.
+
+## Bản đồ giữ ngữ cảnh và popup theo lựa chọn
+
+Chọn nhóm hoặc vườn không xóa các hình vườn khác khỏi bản đồ. Các hình ngoài lựa chọn có nền xám, viền màu nhóm và vẫn nhận bấm. Chọn một vườn riêng làm nổi mức phù hợp của vườn đó; nhóm khác/các vườn khác giữ làm ngữ cảnh. Các bộ chọn thay đổi phần tô chi tiết, không thay danh mục vườn đã lưu.
+
+Bấm hình vườn chọn vườn đó và mở giải thích ngắn trên bản đồ: tên, cây, trạng thái và yếu tố cần lưu ý. Bấm từng ô có dữ liệu cục bộ thì giải thích đúng ô. Bỏ hộp chú giải mức phù hợp nổi cố định; chú giải của lớp vệ tinh GIBS vẫn được giữ khi dùng lớp đó. Popup tự đóng khi sang tab khác hoặc sửa ranh; trên điện thoại bảng thông tin thu gọn để nhường chỗ cho popup.
+
+Khi sửa ranh, MD.gardenId khóa bản nháp vào vườn khởi tạo. Không chồng hình đã lưu lên bản nháp. Các nút Hoàn tác/Làm lại/Xóa góc cập nhật sau thao tác đỉnh và trung điểm; lưu cập nhật tọa độ tâm, diện tích và zone, giữ nguyên hồ sơ canh tác. Hủy chỉ bỏ bản nháp. Vườn ngữ cảnh vẫn ở trên bản đồ khi đang sửa.

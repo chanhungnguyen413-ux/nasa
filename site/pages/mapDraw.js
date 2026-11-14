@@ -8,10 +8,12 @@
 // Hàm hình học thuần nằm ở site/logic/geometry.js (đã có test).
 import { MAP_TEXT } from '../i18n/mapText.js'
 import { DATA_TEXT } from '../i18n/dataText.js'
+import { GARDEN_TEXT } from '../i18n/gardenText.js'
 import { GEO_PARAMS, geoAreaM2, geoCentroid, geoEdgeLengthsM, geoFromGeoJSON, geoInsertVertex, geoMidpoints, geoMoveVertex, geoRectangle, geoRemoveVertex, geoToGeoJSON, geoValidate } from '../logic/geometry.js'
-import { dsSetField } from '../sources/dataStore.js'
+import { DS, dsSetField } from '../sources/dataStore.js'
 
 const MD = {
+  gardenId: null, // Ranh nháp luôn thuộc đúng vườn đã bắt đầu sửa.
   mode: 'idle', // 'idle' | 'draw_poly' | 'draw_rect' | 'edit'
   closed: false, // true sau khi click điểm bắt đầu để khép hình & xem diện tích trước khi Lưu
   draft: [], // mảng [lat, lon] đang vẽ hoặc sửa
@@ -36,6 +38,8 @@ function mdPushHistory() {
 }
 
 function mdSetMode(mode, { reset = true } = {}) {
+  if (typeof mgClosePopup === 'function') mgClosePopup()
+  MD.gardenId = mode === 'idle' ? null : DS.activeGardenId
   MD.mode = mode
   MD.closed = false
   MD.error = null
@@ -55,6 +59,7 @@ function mdSetMode(mode, { reset = true } = {}) {
   mdUpdateLiveArea()
   if (typeof mgRefreshBox === 'function') mgRefreshBox()
   mfdRenderTools()
+  if (typeof mgDrawAllGardens === 'function') mgDrawAllGardens()
 }
 
 function mdCloseDrawing() {
@@ -88,6 +93,11 @@ function mdCloseDrawing() {
 }
 
 function mdCommit(poly, { skipNameModal = false } = {}) {
+  if (MD.gardenId && MD.gardenId !== DS.activeGardenId) {
+    MD.error = GARDEN_TEXT[S.lang].editWrongGarden
+    if (typeof mgRefreshBox === 'function') mgRefreshBox()
+    return false
+  }
   const v = geoValidate(poly)
   if (!v.ok || v.areaM2 < 1) {
     MD.error =
@@ -171,6 +181,7 @@ function mdHandleMapClick(latlng) {
     if (!MD.rectStart) {
       MD.rectStart = pt
       mdDrawHandles()
+      if (typeof mgRefreshBox === 'function') mgRefreshBox()
       mfdRenderTools()
       return true
     }
@@ -249,8 +260,10 @@ function mdDrawHandles() {
   if (!mdActive()) return
   if (MD.draft.length >= 2) {
     const showFilled = MD.mode === 'edit' || (MD.mode === 'draw_poly' && MD.closed)
+    const owner = DS.gardens.find(g => g.id === MD.gardenId)
+    const draftColor = owner && typeof mgGroupColor === 'function' ? mgGroupColor(owner) : '#0f3d24'
     const cls = showFilled
-      ? Lf.polygon(MD.draft, { color: '#0f3d24', weight: 3, fillColor: '#b8e55a', fillOpacity: 0.32, interactive: false })
+      ? Lf.polygon(MD.draft, { color: draftColor, weight: 3, fillColor: '#9aa59e', fillOpacity: 0.22, interactive: false })
       : Lf.polyline(MD.draft, { color: '#0f3d24', weight: 2.5, dashArray: '6 5', interactive: false })
     cls.addTo(MD.layer)
   }
@@ -289,6 +302,7 @@ function mdDrawHandles() {
         MD.draft = geoInsertVertex(MD.draft, i, mid)
         MD.selectedIdx = i + 1
         mdDrawHandles()
+        if (typeof mgRefreshBox === 'function') mgRefreshBox()
         mfdRenderTools()
       })
       mm.on('dragstart', () => mdPushHistory())
@@ -297,6 +311,7 @@ function mdDrawHandles() {
         MD.draft = geoInsertVertex(MD.draft, i, [Math.round(ll.lat * 1e6) / 1e6, Math.round(ll.lng * 1e6) / 1e6])
         MD.selectedIdx = i + 1
         mdDrawHandles()
+        if (typeof mgRefreshBox === 'function') mgRefreshBox()
         mfdRenderTools()
       })
       mm.addTo(MD.layer)
@@ -317,12 +332,14 @@ function mdDrawHandles() {
         MD.draft = geoMoveVertex(MD.draft, idx, [Math.round(ll.lat * 1e6) / 1e6, Math.round(ll.lng * 1e6) / 1e6])
         MD.selectedIdx = idx
         mdDrawHandles()
+        if (typeof mgRefreshBox === 'function') mgRefreshBox()
         mfdRenderTools()
       })
       vm.on('click', (e) => {
         Lf.DomEvent.stopPropagation(e)
         MD.selectedIdx = sel ? null : idx
         mdDrawHandles()
+        if (typeof mgRefreshBox === 'function') mgRefreshBox()
         mfdRenderTools()
       })
       vm.addTo(MD.layer)
@@ -480,6 +497,7 @@ document.addEventListener('click', (e) => {
         MD.draft = geoRemoveVertex(MD.draft, MD.selectedIdx)
         MD.selectedIdx = null
         mdDrawHandles()
+        if (typeof mgRefreshBox === 'function') mgRefreshBox()
         mfdRenderTools()
       }
       return
@@ -537,6 +555,7 @@ document.addEventListener('keydown', (e) => {
     MD.draft = geoRemoveVertex(MD.draft, MD.selectedIdx)
     MD.selectedIdx = null
     mdDrawHandles()
+    if (typeof mgRefreshBox === 'function') mgRefreshBox()
     mfdRenderTools()
   }
 })

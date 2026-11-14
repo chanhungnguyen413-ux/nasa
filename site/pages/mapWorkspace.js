@@ -251,8 +251,7 @@ function mwRenderLegend() {
   const T = mwT()
   const R = mfT()
   const layer = GIBS_LAYERS.find((l) => l.key === MF.layer)
-  const zoneCrop = MW.tab !== 'field' && MFZ.crop ? CROP_LIBRARY[MFZ.crop]?.name[S.lang] : null
-  if (!layer && !zoneCrop && !MW.tilesOffline) {
+  if (!layer && !MW.tilesOffline) {
     el.innerHTML = ''
     return
   }
@@ -260,17 +259,8 @@ function mwRenderLegend() {
   el.innerHTML = `
     <div class="rounded-2xl border border-line bg-white/95 p-3 text-xs shadow-lift backdrop-blur">
       ${MW.tilesOffline ? `<p class="mb-2 flex items-center gap-1.5 font-bold text-sun-700">${icon('wifi-off', 'size-4')}${esc(T.legend.offlineTiles)}</p>` : ''}
-      ${zoneCrop ? `
-        <p class="font-extrabold text-moss-900">${esc(T.legend.zoneTitle)} · ${esc(T.legend.cropPrefix)} ${esc(zoneCrop)}</p>
-        <div class="mt-1.5 flex flex-wrap gap-2 text-[11px] font-bold">
-          <span class="inline-flex items-center gap-1"><span class="size-3 rounded-sm bg-[#5b8c1a]"></span>${R.grades.green}</span>
-          <span class="inline-flex items-center gap-1"><span class="size-3 rounded-sm bg-[#c58a12]"></span>${R.grades.yellow}</span>
-          <span class="inline-flex items-center gap-1"><span class="size-3 rounded-sm bg-[#8f2f14]"></span>${R.grades.red}</span>
-          <span class="inline-flex items-center gap-1"><span class="size-3 rounded-sm mfz-hatch-swatch"></span>${R.grades.gray}</span>
-        </div>
-        <p class="mt-1 text-[11px] text-muted">${esc(T.legend.grayPattern)}</p>` : ''}
       ${layer ? `
-        <div class="${zoneCrop ? 'mt-2 border-t border-line pt-2' : ''}">
+        <div>
           <p class="font-extrabold text-ink">${esc(R.layers[layer.key])} · <span class="text-muted">${esc(layer.date)}</span></p>
           <p class="text-[11px] text-muted">${esc(R.kinds[layer.kind])} · ${esc(src?.credit ?? 'NASA GIBS')}</p>
           <img src="${layer.legend}" alt="${R.legendAlt}" class="mt-1.5 h-auto w-full max-w-[260px]" loading="lazy" />
@@ -297,6 +287,7 @@ function mwRenderBody() {
     return
   }
   MG.layer?.clearLayers()
+  mgClosePopup()
 
   if (MW.tab === 'suit') {
     if (dock) {

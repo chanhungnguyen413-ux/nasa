@@ -54,6 +54,13 @@ export function gmVisibleGardens(gardens, view) {
   return gardens.filter(g => view.mode === 'garden' ? g.id === view.id : g.groupId === view.id)
 }
 
+// Bộ lọc chỉ xác định vườn cần tô chi tiết; các vườn còn lại vẫn là ngữ cảnh trên bản đồ.
+export function gmMapPresentation(gardens,view,editingId=null) {
+  const focused=new Set(gmVisibleGardens(gardens,view).map(g=>g.id))
+  return gardens.filter(gmHasBoundary).map(g=>({garden:g,focused:focused.has(g.id),editing:g.id===editingId}))
+    .sort((a,b)=>Number(a.focused)-Number(b.focused))
+}
+
 export const gmHasBoundary = g => Array.isArray(g?.polygon) && g.polygon.length >= 3 && Number.isFinite(g.lat) && Number.isFinite(g.lon)
 export const gmScopeRecords = (records, garden) => records.filter(r => r.gardenId === garden.id)
 

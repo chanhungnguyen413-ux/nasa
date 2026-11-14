@@ -66,7 +66,8 @@ function mfdRestore() {
   else if (MF.loc) {
     mfdDrawLayers()
     const poly = mfdPolygon()
-    if (poly && typeof mgFitGardenOnMap === 'function') mgFitGardenOnMap({ lat: MF.loc.lat, lon: MF.loc.lon, polygon: poly })
+    if (poly && DS.activeGardenId && MW.tab === 'field') mgFitVisible()
+    else if (poly && typeof mgFitGardenOnMap === 'function') mgFitGardenOnMap({ lat: MF.loc.lat, lon: MF.loc.lon, polygon: poly })
   }
 }
 
