@@ -8,6 +8,7 @@ import { fdCollect, fdField } from '../logic/fieldData.js'
 import { CATALOG_DYNAMIC } from '../sources/catalog.js'
 import { DS, dsAdd, dsLoad, dsSave, dsSetField, dsUnpackRecords } from '../sources/dataStore.js'
 import { FI_MARK_TYPES, fiBelongs, fiToday } from '../sources/farmerInput.js'
+import { gmSoilInputs, gmScopeRecords } from '../logic/gardenModel.js'
 
 const MFD = {
   mode: null, // null | 'draw' | 'mark:flood' | 'mark:dry' | ...
@@ -47,10 +48,12 @@ function mfdUploads() {
 const mfdSameField = (loc) => Boolean(DS.field && loc && Math.abs(DS.field.lat - loc.lat) < 1e-7 && Math.abs(DS.field.lon - loc.lon) < 1e-7)
 const mfdPolygon = () => (mfdSameField(MF.loc) ? DS.field.polygon ?? null : null)
 /** Đơn vị phân tích của ruộng đang xem (một điểm, hoặc lưới ô nếu đã khoanh). */
-const mfdCurrentField = () => fdField(MF.loc, mfdPolygon())
+const mfdCurrentField = () => fdField(MF.loc, mfdPolygon(), DS.activeGardenId)
 
 /** Gọi từ mfSelect(): ghi nhớ ruộng đang xem; chọn điểm mới thì ranh thửa cũ không còn áp dụng. */
 function mfdOnSelect(loc) {
+  const active = DS.gardens.find(g => g.id === DS.activeGardenId)
+  if (active && Number.isFinite(active.lat) && (Math.abs(active.lat-loc.lat)>1e-7 || Math.abs(active.lon-loc.lon)>1e-7)) DS.activeGardenId = null
   if (!mfdSameField(loc)) dsSetField({ lat: loc.lat, lon: loc.lon, id: loc.id ?? null, name: loc.name ?? null, polygon: null })
   MFD.mode = null
   MFD.draft = []
@@ -70,7 +73,10 @@ function mfdRestore() {
 /** Dữ liệu người dùng cho ruộng đang xem (dùng trong mfCompute). */
 function mfdCollect(climate) {
   const field = mfdCurrentField()
-  return field ? fdCollect({ ds: { soil: DS.soil, marks: DS.marks, uploads: mfdUploads() }, field, climate }) : null
+  const active = DS.gardens.find(g => g.id === DS.activeGardenId)
+  const soil = active ? gmSoilInputs(active,DS.soil) : DS.soil
+  const marks=active ? gmScopeRecords(DS.marks,active) : DS.marks
+  return field ? fdCollect({ ds: { soil, marks, uploads: mfdUploads() }, field, climate }) : null
 }
 
 /** Đầu vào thêm cho suitAssess từ số đo đất và đánh dấu. */
@@ -108,13 +114,14 @@ function mfdDrawLayers() {
   if (!MFD.layers) MFD.layers = Lf.layerGroup().addTo(MF.map)
   MFD.layers.clearLayers()
   const poly = mfdPolygon()
-  if (poly) Lf.polygon(poly, { color: '#0f3d24', weight: 3, fillColor: '#b8e55a', fillOpacity: 0.3, interactive: false }).addTo(MFD.layers)
+  if (poly && !DS.activeGardenId) Lf.polygon(poly, { color: '#0f3d24', weight: 3, fillColor: '#b8e55a', fillOpacity: 0.3, interactive: false }).addTo(MFD.layers)
   if (MFD.draft.length) {
     Lf.polyline(MFD.draft, { color: '#0b2e1b', weight: 2, dashArray: '6 6', interactive: false }).addTo(MFD.layers)
     MFD.draft.forEach((pt) => Lf.circleMarker(pt, { radius: 6, color: '#0b2e1b', weight: 2, fillColor: '#ffffff', fillOpacity: 1, interactive: false }).addTo(MFD.layers))
   }
   const R = mfdT()
-  for (const m of DS.marks) {
+  const visibleIds = new Set(typeof mgVisible === 'function' ? mgVisible().map(g => g.id) : [])
+  for (const m of DS.marks.filter(mark => !mark.gardenId || visibleIds.has(mark.gardenId))) {
     Lf.circleMarker([m.lat, m.lon], { radius: 8, color: '#ffffff', weight: 2, fillColor: MFD_MARK_COLOR[m.type], fillOpacity: 1 })
       .bindTooltip(esc(`${R.tools.markTypes[m.type]} · ${m.date}`))
       .addTo(MFD.layers)

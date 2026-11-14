@@ -1,5 +1,15 @@
 # Kịch bản trình diễn (Demo Script) — Mùa Vụ Mekong
 
+## Luồng Nhóm vườn mới
+
+1. Mở `#/ruong-cua-toi`, nhấn **Tạo nhóm vườn**, nhập tên và chọn màu đại diện.
+2. Nhấn **+** ở header nhóm để thêm vườn con. Nhấn bánh răng cạnh vườn để đổi tên, chọn cây và nhập chỉ số riêng; để trống điều chưa biết.
+3. Chọn vườn, nhấn **Vẽ ranh giới vườn**. Chọn huyện hoặc tìm khu vực, chạm các góc, chạm lại góc đầu rồi **Lưu ranh giới**. Chưa chọn cây thì bên trong là vùng xám, viền mang màu nhóm.
+4. Chọn cây trong thẻ vườn hoặc cài đặt. Bổ sung vụ hoặc tháng gieo, tưới và số đo thực tế có ngày đo. Mỗi vườn đánh giá riêng; không hứa màu xanh khi thiếu căn cứ.
+5. Nhấn nút **Nhóm vườn** hoặc **Vườn riêng** rồi chọn mục trong danh sách để lọc bản đồ. Đổi màu nhóm để thấy mọi đường viền vườn con đổi theo. Thử tải lại để kiểm tra khôi phục hồ sơ.
+6. Xóa vườn từ bánh răng, đọc hộp xác nhận. Chỉ vườn và số đo gắn riêng bị xóa; nhóm và các vườn anh em được giữ.
+
+Kịch bản cũ bên dưới là phần khám phá điều kiện/chiến thuật bổ sung, sau khi đã tạo và khoanh một vườn con theo luồng mới.
 ## Mục tiêu trình diễn
 Trong 60–90 giây (hoặc 3 phút khi Q&A), ban giám khảo thấy rõ luồng quyết định thực tế cho người nông dân ĐBSCL:
 **Chạm & khoanh ruộng trên ảnh vệ tinh → Đọc cân bằng nước NASA POWER & điều kiện đất thực tế → Đánh giá 3 chiến lược (tách rõ điều kiện tham gia vs. mức rủi ro) → Thử bật/tắt tưới hoặc giả định năm khô nhất để thấy khuyến nghị thay đổi có giải thích.**

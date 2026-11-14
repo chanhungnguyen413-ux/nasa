@@ -112,8 +112,9 @@ function auRefreshAppUI({ restoreGarden = false, resetMap = false } = {}) {
         Object.assign(MFD, { mode: null, draft: [], note: null })
       }
       if (typeof MG !== 'undefined') {
+        if (typeof mgCloseNameModal === 'function') mgCloseNameModal()
         MG.layer?.clearLayers()
-        Object.assign(MG, { formOpen: false, notice: null })
+        Object.assign(MG, { formOpen: false, notice: null, selector: null, modal: null })
       }
       if (typeof MD !== 'undefined') {
         MD.layer?.clearLayers()

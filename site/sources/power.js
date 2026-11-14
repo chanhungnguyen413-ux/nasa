@@ -128,15 +128,18 @@ export function powerClimate(record, { origin = 'network' } = {}) {
 
 /* ---------------------------------------------------------------
  * Bộ nhớ đệm trong trình duyệt (localStorage). Trong Node không có localStorage thì bỏ qua.
- * Khoá theo toạ độ làm tròn 0,01° (sai lệch: không theo đúng ô lưới POWER vì chưa kiểm chứng biên ô; xem STATE.md).
+ * Khoá theo điểm yêu cầu, không dùng khoá 0,01° chung cho các vườn lân cận.
  * --------------------------------------------------------------- */
-const powerCacheKey = (lat, lon) => `mvm-power-v1-${lat.toFixed(2)}_${lon.toFixed(2)}`
+const powerCacheKey = (lat, lon) => `mvm-power-v2-${lat.toFixed(6)}_${lon.toFixed(6)}`
 const powerStore = () => (typeof localStorage === 'undefined' ? null : localStorage)
+
+export const powerCacheMatches = (record,lat,lon) => Number.isFinite(record?.lat) && Number.isFinite(record?.lon) && Math.abs(record.lat-lat)<1e-6 && Math.abs(record.lon-lon)<1e-6
 
 export function powerReadCache(lat, lon) {
   try {
-    const raw = powerStore()?.getItem(powerCacheKey(lat, lon))
-    return raw ? JSON.parse(raw) : null
+    const raw = powerStore()?.getItem(powerCacheKey(lat, lon)) ?? powerStore()?.getItem(`mvm-power-v1-${lat.toFixed(2)}_${lon.toFixed(2)}`)
+    const record=raw ? JSON.parse(raw) : null
+    return powerCacheMatches(record,lat,lon) ? record : null
   } catch {
     return null
   }

@@ -3,11 +3,13 @@ import { CROP_LIB_IDS, CROP_LIBRARY } from '../data/cropLibrary.js'
 import { PROVINCES } from '../data/provinces.js'
 import { MAP_TEXT } from '../i18n/mapText.js'
 import { P3_TEXT } from '../i18n/phase3Text.js'
-import { suitAssess, suitFindWindow, SUIT_PARAMS } from '../logic/suitability.js'
+import { suitAssess, suitWindow, SUIT_PARAMS } from '../logic/suitability.js'
+import { seasonWindows } from '../logic/rotation.js'
+import { districtInputs } from '../logic/rotationInputs.js'
 import { powerClimate } from '../sources/power.js'
 
 const CSM = {
-  crop: 'lua',
+  crop: 'rice',
   period: 'dx', // 'dx' | 'ht' | 'td' | 'year'
   selectedId: null,
   layer: null,
@@ -16,30 +18,28 @@ const CSM = {
 const csmT = () => MAP_TEXT[S.lang].suitMap
 const CSM_FILL = { green: '#5b8c1a', yellow: '#c58a12', red: '#8f2f14', gray: '#9aa59e' }
 
-function csmPeriodMonths(districtId, period) {
-  const rule = PRECOMPUTED.rule.districts.find((d) => d.id === districtId)
-  if (period === 'year') return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-  if (rule) {
-    const w = suitFindWindow(rule, period)
-    if (w?.months?.length) return w.months
-  }
-  const fallback = { dx: [12, 1, 2, 3], ht: [4, 5, 6, 7], td: [8, 9, 10, 11] }
-  return fallback[period] ?? [1, 2, 3, 4]
+function csmSeasonWindow(districtId, period) {
+  // Dùng cùng lịch NDVI với trang Luân canh; không tự gán lịch vụ cố định cho huyện thiếu lịch.
+  const windows = seasonWindows(districtInputs(PRECOMPUTED, districtId).peakDays)
+  const ndviWindow = windows?.find((w) => w.season === period)
+  if (ndviWindow) return suitWindow({ ndviWindow, crop: CSM.crop })
+  if (period !== 'year') return null
+  // Chế độ cả năm chỉ tổng hợp khí hậu, không gọi đó là lịch một vụ đã kiểm chứng.
+  const months = Array.from({ length: 12 }, (_, i) => i + 1)
+  return { season: period, months, days: Math.round(months.length * 30.4), source: 'annual' }
 }
 
 function csmAssessAll() {
   return PROVINCES.map((p) => {
     const stored = PRECOMPUTED.power.find((d) => d.id === p.id)
     const climate = stored?.record ? powerClimate(stored.record) : null
-    const rule = PRECOMPUTED.rule.districts.find((d) => d.id === p.id) ?? null
-    const months = csmPeriodMonths(p.id, CSM.period)
-    const window = rule && CSM.period !== 'year' ? suitFindWindow(rule, CSM.period) : { season: CSM.period, months, days: months.length * 30 }
-    const result = suitAssess({
-      cropId: CSM.crop,
-      window: window ?? { season: CSM.period, months, days: months.length * 30 },
+    const window = csmSeasonWindow(p.id, CSM.period)
+    const result = window ? suitAssess({
+      crop: CSM.crop,
+      window,
       climate,
-      irrigation: 'adequate',
-    })
+      irrigation: null, // Bản đồ vùng chưa biết nguồn tưới của từng hộ, giữ trạng thái thiếu.
+    }) : { crop: CSM.crop, known: true, overall: 'gray', limiting: [], criteria: [], window: null }
     return { province: p, climate, window, result }
   })
 }
@@ -128,7 +128,7 @@ function csmExplainHtml(item) {
       <div class="mt-3 space-y-2.5 text-xs">
         <div>
           <p class="font-extrabold text-ink">${T.whyColor}</p>
-          ${reasons ? `<ul>${reasons}</ul>` : `<p class="mt-0.5 text-muted">${esc(F.summary.green)}</p>`}
+          ${reasons ? `<ul>${reasons}</ul>` : `<p class="mt-0.5 text-muted">${esc(r.overall === 'gray' ? F.overallGray : F.summary.green)}</p>`}
         </div>
         <div>
           <p class="font-extrabold text-ink">${T.mainRisk}</p>

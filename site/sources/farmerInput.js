@@ -29,6 +29,7 @@ export function fiCheck(key, raw) {
  *   Ruộng là một điểm: cách điểm đó không quá matchDistanceM (ngưỡng do nhóm chọn).
  */
 export function fiBelongs(item, field, params = HARMONIZE_PARAMS) {
+  if (item.gardenId && item.gardenId !== field?.gardenId) return false
   if (!field?.center) return false
   const p = [item.lat, item.lon]
   // Số đo "cả ruộng" (và file không tọa độ) được gắn với điểm đã chọn của ruộng: vẫn thuộc ruộng đó kể cả khi

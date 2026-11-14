@@ -6,9 +6,9 @@ import { fiBelongs, fiMarksForField, fiSoilForField } from '../sources/farmerInp
 import { UPLOAD_VARIABLES } from '../sources/upload.js'
 
 /** Ruộng đang xem → đơn vị phân tích (một điểm, hoặc lưới ô nếu đã khoanh). */
-export function fdField(loc, polygon = null) {
+export function fdField(loc, polygon = null, gardenId = null) {
   if (!loc) return null
-  return hzField({ point: [loc.lat, loc.lon], polygon })
+  return { ...hzField({ point: [loc.lat, loc.lon], polygon }), gardenId }
 }
 
 /** Độ phân giải gốc để ghi lên Evidence: số người dùng nhập, không thì "không rõ". */
@@ -20,6 +20,7 @@ const fdResolution = (m) => (m ? evText(`${m} m (người dùng nhập)`, `${m} 
  * Trả về null nếu file không thuộc ruộng này, ngược lại { upload, layer, fieldRecords, months (12 Evidence) | value (Evidence) }.
  */
 export function fdApplyUpload(upload, field) {
+  if (upload.gardenId && upload.gardenId !== field.gardenId) return null
   const pp = upload.passport
   const info = UPLOAD_VARIABLES[pp.variable]
   const located = upload.records.some((r) => r.lat !== null)

@@ -21,7 +21,7 @@
     <!-- Leaflet 1.9.4 (BSD-2-Clause), nhúng bởi scripts/build-site.mjs cho bản đồ ở trang "Ruộng của tôi" -->
     <style>/*__LEAFLET_CSS__*/</style>
   </head>
-  <body class="bg-ground text-ink antialiased">
+  <body class="bg-ground text-ink antialiased" data-view="home">
     <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-lime-400 focus:px-4 focus:py-2 focus:font-bold focus:text-moss-950">Bỏ qua menu · Skip to content</a>
 
     <header id="nav" data-solid="false" class="group fixed inset-x-0 top-0 z-40 transition-all duration-300 data-[solid=true]:bg-white/90 data-[solid=true]:shadow-card data-[solid=true]:backdrop-blur-md"></header>
@@ -30,11 +30,11 @@
          Địa chỉ sau dấu # quyết định trang nào mở: #/ · #/luan-canh · #/ruong-hom-nay · #/thoi-tiet · #/nguon-du-lieu -->
     <main id="main" tabindex="-1" class="outline-none">
       <div data-page="home">
-        <section id="hero" class="relative isolate flex min-h-[600px] items-end overflow-hidden bg-moss-900 pb-12 pt-28 text-white sm:min-h-[calc(100svh-212px)] sm:pb-14 [@media(max-height:780px)]:pt-24"></section>
-        <section id="stats" class="bg-moss-950 text-white"></section>
-        <section id="mission" class="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-28"></section>
-        <section id="pages" class="mx-auto max-w-6xl px-5 pb-8 sm:px-8"></section>
-        <section id="contact" class="mx-auto max-w-6xl px-5 py-20 sm:px-8 sm:py-24"></section>
+        <section id="hero" class="mk-hero"></section>
+        <section id="stats" class="mk-stats"></section>
+        <section id="pages" class="mk-tools"></section>
+        <section id="mission" class="mk-process"></section>
+        <section id="contact" class="mk-contact"></section>
       </div>
       <!-- Mọi trang con: đệm trên = chiều cao thanh menu (4.5rem), rồi tiêu đề trang cách thêm pt-16 / sm:pt-20,
            để tiêu đề của cả bốn trang nằm cùng một độ cao. -->
@@ -49,7 +49,7 @@
         <section id="sources" class="bg-white pb-20 pt-16 sm:pb-24 sm:pt-20"></section>
       </div>
     </main>
-    <footer id="footer" class="border-t border-line bg-white pb-28 pt-10 sm:pb-10"></footer>
+    <footer id="footer" class="mk-footer"></footer>
 
     <div id="mobilebar" class="fixed inset-x-0 bottom-0 z-40 sm:hidden"></div>
     <div id="fab" class="fixed bottom-6 right-6 z-40 hidden sm:block"></div>
@@ -226,7 +226,7 @@
         village: { id: 'photo-1634016345888-9249da8ce9f4', by: 'ダモ リ' },
         canal: { id: 'photo-1624937195771-358add2e0d9d', by: 'Trang Trinh' },
       }
-      const photoUrl = (key, w = 900) => `https://images.unsplash.com/${PHOTOS[key].id}?w=${w}&q=70&auto=format&fit=crop`
+      const photoUrl = (key, w = 900) => key === 'hero' ? '/*__HERO_PHOTO__*/' : `https://images.unsplash.com/${PHOTOS[key].id}?w=${w}&q=70&auto=format&fit=crop`
       const photo = (key, w, cls, alt = '') =>
         `<img src="${photoUrl(key, w)}" alt="${alt}" loading="lazy" decoding="async" class="${cls}" onerror="this.style.visibility='hidden'" />`
 
@@ -353,6 +353,7 @@
       function showPage(id) {
         const changed = S.page !== id
         S.page = id
+        document.body.dataset.view = id
         S.menuOpen = false
         document.querySelectorAll('[data-page]').forEach((el) => (el.hidden = el.dataset.page !== id))
         const page = PAGES.find((p) => p.id === id)
@@ -414,75 +415,36 @@
         const L_ = l()
         const AT = MAP_TEXT[S.lang]?.auth ?? MAP_TEXT.vi.auth
         const curUser = typeof AU !== 'undefined' ? AU.user : null
-        const authDesktop = curUser
-          ? `<div class="hidden items-center gap-1.5 sm:flex">
-              <span class="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold text-white group-data-[solid=true]:bg-moss-50 group-data-[solid=true]:text-moss-950">${icon('user', 'size-3.5')}${esc(curUser.displayName || curUser.email)}</span>
-              <button type="button" data-au="logout" class="inline-flex items-center gap-1 rounded-full border border-white/40 px-3 py-1.5 text-xs font-bold text-white hover:bg-white/15 group-data-[solid=true]:border-line group-data-[solid=true]:text-ink group-data-[solid=true]:hover:bg-ground">${icon('log-out', 'size-3.5')}${AT.logoutBtn}</button>
-            </div>`
-          : `<button type="button" data-au="openModal" class="hidden items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-bold text-moss-950 transition-all duration-300 hover:-translate-y-0.5 hover:bg-lime-400 sm:inline-flex group-data-[solid=true]:bg-moss-900 group-data-[solid=true]:text-white group-data-[solid=true]:hover:bg-moss-800">${icon('user', 'size-4')}${AT.loginBtn}</button>`
-        const authMobile = curUser
-          ? `<div class="mt-1 flex items-center justify-between gap-2 border-t border-line px-3 pt-2.5 pb-1">
-              <span class="inline-flex items-center gap-1.5 text-xs font-bold text-moss-950">${icon('user', 'size-4')}${esc(curUser.displayName || curUser.email)}</span>
-              <button type="button" data-au="logout" class="inline-flex items-center gap-1 rounded-full border border-line px-3 py-1.5 text-xs font-bold text-ink">${icon('log-out', 'size-3.5')}${AT.logoutBtn}</button>
-            </div>`
-          : `<button type="button" data-au="openModal" class="mt-1 flex w-full items-center gap-3 rounded-2xl border-t border-line px-4 py-3 text-[15px] font-bold text-moss-900 hover:bg-moss-50"><span class="grid size-9 place-items-center rounded-full bg-moss-900 text-white">${icon('user', 'size-4')}</span>${AT.loginBtn}</button>`
-        const link = (p) =>
-          `<a href="${pageHref(p.id)}" ${S.page === p.id ? 'aria-current="page"' : ''} class="rounded-full px-3 py-2 text-sm font-semibold text-white/85 transition-colors hover:text-white aria-[current=page]:bg-white/15 aria-[current=page]:text-white group-data-[solid=true]:text-muted group-data-[solid=true]:hover:text-ink group-data-[solid=true]:aria-[current=page]:bg-moss-50 group-data-[solid=true]:aria-[current=page]:text-moss-900">${L_[p.nav]}</a>`
-        const mobileLink = (p) =>
-          `<a href="${pageHref(p.id)}" ${S.page === p.id ? 'aria-current="page"' : ''} class="flex items-center gap-3 rounded-2xl px-4 py-3 text-[15px] font-bold text-ink hover:bg-moss-50 aria-[current=page]:bg-moss-50 aria-[current=page]:text-moss-900"><span class="grid size-9 place-items-center rounded-full bg-lime-400 text-moss-950">${icon(p.icon, 'size-4')}</span>${L_[p.nav]}</a>`
+        const link = (p) => `<a href="${pageHref(p.id)}" ${S.page === p.id ? 'aria-current="page"' : ''}>${L_[p.nav]}</a>`
+        const auth = curUser
+          ? `<span class="mk-user">${icon('user', 'size-4')}<span>${esc(curUser.displayName || curUser.email)}</span></span><button type="button" data-au="logout" class="mk-login">${icon('log-out', 'size-4')}<span>${AT.logoutBtn}</span></button>`
+          : `<button type="button" data-au="openModal" class="mk-login">${icon('user-round', 'size-4')}<span>${AT.loginBtn}</span></button>`
         $('#nav').innerHTML = `
-          <nav class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8" aria-label="${L_.navLabel}">
-            <a href="${pageHref('home')}" class="flex items-center gap-2.5 text-white group-data-[solid=true]:text-moss-950" aria-label="${appName()}">
-              <span class="grid size-9 place-items-center rounded-full bg-lime-400 text-moss-950">${icon('sprout', 'size-5')}</span>
-              <span class="text-[15px] font-extrabold tracking-tight">${appName()}</span>
-            </a>
-            <div class="hidden items-center gap-1 lg:flex">
-              ${menuPages().map(link).join('')}
-            </div>
-            <div class="flex items-center gap-2">
-              <div role="group" aria-label="${t().langLabel}" class="flex rounded-full border border-white/40 p-0.5 group-data-[solid=true]:border-line">
-                ${['vi', 'en']
-                  .map(
-                    (v) =>
-                      `<button type="button" data-action="lang" data-value="${v}" aria-pressed="${S.lang === v}" class="rounded-full px-3 py-1.5 text-[13px] font-bold text-white/85 transition-colors group-data-[solid=true]:text-muted aria-pressed:bg-lime-400 aria-pressed:text-moss-950 group-data-[solid=true]:aria-pressed:text-moss-950">${v.toUpperCase()}</button>`,
-                  )
-                  .join('')}
-              </div>
-              ${authDesktop}
-              <button type="button" data-action="menu" aria-expanded="${S.menuOpen}" aria-controls="mobile-menu" aria-label="${L_.menu}" class="grid size-10 place-items-center rounded-full border border-white/40 text-white lg:hidden group-data-[solid=true]:border-line group-data-[solid=true]:text-ink">${icon(S.menuOpen ? 'x' : 'menu', 'size-5')}</button>
-            </div>
+          <nav class="mk-nav" aria-label="${L_.navLabel}">
+            <a href="${pageHref('home')}" class="mk-brand" aria-label="${appName()}"><span class="mk-brand-icon">${icon('sprout', 'size-6')}</span><span>${appName()}<span class="mk-brand-dot">.</span></span></a>
+            <div class="mk-nav-links">${menuPages().map(link).join('')}</div>
+            <div class="mk-nav-actions"><div class="mk-languages" role="group" aria-label="${t().langLabel}">${['vi', 'en'].map((v) => `<button type="button" data-action="lang" data-value="${v}" aria-pressed="${S.lang === v}">${v.toUpperCase()}</button>`).join('')}</div><div class="mk-auth-desktop">${auth}</div><button type="button" class="mk-menu-toggle" data-action="menu" aria-expanded="${S.menuOpen}" aria-controls="mobile-menu" aria-label="${L_.menu}">${icon(S.menuOpen ? 'x' : 'menu', 'size-5')}</button></div>
           </nav>
-          ${
-            S.menuOpen
-              ? `<div id="mobile-menu" class="mx-5 mb-3 rounded-[28px] border border-line bg-white p-2 shadow-lift sm:mx-8 lg:hidden">${menuPages().map(mobileLink).join('')}${authMobile}</div>`
-              : ''
-          }`
+          ${S.menuOpen ? `<div id="mobile-menu" class="mk-mobile-menu">${menuPages().map(link).join('')}<div class="mk-mobile-auth">${auth}</div></div>` : ''}`
       }
 
       /* ================================================================
        * Hero + stats + mission
        * ================================================================ */
       function renderHero() {
-        const L_ = l()
+        const H = REDESIGN_TEXT[S.lang]
         $('#hero').innerHTML = `
-          <div class="absolute inset-0 -z-10 bg-moss-800">
-            ${photo('hero', 2000, 'hero-photo size-full object-cover saturate-[.8]', '')}
-          </div>
-          <div class="absolute inset-0 -z-10 bg-moss-950/35"></div>
-          <div class="absolute inset-0 -z-10 bg-gradient-to-r from-moss-950/75 via-moss-950/35 to-moss-950/5"></div>
-          <div class="absolute inset-0 -z-10 bg-gradient-to-b from-moss-950/60 via-transparent to-moss-950/80"></div>
-          <div class="mx-auto w-full max-w-6xl px-5 sm:px-8">
-            <div class="max-w-2xl" data-reveal>
-              <h1 class="text-[2.6rem] font-extrabold leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl [@media(min-width:640px)_and_(max-height:780px)]:text-5xl">${L_.heroTitle}</h1>
-              <p class="mt-5 max-w-xl text-lg leading-relaxed text-white/80">${L_.heroSub}</p>
-              <div class="mt-8 flex flex-wrap gap-3">
-                ${pillBtn(`${L_.heroPrimary}${icon('arrow-down', 'size-4')}`, 'data-action="goto" data-value="myfield"', 'lime')}
-                ${pillBtn(L_.heroSecondary, 'data-action="goto" data-value="sources"', 'outline')}
-              </div>
+          <div class="mk-hero-grid mk-container">
+            <div class="mk-hero-copy" data-reveal>
+              <p class="mk-eyebrow"><span class="mk-live-dot"></span>${H.eyebrow}</p>
+              <h1>${H.title}<br><span>${H.titleAccent}</span></h1>
+              <p class="mk-hero-intro">${H.intro}</p>
+              <div class="mk-hero-actions"><a href="${pageHref('myfield')}" class="mk-button mk-button-primary">${H.primary}${icon('arrow-up-right', 'size-5')}</a><a href="${pageHref('sources')}" class="mk-text-link">${H.secondary}${icon('arrow-right', 'size-4')}</a></div>
+              <p class="mk-hero-note">${icon('map-pin', 'size-4')}${H.note}</p><div id="hero-chip"></div>
             </div>
-            <div class="mt-12 flex flex-wrap items-end justify-between gap-6 [@media(max-height:780px)]:mt-7" data-reveal style="transition-delay:180ms">
-              <div id="hero-chip" class="max-w-xl"></div>
-              <a href="#stats" aria-label="${L_.scrollDown}" class="hidden size-12 place-items-center rounded-full border border-white/40 text-white transition-all duration-300 hover:bg-white/10 sm:grid">${icon('arrow-down', 'size-5')}</a>
+            <div class="mk-hero-visual" data-reveal style="transition-delay:120ms">
+              <div class="mk-photo-frame"><img src="${photoUrl('hero', 1400)}" alt="${H.photoAlt}" class="mk-main-photo" fetchpriority="high" decoding="async" onerror="this.hidden=true" /><div class="mk-photo-shade"></div><span class="mk-region">${icon('map-pin', 'size-3.5')}${H.region}</span><div class="mk-photo-caption"><strong>${H.photoLabel}</strong><span>${H.photoNote}</span></div><a href="${pageHref('myfield')}" class="mk-photo-open" aria-label="${H.primary}">${icon('arrow-up-right', 'size-6')}</a></div>
+              <div class="mk-orbit-card"><span class="mk-orbit-icon">${icon('satellite', 'size-6')}</span><div><strong>${H.orbitLabel}</strong><span>NASA POWER · MODIS</span></div>${icon('radio', 'size-5 mk-orbit-signal')}</div><div class="mk-visual-coordinate" aria-hidden="true">MEKONG / EARTH OBSERVATION</div>
             </div>
           </div>`
       }
@@ -494,54 +456,23 @@
       }
 
       function renderStats() {
-        $('#stats').innerHTML = `
-          <div class="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-8 px-5 py-9 sm:px-8 lg:grid-cols-3">
-            ${l()
-              .stats.map(
-                (s, i) => `
-              <div data-reveal style="transition-delay:${i * 90}ms">
-                <p class="tabular whitespace-nowrap font-extrabold tracking-tight ${s.text ? 'text-[2.4rem] sm:text-6xl' : 'text-5xl sm:text-6xl'}">
-                  ${s.text ? s.text : `<span data-count="${s.value}">${s.value}</span>`}${s.unit ? `<span class="text-3xl font-bold text-lime-400 sm:text-4xl">${s.unit}</span>` : ''}
-                </p>
-                <p class="mt-3 text-[15px] font-semibold text-white">${s.label}</p>
-                <p class="mt-0.5 text-sm text-moss-100/70">${s.note}</p>
-              </div>`,
-              )
-              .join('')}
-          </div>`
+        const H = REDESIGN_TEXT[S.lang]
+        $('#stats').innerHTML = `<div class="mk-container mk-stats-inner"><div class="mk-stats-heading"><p class="mk-eyebrow">${H.dataLabel}</p><p>${H.dataTitle}</p><a href="${pageHref('sources')}" class="mk-source-link">NASA POWER <span>↗</span> MODIS <span>↗</span></a></div><div class="mk-stats-grid">${l().stats.map((st) => `<div class="mk-stat"><p class="mk-stat-number">${st.value}${st.unit ? `<span>${st.unit}</span>` : ''}</p><strong>${st.label}</strong><span>${st.note}</span></div>`).join('')}</div></div>`
       }
 
       function renderMission() {
-        const L_ = l()
-        const words = (s, cls = 'word') => s.split(' ').map((w) => `<span class="${cls}">${w}</span>`).join(' ')
-        $('#mission').innerHTML = `
-          <p class="max-w-5xl text-[1.7rem] font-bold leading-[1.3] tracking-tight sm:text-4xl sm:leading-[1.25]" data-mission>
-            ${words(L_.missionA)}
-            ${words(L_.missionB, 'word soft')}
-          </p>`
+        const H = REDESIGN_TEXT[S.lang]
+        $('#mission').innerHTML = `<div class="mk-container mk-process-grid"><div class="mk-process-intro"><p class="mk-eyebrow">${H.processEyebrow}</p><h2>${H.processTitle.replace('\n', '<br>')}</h2><p>${H.processIntro}</p><span class="mk-process-mark" aria-hidden="true">${icon('sprout', 'size-20')}</span></div><ol class="mk-steps">${H.steps.map((st, i) => `<li data-reveal><span class="mk-step-number">0${i + 1}</span><div><h3>${st.title}</h3><p>${st.text}</p></div>${icon(['map-pin', 'satellite', 'sprout'][i], 'size-6 mk-step-icon')}</li>`).join('')}</ol></div>`
       }
 
       /* ================================================================
        * Home: "Where to start?" — one card per page
        * ================================================================ */
       function renderPagesOverview() {
-        const L_ = l()
-        $('#pages').innerHTML = `
-          <div class="max-w-2xl" data-reveal>
-            <h2 class="text-4xl font-extrabold tracking-tight sm:text-5xl">${L_.pagesTitle}</h2>
-            <p class="mt-3 text-lg leading-relaxed text-muted">${L_.pagesSub}</p>
-          </div>
-          <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">${menuPages().filter((p) => p.id !== 'home')
-            .map(
-              (p, i) => `
-            <a href="${pageHref(p.id)}" class="group flex flex-col rounded-[28px] border border-line bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-moss-700 hover:shadow-lift" data-reveal style="transition-delay:${i * 80}ms">
-              <span class="grid size-12 place-items-center rounded-full bg-lime-400 text-moss-950">${icon(p.icon, 'size-5')}</span>
-              <span class="mt-5 text-xl font-extrabold tracking-tight">${L_[p.nav]}</span>
-              <span class="mt-2 text-[15px] leading-relaxed text-muted">${L_.pageCards[p.id]}</span>
-              <span class="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-bold text-moss-700 group-hover:text-ink">${L_.openPage}${icon('arrow-right', 'size-4 transition-transform duration-300 group-hover:translate-x-1')}</span>
-            </a>`,
-            )
-            .join('')}</div>`
+        const H = REDESIGN_TEXT[S.lang]
+        const ids = ['myfield', 'rotations', 'sources']
+        const icons = ['map', 'calendar-range', 'database']
+        $('#pages').innerHTML = `<div class="mk-container"><div class="mk-section-heading" data-reveal><div><p class="mk-eyebrow">${H.toolsEyebrow}</p><h2>${H.toolsTitle.replace('\n', '<br>')}</h2></div><p>${H.toolsSub}</p></div><div class="mk-tool-grid">${H.tools.map((tool, i) => `<a href="${pageHref(ids[i])}" class="mk-tool-card ${i === 0 ? 'mk-tool-featured' : ''}" data-reveal style="transition-delay:${i * 80}ms"><div class="mk-tool-top"><span class="mk-tool-icon">${icon(icons[i], 'size-6')}</span><span class="mk-tool-number">0${i + 1}</span></div><h3>${tool.label}</h3><p>${tool.desc}</p><span class="mk-tool-detail">${tool.detail}</span><span class="mk-tool-action">${tool.action}<span>${icon('arrow-up-right', 'size-5')}</span></span></a>`).join('')}</div></div>`
       }
 
       /* ================================================================
@@ -862,42 +793,13 @@
        * CTA, footer
        * ================================================================ */
       function renderCta() {
-        const L_ = l()
-        const T_ = t()
-        $('#contact').innerHTML = `
-          <div class="relative isolate overflow-hidden rounded-[32px] bg-moss-800 px-6 py-14 sm:px-12 sm:py-20" data-reveal>
-            <div class="absolute inset-0 -z-10">${photo('village', 1800, 'size-full object-cover')}</div>
-            <div class="absolute inset-0 -z-10 bg-gradient-to-r from-moss-950/85 via-moss-950/50 to-transparent"></div>
-            <div class="max-w-2xl rounded-[28px] bg-white p-7 shadow-lift sm:p-9">
-              <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">${L_.ctaTitle}</h2>
-              <p class="mt-3 leading-relaxed text-muted">${L_.ctaSub}</p>
-              <div class="mt-6 flex flex-wrap gap-3">
-                ${pillBtn(`${L_.ctaRotations}${icon('arrow-up', 'size-4')}`, 'data-action="goto" data-value="rotations"', 'lime')}
-                ${pillBtn(`${L_.navMyField}${icon('arrow-up', 'size-4')}`, 'data-action="goto" data-value="myfield"', 'ghost')}
-                ${pillBtn(`${icon('bot', 'size-4')}${T_.askAssistant}`, 'data-action="assistant"', 'dark')}
-              </div>
-            </div>
-          </div>`
+        const H = REDESIGN_TEXT[S.lang]
+        $('#contact').innerHTML = `<div class="mk-container"><div class="mk-cta-panel" data-reveal><div><p class="mk-eyebrow">${H.ctaEyebrow}</p><h2>${H.ctaTitle.replace('\n', '<br>')}</h2></div><div class="mk-cta-copy"><p>${H.ctaText}</p><a href="${pageHref('myfield')}" class="mk-button mk-button-lime">${H.primary}${icon('arrow-up-right', 'size-5')}</a><span>${H.independent}</span></div><div class="mk-cta-orbits" aria-hidden="true"></div></div></div>`
       }
 
       function renderFooter() {
-        const L_ = l()
-        const T_ = t()
-        const credits = [...new Set(Object.values(PHOTOS).map((p) => p.by))].join(', ')
-        $('#footer').innerHTML = `
-          <div class="mx-auto flex max-w-6xl flex-col gap-4 px-5 text-sm text-muted sm:px-8 md:flex-row md:items-start md:justify-between">
-            <div>
-              <div class="flex items-center gap-2.5 text-ink"><span class="grid size-8 place-items-center rounded-full bg-lime-400 text-moss-950">${icon('sprout', 'size-4')}</span><span class="font-extrabold">${appName()}</span></div>
-              <nav aria-label="${L_.navLabel}" class="mt-4 flex flex-wrap gap-x-4 gap-y-2">${menuPages().map(
-                (p) => `<a href="${pageHref(p.id)}" ${S.page === p.id ? 'aria-current="page"' : ''} class="font-semibold text-muted hover:text-ink aria-[current=page]:text-moss-900 aria-[current=page]:underline aria-[current=page]:underline-offset-4">${L_[p.nav]}</a>`,
-              ).join('')}</nav>
-            </div>
-            <div class="max-w-2xl space-y-1.5 md:text-right">
-              <p>${L_.footerSources}</p>
-              <p>${L_.credits}: ${esc(credits)}.</p>
-              <p class="font-semibold text-ink">${T_.footer}</p>
-            </div>
-          </div>`
+        const H = REDESIGN_TEXT[S.lang]
+        $('#footer').innerHTML = `<div class="mk-container"><div class="mk-footer-top"><div><a href="${pageHref('home')}" class="mk-brand"><span class="mk-brand-icon">${icon('sprout', 'size-6')}</span><span>${appName()}<span class="mk-brand-dot">.</span></span></a><p>${H.footerNote}</p></div><nav aria-label="${l().navLabel}">${menuPages().map((p) => `<a href="${pageHref(p.id)}" ${S.page === p.id ? 'aria-current="page"' : ''}>${l()[p.nav]}</a>`).join('')}</nav></div><div class="mk-footer-bottom"><span>${H.independent}</span><span>${H.photoCredit}</span></div></div>`
       }
 
       function renderFloating() {

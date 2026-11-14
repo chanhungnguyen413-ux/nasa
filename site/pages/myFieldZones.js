@@ -5,6 +5,7 @@ import { DATA_TEXT } from '../i18n/dataText.js'
 import { P3_TEXT } from '../i18n/phase3Text.js'
 import { CROP_LIB_IDS, CROP_LIBRARY } from '../data/cropLibrary.js'
 import { znAssess, znRadius } from '../logic/zones.js'
+import { gmSoilInputs, gmScopeRecords } from '../logic/gardenModel.js'
 
 const MFZ = { crop: null, focus: null, layer: null }
 const mfzT = () => P3_TEXT[S.lang].zones
@@ -28,7 +29,11 @@ function mfzRefresh(data) {
   let body = ''
   if (MFZ.crop) {
     const card = data.results.find((r) => r.crop === MFZ.crop)
-    const z = znAssess({ crop: MFZ.crop, window: card.window, climate: data.climate, irrigation: MF.irrigation, field, soil: DS.soil, marks: DS.marks })
+    if (!card?.window) { mfzClearLayer(); el.innerHTML = ''; return }
+    const garden = mgActiveGarden()
+    const soil = garden ? gmSoilInputs(garden,DS.soil) : DS.soil
+    const marks = garden ? gmScopeRecords(DS.marks, garden) : DS.marks
+    const z = znAssess({ crop: MFZ.crop, window: card.window, climate: data.climate, irrigation: MF.irrigation, field, soil, marks })
     mfzDrawLayer(field, z)
     body = mfzListHtml(field, z, data)
   } else mfzClearLayer()

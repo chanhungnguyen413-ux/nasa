@@ -6,6 +6,7 @@
 import { evidence } from '../core/evidence.js'
 import { CROP_LIBRARY } from '../data/cropLibrary.js'
 import { PROVINCES } from '../data/provinces.js'
+import { REDESIGN_TEXT } from '../i18n/redesignText.js'
 import { MAP_TEXT } from '../i18n/mapText.js'
 import { ROT_TEXT } from '../i18n/rotationText.js'
 import { STRAT_TEXT } from '../i18n/strategyText.js'
@@ -36,6 +37,13 @@ const MW = {
   openStratWhy: new Set(),
 }
 const mwT = () => MAP_TEXT[S.lang]
+const mwDesktop = () => matchMedia('(min-width: 1024px)').matches
+
+addEventListener('resize', () => {
+  if (S.page !== 'myfield') return
+  mwSyncSheetStyle()
+  MF.map?.invalidateSize()
+})
 
 function mwCurrentInputKey(data = null) {
   const poly = mfdPolygon()
@@ -95,6 +103,7 @@ function mwRunEvaluate(data) {
 function mwRenderShell() {
   const T = mwT()
   const R = mfT()
+
   const tabBtn = (id, label) =>
     `<button type="button" data-mw-tab="${id}" class="min-h-11 flex-1 rounded-full px-3 text-xs font-extrabold transition-colors sm:text-sm">${label}</button>`
 
@@ -147,6 +156,11 @@ function mwRenderShell() {
             ${['peek', 'half', 'full'].map((k) => `<button type="button" data-mw-sheet="${k}" class="min-h-8 rounded-full px-2.5 text-[11px] font-bold">${T.sheet[k]}</button>`).join('')}
           </div>
         </div>
+        <div class="mk-workspace-title">
+          <p class="mk-eyebrow">${REDESIGN_TEXT[S.lang].workspaceEyebrow}</p>
+          <h1>${icon('sprout', 'size-5')}${REDESIGN_TEXT[S.lang].workspaceTitle}</h1>
+          <p>${REDESIGN_TEXT[S.lang].workspaceSub}</p>
+        </div>
         <div class="shrink-0 border-b border-line bg-white p-2.5">
           <div class="flex gap-1 rounded-full bg-ground p-1" role="tablist">
             ${tabBtn('field', T.tabs.field)}${tabBtn('suit', T.tabs.suit)}${tabBtn('cond', T.tabs.cond)}${tabBtn('compare', T.tabs.compare)}
@@ -169,7 +183,7 @@ function mwRenderShell() {
 function mwSyncSheetStyle() {
   const p = $('#mw-panel')
   if (!p) return
-  if (wide()) {
+  if (mwDesktop()) {
     p.style.height = ''
   } else {
     p.style.height = MW.sheet === 'peek' ? '116px' : MW.sheet === 'half' ? '50dvh' : '84dvh'
@@ -237,7 +251,7 @@ function mwRenderLegend() {
   const T = mwT()
   const R = mfT()
   const layer = GIBS_LAYERS.find((l) => l.key === MF.layer)
-  const zoneCrop = MFZ.crop ? CROP_LIBRARY[MFZ.crop]?.name[S.lang] : null
+  const zoneCrop = MW.tab !== 'field' && MFZ.crop ? CROP_LIBRARY[MFZ.crop]?.name[S.lang] : null
   if (!layer && !zoneCrop && !MW.tilesOffline) {
     el.innerHTML = ''
     return
@@ -274,6 +288,16 @@ function mwRenderBody() {
   const T = mwT()
   const R = mfT()
 
+  if (MW.tab === 'field') {
+    if (dock) { dock.hidden = true; dock.classList.add('hidden') }
+    if (typeof csmClearLayer === 'function') csmClearLayer()
+    mfzClearLayer()
+    body.innerHTML = mgWorkspaceHtml()
+    mdUpdateLiveArea()
+    return
+  }
+  MG.layer?.clearLayers()
+
   if (MW.tab === 'suit') {
     if (dock) {
       dock.hidden = true
@@ -294,30 +318,6 @@ function mwRenderBody() {
   }
 
   const data = mfCompute()
-  if (MW.tab === 'field') {
-    if (dock) {
-      dock.hidden = true
-      dock.classList.add('hidden')
-    }
-    const cal = fsCalendarSource(MF.loc, PROVINCES)
-    const calName = cal.districtId ? PROVINCES.find((p) => p.id === cal.districtId)?.name : null
-    const calNote =
-      cal.mode === 'borrowed'
-        ? `<p class="mt-3 rounded-2xl border border-line bg-moss-50 px-3.5 py-2.5 text-xs font-semibold text-moss-900">${esc(T.cond.borrowedCal(calName, mfNum(cal.distanceKm, 1), GEO_PARAMS.districtRadiusKm))}</p>`
-        : cal.mode === 'none'
-          ? `<p class="mt-3 rounded-2xl border border-dashed border-line bg-white px-3.5 py-2.5 text-xs font-semibold text-muted">${esc(T.cond.outsideCal(GEO_PARAMS.districtRadiusKm))}</p>`
-          : ''
-    body.innerHTML = `
-      ${typeof mgGardensBarHtml === 'function' ? mgGardensBarHtml() : ''}
-      <div id="mf-selected" class="mt-4">${mfSelectedHtml()}</div>
-      ${calNote}
-      ${typeof mgConditionSummaryHtml === 'function' ? mgConditionSummaryHtml(data) : ''}
-      <div id="mf-tools" class="mt-4">${mdToolsHtml()}</div>
-      <div id="mf-zones" class="mt-4"></div>`
-    mfzRefresh(data)
-    return
-  }
-
   if (MW.tab === 'cond') {
     if (dock) {
       dock.hidden = true
@@ -491,7 +491,7 @@ document.addEventListener('click', (e) => {
   const tab = e.target.closest('[data-mw-tab]')
   if (tab) {
     MW.tab = tab.dataset.mwTab
-    if (!wide() && MW.sheet === 'peek') MW.sheet = 'half'
+    if (!mwDesktop() && MW.sheet === 'peek') MW.sheet = 'half'
     return mfRenderDynamic()
   }
   const sheet = e.target.closest('[data-mw-sheet]')
@@ -526,7 +526,7 @@ document.addEventListener('click', (e) => {
     case 'pickNew':
       MW.picking = true
       MW.confirmGeo = false
-      if (!wide()) MW.sheet = 'peek'
+      if (!mwDesktop()) MW.sheet = 'peek'
       mwSyncSheetStyle()
       return mwRenderTopNotices()
     case 'cancelPick':
@@ -547,7 +547,7 @@ document.addEventListener('click', (e) => {
       MW.tab = 'compare'
       const data = mfCompute()
       mwRunEvaluate(data)
-      if (!wide() && MW.sheet === 'peek') MW.sheet = 'full'
+      if (!mwDesktop() && MW.sheet === 'peek') MW.sheet = 'full'
       return mfRenderDynamic()
     }
     case 'stratWhy':

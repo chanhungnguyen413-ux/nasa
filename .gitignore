@@ -9,3 +9,6 @@ node_modules
 
 # File tạm Python sinh ra khi chạy scripts/python/*.py
 __pycache__/
+
+# Ảnh kiểm tra và hồ sơ trình duyệt thử nghiệm cục bộ.
+.preview/

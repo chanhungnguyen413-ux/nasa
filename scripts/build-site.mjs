@@ -23,6 +23,8 @@ const template = read('site/template.html')
 const modules = [
   'site/data/provinces.js',
   'site/i18n/strings.js',
+  'site/i18n/redesignText.js',
+  'site/i18n/gardenText.js',
   'site/i18n/glossary.js',
   'site/core/evidence.js',
   'site/logic/assistantFallback.js',
@@ -49,6 +51,7 @@ const modules = [
   'site/logic/strategies.js',
   'site/logic/cropPriority.js',
   'site/logic/zones.js',
+  'site/logic/gardenModel.js',
   'site/logic/geometry.js',
   'site/logic/fieldStrategies.js',
   'site/i18n/fieldText.js',
@@ -150,8 +153,9 @@ const fonts = [400, 500, 600, 700, 800]
   .join('\n')
 
 const html = template
+  .replace('/*__HERO_PHOTO__*/', () => `data:image/jpeg;base64,${readFileSync(join(root, 'site/assets/mekong-fields.jpg')).toString('base64')}`)
   .replace('/*__FONTS__*/', () => fonts)
-  .replace('/*__CSS__*/', () => css)
+  .replace('/*__CSS__*/', () => css + '\n' + read('site/redesign.css') + '\n' + read('site/gardens.css'))
   .replace('/*__ICONS__*/ {}', () => JSON.stringify(icons))
   .replace('/*__LOGIC__*/', () => logic)
   .replace('/*__LEAFLET_CSS__*/', () => leafletCss)

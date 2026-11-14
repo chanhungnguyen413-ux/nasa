@@ -8,10 +8,12 @@ import { DATA_TEXT } from '../site/i18n/dataText.js'
 import { STRAT_TEXT } from '../site/i18n/strategyText.js'
 import { P3_TEXT } from '../site/i18n/phase3Text.js'
 import { MAP_TEXT } from '../site/i18n/mapText.js'
+import { REDESIGN_TEXT } from '../site/i18n/redesignText.js'
+import { GARDEN_TEXT } from '../site/i18n/gardenText.js'
 
 function keys(obj, prefix = '') {
   return Object.entries(obj).flatMap(([k, v]) =>
-    v && typeof v === 'object' && !Array.isArray(v) ? keys(v, `${prefix}${k}.`) : [`${prefix}${k}`],
+    v && typeof v === 'object' ? keys(v, `${prefix}${k}.`) : [`${prefix}${k}`],
   )
 }
 
@@ -26,6 +28,8 @@ for (const [name, table] of [
   ['strategy', STRAT_TEXT],
   ['phase3', P3_TEXT],
   ['map', MAP_TEXT],
+  ['redesign', REDESIGN_TEXT],
+  ['gardens', GARDEN_TEXT],
 ]) {
   const vi = new Set(keys(table.vi))
   const en = new Set(keys(table.en))

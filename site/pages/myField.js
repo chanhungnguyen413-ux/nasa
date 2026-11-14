@@ -13,6 +13,7 @@ import { MAP_TEXT } from '../i18n/mapText.js'
 import { cpSort } from '../logic/cropPriority.js'
 import { DATA_TEXT } from '../i18n/dataText.js'
 import { FIELD_TEXT } from '../i18n/fieldText.js'
+import { gmHasBoundary } from '../logic/gardenModel.js'
 import { et0Months } from '../logic/et0.js'
 import { seasonWindows } from '../logic/rotation.js'
 import { districtInputs } from '../logic/rotationInputs.js'
@@ -152,6 +153,7 @@ function mfCompute() {
   const extra = mfdSuitInputs(user)
   const results = MF_CROPS.map((crop) => {
     const ndviWindow = windows ? windows.find((w) => w.season === MF.season) : null
+    if (!ndviWindow && !MF.sowing) return { crop, known: true, overall: 'gray', worstSeen: null, limiting: [], gradedCount: 0, totalCount: 6, criteria: [], window: null }
     return suitAssess({ crop, window: suitWindow({ ndviWindow, sowingMonth: MF.sowing, crop }), climate, irrigation: MF.irrigation, ...extra })
   })
   const uploadRain = user?.uploads.find((u) => u.upload.passport.variable === 'rain' && u.months)?.months ?? null
@@ -175,8 +177,10 @@ function renderMyField() {
 
 /* Gọi từ showPage() trong template mỗi khi trang này hiện ra: bản đồ chỉ khởi tạo được khi khung đang hiện. */
 function myFieldOnShow() {
+  mwSyncSheetStyle() // Đồng bộ chiều cao ngay cả khi đã đổi kích thước lúc đang ở trang khác.
   if (!MF.map) mfInitMap()
   else MF.map.invalidateSize()
+  mgRestoreSelection()
   mfdRestore() // mở lại trang: chọn lại ruộng đã lưu trên máy
 }
 
@@ -252,6 +256,7 @@ function mfApplyMarker() {
   if (!MF.map || !Lf) return
   if (MF.marker) MF.marker.remove()
   if (typeof mgDrawAllGardens === 'function') mgDrawAllGardens()
+  if (typeof mgActiveGarden === 'function' && mgActiveGarden()) { mfdDrawLayers(); return }
   if (!MF.loc) return
   MF.marker = Lf.circleMarker([MF.loc.lat, MF.loc.lon], { radius: 9, color: '#0b2e1b', weight: 3, fillColor: '#b8e55a', fillOpacity: 1 }).addTo(MF.map)
   mfdDrawLayers() // ranh thửa và đánh dấu của nông dân
@@ -273,6 +278,8 @@ function mfApplyOverlay() {
  * Hiện ngay bản có sẵn (nếu có), rồi thay bằng bản mới khi mạng trả lời.
  * ================================================================ */
 async function mfSelect(loc) {
+  const garden=typeof mgActiveGarden==='function'?mgActiveGarden():null
+  if(garden && gmHasBoundary(garden) && Math.abs(garden.lat-loc.lat)<1e-7 && Math.abs(garden.lon-loc.lon)<1e-7) return mgSelectGarden(garden.id,{fit:false})
   mfdOnSelect(loc)
   MF.loc = loc
   const seq = ++MF.seq

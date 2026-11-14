@@ -101,6 +101,7 @@ function mdCommit(poly, { skipNameModal = false } = {}) {
     $('#mf-tools')?.querySelector('[role="alert"]')?.scrollIntoView({ block: 'nearest' })
     return false
   }
+  if (typeof mgCommitBoundary === 'function' && mgActiveGarden()) return mgCommitBoundary(poly)
   if (!skipNameModal && typeof mgOpenNameModal === 'function' && MD.mode === 'draw_poly') {
     MD.closed = true
     MD.cursor = null

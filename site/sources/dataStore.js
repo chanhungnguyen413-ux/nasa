@@ -1,12 +1,14 @@
-// Kho dữ liệu của người dùng, lưu NGAY TRÊN MÁY (localStorage; không gửi đi đâu):
+// Kho dữ liệu của người dùng: localStorage, đồng bộ tài khoản qua authStore khi đã đăng nhập.
+//   gardenGroups: tên/màu; gardenView: bộ lọc; gardens[].profile: chỉ số riêng của vườn con.
 //   field   ruộng đang xem { lat, lon, id?, name?, polygon? }
 //   uploads file đã nhận { id, passport, records: [[ngày, giá trị, vĩ độ, kinh độ]], anchor, createdAt }
 //   soil    số đo đất { id, date, where, lat, lon, ph, ec, ecType, om, soilType }
 //   marks   đánh dấu của nông dân { id, type, lat, lon, date }
 // Lưu không được (bộ nhớ đầy hoặc bị chặn): vẫn dùng trong phiên này và trang nói rõ là chưa lưu.
+import { gmColor, gmMigrateRecords, gmNormalizeGarden, gmNormalizeSnapshot } from '../logic/gardenModel.js'
 const DS_KEY = 'mvm-data-v1'
 
-export const DS = { field: null, gardens: [], activeGardenId: null, uploads: [], soil: [], marks: [], saved: true }
+export const DS = { field: null, gardens: [], gardenGroups: [], gardenView: { mode: 'group', id: null }, activeGardenId: null, uploads: [], soil: [], marks: [], saved: true }
 
 const dsStore = () => (typeof localStorage === 'undefined' ? null : localStorage)
 const dsActiveKey = () => (typeof auStorageKey === 'function' ? auStorageKey() : DS_KEY)
@@ -15,6 +17,8 @@ export function dsSnapshot() {
   return {
     field: DS.field,
     gardens: DS.gardens,
+    gardenGroups: DS.gardenGroups,
+    gardenView: DS.gardenView,
     activeGardenId: DS.activeGardenId,
     uploads: DS.uploads,
     soil: DS.soil,
@@ -23,13 +27,14 @@ export function dsSnapshot() {
 }
 
 export function dsApplySnapshot(data = null) {
+  const normalized=gmNormalizeSnapshot(data)
   Object.assign(DS, {
     field: data?.field ?? null,
-    gardens: Array.isArray(data?.gardens) ? data.gardens : [],
+    ...normalized,
     activeGardenId: data?.activeGardenId ?? null,
-    uploads: Array.isArray(data?.uploads) ? data.uploads : [],
-    soil: Array.isArray(data?.soil) ? data.soil : [],
-    marks: Array.isArray(data?.marks) ? data.marks : [],
+    uploads: gmMigrateRecords(Array.isArray(data?.uploads) ? data.uploads : [],normalized.gardens),
+    soil: gmMigrateRecords(Array.isArray(data?.soil) ? data.soil : [],normalized.gardens),
+    marks: gmMigrateRecords(Array.isArray(data?.marks) ? data.marks : [],normalized.gardens),
   })
   return DS
 }
@@ -76,7 +81,17 @@ export const dsPackRecords = (records) => records.map((r) => [r.date, r.value, r
 export const dsUnpackRecords = (rows) => rows.map(([date, value, lat, lon]) => ({ date, value, lat, lon }))
 
 export function dsAdd(kind, item) {
-  DS[kind].push({ id: dsNewId(), ...item })
+  DS[kind].push({ id: dsNewId(), gardenId: DS.activeGardenId ?? null, ...item })
+  // Phiếu đo mới cho cả vườn cũng cập nhật settings, để hai màn hình dùng cùng một hồ sơ hiện hành.
+  const g=DS.gardens.find(g=>g.id===(item.gardenId ?? DS.activeGardenId))
+  if(kind==='soil' && item.where==='field' && g) {
+    const profile={...g.profile}
+    for(const key of ['ph','ec','om']) if(typeof item[key]==='number')profile[key]=item[key]
+    if(typeof item.ec==='number')profile.ecType=item.ecType ?? 'unknown'
+    if(item.date)profile.measuredAt=item.date
+    if(item.soilType && item.soilType!=='unknown')profile.soilType=item.soilType
+    g.profile=gmNormalizeGarden({...g,profile}).profile
+  }
   return dsSave()
 }
 
@@ -94,22 +109,22 @@ export function dsSaveGarden(garden) {
   const now = new Date().toISOString()
   const id = garden.id || dsNewId()
   const idx = DS.gardens.findIndex((g) => g.id === id)
-  const entry = {
+  const entry = gmNormalizeGarden({
     ...(idx >= 0 ? DS.gardens[idx] : { createdAt: now }),
     ...garden,
     id,
     updatedAt: now,
-  }
+  })
   if (idx >= 0) DS.gardens[idx] = entry
   else DS.gardens.push(entry)
   DS.activeGardenId = id
-  DS.field = {
+  DS.field = Number.isFinite(entry.lat) && Number.isFinite(entry.lon) ? {
     lat: entry.lat,
     lon: entry.lon,
     id: entry.districtId ?? null,
     name: entry.districtName ?? entry.name ?? null,
     polygon: entry.polygon ? entry.polygon.map((p) => [...p]) : null,
-  }
+  } : null
   dsSave()
   return entry
 }
@@ -118,23 +133,25 @@ export function dsSelectGarden(id) {
   const g = DS.gardens.find((x) => x.id === id)
   if (!g) return null
   DS.activeGardenId = g.id
-  DS.field = {
+  DS.field = Number.isFinite(g.lat) && Number.isFinite(g.lon) ? {
     lat: g.lat,
     lon: g.lon,
     id: g.districtId ?? null,
     name: g.districtName ?? g.name ?? null,
     polygon: g.polygon ? g.polygon.map((p) => [...p]) : null,
-  }
+  } : null
   dsSave()
   return g
 }
 
 export function dsDeleteGarden(id) {
   DS.gardens = DS.gardens.filter((g) => g.id !== id)
+  for (const kind of ['soil', 'marks', 'uploads']) DS[kind] = DS[kind].filter(item => item.gardenId !== id)
+  if (DS.gardenView.mode === 'garden' && DS.gardenView.id === id) DS.gardenView = { mode: 'group', id: DS.gardenGroups[0]?.id ?? null }
   if (DS.activeGardenId === id) {
     const next = DS.gardens[0] ?? null
     DS.activeGardenId = next?.id ?? null
-    DS.field = next
+    DS.field = next && Number.isFinite(next.lat) && Number.isFinite(next.lon)
       ? {
           lat: next.lat,
           lon: next.lon,
@@ -145,4 +162,17 @@ export function dsDeleteGarden(id) {
       : null
   }
   return dsSave()
+}
+
+export function dsSaveGroup(group) {
+  const now = new Date().toISOString()
+  const id = group.id || dsNewId()
+  const old = DS.gardenGroups.find(g => g.id === id)
+  const entry = { ...old, ...group, id, color: gmColor(group.color ?? old?.color), updatedAt: now, createdAt: old?.createdAt ?? now }
+  const idx = DS.gardenGroups.findIndex(g => g.id === id)
+  if (idx >= 0) DS.gardenGroups[idx] = entry
+  else DS.gardenGroups.push(entry)
+  if (!DS.gardenView.id) DS.gardenView = { mode: 'group', id }
+  dsSave()
+  return entry
 }
