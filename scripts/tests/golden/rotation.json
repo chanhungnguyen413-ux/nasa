@@ -1,0 +1,9119 @@
+{
+ "_ghiChu": "Ảnh chụp kết quả của code tại thời điểm ghi. KHÔNG sửa tay. Chỉ ghi lại bằng `node scripts/update-golden.mjs` khi cố ý đổi logic và đã đọc bảng kiểm tra in ra.",
+ "cases": {
+  "cantho | mac-dinh": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 1,
+     "months": [
+      9,
+      10,
+      11,
+      12,
+      1
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 4,
+     "months": [
+      2,
+      3,
+      4
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 8,
+     "months": [
+      5,
+      6,
+      7,
+      8
+     ]
+    }
+   ],
+   "calendarConfidence": "medium",
+   "rotations": [
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 86
+     },
+     "total": 97,
+     "contributions": {
+      "water": 25,
+      "soil": 25,
+      "income": 25,
+      "risk": 21.5
+     },
+     "measures": {
+      "extraMm": 309,
+      "dryPenaltyMm": 520,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 678,
+        "rainDryMm": 346,
+        "extraMm": 0,
+        "extraDryMm": 229,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 400,
+        "rainMm": 91,
+        "rainDryMm": 6,
+        "extraMm": 309,
+        "extraDryMm": 394,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 650,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 206,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 309,
+        "extraDryMm": 829,
+        "penaltyMm": 520,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 88,
+     "contributions": {
+      "water": 25,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 309,
+      "dryPenaltyMm": 445,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 678,
+        "rainDryMm": 346,
+        "extraMm": 0,
+        "extraDryMm": 229,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 400,
+        "rainMm": 91,
+        "rainDryMm": 6,
+        "extraMm": 309,
+        "extraDryMm": 394,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 309,
+        "extraDryMm": 754,
+        "penaltyMm": 445,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 55,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 76,
+     "contributions": {
+      "water": 13.8,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 559,
+      "dryPenaltyMm": 445,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 678,
+        "rainDryMm": 346,
+        "extraMm": 0,
+        "extraDryMm": 229,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 650,
+        "rainMm": 91,
+        "rainDryMm": 6,
+        "extraMm": 559,
+        "extraDryMm": 644,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 559,
+        "extraDryMm": 1004,
+        "penaltyMm": 445,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 91,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 64,
+      "soil": 0,
+      "income": 40,
+      "risk": 100
+     },
+     "total": 51,
+     "contributions": {
+      "water": 16,
+      "soil": 0,
+      "income": 10,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 484,
+      "dryPenaltyMm": 445,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 678,
+        "rainDryMm": 346,
+        "extraMm": 0,
+        "extraDryMm": 229,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 575,
+        "rainMm": 91,
+        "rainDryMm": 6,
+        "extraMm": 484,
+        "extraDryMm": 569,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 484,
+        "extraDryMm": 929,
+        "penaltyMm": 445,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "cantho | uu-tien-lech": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 1,
+     "months": [
+      9,
+      10,
+      11,
+      12,
+      1
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 4,
+     "months": [
+      2,
+      3,
+      4
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 8,
+     "months": [
+      5,
+      6,
+      7,
+      8
+     ]
+    }
+   ],
+   "calendarConfidence": "medium",
+   "rotations": [
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 100,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 33.3
+     },
+     "measures": {
+      "extraMm": 309,
+      "dryPenaltyMm": 445,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 678,
+        "rainDryMm": 346,
+        "extraMm": 0,
+        "extraDryMm": 229,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 400,
+        "rainMm": 91,
+        "rainDryMm": 6,
+        "extraMm": 309,
+        "extraDryMm": 394,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 309,
+        "extraDryMm": 754,
+        "penaltyMm": 445,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 86
+     },
+     "total": 95,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 28.7
+     },
+     "measures": {
+      "extraMm": 309,
+      "dryPenaltyMm": 520,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 678,
+        "rainDryMm": 346,
+        "extraMm": 0,
+        "extraDryMm": 229,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 400,
+        "rainMm": 91,
+        "rainDryMm": 6,
+        "extraMm": 309,
+        "extraDryMm": 394,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 650,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 206,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 309,
+        "extraDryMm": 829,
+        "penaltyMm": 520,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 55,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 75,
+     "contributions": {
+      "water": 30.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 33.3
+     },
+     "measures": {
+      "extraMm": 559,
+      "dryPenaltyMm": 445,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 678,
+        "rainDryMm": 346,
+        "extraMm": 0,
+        "extraDryMm": 229,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 650,
+        "rainMm": 91,
+        "rainDryMm": 6,
+        "extraMm": 559,
+        "extraDryMm": 644,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 559,
+        "extraDryMm": 1004,
+        "penaltyMm": 445,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 91,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 64,
+      "soil": 0,
+      "income": 40,
+      "risk": 100
+     },
+     "total": 73,
+     "contributions": {
+      "water": 35.6,
+      "soil": 0,
+      "income": 4.4,
+      "risk": 33.3
+     },
+     "measures": {
+      "extraMm": 484,
+      "dryPenaltyMm": 445,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 678,
+        "rainDryMm": 346,
+        "extraMm": 0,
+        "extraDryMm": 229,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 575,
+        "rainMm": 91,
+        "rainDryMm": 6,
+        "extraMm": 484,
+        "extraDryMm": 569,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 484,
+        "extraDryMm": 929,
+        "penaltyMm": 445,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "cantho | mua-kho-giam-30": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 1,
+     "months": [
+      9,
+      10,
+      11,
+      12,
+      1
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 4,
+     "months": [
+      2,
+      3,
+      4
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 8,
+     "months": [
+      5,
+      6,
+      7,
+      8
+     ]
+    }
+   ],
+   "calendarConfidence": "medium",
+   "rotations": [
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 85
+     },
+     "total": 96,
+     "contributions": {
+      "water": 25,
+      "soil": 25,
+      "income": 25,
+      "risk": 21.3
+     },
+     "measures": {
+      "extraMm": 337,
+      "dryPenaltyMm": 497,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 659,
+        "rainDryMm": 343,
+        "extraMm": 0,
+        "extraDryMm": 232,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 400,
+        "rainMm": 63,
+        "rainDryMm": 4,
+        "extraMm": 337,
+        "extraDryMm": 396,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 650,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 206,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 337,
+        "extraDryMm": 834,
+        "penaltyMm": 497,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 88,
+     "contributions": {
+      "water": 25,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 337,
+      "dryPenaltyMm": 422,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 659,
+        "rainDryMm": 343,
+        "extraMm": 0,
+        "extraDryMm": 232,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 400,
+        "rainMm": 63,
+        "rainDryMm": 4,
+        "extraMm": 337,
+        "extraDryMm": 396,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 337,
+        "extraDryMm": 759,
+        "penaltyMm": 422,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 57,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 77,
+     "contributions": {
+      "water": 14.3,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 587,
+      "dryPenaltyMm": 422,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 659,
+        "rainDryMm": 343,
+        "extraMm": 0,
+        "extraDryMm": 232,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 650,
+        "rainMm": 63,
+        "rainDryMm": 4,
+        "extraMm": 587,
+        "extraDryMm": 646,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 587,
+        "extraDryMm": 1009,
+        "penaltyMm": 422,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 91,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 66,
+      "soil": 0,
+      "income": 40,
+      "risk": 100
+     },
+     "total": 52,
+     "contributions": {
+      "water": 16.5,
+      "soil": 0,
+      "income": 10,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 512,
+      "dryPenaltyMm": 422,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         9,
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 659,
+        "rainDryMm": 343,
+        "extraMm": 0,
+        "extraDryMm": 232,
+        "windowDays": 152,
+        "rootWetness": 0.82,
+        "hotDays": 1.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         2,
+         3,
+         4
+        ],
+        "needMm": 575,
+        "rainMm": 63,
+        "rainDryMm": 4,
+        "extraMm": 512,
+        "extraDryMm": 571,
+        "windowDays": 91,
+        "rootWetness": 0.54,
+        "hotDays": 61.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         5,
+         6,
+         7,
+         8
+        ],
+        "needMm": 575,
+        "rainMm": 837,
+        "rainDryMm": 444,
+        "extraMm": 0,
+        "extraDryMm": 131,
+        "windowDays": 122,
+        "rootWetness": 0.75,
+        "hotDays": 8.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 512,
+        "extraDryMm": 934,
+        "penaltyMm": 422,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "medium",
+        "min": 1.6,
+        "max": 2.8
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "angiang | mac-dinh": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 1,
+     "months": [
+      10,
+      11,
+      12,
+      1
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 5,
+     "months": [
+      2,
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 9,
+     "months": [
+      6,
+      7,
+      8,
+      9
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 87
+     },
+     "total": 97,
+     "contributions": {
+      "water": 25,
+      "soil": 25,
+      "income": 25,
+      "risk": 21.8
+     },
+     "measures": {
+      "extraMm": 336,
+      "dryPenaltyMm": 580,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 369,
+        "rainDryMm": 175,
+        "extraMm": 206,
+        "extraDryMm": 400,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 400,
+        "rainMm": 270,
+        "rainDryMm": 96,
+        "extraMm": 130,
+        "extraDryMm": 304,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 650,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 212,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 336,
+        "extraDryMm": 916,
+        "penaltyMm": 580,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 88,
+     "contributions": {
+      "water": 25,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 336,
+      "dryPenaltyMm": 505,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 369,
+        "rainDryMm": 175,
+        "extraMm": 206,
+        "extraDryMm": 400,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 400,
+        "rainMm": 270,
+        "rainDryMm": 96,
+        "extraMm": 130,
+        "extraDryMm": 304,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 336,
+        "extraDryMm": 841,
+        "penaltyMm": 505,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 57,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 77,
+     "contributions": {
+      "water": 14.3,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 586,
+      "dryPenaltyMm": 505,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 369,
+        "rainDryMm": 175,
+        "extraMm": 206,
+        "extraDryMm": 400,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 650,
+        "rainMm": 270,
+        "rainDryMm": 96,
+        "extraMm": 380,
+        "extraDryMm": 554,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 586,
+        "extraDryMm": 1091,
+        "penaltyMm": 505,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 66,
+      "soil": 0,
+      "income": 40,
+      "risk": 100
+     },
+     "total": 52,
+     "contributions": {
+      "water": 16.5,
+      "soil": 0,
+      "income": 10,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 511,
+      "dryPenaltyMm": 505,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 369,
+        "rainDryMm": 175,
+        "extraMm": 206,
+        "extraDryMm": 400,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 575,
+        "rainMm": 270,
+        "rainDryMm": 96,
+        "extraMm": 305,
+        "extraDryMm": 479,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 511,
+        "extraDryMm": 1016,
+        "penaltyMm": 505,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "angiang | uu-tien-lech": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 1,
+     "months": [
+      10,
+      11,
+      12,
+      1
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 5,
+     "months": [
+      2,
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 9,
+     "months": [
+      6,
+      7,
+      8,
+      9
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 100,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 33.3
+     },
+     "measures": {
+      "extraMm": 336,
+      "dryPenaltyMm": 505,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 369,
+        "rainDryMm": 175,
+        "extraMm": 206,
+        "extraDryMm": 400,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 400,
+        "rainMm": 270,
+        "rainDryMm": 96,
+        "extraMm": 130,
+        "extraDryMm": 304,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 336,
+        "extraDryMm": 841,
+        "penaltyMm": 505,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 87
+     },
+     "total": 96,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 29
+     },
+     "measures": {
+      "extraMm": 336,
+      "dryPenaltyMm": 580,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 369,
+        "rainDryMm": 175,
+        "extraMm": 206,
+        "extraDryMm": 400,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 400,
+        "rainMm": 270,
+        "rainDryMm": 96,
+        "extraMm": 130,
+        "extraDryMm": 304,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 650,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 212,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 336,
+        "extraDryMm": 916,
+        "penaltyMm": 580,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 57,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 76,
+     "contributions": {
+      "water": 31.7,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 33.3
+     },
+     "measures": {
+      "extraMm": 586,
+      "dryPenaltyMm": 505,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 369,
+        "rainDryMm": 175,
+        "extraMm": 206,
+        "extraDryMm": 400,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 650,
+        "rainMm": 270,
+        "rainDryMm": 96,
+        "extraMm": 380,
+        "extraDryMm": 554,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 586,
+        "extraDryMm": 1091,
+        "penaltyMm": 505,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 66,
+      "soil": 0,
+      "income": 40,
+      "risk": 100
+     },
+     "total": 74,
+     "contributions": {
+      "water": 36.7,
+      "soil": 0,
+      "income": 4.4,
+      "risk": 33.3
+     },
+     "measures": {
+      "extraMm": 511,
+      "dryPenaltyMm": 505,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 369,
+        "rainDryMm": 175,
+        "extraMm": 206,
+        "extraDryMm": 400,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 575,
+        "rainMm": 270,
+        "rainDryMm": 96,
+        "extraMm": 305,
+        "extraDryMm": 479,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 511,
+        "extraDryMm": 1016,
+        "penaltyMm": 505,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "angiang | mua-kho-giam-30": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 1,
+     "months": [
+      10,
+      11,
+      12,
+      1
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 5,
+     "months": [
+      2,
+      3,
+      4,
+      5
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 9,
+     "months": [
+      6,
+      7,
+      8,
+      9
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 86
+     },
+     "total": 97,
+     "contributions": {
+      "water": 25,
+      "soil": 25,
+      "income": 25,
+      "risk": 21.5
+     },
+     "measures": {
+      "extraMm": 388,
+      "dryPenaltyMm": 538,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 352,
+        "rainDryMm": 172,
+        "extraMm": 223,
+        "extraDryMm": 403,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 400,
+        "rainMm": 235,
+        "rainDryMm": 89,
+        "extraMm": 165,
+        "extraDryMm": 311,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 650,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 212,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 388,
+        "extraDryMm": 926,
+        "penaltyMm": 538,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 88,
+     "contributions": {
+      "water": 25,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 388,
+      "dryPenaltyMm": 463,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 352,
+        "rainDryMm": 172,
+        "extraMm": 223,
+        "extraDryMm": 403,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 400,
+        "rainMm": 235,
+        "rainDryMm": 89,
+        "extraMm": 165,
+        "extraDryMm": 311,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 388,
+        "extraDryMm": 851,
+        "penaltyMm": 463,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 61,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 78,
+     "contributions": {
+      "water": 15.3,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 638,
+      "dryPenaltyMm": 463,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 352,
+        "rainDryMm": 172,
+        "extraMm": 223,
+        "extraDryMm": 403,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 650,
+        "rainMm": 235,
+        "rainDryMm": 89,
+        "extraMm": 415,
+        "extraDryMm": 561,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 638,
+        "extraDryMm": 1101,
+        "penaltyMm": 463,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 69,
+      "soil": 0,
+      "income": 40,
+      "risk": 100
+     },
+     "total": 52,
+     "contributions": {
+      "water": 17.3,
+      "soil": 0,
+      "income": 10,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 563,
+      "dryPenaltyMm": 463,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         10,
+         11,
+         12,
+         1
+        ],
+        "needMm": 575,
+        "rainMm": 352,
+        "rainDryMm": 172,
+        "extraMm": 223,
+        "extraDryMm": 403,
+        "windowDays": 122,
+        "rootWetness": 0.77,
+        "hotDays": 4.1,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         2,
+         3,
+         4,
+         5
+        ],
+        "needMm": 575,
+        "rainMm": 235,
+        "rainDryMm": 89,
+        "extraMm": 340,
+        "extraDryMm": 486,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 72.2,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         6,
+         7,
+         8,
+         9
+        ],
+        "needMm": 575,
+        "rainMm": 888,
+        "rainDryMm": 438,
+        "extraMm": 0,
+        "extraDryMm": 137,
+        "windowDays": 122,
+        "rootWetness": 0.82,
+        "hotDays": 0.5,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 563,
+        "extraDryMm": 1026,
+        "penaltyMm": 463,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "soctrang | mac-dinh": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 2,
+     "months": [
+      11,
+      12,
+      1,
+      2
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 6,
+     "months": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 10,
+     "months": [
+      7,
+      8,
+      9,
+      10
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 94
+     },
+     "total": 99,
+     "contributions": {
+      "water": 25,
+      "soil": 25,
+      "income": 25,
+      "risk": 23.5
+     },
+     "measures": {
+      "extraMm": 333,
+      "dryPenaltyMm": 314,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 242,
+        "rainDryMm": 101,
+        "extraMm": 333,
+        "extraDryMm": 474,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 400,
+        "rainMm": 516,
+        "rainDryMm": 245,
+        "extraMm": 0,
+        "extraDryMm": 155,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 650,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 18,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 333,
+        "extraDryMm": 647,
+        "penaltyMm": 314,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskWaterlogging",
+       "season": "td",
+       "crop": "maize",
+       "rootWetness": 0.95,
+       "flag": 0.85
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 88,
+     "contributions": {
+      "water": 25,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 333,
+      "dryPenaltyMm": 296,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 242,
+        "rainDryMm": 101,
+        "extraMm": 333,
+        "extraDryMm": 474,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 400,
+        "rainMm": 516,
+        "rainDryMm": 245,
+        "extraMm": 0,
+        "extraDryMm": 155,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 333,
+        "extraDryMm": 629,
+        "penaltyMm": 296,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 71,
+      "soil": 50,
+      "income": 100,
+      "risk": 72
+     },
+     "total": 73,
+     "contributions": {
+      "water": 17.8,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 18
+     },
+     "measures": {
+      "extraMm": 467,
+      "dryPenaltyMm": 412,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 242,
+        "rainDryMm": 101,
+        "extraMm": 333,
+        "extraDryMm": 474,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 650,
+        "rainMm": 516,
+        "rainDryMm": 245,
+        "extraMm": 134,
+        "extraDryMm": 405,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 467,
+        "extraDryMm": 879,
+        "penaltyMm": 412,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 85,
+      "soil": 0,
+      "income": 40,
+      "risk": 72
+     },
+     "total": 49,
+     "contributions": {
+      "water": 21.3,
+      "soil": 0,
+      "income": 10,
+      "risk": 18
+     },
+     "measures": {
+      "extraMm": 392,
+      "dryPenaltyMm": 412,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 242,
+        "rainDryMm": 101,
+        "extraMm": 333,
+        "extraDryMm": 474,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 575,
+        "rainMm": 516,
+        "rainDryMm": 245,
+        "extraMm": 59,
+        "extraDryMm": 330,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 392,
+        "extraDryMm": 804,
+        "penaltyMm": 412,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "soctrang | uu-tien-lech": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 2,
+     "months": [
+      11,
+      12,
+      1,
+      2
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 6,
+     "months": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 10,
+     "months": [
+      7,
+      8,
+      9,
+      10
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 100,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 33.3
+     },
+     "measures": {
+      "extraMm": 333,
+      "dryPenaltyMm": 296,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 242,
+        "rainDryMm": 101,
+        "extraMm": 333,
+        "extraDryMm": 474,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 400,
+        "rainMm": 516,
+        "rainDryMm": 245,
+        "extraMm": 0,
+        "extraDryMm": 155,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 333,
+        "extraDryMm": 629,
+        "penaltyMm": 296,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 94
+     },
+     "total": 98,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 31.3
+     },
+     "measures": {
+      "extraMm": 333,
+      "dryPenaltyMm": 314,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 242,
+        "rainDryMm": 101,
+        "extraMm": 333,
+        "extraDryMm": 474,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 400,
+        "rainMm": 516,
+        "rainDryMm": 245,
+        "extraMm": 0,
+        "extraDryMm": 155,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 650,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 18,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 333,
+        "extraDryMm": 647,
+        "penaltyMm": 314,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskWaterlogging",
+       "season": "td",
+       "crop": "maize",
+       "rootWetness": 0.95,
+       "flag": 0.85
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 85,
+      "soil": 0,
+      "income": 40,
+      "risk": 72
+     },
+     "total": 76,
+     "contributions": {
+      "water": 47.2,
+      "soil": 0,
+      "income": 4.4,
+      "risk": 24
+     },
+     "measures": {
+      "extraMm": 392,
+      "dryPenaltyMm": 412,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 242,
+        "rainDryMm": 101,
+        "extraMm": 333,
+        "extraDryMm": 474,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 575,
+        "rainMm": 516,
+        "rainDryMm": 245,
+        "extraMm": 59,
+        "extraDryMm": 330,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 392,
+        "extraDryMm": 804,
+        "penaltyMm": 412,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 71,
+      "soil": 50,
+      "income": 100,
+      "risk": 72
+     },
+     "total": 75,
+     "contributions": {
+      "water": 39.4,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 24
+     },
+     "measures": {
+      "extraMm": 467,
+      "dryPenaltyMm": 412,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 242,
+        "rainDryMm": 101,
+        "extraMm": 333,
+        "extraDryMm": 474,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 650,
+        "rainMm": 516,
+        "rainDryMm": 245,
+        "extraMm": 134,
+        "extraDryMm": 405,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 467,
+        "extraDryMm": 879,
+        "penaltyMm": 412,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    }
+   ]
+  },
+  "soctrang | mua-kho-giam-30": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 2,
+     "months": [
+      11,
+      12,
+      1,
+      2
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 6,
+     "months": [
+      3,
+      4,
+      5,
+      6
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 10,
+     "months": [
+      7,
+      8,
+      9,
+      10
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 94
+     },
+     "total": 99,
+     "contributions": {
+      "water": 25,
+      "soil": 25,
+      "income": 25,
+      "risk": 23.5
+     },
+     "measures": {
+      "extraMm": 357,
+      "dryPenaltyMm": 295,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 218,
+        "rainDryMm": 97,
+        "extraMm": 357,
+        "extraDryMm": 478,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 400,
+        "rainMm": 489,
+        "rainDryMm": 244,
+        "extraMm": 0,
+        "extraDryMm": 156,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 650,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 18,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 357,
+        "extraDryMm": 652,
+        "penaltyMm": 295,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskWaterlogging",
+       "season": "td",
+       "crop": "maize",
+       "rootWetness": 0.95,
+       "flag": 0.85
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 88,
+     "contributions": {
+      "water": 25,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 357,
+      "dryPenaltyMm": 277,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 218,
+        "rainDryMm": 97,
+        "extraMm": 357,
+        "extraDryMm": 478,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 400,
+        "rainMm": 489,
+        "rainDryMm": 244,
+        "extraMm": 0,
+        "extraDryMm": 156,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 357,
+        "extraDryMm": 634,
+        "penaltyMm": 277,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 69,
+      "soil": 50,
+      "income": 100,
+      "risk": 76
+     },
+     "total": 74,
+     "contributions": {
+      "water": 17.3,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 19
+     },
+     "measures": {
+      "extraMm": 518,
+      "dryPenaltyMm": 366,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 218,
+        "rainDryMm": 97,
+        "extraMm": 357,
+        "extraDryMm": 478,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 650,
+        "rainMm": 489,
+        "rainDryMm": 244,
+        "extraMm": 161,
+        "extraDryMm": 406,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 518,
+        "extraDryMm": 884,
+        "penaltyMm": 366,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 81,
+      "soil": 0,
+      "income": 40,
+      "risk": 76
+     },
+     "total": 49,
+     "contributions": {
+      "water": 20.3,
+      "soil": 0,
+      "income": 10,
+      "risk": 19
+     },
+     "measures": {
+      "extraMm": 443,
+      "dryPenaltyMm": 366,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         11,
+         12,
+         1,
+         2
+        ],
+        "needMm": 575,
+        "rainMm": 218,
+        "rainDryMm": 97,
+        "extraMm": 357,
+        "extraDryMm": 478,
+        "windowDays": 122,
+        "rootWetness": 0.76,
+        "hotDays": 2.8,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         3,
+         4,
+         5,
+         6
+        ],
+        "needMm": 575,
+        "rainMm": 489,
+        "rainDryMm": 244,
+        "extraMm": 86,
+        "extraDryMm": 331,
+        "windowDays": 122,
+        "rootWetness": 0.68,
+        "hotDays": 37.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         7,
+         8,
+         9,
+         10
+        ],
+        "needMm": 575,
+        "rainMm": 1072,
+        "rainDryMm": 632,
+        "extraMm": 0,
+        "extraDryMm": 0,
+        "windowDays": 122,
+        "rootWetness": 0.95,
+        "hotDays": 0,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 443,
+        "extraDryMm": 809,
+        "penaltyMm": 366,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "dongthap | mac-dinh": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 3,
+     "months": [
+      12,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 7,
+     "months": [
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 11,
+     "months": [
+      8,
+      9,
+      10,
+      11
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 84
+     },
+     "total": 96,
+     "contributions": {
+      "water": 25,
+      "soil": 25,
+      "income": 25,
+      "risk": 21
+     },
+     "measures": {
+      "extraMm": 491,
+      "dryPenaltyMm": 474,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 84,
+        "rainDryMm": 8,
+        "extraMm": 491,
+        "extraDryMm": 567,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 400,
+        "rainMm": 618,
+        "rainDryMm": 268,
+        "extraMm": 0,
+        "extraDryMm": 132,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 650,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 266,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 491,
+        "extraDryMm": 965,
+        "penaltyMm": 474,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 88,
+     "contributions": {
+      "water": 25,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 491,
+      "dryPenaltyMm": 399,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 84,
+        "rainDryMm": 8,
+        "extraMm": 491,
+        "extraDryMm": 567,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 400,
+        "rainMm": 618,
+        "rainDryMm": 268,
+        "extraMm": 0,
+        "extraDryMm": 132,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 491,
+        "extraDryMm": 890,
+        "penaltyMm": 399,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 94,
+      "soil": 50,
+      "income": 100,
+      "risk": 65
+     },
+     "total": 77,
+     "contributions": {
+      "water": 23.5,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 16.3
+     },
+     "measures": {
+      "extraMm": 523,
+      "dryPenaltyMm": 617,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 84,
+        "rainDryMm": 8,
+        "extraMm": 491,
+        "extraDryMm": 567,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 650,
+        "rainMm": 618,
+        "rainDryMm": 268,
+        "extraMm": 32,
+        "extraDryMm": 382,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 523,
+        "extraDryMm": 1140,
+        "penaltyMm": 617,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 100,
+      "soil": 0,
+      "income": 40,
+      "risk": 70
+     },
+     "total": 53,
+     "contributions": {
+      "water": 25,
+      "soil": 0,
+      "income": 10,
+      "risk": 17.5
+     },
+     "measures": {
+      "extraMm": 491,
+      "dryPenaltyMm": 574,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 84,
+        "rainDryMm": 8,
+        "extraMm": 491,
+        "extraDryMm": 567,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 575,
+        "rainMm": 618,
+        "rainDryMm": 268,
+        "extraMm": 0,
+        "extraDryMm": 307,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 491,
+        "extraDryMm": 1065,
+        "penaltyMm": 574,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "dongthap | uu-tien-lech": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 3,
+     "months": [
+      12,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 7,
+     "months": [
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 11,
+     "months": [
+      8,
+      9,
+      10,
+      11
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 100,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 33.3
+     },
+     "measures": {
+      "extraMm": 491,
+      "dryPenaltyMm": 399,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 84,
+        "rainDryMm": 8,
+        "extraMm": 491,
+        "extraDryMm": 567,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 400,
+        "rainMm": 618,
+        "rainDryMm": 268,
+        "extraMm": 0,
+        "extraDryMm": 132,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 491,
+        "extraDryMm": 890,
+        "penaltyMm": 399,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 84
+     },
+     "total": 95,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 28
+     },
+     "measures": {
+      "extraMm": 491,
+      "dryPenaltyMm": 474,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 84,
+        "rainDryMm": 8,
+        "extraMm": 491,
+        "extraDryMm": 567,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 400,
+        "rainMm": 618,
+        "rainDryMm": 268,
+        "extraMm": 0,
+        "extraDryMm": 132,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 650,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 266,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 491,
+        "extraDryMm": 965,
+        "penaltyMm": 474,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 94,
+      "soil": 50,
+      "income": 100,
+      "risk": 65
+     },
+     "total": 85,
+     "contributions": {
+      "water": 52.2,
+      "soil": 0,
+      "income": 11.1,
+      "risk": 21.7
+     },
+     "measures": {
+      "extraMm": 523,
+      "dryPenaltyMm": 617,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 84,
+        "rainDryMm": 8,
+        "extraMm": 491,
+        "extraDryMm": 567,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 650,
+        "rainMm": 618,
+        "rainDryMm": 268,
+        "extraMm": 32,
+        "extraDryMm": 382,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 523,
+        "extraDryMm": 1140,
+        "penaltyMm": 617,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 100,
+      "soil": 0,
+      "income": 40,
+      "risk": 70
+     },
+     "total": 83,
+     "contributions": {
+      "water": 55.6,
+      "soil": 0,
+      "income": 4.4,
+      "risk": 23.3
+     },
+     "measures": {
+      "extraMm": 491,
+      "dryPenaltyMm": 574,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 84,
+        "rainDryMm": 8,
+        "extraMm": 491,
+        "extraDryMm": 567,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 575,
+        "rainMm": 618,
+        "rainDryMm": 268,
+        "extraMm": 0,
+        "extraDryMm": 307,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 491,
+        "extraDryMm": 1065,
+        "penaltyMm": 574,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "dongthap | mua-kho-giam-30": {
+   "rankable": true,
+   "windows": [
+    {
+     "season": "dx",
+     "peakMonth": 3,
+     "months": [
+      12,
+      1,
+      2,
+      3
+     ]
+    },
+    {
+     "season": "ht",
+     "peakMonth": 7,
+     "months": [
+      4,
+      5,
+      6,
+      7
+     ]
+    },
+    {
+     "season": "td",
+     "peakMonth": 11,
+     "months": [
+      8,
+      9,
+      10,
+      11
+     ]
+    }
+   ],
+   "calendarConfidence": "high",
+   "rotations": [
+    {
+     "id": "D",
+     "crops": [
+      "rice",
+      "mungbean",
+      "maize"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 100,
+      "income": 100,
+      "risk": 83
+     },
+     "total": 96,
+     "contributions": {
+      "water": 25,
+      "soil": 25,
+      "income": 25,
+      "risk": 20.8
+     },
+     "measures": {
+      "extraMm": 516,
+      "dryPenaltyMm": 453,
+      "soilPoints": 4,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 59,
+        "rainDryMm": 6,
+        "extraMm": 516,
+        "extraDryMm": 569,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 400,
+        "rainMm": 603,
+        "rainDryMm": 266,
+        "extraMm": 0,
+        "extraDryMm": 134,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "maize",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 650,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 266,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       },
+       {
+        "code": "soilUpland",
+        "season": "td",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "td",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 516,
+        "extraDryMm": 969,
+        "penaltyMm": 453,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "td",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "td",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "B",
+     "crops": [
+      "rice",
+      "mungbean",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 100,
+      "soil": 50,
+      "income": 100,
+      "risk": 100
+     },
+     "total": 88,
+     "contributions": {
+      "water": 25,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 25
+     },
+     "measures": {
+      "extraMm": 516,
+      "dryPenaltyMm": 378,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 59,
+        "rainDryMm": 6,
+        "extraMm": 516,
+        "extraDryMm": 569,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "mungbean",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 400,
+        "rainMm": 603,
+        "rainDryMm": 266,
+        "extraMm": 0,
+        "extraDryMm": 134,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilLegume",
+        "season": "ht",
+        "crop": "mungbean",
+        "src": "faoPulses"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 516,
+        "extraDryMm": 894,
+        "penaltyMm": 378,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "low",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       },
+       {
+        "code": "confMungbeanProxy",
+        "src": "faoManual3"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      },
+      {
+       "code": "gapMungbeanSalinity",
+       "src": "fao29"
+      }
+     ],
+     "reviewRisks": []
+    },
+    {
+     "id": "C",
+     "crops": [
+      "rice",
+      "maize",
+      "rice"
+     ],
+     "baseline": false,
+     "scores": {
+      "water": 92,
+      "soil": 50,
+      "income": 100,
+      "risk": 65
+     },
+     "total": 77,
+     "contributions": {
+      "water": 23,
+      "soil": 12.5,
+      "income": 25,
+      "risk": 16.3
+     },
+     "measures": {
+      "extraMm": 563,
+      "dryPenaltyMm": 581,
+      "soilPoints": 2,
+      "profitRatio": 2.5
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 59,
+        "rainDryMm": 6,
+        "extraMm": 516,
+        "extraDryMm": 569,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "maize",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 650,
+        "rainMm": 603,
+        "rainDryMm": 266,
+        "extraMm": 47,
+        "extraDryMm": 384,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilUpland",
+        "season": "ht",
+        "crop": "maize",
+        "src": "linh2014"
+       },
+       {
+        "code": "soilDeepRoot",
+        "season": "ht",
+        "crop": "maize",
+        "rootM": [
+         1,
+         1.7
+        ],
+        "riceRootM": [
+         0.5,
+         1
+        ],
+        "src": "fao56"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeTrial",
+        "low": 2.5,
+        "high": 2.9,
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 563,
+        "extraDryMm": 1144,
+        "penaltyMm": 581,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "medium",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       },
+       {
+        "code": "confOneTrial",
+        "src": "linh2014"
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      },
+      {
+       "code": "gapOneSite",
+       "src": "linh2014"
+      }
+     ],
+     "reviewRisks": [
+      {
+       "code": "riskCycleFit",
+       "season": "ht",
+       "crop": "maize",
+       "windowDays": 122,
+       "cycleDays": [
+        125,
+        180
+       ],
+       "src": "faoManual3"
+      },
+      {
+       "code": "riskSalinity",
+       "season": "ht",
+       "crop": "maize",
+       "ece": 1.7,
+       "riceEce": 3,
+       "src": "fao29"
+      }
+     ]
+    },
+    {
+     "id": "A",
+     "crops": [
+      "rice",
+      "rice",
+      "rice"
+     ],
+     "baseline": true,
+     "scores": {
+      "water": 100,
+      "soil": 0,
+      "income": 40,
+      "risk": 68
+     },
+     "total": 52,
+     "contributions": {
+      "water": 25,
+      "soil": 0,
+      "income": 10,
+      "risk": 17
+     },
+     "measures": {
+      "extraMm": 516,
+      "dryPenaltyMm": 553,
+      "soilPoints": 0,
+      "profitRatio": 1
+     },
+     "reasons": {
+      "water": [
+       {
+        "code": "waterSeason",
+        "season": "dx",
+        "crop": "rice",
+        "months": [
+         12,
+         1,
+         2,
+         3
+        ],
+        "needMm": 575,
+        "rainMm": 59,
+        "rainDryMm": 6,
+        "extraMm": 516,
+        "extraDryMm": 569,
+        "windowDays": 122,
+        "rootWetness": 0.57,
+        "hotDays": 50.7,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "ht",
+        "crop": "rice",
+        "months": [
+         4,
+         5,
+         6,
+         7
+        ],
+        "needMm": 575,
+        "rainMm": 603,
+        "rainDryMm": 266,
+        "extraMm": 0,
+        "extraDryMm": 309,
+        "windowDays": 122,
+        "rootWetness": 0.6,
+        "hotDays": 33.9,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       },
+       {
+        "code": "waterSeason",
+        "season": "td",
+        "crop": "rice",
+        "months": [
+         8,
+         9,
+         10,
+         11
+        ],
+        "needMm": 575,
+        "rainMm": 715,
+        "rainDryMm": 384,
+        "extraMm": 0,
+        "extraDryMm": 191,
+        "windowDays": 122,
+        "rootWetness": 0.79,
+        "hotDays": 0.3,
+        "src": [
+         "faoManual3",
+         "power"
+        ]
+       }
+      ],
+      "soil": [
+       {
+        "code": "soilMonoculture",
+        "src": "linh2014"
+       }
+      ],
+      "income": [
+       {
+        "code": "incomeBaseline",
+        "src": "linh2015"
+       }
+      ],
+      "risk": [
+       {
+        "code": "riskDryYear",
+        "extraMm": 516,
+        "extraDryMm": 1069,
+        "penaltyMm": 553,
+        "src": "power"
+       }
+      ]
+     },
+     "confidence": {
+      "level": "high",
+      "reasons": [
+       {
+        "code": "confCalendar",
+        "level": "high",
+        "min": 2.8,
+        "max": 3
+       }
+      ]
+     },
+     "gaps": [
+      {
+       "code": "gapPrices"
+      },
+      {
+       "code": "gapRainEffective"
+      },
+      {
+       "code": "gapRicePaddyWater"
+      }
+     ],
+     "reviewRisks": []
+    }
+   ]
+  },
+  "bentre | mac-dinh": {
+   "rankable": false,
+   "reason": {
+    "code": "noThreeSeasons",
+    "peaks": 1
+   }
+  },
+  "bentre | uu-tien-lech": {
+   "rankable": false,
+   "reason": {
+    "code": "noThreeSeasons",
+    "peaks": 1
+   }
+  },
+  "bentre | mua-kho-giam-30": {
+   "rankable": false,
+   "reason": {
+    "code": "noThreeSeasons",
+    "peaks": 1
+   }
+  }
+ }
+}

@@ -1,0 +1,588 @@
+{
+ "expectedCycles": {
+  "value": 3,
+  "note": "assumption from project brief; official source still needed"
+ },
+ "closeDays": 32,
+ "overall": {
+  "districtYears": 25,
+  "sameCycleCount": 0.72,
+  "ruleMatchesExpected": 0.56,
+  "kmeansMatchesExpected": 0.8,
+  "peakPairs": 64,
+  "medianPeakGapDays": 16.0,
+  "peaksWithinCloseDays": 0.91
+ },
+ "perDistrict": {
+  "cantho": {
+   "name": "Cần Thơ · Cờ Đỏ",
+   "districtYears": 5,
+   "sameCycleCount": 0.4,
+   "ruleMatchesExpected": 0.4,
+   "kmeansMatchesExpected": 1.0,
+   "peakPairs": 15,
+   "medianPeakGapDays": 16,
+   "peaksWithinCloseDays": 0.87
+  },
+  "angiang": {
+   "name": "An Giang · Thoại Sơn",
+   "districtYears": 5,
+   "sameCycleCount": 0.8,
+   "ruleMatchesExpected": 0.8,
+   "kmeansMatchesExpected": 1.0,
+   "peakPairs": 15,
+   "medianPeakGapDays": 16,
+   "peaksWithinCloseDays": 0.93
+  },
+  "soctrang": {
+   "name": "Sóc Trăng · Mỹ Tú",
+   "districtYears": 5,
+   "sameCycleCount": 0.8,
+   "ruleMatchesExpected": 0.8,
+   "kmeansMatchesExpected": 1.0,
+   "peakPairs": 15,
+   "medianPeakGapDays": 16,
+   "peaksWithinCloseDays": 0.93
+  },
+  "dongthap": {
+   "name": "Đồng Tháp · Tháp Mười",
+   "districtYears": 5,
+   "sameCycleCount": 0.8,
+   "ruleMatchesExpected": 0.8,
+   "kmeansMatchesExpected": 1.0,
+   "peakPairs": 15,
+   "medianPeakGapDays": 16,
+   "peaksWithinCloseDays": 0.93
+  },
+  "bentre": {
+   "name": "Bến Tre · Chợ Lách",
+   "districtYears": 5,
+   "sameCycleCount": 0.8,
+   "ruleMatchesExpected": 0.0,
+   "kmeansMatchesExpected": 0.0,
+   "peakPairs": 4,
+   "medianPeakGapDays": 6.5,
+   "peaksWithinCloseDays": 0.75
+  }
+ },
+ "sensitivity": {
+  "windows": [
+   3,
+   5,
+   7
+  ],
+  "prominences": [
+   0.1,
+   0.15,
+   0.2
+  ],
+  "districts": {
+   "cantho": {
+    "name": "Cần Thơ · Cờ Đỏ",
+    "meanCyclesPerYear": {
+     "w3_p0.10": 2.8,
+     "w3_p0.15": 2.8,
+     "w3_p0.20": 2.8,
+     "w5_p0.10": 2.8,
+     "w5_p0.15": 2.8,
+     "w5_p0.20": 2.0,
+     "w7_p0.10": 2.8,
+     "w7_p0.15": 2.2,
+     "w7_p0.20": 1.6
+    },
+    "min": 1.6,
+    "max": 2.8
+   },
+   "angiang": {
+    "name": "An Giang · Thoại Sơn",
+    "meanCyclesPerYear": {
+     "w3_p0.10": 2.8,
+     "w3_p0.15": 2.8,
+     "w3_p0.20": 2.8,
+     "w5_p0.10": 2.8,
+     "w5_p0.15": 2.8,
+     "w5_p0.20": 2.8,
+     "w7_p0.10": 3.0,
+     "w7_p0.15": 2.8,
+     "w7_p0.20": 2.8
+    },
+    "min": 2.8,
+    "max": 3.0
+   },
+   "soctrang": {
+    "name": "Sóc Trăng · Mỹ Tú",
+    "meanCyclesPerYear": {
+     "w3_p0.10": 3.0,
+     "w3_p0.15": 3.0,
+     "w3_p0.20": 2.8,
+     "w5_p0.10": 2.8,
+     "w5_p0.15": 2.8,
+     "w5_p0.20": 2.8,
+     "w7_p0.10": 2.8,
+     "w7_p0.15": 2.8,
+     "w7_p0.20": 2.8
+    },
+    "min": 2.8,
+    "max": 3.0
+   },
+   "dongthap": {
+    "name": "Đồng Tháp · Tháp Mười",
+    "meanCyclesPerYear": {
+     "w3_p0.10": 2.8,
+     "w3_p0.15": 2.8,
+     "w3_p0.20": 2.8,
+     "w5_p0.10": 3.0,
+     "w5_p0.15": 2.8,
+     "w5_p0.20": 2.8,
+     "w7_p0.10": 2.8,
+     "w7_p0.15": 2.8,
+     "w7_p0.20": 2.8
+    },
+    "min": 2.8,
+    "max": 3.0
+   },
+   "bentre": {
+    "name": "Bến Tre · Chợ Lách",
+    "meanCyclesPerYear": {
+     "w3_p0.10": 2.2,
+     "w3_p0.15": 1.8,
+     "w3_p0.20": 0.8,
+     "w5_p0.10": 1.6,
+     "w5_p0.15": 0.8,
+     "w5_p0.20": 0.6,
+     "w7_p0.10": 1.0,
+     "w7_p0.15": 0.6,
+     "w7_p0.20": 0.0
+    },
+    "min": 0.0,
+    "max": 2.2
+   }
+  }
+ },
+ "rows": [
+  {
+   "id": "cantho",
+   "name": "Cần Thơ · Cờ Đỏ",
+   "year": 2021,
+   "ruleCycles": 2,
+   "cluster": 2,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    129,
+    209
+   ],
+   "kmeansPeakDays": [
+    1,
+    113,
+    225
+   ]
+  },
+  {
+   "id": "cantho",
+   "name": "Cần Thơ · Cờ Đỏ",
+   "year": 2022,
+   "ruleCycles": 4,
+   "cluster": 2,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    1,
+    113,
+    209,
+    353
+   ],
+   "kmeansPeakDays": [
+    1,
+    113,
+    225
+   ]
+  },
+  {
+   "id": "cantho",
+   "name": "Cần Thơ · Cờ Đỏ",
+   "year": 2023,
+   "ruleCycles": 3,
+   "cluster": 2,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    97,
+    193,
+    353
+   ],
+   "kmeansPeakDays": [
+    1,
+    113,
+    225
+   ]
+  },
+  {
+   "id": "cantho",
+   "name": "Cần Thơ · Cờ Đỏ",
+   "year": 2024,
+   "ruleCycles": 2,
+   "cluster": 2,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    113,
+    225
+   ],
+   "kmeansPeakDays": [
+    1,
+    113,
+    225
+   ]
+  },
+  {
+   "id": "cantho",
+   "name": "Cần Thơ · Cờ Đỏ",
+   "year": 2025,
+   "ruleCycles": 3,
+   "cluster": 2,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    1,
+    97,
+    209
+   ],
+   "kmeansPeakDays": [
+    1,
+    113,
+    225
+   ]
+  },
+  {
+   "id": "angiang",
+   "name": "An Giang · Thoại Sơn",
+   "year": 2021,
+   "ruleCycles": 2,
+   "cluster": 4,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    161,
+    273
+   ],
+   "kmeansPeakDays": [
+    17,
+    145,
+    257
+   ]
+  },
+  {
+   "id": "angiang",
+   "name": "An Giang · Thoại Sơn",
+   "year": 2022,
+   "ruleCycles": 3,
+   "cluster": 4,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    17,
+    145,
+    257
+   ],
+   "kmeansPeakDays": [
+    17,
+    145,
+    257
+   ]
+  },
+  {
+   "id": "angiang",
+   "name": "An Giang · Thoại Sơn",
+   "year": 2023,
+   "ruleCycles": 3,
+   "cluster": 4,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    17,
+    129,
+    273
+   ],
+   "kmeansPeakDays": [
+    17,
+    145,
+    257
+   ]
+  },
+  {
+   "id": "angiang",
+   "name": "An Giang · Thoại Sơn",
+   "year": 2024,
+   "ruleCycles": 3,
+   "cluster": 4,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    17,
+    129,
+    273
+   ],
+   "kmeansPeakDays": [
+    17,
+    145,
+    257
+   ]
+  },
+  {
+   "id": "angiang",
+   "name": "An Giang · Thoại Sơn",
+   "year": 2025,
+   "ruleCycles": 3,
+   "cluster": 4,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    1,
+    113,
+    257
+   ],
+   "kmeansPeakDays": [
+    17,
+    145,
+    257
+   ]
+  },
+  {
+   "id": "soctrang",
+   "name": "Sóc Trăng · Mỹ Tú",
+   "year": 2021,
+   "ruleCycles": 3,
+   "cluster": 1,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    49,
+    193,
+    305
+   ],
+   "kmeansPeakDays": [
+    49,
+    193,
+    305
+   ]
+  },
+  {
+   "id": "soctrang",
+   "name": "Sóc Trăng · Mỹ Tú",
+   "year": 2022,
+   "ruleCycles": 2,
+   "cluster": 1,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    49,
+    177
+   ],
+   "kmeansPeakDays": [
+    49,
+    193,
+    305
+   ]
+  },
+  {
+   "id": "soctrang",
+   "name": "Sóc Trăng · Mỹ Tú",
+   "year": 2023,
+   "ruleCycles": 3,
+   "cluster": 6,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    17,
+    161,
+    289
+   ],
+   "kmeansPeakDays": [
+    33,
+    177,
+    289
+   ]
+  },
+  {
+   "id": "soctrang",
+   "name": "Sóc Trăng · Mỹ Tú",
+   "year": 2024,
+   "ruleCycles": 3,
+   "cluster": 6,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    17,
+    161,
+    305
+   ],
+   "kmeansPeakDays": [
+    33,
+    177,
+    289
+   ]
+  },
+  {
+   "id": "soctrang",
+   "name": "Sóc Trăng · Mỹ Tú",
+   "year": 2025,
+   "ruleCycles": 3,
+   "cluster": 6,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    49,
+    161,
+    289
+   ],
+   "kmeansPeakDays": [
+    33,
+    177,
+    289
+   ]
+  },
+  {
+   "id": "dongthap",
+   "name": "Đồng Tháp · Tháp Mười",
+   "year": 2021,
+   "ruleCycles": 3,
+   "cluster": 5,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    97,
+    225,
+    337
+   ],
+   "kmeansPeakDays": [
+    81,
+    209,
+    321
+   ]
+  },
+  {
+   "id": "dongthap",
+   "name": "Đồng Tháp · Tháp Mười",
+   "year": 2022,
+   "ruleCycles": 3,
+   "cluster": 5,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    81,
+    209,
+    337
+   ],
+   "kmeansPeakDays": [
+    81,
+    209,
+    321
+   ]
+  },
+  {
+   "id": "dongthap",
+   "name": "Đồng Tháp · Tháp Mười",
+   "year": 2023,
+   "ruleCycles": 3,
+   "cluster": 5,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    65,
+    193,
+    337
+   ],
+   "kmeansPeakDays": [
+    81,
+    209,
+    321
+   ]
+  },
+  {
+   "id": "dongthap",
+   "name": "Đồng Tháp · Tháp Mười",
+   "year": 2024,
+   "ruleCycles": 3,
+   "cluster": 5,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    81,
+    225,
+    337
+   ],
+   "kmeansPeakDays": [
+    81,
+    209,
+    321
+   ]
+  },
+  {
+   "id": "dongthap",
+   "name": "Đồng Tháp · Tháp Mười",
+   "year": 2025,
+   "ruleCycles": 2,
+   "cluster": 5,
+   "kmeansCycles": 3,
+   "rulePeakDays": [
+    81,
+    193
+   ],
+   "kmeansPeakDays": [
+    81,
+    209,
+    321
+   ]
+  },
+  {
+   "id": "bentre",
+   "name": "Bến Tre · Chợ Lách",
+   "year": 2021,
+   "ruleCycles": 1,
+   "cluster": 3,
+   "kmeansCycles": 1,
+   "rulePeakDays": [
+    353
+   ],
+   "kmeansPeakDays": [
+    1
+   ]
+  },
+  {
+   "id": "bentre",
+   "name": "Bến Tre · Chợ Lách",
+   "year": 2022,
+   "ruleCycles": 0,
+   "cluster": 3,
+   "kmeansCycles": 1,
+   "rulePeakDays": [],
+   "kmeansPeakDays": [
+    1
+   ]
+  },
+  {
+   "id": "bentre",
+   "name": "Bến Tre · Chợ Lách",
+   "year": 2023,
+   "ruleCycles": 1,
+   "cluster": 3,
+   "kmeansCycles": 1,
+   "rulePeakDays": [
+    1
+   ],
+   "kmeansPeakDays": [
+    1
+   ]
+  },
+  {
+   "id": "bentre",
+   "name": "Bến Tre · Chợ Lách",
+   "year": 2024,
+   "ruleCycles": 1,
+   "cluster": 3,
+   "kmeansCycles": 1,
+   "rulePeakDays": [
+    1
+   ],
+   "kmeansPeakDays": [
+    1
+   ]
+  },
+  {
+   "id": "bentre",
+   "name": "Bến Tre · Chợ Lách",
+   "year": 2025,
+   "ruleCycles": 1,
+   "cluster": 3,
+   "kmeansCycles": 1,
+   "rulePeakDays": [
+    129
+   ],
+   "kmeansPeakDays": [
+    1
+   ]
+  }
+ ]
+}

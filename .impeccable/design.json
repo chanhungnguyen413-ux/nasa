@@ -1,0 +1,801 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-21T12:00:00.000Z",
+  "title": "Design System: NASA Adapting Farms",
+  "extensions": {
+    "colorMeta": {
+      "lime-100": {
+        "role": "primary",
+        "displayName": "Lime Wash",
+        "canonical": "#eef9d9",
+        "tonalRamp": [
+          "#a3d63f",
+          "#b8e55a",
+          "#cff08a",
+          "#eef9d9"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "lime-300": {
+        "role": "primary",
+        "displayName": "Lime Glow",
+        "canonical": "#cff08a",
+        "tonalRamp": [
+          "#a3d63f",
+          "#b8e55a",
+          "#cff08a",
+          "#eef9d9"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "lime-400": {
+        "role": "primary",
+        "displayName": "Field Lime",
+        "canonical": "#b8e55a",
+        "tonalRamp": [
+          "#a3d63f",
+          "#b8e55a",
+          "#cff08a",
+          "#eef9d9"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "lime-500": {
+        "role": "primary",
+        "displayName": "Lime Spark",
+        "canonical": "#a3d63f",
+        "tonalRamp": [
+          "#a3d63f",
+          "#b8e55a",
+          "#cff08a",
+          "#eef9d9"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "moss-50": {
+        "role": "secondary",
+        "displayName": "Moss Mist",
+        "canonical": "#eef4ef",
+        "tonalRamp": [
+          "#0b2e1b",
+          "#0f3d24",
+          "#155030",
+          "#1f6b3c",
+          "#dde9df",
+          "#eef4ef"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "moss-100": {
+        "role": "secondary",
+        "displayName": "Moss Pale",
+        "canonical": "#dde9df",
+        "tonalRamp": [
+          "#0b2e1b",
+          "#0f3d24",
+          "#155030",
+          "#1f6b3c",
+          "#dde9df",
+          "#eef4ef"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "moss-700": {
+        "role": "secondary",
+        "displayName": "Pine",
+        "canonical": "#1f6b3c",
+        "tonalRamp": [
+          "#0b2e1b",
+          "#0f3d24",
+          "#155030",
+          "#1f6b3c",
+          "#dde9df",
+          "#eef4ef"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "moss-800": {
+        "role": "secondary",
+        "displayName": "Forest",
+        "canonical": "#155030",
+        "tonalRamp": [
+          "#0b2e1b",
+          "#0f3d24",
+          "#155030",
+          "#1f6b3c",
+          "#dde9df",
+          "#eef4ef"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "moss-900": {
+        "role": "secondary",
+        "displayName": "Deep Moss",
+        "canonical": "#0f3d24",
+        "tonalRamp": [
+          "#0b2e1b",
+          "#0f3d24",
+          "#155030",
+          "#1f6b3c",
+          "#dde9df",
+          "#eef4ef"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "moss-950": {
+        "role": "secondary",
+        "displayName": "Moss Night",
+        "canonical": "#0b2e1b",
+        "tonalRamp": [
+          "#0b2e1b",
+          "#0f3d24",
+          "#155030",
+          "#1f6b3c",
+          "#dde9df",
+          "#eef4ef"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Field Ground",
+        "canonical": "#f3f5f1",
+        "tonalRamp": [
+          "#10231a",
+          "#5a6b61",
+          "#e2e8e1",
+          "#f3f5f1",
+          "#ffffff"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "surface-white": {
+        "role": "neutral",
+        "displayName": "Card White",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "#10231a",
+          "#5a6b61",
+          "#e2e8e1",
+          "#f3f5f1",
+          "#ffffff"
+        ],
+        "source": "Tailwind bg-white utility"
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e2e8e1",
+        "tonalRamp": [
+          "#10231a",
+          "#5a6b61",
+          "#e2e8e1",
+          "#f3f5f1",
+          "#ffffff"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#10231a",
+        "tonalRamp": [
+          "#10231a",
+          "#5a6b61",
+          "#e2e8e1",
+          "#f3f5f1",
+          "#ffffff"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#5a6b61",
+        "tonalRamp": [
+          "#10231a",
+          "#5a6b61",
+          "#e2e8e1",
+          "#f3f5f1",
+          "#ffffff"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "water-100": {
+        "role": "tertiary",
+        "displayName": "Water Mist",
+        "canonical": "#dcecf7",
+        "tonalRamp": [
+          "#1b5a86",
+          "#2e86c1",
+          "#8cc0e3",
+          "#dcecf7"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "water-300": {
+        "role": "tertiary",
+        "displayName": "Shallow Water",
+        "canonical": "#8cc0e3",
+        "tonalRamp": [
+          "#1b5a86",
+          "#2e86c1",
+          "#8cc0e3",
+          "#dcecf7"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "water-500": {
+        "role": "tertiary",
+        "displayName": "Water",
+        "canonical": "#2e86c1",
+        "tonalRamp": [
+          "#1b5a86",
+          "#2e86c1",
+          "#8cc0e3",
+          "#dcecf7"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "water-700": {
+        "role": "tertiary",
+        "displayName": "Deep Canal",
+        "canonical": "#1b5a86",
+        "tonalRamp": [
+          "#1b5a86",
+          "#2e86c1",
+          "#8cc0e3",
+          "#dcecf7"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "sun-100": {
+        "role": "tertiary",
+        "displayName": "Sun Wash",
+        "canonical": "#fdf1d3",
+        "tonalRamp": [
+          "#7f5306",
+          "#f2b134",
+          "#fdf1d3"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "sun-400": {
+        "role": "tertiary",
+        "displayName": "Sun",
+        "canonical": "#f2b134",
+        "tonalRamp": [
+          "#7f5306",
+          "#f2b134",
+          "#fdf1d3"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "sun-700": {
+        "role": "tertiary",
+        "displayName": "Sun Deep",
+        "canonical": "#7f5306",
+        "tonalRamp": [
+          "#7f5306",
+          "#f2b134",
+          "#fdf1d3"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "clay-100": {
+        "role": "tertiary",
+        "displayName": "Clay Wash",
+        "canonical": "#f6ddd2",
+        "tonalRamp": [
+          "#8f2f14",
+          "#f6ddd2"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "clay-700": {
+        "role": "tertiary",
+        "displayName": "Clay Deep",
+        "canonical": "#8f2f14",
+        "tonalRamp": [
+          "#8f2f14",
+          "#f6ddd2"
+        ],
+        "source": "redesign/styles.css @theme"
+      },
+      "field-good": {
+        "role": "data",
+        "displayName": "Field Good",
+        "canonical": "#7ccf45",
+        "tonalRamp": [
+          "#5b4527",
+          "#3fae4a",
+          "#7ccf45",
+          "#9fd55a",
+          "#bfd154",
+          "#c9cf52",
+          "#dccb8c"
+        ],
+        "source": "redesign/template.html SVG literal"
+      },
+      "field-low": {
+        "role": "data",
+        "displayName": "Field Low",
+        "canonical": "#bfd154",
+        "tonalRamp": [
+          "#5b4527",
+          "#3fae4a",
+          "#7ccf45",
+          "#9fd55a",
+          "#bfd154",
+          "#c9cf52",
+          "#dccb8c"
+        ],
+        "source": "redesign/template.html SVG literal"
+      },
+      "field-very-low": {
+        "role": "data",
+        "displayName": "Field Very Low",
+        "canonical": "#dccb8c",
+        "tonalRamp": [
+          "#5b4527",
+          "#3fae4a",
+          "#7ccf45",
+          "#9fd55a",
+          "#bfd154",
+          "#c9cf52",
+          "#dccb8c"
+        ],
+        "source": "redesign/template.html SVG literal"
+      },
+      "canopy-dense": {
+        "role": "data",
+        "displayName": "Canopy Dense",
+        "canonical": "#3fae4a",
+        "tonalRamp": [
+          "#5b4527",
+          "#3fae4a",
+          "#7ccf45",
+          "#9fd55a",
+          "#bfd154",
+          "#c9cf52",
+          "#dccb8c"
+        ],
+        "source": "redesign/template.html SVG literal"
+      },
+      "canopy-mid": {
+        "role": "data",
+        "displayName": "Canopy Mid",
+        "canonical": "#9fd55a",
+        "tonalRamp": [
+          "#5b4527",
+          "#3fae4a",
+          "#7ccf45",
+          "#9fd55a",
+          "#bfd154",
+          "#c9cf52",
+          "#dccb8c"
+        ],
+        "source": "redesign/template.html SVG literal"
+      },
+      "drought-2": {
+        "role": "data",
+        "displayName": "Drought 2",
+        "canonical": "#c9cf52",
+        "tonalRamp": [
+          "#d9552f",
+          "#e07b2a",
+          "#f2b134",
+          "#c9cf52",
+          "#7ccf45"
+        ],
+        "source": "redesign/template.html SVG literal"
+      },
+      "drought-4": {
+        "role": "data",
+        "displayName": "Drought 4",
+        "canonical": "#e07b2a",
+        "tonalRamp": [
+          "#d9552f",
+          "#e07b2a",
+          "#f2b134",
+          "#c9cf52",
+          "#7ccf45"
+        ],
+        "source": "redesign/template.html SVG literal"
+      },
+      "drought-5": {
+        "role": "data",
+        "displayName": "Drought 5",
+        "canonical": "#d9552f",
+        "tonalRamp": [
+          "#d9552f",
+          "#e07b2a",
+          "#f2b134",
+          "#c9cf52",
+          "#7ccf45"
+        ],
+        "source": "redesign/template.html SVG literal"
+      },
+      "dry-stipple": {
+        "role": "data",
+        "displayName": "Dry Stipple",
+        "canonical": "#5b4527",
+        "tonalRamp": [
+          "#5b4527",
+          "#3fae4a",
+          "#7ccf45",
+          "#9fd55a",
+          "#bfd154",
+          "#c9cf52",
+          "#dccb8c"
+        ],
+        "source": "redesign/template.html SVG literal"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headline only; 2.6rem phone, 3.75rem at 640px, 4.5rem at 1024px, 3rem on short screens."
+      },
+      "stat": {
+        "displayName": "Stat",
+        "purpose": "Stat band numbers; 3rem on phones; lime unit."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Every section h2; 2.25rem on phones."
+      },
+      "statement": {
+        "displayName": "Statement",
+        "purpose": "Scroll-lit mission paragraph; 1.7rem on phones."
+      },
+      "figure": {
+        "displayName": "Figure",
+        "purpose": "Reading values in dashboard cards."
+      },
+      "title-lg": {
+        "displayName": "Title Lg",
+        "purpose": "Advice headline (1.875rem at 640px), dark-card titles, share title."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Advice subsections, solution-card titles."
+      },
+      "card-label": {
+        "displayName": "Card Label",
+        "purpose": "Reading-card headers."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Sentence under each section headline."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Advice reasons, steps, summary (max 70ch)."
+      },
+      "body-sm": {
+        "displayName": "Body Sm",
+        "purpose": "Reading descriptions, popovers, source metadata."
+      },
+      "button": {
+        "displayName": "Button",
+        "purpose": "Pill button labels."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Badges, segmented options, selects, preset chips."
+      },
+      "label-sm": {
+        "displayName": "Label Sm",
+        "purpose": "Map pills, language switch, legends."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "What-if and sample tags, chart ticks."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card",
+        "value": "0 1px 2px rgb(11 46 27 / 0.05), 0 8px 24px -12px rgb(11 46 27 / 0.18)",
+        "purpose": "Resting cards, map frame, advice tile, map pills, solid nav, slider thumb."
+      },
+      {
+        "name": "lift",
+        "value": "0 2px 4px rgb(11 46 27 / 0.06), 0 22px 40px -18px rgb(11 46 27 / 0.35)",
+        "purpose": "Hovered cards, advice panel, popovers, dialogs, drawer, CTA card, floating assistant button."
+      },
+      {
+        "name": "focus-ring",
+        "value": "outline: 3px solid var(--color-lime-500); outline-offset: 3px",
+        "purpose": "Global :focus-visible treatment."
+      },
+      {
+        "name": "glass",
+        "value": "background: rgb(255 255 255 / 0.1); border: 1px solid rgb(255 255 255 / 0.25); backdrop-filter: blur(12px)",
+        "purpose": "Hero advice chip and outline pills over photos."
+      },
+      {
+        "name": "map-plot-lift",
+        "value": "SVG feDropShadow dx=0 dy=12 stdDeviation=10 flood-opacity=0.38",
+        "purpose": "Soft drop shadow under map plots (SVG only)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The single curve for every entrance and the water flow."
+      },
+      {
+        "name": "reveal",
+        "value": "opacity 0 -> 1, translateY(24px) -> 0, 900ms ease-out-expo, staggered 80-180ms",
+        "purpose": "Sections and cards entering on scroll."
+      },
+      {
+        "name": "hero-zoom",
+        "value": "scale 1.08 -> 1, 2.4s ease-out-expo",
+        "purpose": "Hero photo settles once."
+      },
+      {
+        "name": "panel-in",
+        "value": "translateY(16px) + fade, 600ms ease-out-expo",
+        "purpose": "Advice panel, share dialog."
+      },
+      {
+        "name": "pop-in",
+        "value": "translateY(-6px) scale(0.98) + fade, 260ms ease-out-expo",
+        "purpose": "Term popover, scheduled flag."
+      },
+      {
+        "name": "drawer-in",
+        "value": "translateX(48px) + fade, 480ms ease-out-expo",
+        "purpose": "Assistant drawer."
+      },
+      {
+        "name": "scrim-in",
+        "value": "fade, 300ms ease",
+        "purpose": "Dialog scrims."
+      },
+      {
+        "name": "flow-path",
+        "value": "stroke-dashoffset 560 -> 0, 1100ms ease-out-expo",
+        "purpose": "Water line from the gate into the plot."
+      },
+      {
+        "name": "wet-overlay",
+        "value": "opacity 0 -> 1, 900ms ease-out-expo, 700ms delay",
+        "purpose": "Blue sheen on the watered plot."
+      },
+      {
+        "name": "water-run",
+        "value": "stroke-dashoffset to -44, 1.1s linear infinite",
+        "purpose": "White dashes running along the water line."
+      },
+      {
+        "name": "sel-ring",
+        "value": "stroke-opacity to 0.45 at 50%, 2.4s ease-in-out infinite",
+        "purpose": "Selected plot ring breathing."
+      },
+      {
+        "name": "ripple",
+        "value": "stroke-dashoffset to -120, 6s linear infinite",
+        "purpose": "Canal ripples."
+      },
+      {
+        "name": "rain-fall",
+        "value": "translate(0,-30px) -> (-8px,30px), 0.9s linear infinite",
+        "purpose": "Rain streaks when rain is due."
+      },
+      {
+        "name": "hover-lift",
+        "value": "translateY(-2px) pills, -4px cards, 300ms",
+        "purpose": "Hover feedback."
+      },
+      {
+        "name": "statement-words",
+        "value": "color 0.4s ease",
+        "purpose": "Words darken as the statement scrolls."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce -> no animations or transitions",
+        "purpose": "Everything above is disabled."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "short",
+        "value": "max-height: 780px"
+      },
+      {
+        "name": "container",
+        "value": "1152px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Pill",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Field Lime pill for the main action; Moss Night label; hover to Lime Glow with a 2px rise.",
+      "html": "<button type=\"button\" class=\"ds-btn-primary\">Partnership<svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 9999px; font: 700 15px/1.4 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); border: 0; background: var(--color-lime-400, #b8e55a); color: var(--color-moss-950, #0b2e1b); } .ds-btn-primary:hover { background: var(--color-lime-300, #cff08a); transform: translateY(-2px); } .ds-btn-primary:focus-visible { outline: 3px solid var(--color-lime-500, #a3d63f); outline-offset: 3px; }"
+    },
+    {
+      "name": "Dark Pill",
+      "kind": "button",
+      "refersTo": "button-dark",
+      "description": "Deep Moss pill for the second action: schedule, print, ask the assistant.",
+      "html": "<button type=\"button\" class=\"ds-btn-dark\">Schedule for 18:00</button>",
+      "css": ".ds-btn-dark { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 9999px; font: 700 15px/1.4 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); border: 0; background: var(--color-moss-900, #0f3d24); color: #fff; } .ds-btn-dark:hover { background: var(--color-moss-800, #155030); transform: translateY(-2px); } .ds-btn-dark:focus-visible { outline: 3px solid var(--color-lime-500, #a3d63f); outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Pill",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "White pill with a hairline border for tertiary actions; border turns Pine on hover.",
+      "html": "<button type=\"button\" class=\"ds-btn-ghost\">Share</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 9999px; font: 700 15px/1.4 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid var(--color-line, #e2e8e1); background: #fff; color: var(--color-ink, #10231a); } .ds-btn-ghost:hover { border-color: var(--color-moss-700, #1f6b3c); transform: translateY(-2px); } .ds-btn-ghost:focus-visible { outline: 3px solid var(--color-lime-500, #a3d63f); outline-offset: 3px; }"
+    },
+    {
+      "name": "Outline Pill on Moss",
+      "kind": "button",
+      "refersTo": "button-outline-on-dark",
+      "description": "White outline pill used over the hero photo and on dark sections.",
+      "html": "<div class=\"ds-dark-stage\"><button type=\"button\" class=\"ds-btn-outline\">Meet farmers</button></div>",
+      "css": ".ds-dark-stage { padding: 24px; border-radius: 24px; background: var(--color-moss-950, #0b2e1b); } .ds-btn-outline { display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 9999px; font: 700 15px/1.4 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid rgb(255 255 255 / 0.6); background: transparent; color: #fff; } .ds-btn-outline:hover { background: rgb(255 255 255 / 0.1); transform: translateY(-2px); } .ds-btn-outline:focus-visible { outline: 3px solid var(--color-lime-500, #a3d63f); outline-offset: 3px; }"
+    },
+    {
+      "name": "Segmented Switch",
+      "kind": "nav",
+      "refersTo": "segmented",
+      "description": "White pill track; active option filled Deep Moss with white text.",
+      "html": "<div class=\"ds-seg\" role=\"group\"><button type=\"button\" aria-pressed=\"true\">Demo</button><button type=\"button\" aria-pressed=\"false\">Live NASA</button></div>",
+      "css": ".ds-seg { display: inline-flex; padding: 4px; border: 1px solid var(--color-line, #e2e8e1); border-radius: 9999px; background: #fff; } .ds-seg button { padding: 8px 16px; border: 0; border-radius: 9999px; background: transparent; color: var(--color-muted, #5a6b61); font: 700 14px/1.43 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); cursor: pointer; transition: color 300ms, background-color 300ms; } .ds-seg button:hover { color: var(--color-ink, #10231a); } .ds-seg button[aria-pressed=\"true\"] { background: var(--color-moss-900, #0f3d24); color: #fff; } .ds-seg button:focus-visible { outline: 3px solid var(--color-lime-500, #a3d63f); outline-offset: 3px; }"
+    },
+    {
+      "name": "Select Pill",
+      "kind": "input",
+      "refersTo": "select",
+      "description": "White pill select with a Pine leading icon and a Muted chevron; border turns Pine on hover and focus.",
+      "html": "<label class=\"ds-select\"><span class=\"ds-select-lead\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 20h10\"/><path d=\"M10 20c5.5-2.5.8-6.4 3-10\"/><path d=\"M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z\"/><path d=\"M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z\"/></svg></span><select><option>Rice</option><option>Vegetables</option></select><span class=\"ds-select-chev\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></span></label>",
+      "css": ".ds-select { position: relative; display: inline-flex; align-items: center; border: 1px solid var(--color-line, #e2e8e1); border-radius: 9999px; background: #fff; transition: border-color 150ms; } .ds-select:hover, .ds-select:focus-within { border-color: var(--color-moss-700, #1f6b3c); } .ds-select select { appearance: none; padding: 8px 36px 8px 40px; border: 0; border-radius: 9999px; background: transparent; color: var(--color-ink, #10231a); font: 700 14px/1.43 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); outline: none; } .ds-select-lead { position: absolute; left: 14px; display: inline-flex; color: var(--color-moss-700, #1f6b3c); pointer-events: none; } .ds-select-chev { position: absolute; right: 12px; display: inline-flex; color: var(--color-muted, #5a6b61); pointer-events: none; }"
+    },
+    {
+      "name": "Status Badges and What-if Tag",
+      "kind": "chip",
+      "refersTo": "badge-good",
+      "description": "Good and warn status pills with a 16px icon, plus the dashed amber what-if tag.",
+      "html": "<div class=\"ds-badges\"><span class=\"ds-badge ds-good\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"/></svg>Good</span><span class=\"ds-badge ds-warn\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3\"/><path d=\"M12 9v4\"/><path d=\"M12 17h.01\"/></svg>Low</span><span class=\"ds-tag-whatif\">What-if</span></div>",
+      "css": ".ds-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; } .ds-badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 9999px; font: 700 14px/1.43 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); } .ds-good { background: var(--color-lime-100, #eef9d9); color: var(--color-moss-900, #0f3d24); } .ds-warn { background: var(--color-sun-100, #fdf1d3); color: var(--color-sun-700, #7f5306); } .ds-tag-whatif { padding: 2px 10px; border: 1px dashed var(--color-sun-400, #f2b134); border-radius: 9999px; background: var(--color-sun-100, #fdf1d3); color: var(--color-sun-700, #7f5306); font: 700 12px/1.33 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); }"
+    },
+    {
+      "name": "Reading Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "White 24px card with hairline and Card shadow; lifts 4px onto Lift on hover.",
+      "html": "<div class=\"ds-card\"><p class=\"ds-card-label\"><span class=\"ds-card-icon\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z\"/><path d=\"M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97\"/></svg></span><span class=\"ds-term\">Soil moisture</span></p><div class=\"ds-card-row\"><p class=\"ds-figure\">35<span>%</span></p><span class=\"ds-badge-warn\">Low</span></div><div class=\"ds-gauge\"><div class=\"ds-gauge-fill\"></div></div><p class=\"ds-card-note\">Below the 40% rice needs. Water this evening.</p></div>",
+      "css": ".ds-card { width: 260px; padding: 20px; border: 1px solid var(--color-line, #e2e8e1); border-radius: 24px; background: #fff; color: var(--color-ink, #10231a); box-shadow: var(--shadow-card, 0 1px 2px rgb(11 46 27 / 0.05), 0 8px 24px -12px rgb(11 46 27 / 0.18)); font-family: var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift, 0 2px 4px rgb(11 46 27 / 0.06), 0 22px 40px -18px rgb(11 46 27 / 0.35)); } .ds-card-label { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 15px; font-weight: 700; } .ds-card-icon { display: inline-flex; color: var(--color-water-500, #2e86c1); } .ds-term { text-decoration: underline dotted 2px; text-decoration-color: rgb(16 35 26 / 0.4); text-underline-offset: 5px; } .ds-card-row { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 12px; } .ds-figure { margin: 0; font-size: 3rem; font-weight: 800; line-height: 1; letter-spacing: -0.025em; font-variant-numeric: tabular-nums; } .ds-figure span { font-size: 1.5rem; font-weight: 700; color: var(--color-muted, #5a6b61); } .ds-badge-warn { padding: 4px 12px; border-radius: 9999px; background: var(--color-sun-100, #fdf1d3); color: var(--color-sun-700, #7f5306); font-size: 14px; font-weight: 700; } .ds-gauge { height: 10px; margin-top: 20px; border-radius: 9999px; background: var(--color-moss-100, #dde9df); } .ds-gauge-fill { width: 35%; height: 100%; border-radius: 9999px; background: var(--color-water-500, #2e86c1); } .ds-card-note { margin: 8px 0 0; font-size: 14px; line-height: 1.625; color: var(--color-muted, #5a6b61); }"
+    },
+    {
+      "name": "Advice Tile",
+      "kind": "custom",
+      "refersTo": "advice-tile",
+      "description": "The lime ask in the readings row; the arrow disc rotates 45 degrees on hover.",
+      "html": "<button type=\"button\" class=\"ds-advice\"><span class=\"ds-advice-top\"><span class=\"ds-advice-icon\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z\"/><path d=\"M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97\"/></svg></span><span class=\"ds-advice-arrow\"><svg viewBox=\"0 0 24 24\" width=\"16\" height=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></span></span><span class=\"ds-advice-text\"><span class=\"ds-advice-title\">Irrigation advice</span><span class=\"ds-advice-sub\">Plot B · from moisture, NDVI and rain</span></span></button>",
+      "css": ".ds-advice { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; width: 260px; padding: 20px; border: 0; border-radius: 24px; background: var(--color-lime-400, #b8e55a); color: var(--color-moss-950, #0b2e1b); text-align: left; box-shadow: var(--shadow-card, 0 1px 2px rgb(11 46 27 / 0.05), 0 8px 24px -12px rgb(11 46 27 / 0.18)); font-family: var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-advice:hover { background: var(--color-lime-300, #cff08a); transform: translateY(-4px); box-shadow: var(--shadow-lift, 0 2px 4px rgb(11 46 27 / 0.06), 0 22px 40px -18px rgb(11 46 27 / 0.35)); } .ds-advice:focus-visible { outline: 3px solid var(--color-lime-500, #a3d63f); outline-offset: 3px; } .ds-advice-top { display: flex; align-items: flex-start; justify-content: space-between; } .ds-advice-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 9999px; background: rgb(11 46 27 / 0.1); } .ds-advice-arrow { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 9999px; background: var(--color-moss-950, #0b2e1b); color: var(--color-lime-400, #b8e55a); transition: transform 300ms; } .ds-advice:hover .ds-advice-arrow { transform: rotate(45deg); } .ds-advice-text { display: flex; flex-direction: column; line-height: 1.25; } .ds-advice-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.025em; } .ds-advice-sub { margin-top: 4px; font-size: 15px; font-weight: 700; opacity: 0.75; }"
+    },
+    {
+      "name": "Hero Advice Chip",
+      "kind": "custom",
+      "refersTo": "hero-chip",
+      "description": "Glass pill on the hero photo carrying today's advice; opens the advice panel.",
+      "html": "<div class=\"ds-hero-stage\"><button type=\"button\" class=\"ds-hero-chip\"><span class=\"ds-hero-disc\"><svg viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z\"/><path d=\"M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97\"/></svg></span><span><span class=\"ds-hero-today\">Today:</span> Drip-water plot B · 45 min · 18:00</span></button></div>",
+      "css": ".ds-hero-stage { padding: 28px; border-radius: 24px; background: linear-gradient(90deg, rgb(11 46 27 / 0.9), rgb(21 80 48 / 0.7)); } .ds-hero-chip { display: flex; align-items: center; gap: 12px; padding: 8px 20px 8px 8px; border: 1px solid rgb(255 255 255 / 0.25); border-radius: 9999px; background: rgb(255 255 255 / 0.1); backdrop-filter: blur(12px); color: #fff; text-align: left; font: 600 15px/1.375 var(--font-sans, \"Be Vietnam Pro\", ui-sans-serif, system-ui, sans-serif); cursor: pointer; transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-hero-chip:hover { background: rgb(255 255 255 / 0.2); transform: translateY(-2px); } .ds-hero-chip:focus-visible { outline: 3px solid var(--color-lime-500, #a3d63f); outline-offset: 3px; } .ds-hero-disc { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border-radius: 9999px; background: var(--color-lime-400, #b8e55a); color: var(--color-moss-950, #0b2e1b); } .ds-hero-today { color: var(--color-lime-300, #cff08a); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Live Field Brochure",
+    "overview": "This is a premium agritech landing page whose product actually runs on the page. It uses the full grammar of a marketing site: a full-bleed aerial hero, a stat band, a statement paragraph, a photo carousel, a dark forecast section, stories and a photo CTA. The working dashboard sits inside that sequence instead of being described and linked elsewhere. The world is vibrant field lime against deep moss, laid on a pale green-grey ground with white cards. Lime is the colour you press. Moss is the colour of depth: the hero overlay, the stat band, the forecast section and the dark \"digital farm\" map.\n\nShapes are soft and generous. Every control is a pill, and cards run 24 to 32px. Headlines are big and set in Be Vietnam Pro 800 with tight tracking, and body text drops back to a muted green-grey. Photography is verified Unsplash aerial paddies and fields, and every photo sits on a moss fallback so the page holds its colour when an image fails. Motion is fade-and-rise on reveal, hover lifts of 2 to 4px, and one signature sequence on the farm map, where a glowing water line runs from the gate into a plot.\n\nThe world was pinned by the user to the NEOFARM reference, so it did not come from a concept roll. The build honours that pin: lime and moss on light grey, pills, a moss stat band, grid and carousel sections, and fade/slide motion.",
+    "keyCharacteristics": [
+      "Landing-page grammar that carries the live product: hero → stats → statement → dashboard → solutions → forecast → water → stories → CTA.",
+      "Lime pills for primary actions, moss for depth, white cards on a pale ground.",
+      "Dark moss \"digital farm\" map with glossy plots, floating white data chips and a breathing lime selection ring.",
+      "Water blue appears only where water is shown.",
+      "One family, Be Vietnam Pro, in heavy weights, with tabular figures for every changing number.",
+      "Everything pressable is a pill. Cards are 24px, dark panels 28px and photo frames 32px.",
+      "A single ease-out-expo curve drives every entrance. Reduced motion turns it all off."
+    ],
+    "rules": [
+      {
+        "name": "The Lime Is Pressable Rule",
+        "body": "A lime fill means you can press it or it is selected. Text on lime is always Moss Night, never white.",
+        "section": "colors"
+      },
+      {
+        "name": "The Water Stays Blue Rule",
+        "body": "Water blue marks water only: the canal, rain, measured moisture fills, the flow line and the watered sheen. It never marks an action, a selection or focus. Recommended watering is an action, so it takes lime. The lime moisture bars in the week chart are recorded drift, not precedent.",
+        "section": "colors"
+      },
+      {
+        "name": "The Amber Means Unsure Rule",
+        "body": "Sun amber marks simulated, sample, illustrative or hypothetical content and caution. What-if states add a dashed sun-400 edge. Amber never fills a primary action.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tint Plus Texture Rule",
+        "body": "On the map, condition is never shown by colour alone. Dry is stippled and severe drought is hatched, and the legend swatches repeat the same textures.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every number that can change sets tabular figures: stats, readings, times, m³, dates, chart labels and map chips. Decimal commas follow the language, so Vietnamese shows 0,68.",
+        "section": "typography"
+      },
+      {
+        "name": "The Twelve-Pixel Floor Rule",
+        "body": "Text drawn inside the map never renders below 12px on screen. When the map is drawn small, the data chips scale up (to 1.45× wide, 2.1× on phones) and drop their secondary line instead of letting text shrink.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sentence Case Rule",
+        "body": "Headlines, labels and pills are set in sentence case with normal or tight tracking. The only uppercase is the two-letter language codes.",
+        "section": "typography"
+      },
+      {
+        "name": "The Moss Shadow Rule",
+        "body": "UI shadows are tinted from Moss Night, never neutral black. They only use Card or Lift.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Lift On Hover Rule",
+        "body": "Interactive cards and pills rise on hover: 2px for pills and chips, 4px for cards, with the shadow stepping from Card to Lift.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Pill Controls Rule",
+        "body": "If it can be pressed, it is a pill or sits in one.",
+        "section": "shapes"
+      },
+      {
+        "name": "The Dashed Means What-If Rule",
+        "body": "Dashed strokes are reserved for hypotheticals and thresholds. Solid strokes are measured fact.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** put primary actions on Field Lime pills with Moss Night text, and hover to Lime Glow with a 2px rise.",
+      "**Do** use Moss Night and Deep Moss for depth: overlays, bands, dark sections and the map.",
+      "**Do** keep water blue for water only, and let recommended watering read as a lime action.",
+      "**Do** mark anything simulated, sample, illustrative or hypothetical in amber (sun-100 with sun-700), with a dashed sun-400 edge for what-if.",
+      "**Do** set every changing number with tabular figures and keep map text at 12px or larger by scaling the chips.",
+      "**Do** use only the Card and Lift shadows on UI, stepping to Lift with a 4px rise on hover.",
+      "**Do** make every explainable term a dotted-underline button with an info icon that opens a plain-language popover.",
+      "**Do** set every photo on a moss fallback and credit it in the footer."
+    ],
+    "donts": [
+      "**Don't** put white text on lime, or use lime for text on light grounds.",
+      "**Don't** use water blue for actions, selection or focus, and don't introduce a new hue for water.",
+      "**Don't** use amber as decoration or as a primary action fill.",
+      "**Don't** use square corners or small radii on controls. If it can be pressed, it is a pill.",
+      "**Don't** use neutral grey or black for UI text, borders or shadows. Ink is green-black, and shadows are moss-tinted.",
+      "**Don't** add a second typeface, uppercase labels or letter-spaced kickers above headlines.",
+      "**Don't** present stories, partners or pilots as real. Stories carry the illustrative label, and there is no NASA insignia or implied affiliation.",
+      "**Don't** extend the legacy `src/` tokens (leaf, canal, earth) into new surfaces."
+    ]
+  }
+}
