@@ -789,8 +789,16 @@ const MF_GRADE_STYLE = {
   red: ['bg-clay-100 text-clay-700', 'circle-x'],
   gray: ['border border-dashed border-line bg-ground text-muted', 'circle-help'],
 }
-const mfGradeBadge = (grade, text, big = false) =>
-  `<span class="inline-flex items-center gap-2 rounded-full ${big ? 'px-4 py-2 text-lg' : 'px-3 py-1 text-sm'} font-extrabold ${MF_GRADE_STYLE[grade][0]}">${icon(MF_GRADE_STYLE[grade][1], big ? 'size-5' : 'size-4')}${text}</span>`
+const mfGradeBadge = (grade, text, big = false) => {
+  const cls =
+    big === 'xs'
+      ? 'shrink-0 whitespace-nowrap gap-1 px-2 py-0.5 text-xs font-bold leading-5'
+      : big
+        ? 'gap-2 px-4 py-2 text-lg font-extrabold'
+        : 'gap-2 px-3 py-1 text-sm font-extrabold'
+  const icCls = big === 'xs' ? 'size-3.5 shrink-0' : big ? 'size-5' : 'size-4'
+  return `<span class="inline-flex items-center rounded-full ${cls} ${MF_GRADE_STYLE[grade][0]}">${icon(MF_GRADE_STYLE[grade][1], icCls)}${text}</span>`
+}
 
 function mfCropsHtml(data) {
   const R = mfT()

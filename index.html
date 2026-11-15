@@ -12676,8 +12676,16 @@ const MF_GRADE_STYLE = {
   red: ['bg-clay-100 text-clay-700', 'circle-x'],
   gray: ['border border-dashed border-line bg-ground text-muted', 'circle-help'],
 }
-const mfGradeBadge = (grade, text, big = false) =>
-  `<span class="inline-flex items-center gap-2 rounded-full ${big ? 'px-4 py-2 text-lg' : 'px-3 py-1 text-sm'} font-extrabold ${MF_GRADE_STYLE[grade][0]}">${icon(MF_GRADE_STYLE[grade][1], big ? 'size-5' : 'size-4')}${text}</span>`
+const mfGradeBadge = (grade, text, big = false) => {
+  const cls =
+    big === 'xs'
+      ? 'shrink-0 whitespace-nowrap gap-1 px-2 py-0.5 text-xs font-bold leading-5'
+      : big
+        ? 'gap-2 px-4 py-2 text-lg font-extrabold'
+        : 'gap-2 px-3 py-1 text-sm font-extrabold'
+  const icCls = big === 'xs' ? 'size-3.5 shrink-0' : big ? 'size-5' : 'size-4'
+  return `<span class="inline-flex items-center rounded-full ${cls} ${MF_GRADE_STYLE[grade][0]}">${icon(MF_GRADE_STYLE[grade][1], icCls)}${text}</span>`
+}
 
 function mfCropsHtml(data) {
   const R = mfT()
@@ -16071,7 +16079,7 @@ function mwRenderDetailsHtml() {
     ? `<div class="mt-2.5 space-y-1.5">${assess.result.criteria
         .map((c) => {
           const ev = c.evidence?.[0]
-          return `<div class="flex items-center justify-between gap-2 rounded-xl bg-ground px-2.5 py-1.5 text-xs"><span class="font-semibold text-ink">${esc(R.criteria?.[c.key] ?? c.key)}${ev ? ` · ${showValue(ev, { digits: mfDigits(ev) })}` : ''}</span>${mfGradeBadge(c.grade, c.grade === 'gray' ? R.overallGray : R.grades[c.grade])}</div>`
+          return `<div class="flex items-center justify-between gap-2 rounded-xl bg-ground px-2.5 py-1.5 text-xs"><span class="min-w-0 font-semibold text-ink">${esc(R.criteria?.[c.key] ?? c.key)}${ev ? ` · ${showValue(ev, { digits: mfDigits(ev) })}` : ''}</span>${mfGradeBadge(c.grade, R.grades[c.grade], 'xs')}</div>`
         })
         .join('')}</div>`
     : ''
@@ -16106,7 +16114,7 @@ function mwRenderDetailsHtml() {
       <div class="rounded-3xl border border-line bg-white p-4 shadow-card" data-reveal="mw-det-crop-${dKey}">
         <div class="flex items-center justify-between gap-2">
           <p class="text-xs font-extrabold uppercase tracking-wide text-moss-700">${esc(D.cropTitle)}</p>
-          ${assess ? mfGradeBadge(assess.grade, typeof mgT === 'function' ? mgT().grades[assess.grade] : assess.grade) : ''}
+          ${assess ? mfGradeBadge(assess.grade, typeof mgT === 'function' ? mgT().grades[assess.grade] : assess.grade, 'xs') : ''}
         </div>
         <p class="mt-1 text-sm font-extrabold text-ink">${cropName ? esc(cropName) : auto.crop ? mwEstValue(auto.crop) : esc(D.noCrop)}</p>
         ${!cropName && recCrops ? `<p class="mt-1 text-xs text-muted"><span class="font-bold text-moss-900">${esc(T.legend.dbsclRecCrop)}</span> ${esc(recCrops)}</p>` : ''}

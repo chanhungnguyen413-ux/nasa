@@ -856,7 +856,7 @@ function mwRenderDetailsHtml() {
     ? `<div class="mt-2.5 space-y-1.5">${assess.result.criteria
         .map((c) => {
           const ev = c.evidence?.[0]
-          return `<div class="flex items-center justify-between gap-2 rounded-xl bg-ground px-2.5 py-1.5 text-xs"><span class="font-semibold text-ink">${esc(R.criteria?.[c.key] ?? c.key)}${ev ? ` · ${showValue(ev, { digits: mfDigits(ev) })}` : ''}</span>${mfGradeBadge(c.grade, c.grade === 'gray' ? R.overallGray : R.grades[c.grade])}</div>`
+          return `<div class="flex items-center justify-between gap-2 rounded-xl bg-ground px-2.5 py-1.5 text-xs"><span class="min-w-0 font-semibold text-ink">${esc(R.criteria?.[c.key] ?? c.key)}${ev ? ` · ${showValue(ev, { digits: mfDigits(ev) })}` : ''}</span>${mfGradeBadge(c.grade, R.grades[c.grade], 'xs')}</div>`
         })
         .join('')}</div>`
     : ''
@@ -891,7 +891,7 @@ function mwRenderDetailsHtml() {
       <div class="rounded-3xl border border-line bg-white p-4 shadow-card" data-reveal="mw-det-crop-${dKey}">
         <div class="flex items-center justify-between gap-2">
           <p class="text-xs font-extrabold uppercase tracking-wide text-moss-700">${esc(D.cropTitle)}</p>
-          ${assess ? mfGradeBadge(assess.grade, typeof mgT === 'function' ? mgT().grades[assess.grade] : assess.grade) : ''}
+          ${assess ? mfGradeBadge(assess.grade, typeof mgT === 'function' ? mgT().grades[assess.grade] : assess.grade, 'xs') : ''}
         </div>
         <p class="mt-1 text-sm font-extrabold text-ink">${cropName ? esc(cropName) : auto.crop ? mwEstValue(auto.crop) : esc(D.noCrop)}</p>
         ${!cropName && recCrops ? `<p class="mt-1 text-xs text-muted"><span class="font-bold text-moss-900">${esc(T.legend.dbsclRecCrop)}</span> ${esc(recCrops)}</p>` : ''}
