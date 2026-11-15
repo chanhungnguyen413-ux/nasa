@@ -52,7 +52,8 @@ export function gmNormalizeGarden(garden) {
   p.cropId = CROP_LIBRARY[p.cropId] ? p.cropId : null
   // Tên cây tự nhập (ngoài thư viện FAO): giữ nguyên chữ của nông dân, cắt khoảng trắng, tối đa 60 ký tự.
   p.cropName = !p.cropId && typeof p.cropName === 'string' && p.cropName.trim() ? p.cropName.trim().slice(0, 60) : null
-  p.useEstimates = p.useEstimates !== false
+  // Điền thông minh LUÔN bật (bỏ ô tích): giá trị false cũ trong máy cũng được bật lại.
+  p.useEstimates = true
   // Cách đang làm gõ tự do (vd "ngô - đậu phộng - lúa"): giữ nguyên chữ của bà con, tối đa 160 ký tự.
   p.currentText = typeof p.currentText === 'string' && p.currentText.trim() ? p.currentText.trim().slice(0, 160) : null
   for (const key of ['ph', 'ec', 'om']) {
@@ -140,34 +141,55 @@ export function gmSoilInputs(garden, soil = []) {
   return [...gmProfileSoil(garden),...points]
 }
 
-export function gmAssessmentKey({garden,climate=null,windows=null,soil=[],marks=[],estimates=null}) {
+export function gmAssessmentKey({garden,climate=null,windows=null,soil=[],marks=[],estimates=null,fill=null}) {
   const ordered=records=>[...records].sort((a,b)=>String(a.id).localeCompare(String(b.id)))
   return JSON.stringify({
     garden:{id:garden.id,lat:garden.lat,lon:garden.lon,polygon:garden.polygon,profile:garden.profile},
     climate,windows,soil:ordered(gmSoilInputs(garden,soil)),marks:ordered(gmScopeRecords(marks,garden)),
     estimates:estimates?{ph:estimates.ph?.value??null,ec:estimates.ec?.value??null}:null,
+    fill:fill?Object.fromEntries(fill.filled.map(k=>[k,fill.fields[k].value??fill.fields[k].custom??null])):null,
   })
 }
 
-export function gmAssessGarden({ garden, climate = null, windows = null, soil = [], marks = [], estimates = null }) {
+/**
+ * fill: kết quả sfFill (site/logic/smartFill.js). CHỈ dùng trường 'auto' khi hồ sơ trống (cây, mùa vụ);
+ * kết quả mang autoFilled để giao diện ghi rõ "≈ tự điền". Không truyền fill → hành vi như cũ.
+ */
+export function gmAssessGarden({ garden, climate = null, windows = null, soil = [], marks = [], estimates = null, fill = null }) {
   const p = garden.profile ?? gmProfileDefaults()
-  const empty = reason => ({ grade: 'gray', reason, zones: null, result: null, field: null })
+  const autoFilled = []
+  const empty = reason => ({ grade: 'gray', reason, zones: null, result: null, field: null, autoFilled })
+  const auto = (k) => (fill?.fields?.[k]?.origin === 'auto' ? fill.fields[k] : null)
+  let cropId = p.cropId
+  if (!cropId && !p.cropName && auto('cropId')?.value && CROP_LIBRARY[auto('cropId').value]) {
+    cropId = auto('cropId').value
+    autoFilled.push('cropId')
+  }
+  const customName = p.cropName ?? (!cropId ? auto('cropId')?.custom : null)
   // Cây tự nhập ngoài thư viện: giữ tên, báo thiếu tham số FAO (không ép thành "chưa chọn cây").
-  if (!p.cropId && p.cropName) return empty('cropNotInLibrary')
-  if (!p.cropId) return empty('noCrop')
+  if (!cropId && customName) {
+    if (!p.cropName) autoFilled.push('cropId')
+    return empty('cropNotInLibrary')
+  }
+  if (!cropId) return empty('noCrop')
   if (!gmHasBoundary(garden)) return empty('noBoundary')
   if (!climate) return empty('noClimate')
-  const ndviWindow = windows?.find(w => w.season === p.season) ?? null
+  let season = p.season
+  if (!season && !p.sowing && auto('season')) {
+    season = auto('season').value
+    autoFilled.push('season')
+  }
+  const ndviWindow = windows?.find(w => w.season === season) ?? null
   if (!ndviWindow && !p.sowing) return empty('noSeason')
   const field = fdField({ lat: garden.lat, lon: garden.lon }, garden.polygon, garden.id)
-  const window = suitWindow({ ndviWindow, sowingMonth: p.sowing, crop: p.cropId })
+  const window = suitWindow({ ndviWindow, sowingMonth: p.sowing, crop: cropId })
   const scopedSoil = gmSoilInputs(garden, soil)
-  const zones = znAssess({ crop: p.cropId, window, climate, irrigation: p.irrigation, field, soil: scopedSoil, marks: gmScopeRecords(marks, garden), estimates })
+  const zones = znAssess({ crop: cropId, window, climate, irrigation: p.irrigation, field, soil: scopedSoil, marks: gmScopeRecords(marks, garden), estimates })
   // Những thửa quá hẹp không chứa tâm ô vẫn phải giữ xám thay vì tạo vùng giả.
   if (!zones.cells.length) return empty('noCells')
   const order = ['green', 'yellow', 'red']
   const grades = zones.cells.map(c => c.result.overall)
   const grade = grades.includes('gray') ? 'gray' : grades.reduce((a,b) => order.indexOf(b) > order.indexOf(a) ? b : a, 'green')
   const representative=zones.zones.find(z=>z.result.overall===grade) ?? zones.zones[0]
-  return { grade, reason: grade === 'gray' ? 'missingData' : 'assessed', zones, field, window, result: representative?.result ?? null }
+  return { grade, reason: grade === 'gray' ? 'missingData' : 'assessed', zones, field, window, result: representative?.result ?? null, autoFilled }
 }

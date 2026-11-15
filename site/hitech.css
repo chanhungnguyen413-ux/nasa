@@ -232,17 +232,12 @@ body[data-view=glossary] #glossary .mk-page-head h2 { font-size: clamp(30px, 3.4
   transform: scaleX(0);
   transition: transform 520ms var(--ease-out-expo);
 }
-.mk-tool-card:hover { box-shadow: 0 0 0 1px rgba(98, 141, 57, 0.14), 0 18px 34px -18px rgba(33, 68, 45, 0.35); }
 .mk-tool-card:hover::before { transform: scaleX(1); }
 .mk-tool-card:active { transform: translateY(-2px) scale(0.99); transition-duration: 90ms; }
-.mk-tool-featured { background: linear-gradient(160deg, #2a5a3c 0%, #254f35 45%, #1d4430 100%); }
 .mk-tool-featured::before { background: linear-gradient(90deg, transparent, var(--mk-lime), transparent); }
-.mk-tool-featured:hover { box-shadow: 0 0 0 1px var(--mk-glow-line), 0 22px 40px -18px rgba(11, 46, 27, 0.6); }
 .mk-button:active { transform: translateY(0) scale(0.98); transition-duration: 90ms; }
-.mk-button-primary { box-shadow: 0 10px 24px -14px rgba(34, 76, 52, 0.8); }
 
 /* CTA: lưới mờ màu lime + một vệ tinh nhỏ chạy chậm trên quỹ đạo */
-.mk-cta-panel { background: radial-gradient(120% 140% at 100% 0%, #2a5038 0%, #203f2e 48%, #18372a 100%); box-shadow: inset 0 0 0 1px rgba(184, 229, 90, 0.1); }
 .mk-cta-panel.mk-tech-grid { --mk-grid-ink: rgba(209, 232, 166, 0.06); }
 .mk-cta-panel.mk-tech-grid::before { -webkit-mask-image: radial-gradient(90% 120% at 100% 50%, #000 0%, transparent 70%); mask-image: radial-gradient(90% 120% at 100% 50%, #000 0%, transparent 70%); }
 .mk-cta-orbits { animation: mk-orbit 60s linear infinite; }
@@ -668,23 +663,23 @@ body[data-view=glossary] #glossary .mk-page-head h2 { font-size: clamp(30px, 3.4
        Kế hoạch 3 vụ dạng bảng ít chữ (rotationFarm.js: rfDataTableHtml, rfPlanTableHtml).
    ===================================================================== */
 /* Lưới cân đối: cột trái "đo tại ruộng", cột phải "vệ tinh" + "mô hình" xếp chồng → hai cột cao gần bằng nhau. */
-#rot-farm .rf-dl-grid { display: grid; gap: 12px; }
-#rot-farm .rf-dl-stack { display: grid; gap: 12px; align-content: start; }
-@media (min-width: 768px) { #rot-farm .rf-dl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
-#rot-farm .rf-dl-group { border: 1px solid #dce3d5; border-radius: 18px; background: #fafbf6; padding: 12px 14px 4px; }
-#rot-farm .rf-dl-title { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #6d9b37; }
-#rot-farm .rf-dl-list > li + li { border-top: 1px solid #e6ebe0; }
-#rot-farm .rf-dl-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 9px 0; }
-#rot-farm .rf-fix { margin-left: 6px; border-radius: 999px; background: #173d2b; color: #fff; padding: 2px 9px; font-size: 11px; font-weight: 800; white-space: nowrap; }
-#rot-farm .rf-fix:hover { background: #254f35; }
+:is(#rot-farm, #mk-print) .rf-dl-grid { display: grid; gap: 12px; }
+:is(#rot-farm, #mk-print) .rf-dl-stack { display: grid; gap: 12px; align-content: start; }
+@media (min-width: 768px) { :is(#rot-farm, #mk-print) .rf-dl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+:is(#rot-farm, #mk-print) .rf-dl-group { border: 1px solid #dce3d5; border-radius: 18px; background: #fafbf6; padding: 12px 14px 4px; }
+:is(#rot-farm, #mk-print) .rf-dl-title { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #6d9b37; }
+:is(#rot-farm, #mk-print) .rf-dl-list > li + li { border-top: 1px solid #e6ebe0; }
+:is(#rot-farm, #mk-print) .rf-dl-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 9px 0; }
+:is(#rot-farm, #mk-print) .rf-fix { margin-left: 6px; border-radius: 999px; background: #173d2b; color: #fff; padding: 2px 9px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+:is(#rot-farm, #mk-print) .rf-fix:hover { background: #254f35; }
 
 /* Nhãn độ tin cậy có nguồn: ⓘ + gạch chấm báo "rà vào xem được". */
-#rot-farm .rf-rate { position: relative; flex: none; }
-#rot-farm .rf-rate:hover, #rot-farm .rf-rate:focus-within, #rot-farm .rf-rate.is-open { z-index: 70; }
-#rot-farm .rf-rate-btn { cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; }
-#rot-farm .rf-rate-btn:focus-visible { outline: 2px solid #628d39; outline-offset: 2px; }
-#rot-farm .rf-rate-i { font-size: 10px; opacity: .75; text-decoration: none; }
-#rot-farm .rf-tip {
+:is(#rot-farm, #mk-print) .rf-rate { position: relative; flex: none; }
+:is(#rot-farm, #mk-print) .rf-rate:hover, :is(#rot-farm, #mk-print) .rf-rate:focus-within, :is(#rot-farm, #mk-print) .rf-rate.is-open { z-index: 70; }
+:is(#rot-farm, #mk-print) .rf-rate-btn { cursor: help; text-decoration: underline dotted; text-underline-offset: 3px; }
+:is(#rot-farm, #mk-print) .rf-rate-btn:focus-visible { outline: 2px solid #628d39; outline-offset: 2px; }
+:is(#rot-farm, #mk-print) .rf-rate-i { font-size: 10px; opacity: .75; text-decoration: none; }
+:is(#rot-farm, #mk-print) .rf-tip {
   position: absolute; right: 0; top: calc(100% + 6px); z-index: 70;
   width: min(300px, 82vw); padding: 10px 12px; border-radius: 14px;
   background: #0b2e1b; color: #f7f8f2; box-shadow: 0 14px 34px rgba(11, 46, 27, .28);
@@ -693,90 +688,195 @@ body[data-view=glossary] #glossary .mk-page-head h2 { font-size: clamp(30px, 3.4
   transition: opacity 160ms var(--ease-out-expo, ease-out), transform 160ms var(--ease-out-expo, ease-out), visibility 0s linear 160ms;
   pointer-events: none;
 }
-#rot-farm .rf-rate:hover .rf-tip, #rot-farm .rf-rate:focus-within .rf-tip, #rot-farm .rf-rate.is-open .rf-tip {
+:is(#rot-farm, #mk-print) .rf-rate:hover .rf-tip, :is(#rot-farm, #mk-print) .rf-rate:focus-within .rf-tip, :is(#rot-farm, #mk-print) .rf-rate.is-open .rf-tip {
   opacity: 1; visibility: visible; transform: none; transition-delay: 0s; pointer-events: auto;
 }
-#rot-farm .rf-tip-row + .rf-tip-row { margin-top: 5px; }
-#rot-farm .rf-tip dt { font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #b8e55a; }
-#rot-farm .rf-tip dd { margin: 1px 0 0; font-weight: 600; }
-#rot-farm .rf-tip-url { display: block; margin-top: 7px; font-size: 10px; color: rgba(247, 248, 242, .7); word-break: break-all; }
+:is(#rot-farm, #mk-print) .rf-tip-row + .rf-tip-row { margin-top: 5px; }
+:is(#rot-farm, #mk-print) .rf-tip dt { font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #b8e55a; }
+:is(#rot-farm, #mk-print) .rf-tip dd { margin: 1px 0 0; font-weight: 600; }
+:is(#rot-farm, #mk-print) .rf-tip-url { display: block; margin-top: 7px; font-size: 10px; color: rgba(247, 248, 242, .7); word-break: break-all; }
 
 /* Kế hoạch 3 vụ: 3 ô số tóm tắt. */
-#rot-farm .rf-sum { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-#rot-farm .rf-sum-tile { border: 1px solid #dce3d5; border-radius: 14px; background: #fafbf6; padding: 10px 12px; }
-#rot-farm .rf-sum-title { font-size: 11px; font-weight: 800; color: #627063; }
-#rot-farm .rf-sum-big { margin-top: 2px; font-size: 16px; font-weight: 800; color: #173d2b; font-variant-numeric: tabular-nums; }
-#rot-farm .rf-pair { display: grid; gap: 3px; margin-top: 6px; }
-#rot-farm .rf-pair-track { display: block; height: 6px; overflow: hidden; border-radius: 999px; background: #edf1e4; }
-#rot-farm .rf-pair-track > .rf-bar { display: block; height: 100%; border-radius: 999px; }
-#rot-farm .rf-pair-rice, #rot-farm .rf-legend-rice { background: #9aa79a; }
-#rot-farm .rf-legend-rice, #rot-farm .rf-legend-this { display: inline-block; width: 10px; height: 6px; margin-right: 4px; border-radius: 999px; vertical-align: middle; }
-#rot-farm .rf-legend-this { background: #628d39; }
+:is(#rot-farm, #mk-print) .rf-sum { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+:is(#rot-farm, #mk-print) .rf-sum-tile { border: 1px solid #dce3d5; border-radius: 14px; background: #fafbf6; padding: 10px 12px; }
+:is(#rot-farm, #mk-print) .rf-sum-title { font-size: 11px; font-weight: 800; color: #627063; }
+:is(#rot-farm, #mk-print) .rf-sum-big { margin-top: 2px; font-size: 16px; font-weight: 800; color: #173d2b; font-variant-numeric: tabular-nums; }
+:is(#rot-farm, #mk-print) .rf-pair { display: grid; gap: 3px; margin-top: 6px; }
+:is(#rot-farm, #mk-print) .rf-pair-track { display: block; height: 6px; overflow: hidden; border-radius: 999px; background: #edf1e4; }
+:is(#rot-farm, #mk-print) .rf-pair-track > .rf-bar { display: block; height: 100%; border-radius: 999px; }
+:is(#rot-farm, #mk-print) .rf-pair-rice, :is(#rot-farm, #mk-print) .rf-legend-rice { background: #9aa79a; }
+:is(#rot-farm, #mk-print) .rf-legend-rice, :is(#rot-farm, #mk-print) .rf-legend-this { display: inline-block; width: 10px; height: 6px; margin-right: 4px; border-radius: 999px; vertical-align: middle; }
+:is(#rot-farm, #mk-print) .rf-legend-this { background: #628d39; }
 /* Màn hẹp: tooltip thành thẻ cố định sát đáy màn hình → không bị cắt mép trái hay bởi khung chứa. */
 @media (max-width: 640px) {
-  #rot-farm .rf-tip { position: fixed; left: 12px; right: 12px; top: auto; bottom: calc(16px + env(safe-area-inset-bottom)); width: auto; max-height: 60vh; overflow-y: auto; transform: translateY(8px); }
+  :is(#rot-farm, #mk-print) .rf-tip { position: fixed; left: 12px; right: 12px; top: auto; bottom: calc(16px + env(safe-area-inset-bottom)); width: auto; max-height: 60vh; overflow-y: auto; transform: translateY(8px); }
 }
-#rot-farm .rf-plan-common { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; border-radius: 14px; background: #fdf8ea; border: 1px solid #f1e2b8; padding: 8px 12px; }
-#rot-farm .rf-plan-note { display: inline-flex; border-radius: 999px; background: #fdf3dc; color: #8a5a0a; padding: 4px 12px; font-size: 12px; font-weight: 800; }
+:is(#rot-farm, #mk-print) .rf-plan-common { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 10px; border-radius: 14px; background: #fdf8ea; border: 1px solid #f1e2b8; padding: 8px 12px; }
+:is(#rot-farm, #mk-print) .rf-plan-note { display: inline-flex; border-radius: 999px; background: #fdf3dc; color: #8a5a0a; padding: 4px 12px; font-size: 12px; font-weight: 800; }
 
 /* Kế hoạch 3 vụ: bảng 4 cột trên màn rộng, mỗi vụ một thẻ trên điện thoại (nhãn cột hiện trong thẻ). */
-#rot-farm .rf-plan { border: 1px solid #dce3d5; border-radius: 18px; overflow: hidden; }
-#rot-farm .rf-plan-head { display: none; }
-#rot-farm .rf-plan-row { display: grid; gap: 8px; padding: 12px 14px; }
-#rot-farm .rf-plan-row + .rf-plan-row { border-top: 1px solid #e6ebe0; }
-#rot-farm .rf-plan-label { display: block; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #6d9b37; }
+:is(#rot-farm, #mk-print) .rf-plan { border: 1px solid #dce3d5; border-radius: 18px; overflow: hidden; }
+:is(#rot-farm, #mk-print) .rf-plan-head { display: none; }
+:is(#rot-farm, #mk-print) .rf-plan-row { display: grid; gap: 8px; padding: 12px 14px; }
+:is(#rot-farm, #mk-print) .rf-plan-row + .rf-plan-row { border-top: 1px solid #e6ebe0; }
+:is(#rot-farm, #mk-print) .rf-plan-label { display: block; font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #6d9b37; }
 @media (min-width: 768px) {
-  #rot-farm .rf-plan-head, #rot-farm .rf-plan-row { display: grid; grid-template-columns: 1.1fr 1.2fr 1.2fr 2fr; gap: 14px; align-items: start; }
-  #rot-farm .rf-plan-head { background: #f7f8f2; padding: 8px 14px; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #6d9b37; }
-  #rot-farm .rf-plan-label { display: none; }
+  :is(#rot-farm, #mk-print) .rf-plan-head, :is(#rot-farm, #mk-print) .rf-plan-row { display: grid; grid-template-columns: 1.1fr 1.2fr 1.2fr 2fr; gap: 14px; align-items: start; }
+  :is(#rot-farm, #mk-print) .rf-plan-head { background: #f7f8f2; padding: 8px 14px; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #6d9b37; }
+  :is(#rot-farm, #mk-print) .rf-plan-label { display: none; }
 }
-#rot-farm .rf-tag { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 800; white-space: nowrap; }
-#rot-farm .rf-tag-ok { background: #e3f0cd; color: #254f35; }
-#rot-farm .rf-tag-act { background: #dbeaf6; color: #1d4f73; }
-#rot-farm .rf-tag-warn { background: #fdf3dc; color: #8a5a0a; }
-#rot-farm .rf-tag-risk { background: #f6ddd2; color: #8f2f14; }
+:is(#rot-farm, #mk-print) .rf-tag { display: inline-flex; align-items: center; border-radius: 999px; padding: 3px 9px; font-size: 11px; font-weight: 800; white-space: nowrap; }
+:is(#rot-farm, #mk-print) .rf-tag-ok { background: #e3f0cd; color: #254f35; }
+:is(#rot-farm, #mk-print) .rf-tag-act { background: #dbeaf6; color: #1d4f73; }
+:is(#rot-farm, #mk-print) .rf-tag-warn { background: #fdf3dc; color: #8a5a0a; }
+:is(#rot-farm, #mk-print) .rf-tag-risk { background: #f6ddd2; color: #8f2f14; }
 @media (max-width: 520px) {
-  #rot-farm .rf-sum { grid-template-columns: 1fr; }
+  :is(#rot-farm, #mk-print) .rf-sum { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  #rot-farm .rf-tip { transition: none; transform: none; }
+  :is(#rot-farm, #mk-print) .rf-tip { transition: none; transform: none; }
 }
 
 /* =====================================================================
    13. Đề xuất luân canh tự do (rotationFarm.js: rfGenHtml) — ô mô tả, bảng đề xuất, "Vì sao?".
    ===================================================================== */
-#rot-farm .rf-gen-card { border: 1px solid #dfe5d9; border-radius: 28px; background: #fff; padding: 20px; box-shadow: var(--shadow-card, 0 1px 2px rgba(25, 45, 34, .06)); }
-#rot-farm .rf-wish { display: grid; gap: 8px; border: 1px solid #dce3d5; border-radius: 18px; background: #fafbf6; padding: 12px 14px; }
-#rot-farm .rf-wish textarea { width: 100%; min-height: 56px; resize: vertical; border: 1px solid #dfe5d9; border-radius: 14px; background: #fff; padding: 10px 12px; font-size: 15px; color: #192d22; }
-#rot-farm .rf-wish textarea:focus { outline: 2px solid #628d39; outline-offset: 1px; }
-#rot-farm .rf-gen { border: 1px solid #dce3d5; border-radius: 18px; overflow: hidden; }
-#rot-farm .rf-gen-head { display: none; }
-#rot-farm .rf-gen-row { display: grid; gap: 8px; padding: 12px 14px; border-top: 1px solid #e6ebe0; }
-#rot-farm .rf-gen-row:first-of-type, #rot-farm .rf-gen-head + .rf-gen-row { border-top: 0; }
-#rot-farm .rf-gen-row.is-on { background: #edf1e4; box-shadow: inset 4px 0 0 #628d39; }
-#rot-farm .rf-gen-row.is-current { background: #fbfcf8; }
-#rot-farm .rf-gen-row.is-current.is-on { background: #edf1e4; }
-#rot-farm .rf-gen-pick { text-align: left; cursor: pointer; border-radius: 10px; }
-#rot-farm .rf-gen-pick:focus-visible { outline: 2px solid #628d39; outline-offset: 2px; }
-#rot-farm .rf-gen-kind { display: inline-flex; border-radius: 999px; background: #e3f0cd; color: #254f35; padding: 1px 8px; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
-#rot-farm .rf-gen-row.is-current .rf-gen-kind { background: #edf1e4; color: #627063; }
-#rot-farm .rf-gen-cell { display: flex; align-items: center; gap: 8px; }
-#rot-farm .rf-gen-why { grid-column: 1 / -1; }
-#rot-farm .rf-gen-why > summary, #rot-farm .rf-gen-more > summary { cursor: pointer; width: fit-content; border-radius: 999px; border: 1px solid #dce3d5; padding: 2px 10px; font-size: 12px; font-weight: 800; color: #254f35; list-style: none; }
-#rot-farm .rf-gen-why > summary::-webkit-details-marker, #rot-farm .rf-gen-more > summary::-webkit-details-marker { display: none; }
-#rot-farm .rf-gen-why[open] > summary { background: #254f35; color: #fff; border-color: #254f35; }
-#rot-farm .rf-why { margin-top: 8px; border-radius: 14px; background: #fafbf6; border: 1px solid #e6ebe0; padding: 10px 12px; }
-#rot-farm .rf-why-seasons { display: grid; gap: 8px; }
-@media (min-width: 900px) { #rot-farm .rf-why-seasons { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-#rot-farm .rf-why-season { border-radius: 12px; background: #fff; border: 1px solid #e6ebe0; padding: 8px 10px; }
-#rot-farm .rf-why-crit { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; background: #f7f8f2; padding: 1px 7px; font-size: 11px; font-weight: 700; color: #192d22; }
-#rot-farm .rf-why-ai { margin-bottom: 8px; border-radius: 12px; background: #eef5fb; border: 1px solid #d3e4f2; padding: 8px 10px; }
-#rot-farm .rf-gen-more { margin-top: 12px; }
-#rot-farm .rf-gen-chip { border-radius: 999px; border: 1px solid #dce3d5; background: #fff; padding: 4px 10px; font-size: 12px; font-weight: 700; color: #192d22; }
-#rot-farm .rf-gen-chip:hover, #rot-farm .rf-gen-chip.is-on { border-color: #254f35; background: #edf1e4; }
-#rot-farm .rf-gen-row .rf-plan-label { margin-right: 4px; }
+:is(#rot-farm, #mk-print) .rf-gen-card { border: 1px solid #dfe5d9; border-radius: 28px; background: #fff; padding: 20px; box-shadow: var(--shadow-card, 0 1px 2px rgba(25, 45, 34, .06)); }
+:is(#rot-farm, #mk-print) .rf-wish { display: grid; gap: 8px; border: 1px solid #dce3d5; border-radius: 18px; background: #fafbf6; padding: 12px 14px; }
+:is(#rot-farm, #mk-print) .rf-wish textarea { width: 100%; min-height: 56px; resize: vertical; border: 1px solid #dfe5d9; border-radius: 14px; background: #fff; padding: 10px 12px; font-size: 15px; color: #192d22; }
+:is(#rot-farm, #mk-print) .rf-wish textarea:focus { outline: 2px solid #628d39; outline-offset: 1px; }
+:is(#rot-farm, #mk-print) .rf-gen { border: 1px solid #dce3d5; border-radius: 18px; overflow: hidden; }
+:is(#rot-farm, #mk-print) .rf-gen-head { display: none; }
+:is(#rot-farm, #mk-print) .rf-gen-row { display: grid; gap: 8px; padding: 12px 14px; border-top: 1px solid #e6ebe0; }
+:is(#rot-farm, #mk-print) .rf-gen-row:first-of-type, :is(#rot-farm, #mk-print) .rf-gen-head + .rf-gen-row { border-top: 0; }
+:is(#rot-farm, #mk-print) .rf-gen-row.is-on { background: #edf1e4; box-shadow: inset 4px 0 0 #628d39; }
+:is(#rot-farm, #mk-print) .rf-gen-row.is-current { background: #fbfcf8; }
+:is(#rot-farm, #mk-print) .rf-gen-row.is-current.is-on { background: #edf1e4; }
+:is(#rot-farm, #mk-print) .rf-gen-pick { text-align: left; cursor: pointer; border-radius: 10px; }
+:is(#rot-farm, #mk-print) .rf-gen-pick:focus-visible { outline: 2px solid #628d39; outline-offset: 2px; }
+:is(#rot-farm, #mk-print) .rf-gen-kind { display: inline-flex; border-radius: 999px; background: #e3f0cd; color: #254f35; padding: 1px 8px; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+:is(#rot-farm, #mk-print) .rf-gen-row.is-current .rf-gen-kind { background: #edf1e4; color: #627063; }
+:is(#rot-farm, #mk-print) .rf-gen-cell { display: flex; align-items: center; gap: 8px; }
+:is(#rot-farm, #mk-print) .rf-gen-why { grid-column: 1 / -1; }
+:is(#rot-farm, #mk-print) .rf-gen-why > summary, :is(#rot-farm, #mk-print) .rf-gen-more > summary { cursor: pointer; width: fit-content; border-radius: 999px; border: 1px solid #dce3d5; padding: 2px 10px; font-size: 12px; font-weight: 800; color: #254f35; list-style: none; }
+:is(#rot-farm, #mk-print) .rf-gen-why > summary::-webkit-details-marker, :is(#rot-farm, #mk-print) .rf-gen-more > summary::-webkit-details-marker { display: none; }
+:is(#rot-farm, #mk-print) .rf-gen-why[open] > summary { background: #254f35; color: #fff; border-color: #254f35; }
+:is(#rot-farm, #mk-print) .rf-why { margin-top: 8px; border-radius: 14px; background: #fafbf6; border: 1px solid #e6ebe0; padding: 10px 12px; }
+:is(#rot-farm, #mk-print) .rf-why-seasons { display: grid; gap: 8px; }
+@media (min-width: 900px) { :is(#rot-farm, #mk-print) .rf-why-seasons { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+:is(#rot-farm, #mk-print) .rf-why-season { border-radius: 12px; background: #fff; border: 1px solid #e6ebe0; padding: 8px 10px; }
+:is(#rot-farm, #mk-print) .rf-why-crit { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; background: #f7f8f2; padding: 1px 7px; font-size: 11px; font-weight: 700; color: #192d22; }
+:is(#rot-farm, #mk-print) .rf-why-ai { margin-bottom: 8px; border-radius: 12px; background: #eef5fb; border: 1px solid #d3e4f2; padding: 8px 10px; }
+:is(#rot-farm, #mk-print) .rf-gen-more { margin-top: 12px; }
+:is(#rot-farm, #mk-print) .rf-gen-chip { border-radius: 999px; border: 1px solid #dce3d5; background: #fff; padding: 4px 10px; font-size: 12px; font-weight: 700; color: #192d22; }
+:is(#rot-farm, #mk-print) .rf-gen-chip:hover, :is(#rot-farm, #mk-print) .rf-gen-chip.is-on { border-color: #254f35; background: #edf1e4; }
+:is(#rot-farm, #mk-print) .rf-gen-row .rf-plan-label { margin-right: 4px; }
 @media (min-width: 768px) {
-  #rot-farm .rf-gen-head, #rot-farm .rf-gen-row { display: grid; grid-template-columns: 2.4fr 1fr 1.2fr 1fr .6fr; gap: 14px; align-items: center; }
-  #rot-farm .rf-gen-head { background: #f7f8f2; padding: 8px 14px; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #6d9b37; }
-  #rot-farm .rf-gen-row .rf-plan-label { display: none; }
+  :is(#rot-farm, #mk-print) .rf-gen-head, :is(#rot-farm, #mk-print) .rf-gen-row { display: grid; grid-template-columns: 2.4fr 1fr 1.2fr 1fr .6fr; gap: 14px; align-items: center; }
+  :is(#rot-farm, #mk-print) .rf-gen-head { background: #f7f8f2; padding: 8px 14px; font-size: 11px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #6d9b37; }
+  :is(#rot-farm, #mk-print) .rf-gen-row .rf-plan-label { display: none; }
 }
+
+/* =====================================================================
+   14. Báo cáo in / PDF (#mk-print): chỉ in báo cáo, mở sẵn tooltip nguồn và phần "Vì sao?".
+   ===================================================================== */
+#mk-print { display: none; }
+:is(#rot-farm, #mk-print) .rf-gen-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; grid-column: 1 / -1; }
+:is(#rot-farm, #mk-print) .rf-gen-actions .rf-gen-why { flex: 1 1 100%; order: 2; }
+:is(#rot-farm, #mk-print) .rf-gen-pdf { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; border: 1px solid #dce3d5; padding: 2px 10px; font-size: 12px; font-weight: 800; color: #254f35; background: #fff; }
+:is(#rot-farm, #mk-print) .rf-gen-pdf:hover { background: #edf1e4; }
+@media print {
+  @page { size: A4; margin: 14mm; }
+  /* Trang bản đồ khóa body 100dvh + overflow hidden: mở khóa để báo cáo dài in đủ nhiều trang. */
+  html, body, body[data-view] { overflow: visible !important; height: auto !important; min-height: 0 !important; background: #fff !important; }
+  body > *:not(#mk-print) { display: none !important; }
+  #mk-print { display: block; position: static; color: #192d22; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  #mk-print, #mk-print * { visibility: visible !important; }
+  #mk-print .rf-report-head h1 { font-size: 18pt; font-weight: 800; margin: 2px 0 8px; color: #0b2e1b; }
+  #mk-print .rf-report-brand { font-size: 9pt; color: #627063; }
+  #mk-print .rf-report-meta { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 16px; font-size: 9.5pt; }
+  #mk-print .rf-report-meta dt { color: #627063; font-size: 8.5pt; }
+  #mk-print .rf-report-meta dd { margin: 0; font-weight: 700; }
+  #mk-print .rf-report-sec { margin-top: 14px; break-inside: auto; }
+  #mk-print .rf-report-sec > h2 { font-size: 12.5pt; font-weight: 800; color: #254f35; border-bottom: 1.5px solid #628d39; padding-bottom: 3px; margin-bottom: 8px; break-after: avoid; }
+  #mk-print .rf-report-table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+  #mk-print .rf-report-table th, #mk-print .rf-report-table td { border: 1px solid #dfe5d9; padding: 3px 6px; text-align: left; vertical-align: top; }
+  #mk-print .rf-report-table th { background: #f7f8f2; }
+  #mk-print .rf-report-table tr { break-inside: avoid; }
+  #mk-print .rf-report-note, #mk-print .rf-report-foot { font-size: 8.5pt; color: #627063; margin-top: 4px; }
+  #mk-print .rf-report-foot { margin-top: 16px; border-top: 1px solid #dfe5d9; padding-top: 6px; }
+  #mk-print .rf-report-big { font-size: 14pt; font-weight: 800; }
+  #mk-print .rf-report-list { padding-left: 18px; list-style: decimal; }
+  /* Tooltip nguồn in thẳng dưới mỗi dòng: minh bạch đầy đủ trên giấy. */
+  #mk-print .rf-dl-row { flex-wrap: wrap; break-inside: avoid; }
+  #mk-print .rf-rate { flex: 1 1 100%; display: flex; flex-direction: column; align-items: flex-start; }
+  #mk-print .rf-dt-title, #mk-print .rf-hint, #mk-print .rf-rate-i, #mk-print .rf-fix, #mk-print .rf-gen-pdf, #mk-print button[data-rf="editField"], #mk-print button[data-rf="focusQuick"] { display: none !important; }
+  #mk-print .rf-tip { position: static !important; opacity: 1 !important; visibility: visible !important; transform: none !important; width: auto !important; margin-top: 4px; background: #f7f8f2 !important; color: #192d22 !important; box-shadow: none !important; padding: 5px 8px; font-size: 8pt; }
+  #mk-print .rf-tip dt { color: #4f7a2a !important; }
+  #mk-print .rf-tip-url { color: #627063 !important; }
+  #mk-print .rf-dl-grid { display: block; }
+  #mk-print .rf-dl-group, #mk-print .rf-dl-stack > .rf-dl-group { margin-bottom: 8px; }
+  #mk-print details { display: block; }
+  #mk-print details > summary { display: none; }
+  #mk-print .rf-why-seasons { grid-template-columns: repeat(3, 1fr); }
+  #mk-print * { animation: none !important; transition: none !important; }
+  #mk-print .rf-bar { transform: scaleX(var(--rf-w, 0)) !important; }
+}
+
+/* =====================================================================
+   15. Quản lý vườn nhanh ở trang Luân canh (rotationFarm.js: rfMgmtHtml, rfMgmtActions)
+   ===================================================================== */
+#rot-farm .rf-mgmt { margin-top: 12px; border: 1px solid #dce3d5; border-radius: 18px; background: #fafbf6; padding: 10px 14px; }
+#rot-farm .rf-mgmt > summary { cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: #254f35; list-style: none; }
+#rot-farm .rf-mgmt > summary::-webkit-details-marker { display: none; }
+#rot-farm .rf-mgmt ul { margin-top: 8px; display: grid; gap: 2px; }
+#rot-farm .rf-mgmt-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 7px 0; border-top: 1px solid #e6ebe0; }
+#rot-farm .rf-mgmt-name { font-weight: 800; color: #173d2b; text-align: left; }
+#rot-farm .rf-mgmt-name:hover { text-decoration: underline; }
+#rot-farm .rf-mgmt-area { font-size: 12px; color: #627063; font-variant-numeric: tabular-nums; }
+#rot-farm .rf-mgmt-actions { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; }
+#rot-farm .rf-mgmt-btn { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; border: 1px solid #dce3d5; background: #fff; color: #254f35; }
+#rot-farm .rf-mgmt-btn:hover { background: #edf1e4; }
+#rot-farm .rf-mgmt-btn.is-danger { color: #8f2f14; }
+#rot-farm .rf-mgmt-btn.is-danger:hover { background: #f6ddd2; }
+#rot-farm .rf-mgmt-btn:focus-visible, #rot-farm .rf-mgmt-group select:focus-visible { outline: 2px solid #628d39; outline-offset: 2px; }
+#rot-farm .rf-mgmt-group select { height: 34px; max-width: 160px; border-radius: 10px; border: 1px solid #dce3d5; background: #fff; padding: 0 8px; font-size: 12px; font-weight: 700; color: #192d22; }
+#rot-farm .rf-mgmt-edit { display: inline-flex; flex-direction: column; gap: 2px; }
+#rot-farm .rf-mgmt-input { min-width: 180px; height: 36px; border-radius: 10px; border: 1.5px solid #628d39; background: #fff; padding: 0 10px; font-weight: 800; color: #173d2b; }
+#rot-farm .rf-mgmt-input.is-big { font-size: 20px; height: 44px; }
+#rot-farm .rf-mgmt-hint { font-size: 11px; font-weight: 600; color: #627063; }
+@media print { #mk-print .rf-mgmt-actions, #mk-print .rf-mgmt { display: none !important; } }
+
+/* =====================================================================
+   16. "Thông số thửa": nhập ngay tại dòng (rotationFarm.js: rfParamEditor)
+   ===================================================================== */
+#rot-farm .rf-fix.is-soft { background: #fff; color: #254f35; border: 1px solid #c9d8bb; }
+#rot-farm .rf-fix.is-soft:hover { background: #edf1e4; }
+#rot-farm .rf-inline { display: grid; gap: 6px; margin-top: 4px; font-weight: 600; }
+#rot-farm .rf-inline-fields { display: flex; flex-wrap: wrap; gap: 6px; }
+#rot-farm .rf-inline-ctl { min-height: 38px; min-width: 0; max-width: 100%; border: 1.5px solid #628d39; border-radius: 10px; background: #fff; padding: 4px 10px; font-size: 14px; font-weight: 700; color: #173d2b; }
+#rot-farm .rf-inline-num { width: 120px; }
+#rot-farm .rf-inline-ctl:focus { outline: 2px solid #b8e55a; outline-offset: 1px; }
+#rot-farm .rf-inline-btns { display: flex; gap: 6px; }
+#rot-farm .rf-inline-save, #rot-farm .rf-inline-cancel { display: inline-flex; align-items: center; gap: 4px; min-height: 34px; border-radius: 999px; padding: 0 12px; font-size: 12px; font-weight: 800; }
+#rot-farm .rf-inline-save { background: #173d2b; color: #fff; }
+#rot-farm .rf-inline-cancel { border: 1px solid #dce3d5; background: #fff; color: #4f5f50; }
+#rot-farm .rf-inline-msg { font-size: 11px; color: #627063; }
+#rot-farm .rf-inline-msg.is-err { color: #8f2f14; font-weight: 800; }
+@media print { #mk-print .rf-inline-btns, #mk-print .rf-fix { display: none !important; } }
+
+/* =====================================================================
+   17. Ghép giao diện nasa-UI-UX (15/11/2026): loader mầm cây, cảnh 2D trang chủ, nền đất,
+       skeleton reveal (styles.css), click burst (redesign.css). Mục này chỉ giữ cho các lớp cũ
+       của hitech.css không đè hoặc làm hỏng hiệu ứng mới.
+   ===================================================================== */
+/* Fade khi đổi trang: chỉ giữ transform lúc đang chạy (backwards), trang bản đồ và #main chỉ mờ dần,
+   vì transform còn sót trên khung cha làm lệch bottom sheet position:fixed và khung Leaflet. */
+.mk-page-fade-in { animation-fill-mode: backwards; }
+[data-page="myfield"].mk-page-fade-in, #main.mk-page-fade-in { animation-name: mk-fade-in; }
+/* Khối có ::after trang trí riêng (vạch kẻ đầu trang, vạch lime khi rê thẻ): không cho skeleton chiếm ::after. */
+:is(.mk-page-head, .rf-card)[data-reveal]::after { opacity: 1; animation: none; border: 0; border-radius: 0; z-index: 2; }
+.mk-page-head[data-reveal]::after { position: static; }
+/* In / PDF: mọi khối hiện đủ, không còn skeleton. */
+#mk-print [data-reveal] > *, body.mk-printing-report [data-reveal] > * { opacity: 1 !important; transform: none !important; }
+#mk-print [data-reveal]::after, body.mk-printing-report [data-reveal]::after { display: none !important; }
+@media print { [data-reveal] > * { opacity: 1 !important; transform: none !important; } [data-reveal]::after, #mk-loader, .mk-click-burst { display: none !important; } }

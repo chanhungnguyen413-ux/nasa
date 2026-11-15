@@ -1,0 +1,1988 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mùa Vụ Mekong · Mekong Seasons — Hackathon AgriTech Pitch Deck</title>
+    <meta
+      name="description"
+      content="Bilingual VI/EN Hackathon AgriTech Pitch Deck for Mekong Seasons (Mùa Vụ Mekong): Zero-friction geospatial map, Always-on Smart Fill, 2-Tier Verified AI, and 3-Season Crop Rotation."
+    />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%230f3d24'/%3E%3Cg transform='translate(8 8)' fill='none' stroke='%23b8e55a' stroke-width='2.1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3'/%3E%3Cpath d='M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4'/%3E%3Cpath d='M5 21h14'/%3E%3C/g%3E%3C/svg%3E"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* =====================================================================
+         Bảng màu & Token lấy trực tiếp từ site/hitech.css và site/styles.css
+         ===================================================================== */
+      :root {
+        --mk-canvas: #f7f8f2;
+        --mk-surface: #fafbf6;
+        --mk-white: #ffffff;
+        --mk-line: #dfe5d9;
+        --mk-line-strong: #cfd8c6;
+        --mk-line-hover: #98ae7a;
+        --mk-ink: #192d22;
+        --mk-muted: #627063;
+        --mk-moss: #254f35;
+        --mk-moss-2: #173d2b;
+        --mk-moss-deep: #0f3d24;
+        --mk-moss-abyss: #0b2e1b;
+        --mk-lime: #b8e55a;
+        --mk-lime-soft: #d1e8a6;
+        --mk-accent: #628d39;
+        --mk-glow-line: rgba(184, 229, 90, 0.25);
+
+        --color-water-100: #dcecf7;
+        --color-water-500: #2e86c1;
+        --color-water-700: #1b5a86;
+        --color-sun-100: #fdf1d3;
+        --color-sun-400: #f2b134;
+        --color-sun-700: #7f5306;
+        --color-clay-100: #f6ddd2;
+        --color-clay-700: #8f2f14;
+
+        --mk-r-xl: 18px;
+        --mk-r-lg: 14px;
+        --mk-r-md: 12px;
+        --mk-r-sm: 9px;
+        --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+        --font-sans: "Be Vietnam Pro", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+        --font-serif: "Fraunces", Georgia, serif;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #071f12;
+        color: var(--mk-ink);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        user-select: none;
+      }
+
+      /* Chuyển đổi ngôn ngữ VI / EN tức thì bằng thuộc tính lang trên html */
+      html[lang="vi"] [data-lang="en"] {
+        display: none !important;
+      }
+      html[lang="en"] [data-lang="vi"] {
+        display: none !important;
+      }
+
+      /* Khung trình chiếu chuẩn 16:9 tự co giãn theo màn hình */
+      .deck-viewport {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at 15% 15%, rgba(98, 141, 57, 0.16), transparent 45%),
+          radial-gradient(circle at 85% 85%, rgba(46, 134, 193, 0.12), transparent 45%),
+          #071f12;
+      }
+
+      .deck-stage {
+        position: relative;
+        width: min(100vw, 177.7778vh);
+        height: min(56.25vw, 100vh);
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+        background: var(--mk-canvas);
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(184, 229, 90, 0.22);
+      }
+
+      /* Lưới kỹ thuật & góc ngắm vệ tinh từ site/hitech.css */
+      .mk-tech-grid {
+        position: relative;
+        isolation: isolate;
+      }
+      .mk-tech-grid::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(37, 79, 53, 0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(37, 79, 53, 0.055) 1px, transparent 1px);
+        background-size: 28px 28px;
+      }
+
+      .mk-reticle {
+        --mk-ret: rgba(98, 141, 57, 0.55);
+        background-image:
+          linear-gradient(var(--mk-ret) 0 0), linear-gradient(var(--mk-ret) 0 0),
+          linear-gradient(var(--mk-ret) 0 0), linear-gradient(var(--mk-ret) 0 0),
+          linear-gradient(var(--mk-ret) 0 0), linear-gradient(var(--mk-ret) 0 0),
+          linear-gradient(var(--mk-ret) 0 0), linear-gradient(var(--mk-ret) 0 0);
+        background-repeat: no-repeat;
+        background-size: 12px 1px, 1px 12px, 12px 1px, 1px 12px, 12px 1px, 1px 12px, 12px 1px, 1px 12px;
+        background-position:
+          top 8px left 8px, top 8px left 8px,
+          top 8px right 8px, top 8px right 8px,
+          bottom 8px left 8px, bottom 8px left 8px,
+          bottom 8px right 8px, bottom 8px right 8px;
+      }
+
+      /* Từng Slide */
+      .slide {
+        position: absolute;
+        inset: 0;
+        padding: 3.2% 4.2% 5.2%;
+        display: grid;
+        grid-template-rows: auto 1fr;
+        gap: 2.2%;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: opacity 260ms var(--ease-out-expo), transform 260ms var(--ease-out-expo), visibility 0s linear 260ms;
+        container-type: size;
+      }
+
+      .slide.is-active {
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        transition-delay: 0s;
+        z-index: 2;
+      }
+
+      .slide-dark {
+        background:
+          radial-gradient(90% 80% at 92% 12%, rgba(98, 141, 57, 0.22), transparent 60%),
+          linear-gradient(155deg, var(--mk-moss-abyss) 0%, var(--mk-moss-deep) 65%, #123f26 100%);
+        color: var(--mk-canvas);
+      }
+      .slide-dark.mk-tech-grid::before {
+        background-image:
+          linear-gradient(rgba(209, 232, 166, 0.065) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(209, 232, 166, 0.065) 1px, transparent 1px);
+      }
+
+      /* Đầu mỗi slide */
+      .slide-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 20px;
+        padding-bottom: 1.1%;
+        border-bottom: 1px solid var(--mk-line);
+      }
+      .slide-dark .slide-head {
+        border-bottom-color: rgba(209, 232, 166, 0.16);
+      }
+
+      .slide-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: clamp(11px, 1.05cqw, 15px);
+        font-weight: 700;
+        color: var(--mk-accent);
+        margin-bottom: 4px;
+      }
+      .slide-dark .slide-kicker {
+        color: var(--mk-lime);
+      }
+
+      .live-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--mk-lime);
+        box-shadow: 0 0 0 4px rgba(184, 229, 90, 0.22);
+      }
+
+      .slide-title {
+        font-size: clamp(21px, 2.45cqw, 38px);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        color: var(--mk-moss-2);
+      }
+      .slide-dark .slide-title {
+        color: #ffffff;
+      }
+
+      .slide-meta {
+        font-size: clamp(10px, 0.9cqw, 13px);
+        font-weight: 600;
+        color: var(--mk-muted);
+        font-variant-numeric: tabular-nums;
+        text-align: right;
+        white-space: nowrap;
+      }
+      .slide-dark .slide-meta {
+        color: var(--mk-lime-soft);
+      }
+
+      /* Bố cục Bento & Split */
+      .split-2 {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 2.2%;
+        height: 100%;
+        min-height: 0;
+      }
+      .split-hero {
+        display: grid;
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: 2.6%;
+        height: 100%;
+        min-height: 0;
+        align-items: center;
+      }
+      .bento-3 {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.8%;
+        height: 100%;
+        min-height: 0;
+      }
+      .rows-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        height: 100%;
+        min-height: 0;
+        justify-content: space-between;
+      }
+
+      /* Thẻ nội dung */
+      .card {
+        background: var(--mk-white);
+        border: 1px solid var(--mk-line);
+        border-radius: var(--mk-r-xl);
+        padding: clamp(14px, 1.5cqw, 24px);
+        box-shadow: 0 10px 28px -18px rgba(11, 46, 27, 0.18);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 0;
+      }
+      .card-subtle {
+        background: var(--mk-surface);
+        border: 1px solid var(--mk-line-strong);
+        border-radius: var(--mk-r-lg);
+        padding: clamp(12px, 1.25cqw, 20px);
+      }
+      .card-dark {
+        background: rgba(11, 46, 27, 0.76);
+        border: 1px solid rgba(184, 229, 90, 0.24);
+        border-radius: var(--mk-r-xl);
+        padding: clamp(14px, 1.5cqw, 24px);
+        color: var(--mk-canvas);
+        backdrop-filter: blur(12px);
+      }
+      .card-moss {
+        background: linear-gradient(150deg, var(--mk-moss-2), var(--mk-moss-abyss));
+        color: #ffffff;
+        border: 1px solid rgba(184, 229, 90, 0.28);
+        border-radius: var(--mk-r-xl);
+        padding: clamp(14px, 1.5cqw, 24px);
+      }
+
+      /* Con số lớn (Big Metrics) */
+      .big-metric {
+        font-family: var(--font-serif);
+        font-size: clamp(28px, 3.2cqw, 52px);
+        font-weight: 700;
+        line-height: 1.02;
+        letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+        color: var(--mk-moss-2);
+      }
+      .big-metric.lime {
+        color: var(--mk-lime);
+      }
+      .big-metric.amber {
+        color: var(--color-sun-400);
+      }
+      .big-metric.water {
+        color: var(--color-water-500);
+      }
+      .big-metric.clay {
+        color: var(--color-clay-700);
+      }
+
+      .card-heading {
+        font-size: clamp(15px, 1.32cqw, 20px);
+        font-weight: 800;
+        color: var(--mk-moss-2);
+        line-height: 1.25;
+      }
+      .card-dark .card-heading,
+      .card-moss .card-heading {
+        color: #ffffff;
+      }
+
+      .short-list {
+        list-style: none;
+        display: grid;
+        gap: clamp(6px, 0.7cqw, 11px);
+      }
+      .short-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 9px;
+        font-size: clamp(12px, 1.02cqw, 15.5px);
+        line-height: 1.42;
+        font-weight: 500;
+        color: var(--mk-ink);
+      }
+      .card-dark .short-list li,
+      .card-moss .short-list li {
+        color: rgba(247, 248, 242, 0.9);
+      }
+      .bullet-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--mk-accent);
+        margin-top: 7px;
+        flex-shrink: 0;
+      }
+      .bullet-dot.lime {
+        background: var(--mk-lime);
+      }
+      .bullet-dot.amber {
+        background: var(--color-sun-400);
+      }
+      .bullet-dot.clay {
+        background: var(--color-clay-700);
+      }
+
+      /* Nhãn độ tin cậy & chip chuẩn từ rotationFarm.js */
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border-radius: 999px;
+        padding: 3px 10px;
+        font-size: clamp(10px, 0.85cqw, 13px);
+        font-weight: 800;
+        white-space: nowrap;
+      }
+      .chip-high {
+        background: #6d9b37;
+        color: #ffffff;
+      }
+      .chip-med {
+        background: #d9ebb8;
+        color: #254f35;
+      }
+      .chip-ref {
+        background: #edf1e4;
+        color: #4f5f50;
+        border: 1px dashed #98ae7a;
+      }
+      .chip-amber {
+        background: var(--color-sun-100);
+        color: var(--color-sun-700);
+        border: 1px solid rgba(242, 177, 52, 0.45);
+      }
+      .chip-clay {
+        background: var(--color-clay-100);
+        color: var(--color-clay-700);
+      }
+      .chip-water {
+        background: var(--color-water-100);
+        color: var(--color-water-700);
+      }
+
+      /* Nút bấm Live Demo */
+      .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+      }
+      .btn-demo {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 18px;
+        border-radius: 999px;
+        font-size: clamp(12px, 1cqw, 15px);
+        font-weight: 800;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 140ms ease, box-shadow 200ms ease, background-color 200ms ease;
+      }
+      .btn-demo:hover {
+        transform: translateY(-1px);
+      }
+      .btn-demo:active {
+        transform: scale(0.98);
+      }
+      .btn-lime {
+        background: var(--mk-lime);
+        color: var(--mk-moss-abyss);
+        box-shadow: 0 10px 24px -10px rgba(184, 229, 90, 0.6);
+      }
+      .btn-moss {
+        background: var(--mk-moss-2);
+        color: #ffffff;
+      }
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        border: 1px solid rgba(184, 229, 90, 0.35);
+      }
+
+      /* Giao diện giả lập Thông số thửa & Tự điền (Slide 3) */
+      .mock-table {
+        display: grid;
+        gap: 8px;
+      }
+      .mock-row {
+        display: grid;
+        grid-template-columns: 1.15fr 1.35fr auto auto;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 12px;
+        border-radius: var(--mk-r-md);
+        background: var(--mk-surface);
+        border: 1px solid var(--mk-line);
+        font-size: clamp(11px, 0.95cqw, 14px);
+      }
+      .mock-row.is-override {
+        background: #eef9d9;
+        border-color: #6d9b37;
+      }
+      .mock-param {
+        font-weight: 700;
+        color: var(--mk-muted);
+      }
+      .mock-val {
+        font-weight: 800;
+        color: var(--mk-moss-2);
+        font-variant-numeric: tabular-nums;
+      }
+      .mock-btn {
+        border: 1px solid var(--mk-moss-2);
+        background: var(--mk-moss-2);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: clamp(10px, 0.8cqw, 12px);
+        font-weight: 800;
+        padding: 4px 10px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+      .mock-btn:hover {
+        background: var(--mk-moss);
+      }
+
+      /* Sơ đồ Kiến trúc AI 2 tầng (Slide 4) */
+      .arch-flow {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr auto 1fr;
+        align-items: stretch;
+        gap: 10px;
+        height: 100%;
+        min-height: 0;
+      }
+      .arch-arrow {
+        display: grid;
+        place-items: center;
+        color: var(--mk-accent);
+        font-weight: 800;
+        font-size: clamp(18px, 1.8cqw, 28px);
+      }
+      .code-pill {
+        display: inline-block;
+        font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+        font-size: clamp(10px, 0.82cqw, 12.5px);
+        font-weight: 700;
+        background: rgba(23, 61, 43, 0.08);
+        color: var(--mk-moss-2);
+        padding: 2px 7px;
+        border-radius: 6px;
+        border: 1px solid rgba(23, 61, 43, 0.14);
+      }
+      .slide-dark .code-pill,
+      .card-moss .code-pill,
+      .card-dark .code-pill {
+        background: rgba(184, 229, 90, 0.14);
+        color: var(--mk-lime);
+        border-color: rgba(184, 229, 90, 0.28);
+      }
+
+      /* Thanh điều khiển dưới đáy */
+      .deck-hud {
+        position: absolute;
+        left: 4.2%;
+        right: 4.2%;
+        bottom: 1.4%;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        pointer-events: none;
+      }
+      .hud-group {
+        pointer-events: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(11, 46, 27, 0.86);
+        color: var(--mk-canvas);
+        padding: 5px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(184, 229, 90, 0.28);
+        backdrop-filter: blur(10px);
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .hud-dots {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+      .hud-dot {
+        width: 22px;
+        height: 22px;
+        border-radius: 999px;
+        border: none;
+        background: transparent;
+        color: rgba(247, 248, 242, 0.65);
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 800;
+        cursor: pointer;
+        transition: background-color 160ms ease, color 160ms ease;
+      }
+      .hud-dot:hover {
+        color: #ffffff;
+        background: rgba(255, 255, 255, 0.12);
+      }
+      .hud-dot.is-on {
+        background: var(--mk-lime);
+        color: var(--mk-moss-abyss);
+      }
+      .hud-btn {
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+      .hud-btn:hover {
+        background: rgba(184, 229, 90, 0.25);
+      }
+      .lang-switch {
+        display: inline-flex;
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 999px;
+        padding: 2px;
+        border: 1px solid rgba(184, 229, 90, 0.25);
+      }
+      .lang-btn {
+        border: none;
+        background: transparent;
+        color: rgba(247, 248, 242, 0.7);
+        font-family: inherit;
+        font-size: 11px;
+        font-weight: 800;
+        padding: 3px 9px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+      .lang-btn.is-on {
+        background: var(--mk-lime);
+        color: var(--mk-moss-abyss);
+      }
+
+      /* Tôn trọng prefers-reduced-motion */
+      @media (prefers-reduced-motion: reduce) {
+        .slide,
+        .btn-demo,
+        .hud-dot {
+          transition: none !important;
+          transform: none !important;
+        }
+      }
+
+      /* =====================================================================
+         Hỗ trợ Ctrl+P xuất PDF ngang 16:9 không vỡ khung
+         ===================================================================== */
+      @page {
+        size: 16in 9in;
+        margin: 0;
+      }
+      @media print {
+        html,
+        body {
+          width: 16in !important;
+          height: auto !important;
+          overflow: visible !important;
+          background: var(--mk-canvas) !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+        .deck-viewport {
+          display: block !important;
+          width: 16in !important;
+          height: auto !important;
+          background: none !important;
+        }
+        .deck-stage {
+          width: 16in !important;
+          height: auto !important;
+          aspect-ratio: auto !important;
+          box-shadow: none !important;
+          overflow: visible !important;
+        }
+        .deck-hud {
+          display: none !important;
+        }
+        .slide {
+          position: relative !important;
+          inset: auto !important;
+          width: 16in !important;
+          height: 9in !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: none !important;
+          page-break-after: always !important;
+          break-after: page !important;
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+        .slide:last-of-type {
+          page-break-after: auto !important;
+          break-after: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck-viewport">
+      <main class="deck-stage" id="deck-stage" aria-live="polite">
+        <!-- =================================================================
+             SLIDE 1: TITLE & HOOK — BÀI TOÁN & GIẢI PHÁP KHÔNG RÀO CẢN
+             ================================================================= -->
+        <section class="slide slide-dark mk-tech-grid is-active" data-slide="1" aria-label="Slide 1">
+          <header class="slide-head">
+            <div>
+              <p class="slide-kicker">
+                <span class="live-dot"></span>
+                <span data-lang="vi">MÙA VỤ MEKONG · HACKATHON AGRITECH PITCH</span>
+                <span data-lang="en">MEKONG SEASONS · HACKATHON AGRITECH PITCH</span>
+              </p>
+              <h1 class="slide-title">
+                <span data-lang="vi">Bản đồ nông nghiệp &amp; luân canh không rào cản cho ĐBSCL</span>
+                <span data-lang="en">Zero-friction geospatial farming &amp; crop rotation for the Mekong Delta</span>
+              </h1>
+            </div>
+            <div class="slide-meta">
+              <div>8.5°N – 11.0°N · 104.4°E – 106.8°E</div>
+              <div>SLIDE 01 / 07</div>
+            </div>
+          </header>
+
+          <div class="split-hero">
+            <div class="rows-stack">
+              <div class="card-dark mk-reticle" style="flex: 1; justify-content: center; gap: 16px">
+                <span class="chip chip-amber" style="width: fit-content">
+                  <span data-lang="vi">Không cần tài khoản · Chạy 100% tĩnh &amp; Offline</span>
+                  <span data-lang="en">No login required · 100% Static &amp; Offline-ready</span>
+                </span>
+                <p style="font-family: var(--font-serif); font-size: clamp(23px, 2.65cqw, 42px); font-weight: 700; line-height: 1.15; color: #ffffff">
+                  <span data-lang="vi">Biến dữ liệu vệ tinh NASA &amp; bảng chuẩn FAO thành quyết định mùa vụ trong 1 chạm.</span>
+                  <span data-lang="en">Turn public NASA satellite data &amp; FAO tables into one-tap seasonal decisions.</span>
+                </p>
+                <ul class="short-list">
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi">Giải quyết trực tiếp bài toán <strong>mặn xâm nhập, đất phèn, lệch vụ</strong> tại 13 tỉnh ĐBSCL.</span>
+                    <span data-lang="en">Directly addresses <strong>salinity intrusion, acid-sulfate soils, and season shifts</strong> across 13 Mekong provinces.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi">Khoanh ruộng trên bản đồ — hệ thống <strong>tự điền thông minh luôn bật</strong>, bà con nhập đè bất cứ lúc nào.</span>
+                    <span data-lang="en">Outline a field on the map — <strong>always-on Smart Fill</strong> populates data, with instant farmer override.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi"><strong>Trợ lý AI 2 tầng</strong> đối chiếu sổ bằng chứng, phản hồi 6–11s, cam kết không bịa số liệu.</span>
+                    <span data-lang="en"><strong>Hybrid 2-Tier AI</strong> cross-checks the evidence ledger, replies in 6–11s, with zero hallucinated numbers.</span>
+                  </li>
+                </ul>
+                <div class="btn-row" style="margin-top: 6px">
+                  <a class="btn-demo btn-lime" data-demo-hash="#/ruong-cua-toi" href="../index.html#/ruong-cua-toi">
+                    <span data-lang="vi">Mở Vườn của tôi (#/ruong-cua-toi)</span>
+                    <span data-lang="en">Open My Field (#/ruong-cua-toi)</span>
+                  </a>
+                  <a class="btn-demo btn-ghost" data-demo-hash="#/luan-canh" href="../index.html#/luan-canh">
+                    <span data-lang="vi">Mở Luân canh (#/luan-canh)</span>
+                    <span data-lang="en">Open Crop Rotation (#/luan-canh)</span>
+                  </a>
+                </div>
+              </div>
+
+              <div class="bento-3" style="height: auto">
+                <div class="card-dark">
+                  <span class="big-metric lime">22</span>
+                  <span style="font-size: clamp(11px, 0.95cqw, 14px); color: var(--mk-lime-soft); font-weight: 700">
+                    <span data-lang="vi">Lớp vệ tinh &amp; đất 5 km</span>
+                    <span data-lang="en">5 km satellite &amp; soil layers</span>
+                  </span>
+                </div>
+                <div class="card-dark">
+                  <span class="big-metric amber">1.624</span>
+                  <span style="font-size: clamp(11px, 0.95cqw, 14px); color: var(--mk-lime-soft); font-weight: 700">
+                    <span data-lang="vi">Ô lưới chuẩn ĐBSCL</span>
+                    <span data-lang="en">Mekong Delta grid cells</span>
+                  </span>
+                </div>
+                <div class="card-dark">
+                  <span class="big-metric" style="color: #ffffff">199/199</span>
+                  <span style="font-size: clamp(11px, 0.95cqw, 14px); color: var(--mk-lime-soft); font-weight: 700">
+                    <span data-lang="vi">Ca kiểm thử nông học pass</span>
+                    <span data-lang="en">Agronomic unit tests passed</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sơ đồ trực quan HUD Bản đồ ĐBSCL -->
+            <div class="card-dark mk-reticle" style="height: 100%; justify-content: space-between">
+              <div style="display: flex; justify-content: space-between; align-items: center">
+                <span class="chip chip-med">
+                  <span data-lang="vi">HUD BẢN ĐỒ ĐBSCL · 13 TỈNH THÀNH</span>
+                  <span data-lang="en">MEKONG DELTA HUD · 13 PROVINCES</span>
+                </span>
+                <span class="code-pill">MEKONG_OUTER_RINGS · 5km Grid</span>
+              </div>
+
+              <svg viewBox="0 0 420 270" style="width: 100%; height: auto; max-height: 62%; border-radius: 12px; background: #072214; border: 1px solid rgba(184,229,90,0.2)">
+                <defs>
+                  <pattern id="grid5km" width="20" height="20" patternUnits="userSpaceOnUse">
+                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(184,229,90,0.1)" stroke-width="0.8" />
+                  </pattern>
+                </defs>
+                <rect width="420" height="270" fill="url(#grid5km)" />
+                <path
+                  d="M 110 38 L 235 32 L 325 78 L 355 135 L 295 205 L 185 248 L 112 242 L 82 175 L 68 95 Z"
+                  fill="rgba(98, 141, 57, 0.22)"
+                  stroke="#b8e55a"
+                  stroke-width="2"
+                />
+                <path
+                  d="M 325 78 L 355 135 L 295 205 L 185 248 L 112 242 L 145 195 L 255 162 L 305 110 Z"
+                  fill="rgba(242, 177, 52, 0.28)"
+                  stroke="#f2b134"
+                  stroke-width="1.5"
+                  stroke-dasharray="4 3"
+                />
+                <path d="M 140 40 Q 210 105 335 125" fill="none" stroke="#2e86c1" stroke-width="3.2" stroke-linecap="round" />
+                <path d="M 120 62 Q 195 135 305 175" fill="none" stroke="#2e86c1" stroke-width="3.2" stroke-linecap="round" />
+                <polygon points="175,95 225,88 232,126 180,132" fill="rgba(184,229,90,0.42)" stroke="#ffffff" stroke-width="2" />
+                <circle cx="203" cy="110" r="4" fill="#b8e55a" />
+
+                <rect x="22" y="18" width="172" height="44" rx="8" fill="rgba(11,46,27,0.92)" stroke="rgba(184,229,90,0.4)" />
+                <text x="32" y="36" fill="#b8e55a" font-size="10" font-weight="800" data-svg-vi="THỬA ĐANG CHỌN · 1,45 ha" data-svg-en="SELECTED FIELD · 1.45 ha">THỬA ĐANG CHỌN · 1,45 ha</text>
+                <text x="32" y="52" fill="#ffffff" font-size="11" font-weight="700" data-svg-vi="Lúa ➔ Đậu xanh ➔ Lúa (Hợp)" data-svg-en="Rice ➔ Mungbean ➔ Rice (Suits)">Lúa ➔ Đậu xanh ➔ Lúa (Hợp)</text>
+
+                <rect x="208" y="206" width="194" height="46" rx="8" fill="rgba(11,46,27,0.92)" stroke="rgba(242,177,52,0.55)" />
+                <text x="218" y="224" fill="#f2b134" font-size="10" font-weight="800" data-svg-vi="CẢNH BÁO MẶN MÙA KHÔ" data-svg-en="DRY-SEASON SALINITY ALERT">CẢNH BÁO MẶN MÙA KHÔ</text>
+                <text x="218" y="241" fill="#ffffff" font-size="11" font-weight="700" data-svg-vi="≈ 2,8 dS/m · Wang et al. 2025" data-svg-en="≈ 2.8 dS/m · Wang et al. 2025">≈ 2,8 dS/m · Wang et al. 2025</text>
+              </svg>
+
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; font-size: clamp(10px, 0.85cqw, 12px)">
+                <div style="padding: 8px; border-radius: 9px; background: rgba(255,255,255,0.06)">
+                  <strong style="color: var(--mk-lime)">
+                    <span data-lang="vi">Đất &amp; Địa hình (6)</span>
+                    <span data-lang="en">Soil &amp; Terrain (6)</span>
+                  </strong>
+                  <p style="color: rgba(247,248,242,0.75); margin-top: 2px">pH, SOC, Clay, N, FAO, DEM</p>
+                </div>
+                <div style="padding: 8px; border-radius: 9px; background: rgba(255,255,255,0.06)">
+                  <strong style="color: var(--color-sun-400)">
+                    <span data-lang="vi">Nước &amp; Ngập lũ (6)</span>
+                    <span data-lang="en">Water &amp; Flood (6)</span>
+                  </strong>
+                  <p style="color: rgba(247,248,242,0.75); margin-top: 2px">IMERG, SMAP, ESI, Flood</p>
+                </div>
+                <div style="padding: 8px; border-radius: 9px; background: rgba(255,255,255,0.06)">
+                  <strong style="color: #8cc0e3">
+                    <span data-lang="vi">Cây &amp; Nhiệt (10)</span>
+                    <span data-lang="en">Crops &amp; Heat (10)</span>
+                  </strong>
+                  <p style="color: rgba(247,248,242,0.75); margin-top: 2px">NDVI, EVI, LAI, LST Day/Night</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             SLIDE 2: BÀI TOÁN CANH TÁC ĐBSCL & GIẢI PHÁP BẢN ĐỒ KHÔNG RÀO CẢN
+             ================================================================= -->
+        <section class="slide mk-tech-grid" data-slide="2" aria-label="Slide 2">
+          <header class="slide-head">
+            <div>
+              <p class="slide-kicker">
+                <span data-lang="vi">01 · NỖI ĐAU THỰC TẾ TẠI ĐỒNG BẰNG SÔNG CỬU LONG</span>
+                <span data-lang="en">01 · REAL FARMING CHALLENGES IN THE MEKONG DELTA</span>
+              </p>
+              <h2 class="slide-title">
+                <span data-lang="vi">Mặn lấn sâu, đất phèn hóa &amp; khoảng trống dữ liệu tại ruộng</span>
+                <span data-lang="en">Salinity intrusion, acid-sulfate soils &amp; the field-level data gap</span>
+              </h2>
+            </div>
+            <div class="slide-meta">
+              <div>
+                <span data-lang="vi">BÀI TOÁN &amp; ĐỐI TƯỢNG</span>
+                <span data-lang="en">PROBLEM &amp; CONTEXT</span>
+              </div>
+              <div>SLIDE 02 / 07</div>
+            </div>
+          </header>
+
+          <div class="rows-stack">
+            <div class="bento-3" style="flex: 1">
+              <!-- Nỗi đau 1 -->
+              <article class="card mk-reticle">
+                <div>
+                  <span class="chip chip-amber">
+                    <span data-lang="vi">Áp lực Mặn &amp; Phèn</span>
+                    <span data-lang="en">Salinity &amp; Acidity</span>
+                  </span>
+                  <p class="big-metric amber" style="margin-top: 10px">EC &amp; pH</p>
+                  <h3 class="card-heading" style="margin-top: 6px">
+                    <span data-lang="vi">Biến động mạnh theo mùa khô</span>
+                    <span data-lang="en">Severe dry-season fluctuations</span>
+                  </h3>
+                </div>
+                <ul class="short-list">
+                  <li>
+                    <span class="bullet-dot amber"></span>
+                    <span data-lang="vi">Mặn mùa khô lấn sâu nội đồng, vượt ngưỡng chịu mặn FAO-29 của lúa và ngô.</span>
+                    <span data-lang="en">Dry-season salinity penetrates inland, exceeding FAO-29 thresholds for rice and maize.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot amber"></span>
+                    <span data-lang="vi">Vùng trũng phèn (Đồng Tháp Mười, Tứ giác Long Xuyên) có pH thấp gây ngộ độc rễ.</span>
+                    <span data-lang="en">Low-lying acid-sulfate zones have low soil pH that stunts root development.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot amber"></span>
+                    <span data-lang="vi">Trồng độc canh 3 vụ lúa liên tiếp làm kiệt dinh dưỡng và tích tụ sâu bệnh.</span>
+                    <span data-lang="en">Continuous 3-season rice monoculture depletes soil nutrients and builds up pests.</span>
+                  </li>
+                </ul>
+                <div class="card-subtle" style="font-size: clamp(11px, 0.9cqw, 13px); font-weight: 700; color: var(--color-sun-700)">
+                  <span data-lang="vi">Hệ quả: Giảm năng suất nặng nếu chọn sai cây ở vụ Hè Thu – Xuân Hè.</span>
+                  <span data-lang="en">Impact: Heavy yield loss when planting salt-sensitive crops in dry months.</span>
+                </div>
+              </article>
+
+              <!-- Nỗi đau 2 -->
+              <article class="card mk-reticle">
+                <div>
+                  <span class="chip chip-water">
+                    <span data-lang="vi">Lệch Lịch Thời Vụ</span>
+                    <span data-lang="en">Shifting Crop Calendars</span>
+                  </span>
+                  <p class="big-metric water" style="margin-top: 10px">
+                    <span data-lang="vi">13 Tỉnh</span>
+                    <span data-lang="en">13 Provinces</span>
+                  </p>
+                  <h3 class="card-heading" style="margin-top: 6px">
+                    <span data-lang="vi">Khác biệt lịch xuống giống &amp; mưa</span>
+                    <span data-lang="en">Divergent sowing windows &amp; rainfall</span>
+                  </h3>
+                </div>
+                <ul class="short-list">
+                  <li>
+                    <span class="bullet-dot"></span>
+                    <span data-lang="vi">Mỗi tiểu vùng có chu kỳ NDVI 1–3 vụ/năm và lượng mưa mùa khô hoàn toàn khác nhau.</span>
+                    <span data-lang="en">Each subregion has distinct 1–3 season MODIS NDVI cycles and dry-season rain.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot"></span>
+                    <span data-lang="vi">Áp dụng một lịch gieo trồng cứng nhắc dễ gặp hạn cuối vụ hoặc ngập úng đầu vụ.</span>
+                    <span data-lang="en">Rigid sowing schedules risk late-season drought or early-season waterlogging.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot"></span>
+                    <span data-lang="vi">Thiếu công cụ tính nhanh lượng <strong>nước tưới cần bù (FAO − mưa POWER)</strong>.</span>
+                    <span data-lang="en">Lack of simple tools to estimate <strong>supplemental irrigation (FAO − POWER rain)</strong>.</span>
+                  </li>
+                </ul>
+                <div class="card-subtle" style="font-size: clamp(11px, 0.9cqw, 13px); font-weight: 700; color: var(--color-water-700)">
+                  <span data-lang="vi">Hệ quả: Thừa nước vụ mưa, thiếu nước ngọt trầm trọng vào cao điểm mùa khô.</span>
+                  <span data-lang="en">Impact: Excess water in wet months, severe freshwater deficit in dry months.</span>
+                </div>
+              </article>
+
+              <!-- Nỗi đau 3 -->
+              <article class="card mk-reticle">
+                <div>
+                  <span class="chip chip-clay">
+                    <span data-lang="vi">Rào Cản Công Nghệ</span>
+                    <span data-lang="en">Technical Barriers</span>
+                  </span>
+                  <p class="big-metric clay" style="margin-top: 10px">
+                    <span data-lang="vi">0 Phễu</span>
+                    <span data-lang="en">Zero Gate</span>
+                  </p>
+                  <h3 class="card-heading" style="margin-top: 6px">
+                    <span data-lang="vi">Dữ liệu vệ tinh khó tiếp cận</span>
+                    <span data-lang="en">Complex raw satellite datasets</span>
+                  </h3>
+                </div>
+                <ul class="short-list">
+                  <li>
+                    <span class="bullet-dot clay"></span>
+                    <span data-lang="vi">Ảnh MODIS, SMAP, SoilGrids nằm rời rạc ở định dạng GeoTIFF/WMS chuyên ngành.</span>
+                    <span data-lang="en">MODIS, SMAP, and SoilGrids data sit in fragmented GeoTIFF/WMS scientific formats.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot clay"></span>
+                    <span data-lang="vi">Nông dân không có sẵn máy đo ECe, pH hay độ ẩm vùng rễ khi mới bắt đầu.</span>
+                    <span data-lang="en">Smallholder farmers rarely have lab ECe or pH readings when starting out.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot clay"></span>
+                    <span data-lang="vi">Các app yêu cầu đăng ký tài khoản hoặc chờ tải API 40+ giây gây bỏ cuộc sớm.</span>
+                    <span data-lang="en">Apps requiring sign-ups or 40+ second live API calls cause immediate drop-off.</span>
+                  </li>
+                </ul>
+                <div class="card-subtle" style="font-size: clamp(11px, 0.9cqw, 13px); font-weight: 700; color: var(--color-clay-700)">
+                  <span data-lang="vi">Giải pháp: Mở thẳng bản đồ ĐBSCL, không đăng nhập, tự điền ngay khi chấm điểm.</span>
+                  <span data-lang="en">Solution: Open the Mekong map directly, no login, instant precomputed Smart Fill.</span>
+                </div>
+              </article>
+            </div>
+
+            <!-- Thanh tóm tắt đối chiếu Giải pháp -->
+            <div class="card-moss" style="flex-direction: row; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 22px">
+              <div>
+                <span class="chip chip-high">
+                  <span data-lang="vi">Cách tiếp cận của Mùa Vụ Mekong</span>
+                  <span data-lang="en">Mekong Seasons Approach</span>
+                </span>
+                <span style="margin-left: 10px; font-size: clamp(13px, 1.12cqw, 17.5px); font-weight: 800">
+                  <span data-lang="vi">Khoanh thửa trên bản đồ ➔ Tự động khớp 22 lớp vệ tinh 5 km ➔ Xuất ngay 3 chiến thuật luân canh hợp đất &amp; nước</span>
+                  <span data-lang="en">Outline field on map ➔ Match 22 precomputed 5 km layers ➔ Generate 3 tailored rotation strategies</span>
+                </span>
+              </div>
+              <span class="code-pill">Zero-Friction UX · Offline-First</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             SLIDE 3: TỰ ĐIỀN THÔNG MINH LUÔN BẬT (SMART FILL) & NHẬP ĐÈ THỰC TẾ
+             ================================================================= -->
+        <section class="slide mk-tech-grid" data-slide="3" aria-label="Slide 3">
+          <header class="slide-head">
+            <div>
+              <p class="slide-kicker">02 · ZERO-FRICTION DATA PIPELINE (site/logic/smartFill.js)</p>
+              <h2 class="slide-title">
+                <span data-lang="vi">Tự điền thông minh luôn bật kèm nhãn “≈ tự điền” &amp; nhập đè 1 chạm</span>
+                <span data-lang="en">Always-on Smart Fill with “≈ auto-filled” badges &amp; 1-tap farmer override</span>
+              </h2>
+            </div>
+            <div class="slide-meta">
+              <div>sfFill() · sfApplyInput()</div>
+              <div>SLIDE 03 / 07</div>
+            </div>
+          </header>
+
+          <div class="split-2">
+            <!-- Bên trái: Luồng 4 nguồn vệ tinh & Quy tắc ưu tiên -->
+            <div class="rows-stack">
+              <div class="card mk-reticle" style="flex: 1">
+                <div style="display: flex; justify-content: space-between; align-items: center">
+                  <h3 class="card-heading">
+                    <span data-lang="vi">4 nguồn dữ liệu tĩnh tự động khớp theo tọa độ thửa</span>
+                    <span data-lang="en">4 static scientific sources matched to field coordinates</span>
+                  </h3>
+                  <span class="code-pill">PRECOMPUTED.snapshot</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0">
+                  <div class="card-subtle">
+                    <span class="chip chip-med">MODIS NDVI (MOD13Q1)</span>
+                    <p style="font-weight: 800; margin-top: 6px; font-size: clamp(12px, 1cqw, 15px)">
+                      <span data-lang="vi">Lịch mùa vụ &amp; Tháng gieo</span>
+                      <span data-lang="en">Crop Calendar &amp; Sowing Month</span>
+                    </p>
+                    <p style="font-size: clamp(11px, 0.88cqw, 13px); color: var(--mk-muted); margin-top: 2px">
+                      <span data-lang="vi">Tự nhận diện vụ ĐX / HT / TĐ đang hoặc sắp diễn ra (<code style="font-weight:700">sfAutoSeason</code>).</span>
+                      <span data-lang="en">Detects active or upcoming WS / SA / AW season (<code style="font-weight:700">sfAutoSeason</code>).</span>
+                    </p>
+                  </div>
+                  <div class="card-subtle">
+                    <span class="chip chip-ref">SoilGrids 2.0 + Wang 2025</span>
+                    <p style="font-weight: 800; margin-top: 6px; font-size: clamp(12px, 1cqw, 15px)">
+                      <span data-lang="vi">pH đất (0–30 cm) &amp; Độ mặn EC</span>
+                      <span data-lang="en">Soil pH (0–30 cm) &amp; Salinity EC</span>
+                    </p>
+                    <p style="font-size: clamp(11px, 0.88cqw, 13px); color: var(--mk-muted); margin-top: 2px">
+                      <span data-lang="vi">Đọc ô 5 km chứa thửa (2.551 ô pH WCS, 1.748 ô mặn Landsat dS/m).</span>
+                      <span data-lang="en">Reads the 5 km cell (2,551 WCS pH cells, 1,748 Landsat salinity dS/m cells).</span>
+                    </p>
+                  </div>
+                  <div class="card-subtle">
+                    <span class="chip chip-ref">UN FAO DSMW v3.6</span>
+                    <p style="font-weight: 800; margin-top: 6px; font-size: clamp(12px, 1cqw, 15px)">
+                      <span data-lang="vi">Nhóm đất canh tác</span>
+                      <span data-lang="en">FAO Soil Group</span>
+                    </p>
+                    <p style="font-size: clamp(11px, 0.88cqw, 13px); color: var(--mk-muted); margin-top: 2px">
+                      <span data-lang="vi">Ánh xạ phù sa, phèn, mặn, sét lầy khi nhãn ô rõ nghĩa (<code style="font-weight:700">sfSoilTypeFromLabel</code>).</span>
+                      <span data-lang="en">Maps alluvial, acid-sulfate, saline, or clay soils when unambiguous.</span>
+                    </p>
+                  </div>
+                  <div class="card-subtle">
+                    <span class="chip chip-ref">DEM PANGAEA 500 m &amp; POWER</span>
+                    <p style="font-weight: 800; margin-top: 6px; font-size: clamp(12px, 1cqw, 15px)">
+                      <span data-lang="vi">Cao độ Hòn Dấu &amp; Khí hậu 25 năm</span>
+                      <span data-lang="en">Elevation &amp; 25-Year Climate</span>
+                    </p>
+                    <p style="font-size: clamp(11px, 0.88cqw, 13px); color: var(--mk-muted); margin-top: 2px">
+                      <span data-lang="vi">1.600 ô cao độ + mưa hiệu quả FAO Manual 3 &amp; ẩm vùng rễ GWETROOT.</span>
+                      <span data-lang="en">1,600 DEM cells + FAO Manual 3 effective rain &amp; GWETROOT wetness.</span>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="card-moss" style="padding: 12px 16px">
+                  <p style="font-size: clamp(11px, 0.95cqw, 14px); font-weight: 800; color: var(--mk-lime)">
+                    <span data-lang="vi">Thứ tự ưu tiên bất biến trong <code style="color:#fff">sfFill()</code>:</span>
+                    <span data-lang="en">Strict priority hierarchy in <code style="color:#fff">sfFill()</code>:</span>
+                  </p>
+                  <p style="font-size: clamp(11px, 0.92cqw, 13.5px); margin-top: 4px">
+                    <span data-lang="vi"><strong>1. Số đo bà con nhập [Cao]</strong> ➔ <strong>2. Suy từ câu mô tả</strong> ➔ <strong>3. Dữ liệu tĩnh “≈ tự điền” [Tham khảo]</strong> ➔ <strong>4. Để trống trung thực (SF_NEVER: nguồn tưới, hữu cơ)</strong></span>
+                    <span data-lang="en"><strong>1. Farmer measurement [High]</strong> ➔ <strong>2. Parsed farmer text</strong> ➔ <strong>3. Static “≈ auto-fill” [Reference]</strong> ➔ <strong>4. Honest empty (SF_NEVER: irrigation, OM)</strong></span>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bên phải: Mô phỏng trực tiếp bảng "Thông số thửa" cho phép bấm thử Nhập đè -->
+            <div class="card mk-reticle">
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+                <div>
+                  <span class="chip chip-amber">
+                    <span data-lang="vi">Tương tác trực tiếp trên Slide</span>
+                    <span data-lang="en">Interactive Slide Demo</span>
+                  </span>
+                  <h3 class="card-heading" style="margin-top: 4px">
+                    <span data-lang="vi">Bảng “Thông số thửa” — 1 dòng/chỉ số</span>
+                    <span data-lang="en">“Field Parameters” — 1 row per metric</span>
+                  </h3>
+                </div>
+                <button type="button" class="mock-btn" id="btn-toggle-override">
+                  Thử bấm: Nông dân nhập số đo thực tế
+                </button>
+              </div>
+
+              <div class="mock-table" id="demo-smartfill-rows">
+                <div class="mock-row" data-row="ph">
+                  <span class="mock-param">
+                    <span data-lang="vi">pH đất</span>
+                    <span data-lang="en">Soil pH</span>
+                  </span>
+                  <span class="mock-val" data-val>≈ 5,4 (ước tính ô 5 km)</span>
+                  <span class="chip chip-ref" data-chip>Tham khảo ⓘ</span>
+                  <span class="code-pill" data-origin>origin: "auto"</span>
+                </div>
+                <div class="mock-row" data-row="ec">
+                  <span class="mock-param">
+                    <span data-lang="vi">Độ mặn đất</span>
+                    <span data-lang="en">Soil Salinity</span>
+                  </span>
+                  <span class="mock-val" data-val>≈ 1,8 dS/m (chưa phải ECe)</span>
+                  <span class="chip chip-ref" data-chip>Tham khảo ⓘ</span>
+                  <span class="code-pill" data-origin>origin: "auto"</span>
+                </div>
+                <div class="mock-row">
+                  <span class="mock-param">
+                    <span data-lang="vi">Loại đất</span>
+                    <span data-lang="en">Soil Type</span>
+                  </span>
+                  <span class="mock-val">
+                    <span data-lang="vi">≈ Đất phù sa (bản đồ FAO)</span>
+                    <span data-lang="en">≈ Alluvial soil (FAO map)</span>
+                  </span>
+                  <span class="chip chip-ref">
+                    <span data-lang="vi">Tham khảo ⓘ</span>
+                    <span data-lang="en">Reference ⓘ</span>
+                  </span>
+                  <span class="code-pill">origin: "auto"</span>
+                </div>
+                <div class="mock-row">
+                  <span class="mock-param">
+                    <span data-lang="vi">Mùa vụ &amp; Tháng gieo</span>
+                    <span data-lang="en">Season &amp; Sowing</span>
+                  </span>
+                  <span class="mock-val">
+                    <span data-lang="vi">≈ Đông Xuân · Tháng 11–2</span>
+                    <span data-lang="en">≈ Winter–Spring · Nov–Feb</span>
+                  </span>
+                  <span class="chip chip-med">
+                    <span data-lang="vi">Trung bình ⓘ</span>
+                    <span data-lang="en">Medium ⓘ</span>
+                  </span>
+                  <span class="code-pill">MODIS NDVI</span>
+                </div>
+                <div class="mock-row">
+                  <span class="mock-param">
+                    <span data-lang="vi">Nguồn tưới (SF_NEVER)</span>
+                    <span data-lang="en">Irrigation (SF_NEVER)</span>
+                  </span>
+                  <span class="mock-val" style="color: var(--color-clay-700)">
+                    <span data-lang="vi">Chưa khai — Không đoán mò</span>
+                    <span data-lang="en">Not set — Never guessed</span>
+                  </span>
+                  <span class="chip chip-clay">
+                    <span data-lang="vi">Thiếu ⓘ</span>
+                    <span data-lang="en">Missing ⓘ</span>
+                  </span>
+                  <span class="code-pill">origin: "empty"</span>
+                </div>
+              </div>
+
+              <div class="card-subtle" style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+                <p style="font-size: clamp(11px, 0.9cqw, 13.5px); color: var(--mk-ink)">
+                  <span data-lang="vi"><strong>Bảo vệ nông học:</strong> Độ mặn tự điền mang <code class="code-pill">ecType: 'unknown'</code> để thang FAO-29 không chấm nhầm trước khi bà con đo ECe thực tế.</span>
+                  <span data-lang="en"><strong>Agronomic safeguard:</strong> Auto-filled salinity carries <code class="code-pill">ecType: 'unknown'</code> so FAO-29 ECe thresholds never misfire.</span>
+                </p>
+                <span class="chip chip-high">11/11 smartFill tests</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             SLIDE 4: KIẾN TRÚC TRỢ LÝ AI 2 TẦNG (DETERMINISTIC + GEMINI-FLASH-LITE)
+             ================================================================= -->
+        <section class="slide slide-dark mk-tech-grid" data-slide="4" aria-label="Slide 4">
+          <header class="slide-head">
+            <div>
+              <p class="slide-kicker">
+                <span class="live-dot"></span>
+                <span data-lang="vi">03 · KIẾN TRÚC HYBRID AI 2 TẦNG CHỐNG BỊA SỐ LIỆU</span>
+                <span data-lang="en">03 · ANTI-HALLUCINATION 2-TIER HYBRID AI ARCHITECTURE</span>
+              </p>
+              <h2 class="slide-title">
+                <span data-lang="vi">Tầng 1 tất định (twoTier) + Tầng 2 Gemini-Flash-Lite phản hồi 6–11s, ≤ 80 từ</span>
+                <span data-lang="en">Tier 1 deterministic (twoTier) + Tier 2 Gemini-Flash-Lite in 6–11s, ≤ 80 words</span>
+              </h2>
+            </div>
+            <div class="slide-meta">
+              <div>server.mjs · assistantFallback.js</div>
+              <div>SLIDE 04 / 07</div>
+            </div>
+          </header>
+
+          <div class="rows-stack">
+            <div class="arch-flow" style="flex: 1">
+              <!-- Tầng 1 -->
+              <article class="card-dark mk-reticle">
+                <div>
+                  <span class="chip chip-med">
+                    <span data-lang="vi">TẦNG 1 · TẤT ĐỊNH (DETERMINISTIC)</span>
+                    <span data-lang="en">TIER 1 · DETERMINISTIC ENGINE</span>
+                  </span>
+                  <p class="big-metric lime" style="margin-top: 8px">&lt; 10 ms</p>
+                  <h3 class="card-heading" style="margin-top: 4px">
+                    <span data-lang="vi">Tính toán chuẩn FAO ngay trên thiết bị</span>
+                    <span data-lang="en">Client-side FAO &amp; ECOCROP computation</span>
+                  </h3>
+                </div>
+                <ul class="short-list">
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi">Chạy <code class="code-pill">asstTier1Propose</code> &amp; <code class="code-pill">asstTier2Check</code> từ bảng ngưỡng <strong>FAO-29, FAO-56, ECOCROP</strong>.</span>
+                    <span data-lang="en">Runs <code class="code-pill">asstTier1Propose</code> &amp; <code class="code-pill">asstTier2Check</code> using locked <strong>FAO-29, FAO-56, ECOCROP</strong> tables.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi">Đóng gói <code class="code-pill">context.twoTier</code> gồm đề xuất luân canh + phân loại từng dữ kiện (<code class="code-pill">ground</code>, <code class="code-pill">satellite</code>, <code class="code-pill">model</code>, <code class="code-pill">missing</code>).</span>
+                    <span data-lang="en">Packs <code class="code-pill">context.twoTier</code> with ranked proposals &amp; provenance tags (<code class="code-pill">ground</code>, <code class="code-pill">satellite</code>, <code class="code-pill">model</code>, <code class="code-pill">missing</code>).</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi">Tạo sổ cái số hợp lệ <code class="code-pill">asstLedgerNumbers(context)</code> trước khi gọi LLM.</span>
+                    <span data-lang="en">Builds the allowed numeric ledger <code class="code-pill">asstLedgerNumbers(context)</code> before calling LLM.</span>
+                  </li>
+                </ul>
+                <div style="font-size: 12px; color: var(--mk-lime-soft); font-weight: 700">
+                  <span data-lang="vi">Không tốn vòng gọi LLM cho Tầng 1 ➔ Tăng tốc gấp đôi!</span>
+                  <span data-lang="en">Zero LLM round-trip for Tier 1 ➔ 2× faster response!</span>
+                </div>
+              </article>
+
+              <div class="arch-arrow" aria-hidden="true">➔</div>
+
+              <!-- Tầng 2 -->
+              <article class="card-dark mk-reticle">
+                <div>
+                  <span class="chip chip-amber">
+                    <span data-lang="vi">TẦNG 2 · DIỄN ĐẠT &amp; KIỂM CHỨNG</span>
+                    <span data-lang="en">TIER 2 · VERIFICATION &amp; STREAMING</span>
+                  </span>
+                  <p class="big-metric amber" style="margin-top: 8px">6–11 s</p>
+                  <h3 class="card-heading" style="margin-top: 4px">gemini-flash-lite-latest (≤ 80 words)</h3>
+                </div>
+                <ul class="short-list">
+                  <li>
+                    <span class="bullet-dot amber"></span>
+                    <span data-lang="vi">Ưu tiên <code class="code-pill">gemini-flash-lite-latest</code> phản hồi stream trong <strong>6–11 giây</strong> (dự phòng <code class="code-pill">gemini-flash-latest</code>).</span>
+                    <span data-lang="en">Prioritizes <code class="code-pill">gemini-flash-lite-latest</code> for <strong>6–11s</strong> streaming (fallback to <code class="code-pill">gemini-flash-latest</code>).</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot amber"></span>
+                    <span data-lang="vi"><strong>Giới hạn cứng ≤ 80 từ:</strong> 1 câu trả lời thẳng + tối đa 3 gạch đầu dòng (≤ 15 từ/dòng) + 1 câu nhắc khuyến nông.</span>
+                    <span data-lang="en"><strong>Strict ≤ 80-word cap:</strong> 1 direct sentence + max 3 short bullets (≤ 15 words each) + 1 extension reminder.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot amber"></span>
+                    <span data-lang="vi">Bắt buộc tách bạch mục đo tại ruộng <strong>[Cao]</strong> với vệ tinh <strong>[Trung bình]</strong> / mô hình <strong>[Tham khảo]</strong>.</span>
+                    <span data-lang="en">Explicitly separates field measurements <strong>[High]</strong> from satellite <strong>[Medium]</strong> &amp; model <strong>[Reference]</strong>.</span>
+                  </li>
+                </ul>
+                <div style="font-size: 12px; color: var(--color-sun-400); font-weight: 700">
+                  <span data-lang="vi">Chặn câu hỏi ngoài canh tác bằng <code class="code-pill">asstIsFarmQuestion</code> (~1s).</span>
+                  <span data-lang="en">Blocks off-topic queries via <code class="code-pill">asstIsFarmQuestion</code> (~1s).</span>
+                </div>
+              </article>
+
+              <div class="arch-arrow" aria-hidden="true">➔</div>
+
+              <!-- Chốt chặn kiểm chứng -->
+              <article class="card-dark mk-reticle">
+                <div>
+                  <span class="chip chip-high">
+                    <span data-lang="vi">CHỐT CHẶN CHỐNG BỊA SỐ (GUARDRAIL)</span>
+                    <span data-lang="en">NUMERIC LEDGER GUARDRAIL</span>
+                  </span>
+                  <p class="big-metric" style="color: #ffffff; margin-top: 8px">0% Hallucination</p>
+                  <h3 class="card-heading" style="margin-top: 4px">
+                    <span data-lang="vi">Đối chiếu sổ bằng chứng tự động</span>
+                    <span data-lang="en">Automated evidence-ledger verification</span>
+                  </h3>
+                </div>
+                <ul class="short-list">
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi">Hàm <code class="code-pill">asstVerifyReply(reply, allowed)</code> quét mọi con số trong câu trả lời của Gemini.</span>
+                    <span data-lang="en"><code class="code-pill">asstVerifyReply(reply, allowed)</code> audits every number in Gemini’s output.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi">Nếu xuất hiện <strong>bất kỳ con số nào không nằm trong sổ bằng chứng</strong> ➔ Hủy ngay, chuyển sang câu trả lời 2 tầng tất định.</span>
+                    <span data-lang="en">Any <strong>unverified number not in the ledger</strong> triggers instant rejection &amp; deterministic fallback.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi">Không có khóa API hoặc đứt mạng ➔ <code class="code-pill">HTTP 204</code> tự động chạy offline 100%.</span>
+                    <span data-lang="en">No API key or offline ➔ <code class="code-pill">HTTP 204</code> seamlessly runs the local 2-tier engine.</span>
+                  </li>
+                </ul>
+                <div style="font-size: 12px; color: var(--mk-lime); font-weight: 700">
+                  <span data-lang="vi">Không kê liều phân/thuốc BVTV · Sai nói sai, thiếu nói thiếu.</span>
+                  <span data-lang="en">No chemical doses · Honest about missing or conflicting data.</span>
+                </div>
+              </article>
+            </div>
+
+            <!-- Ví dụ câu trả lời chuẩn ≤ 80 từ -->
+            <div class="card-dark" style="flex-direction: row; align-items: center; justify-content: space-between; gap: 18px; padding: 12px 20px">
+              <div style="font-size: clamp(11px, 0.95cqw, 14px); line-height: 1.45">
+                <span data-lang="vi">
+                  <strong style="color: var(--mk-lime)">Mẫu phản hồi thực tế (54 từ):</strong>
+                  “Thửa Cờ Đỏ hợp phương án <strong>Lúa → Đậu xanh → Lúa</strong> (tiết kiệm ~420 mm nước tưới/năm). • Nguồn tưới chủ động: bà con khai <strong>[Cao]</strong>. • Lịch 3 vụ MODIS: vệ tinh <strong>[Trung bình]</strong>. • pH ≈ 5,6 &amp; mặn ≈ 0,9 dS/m: mô hình <strong>[Tham khảo]</strong>, nên đo lại bằng bút cầm tay. Hãy hỏi thêm cán bộ khuyến nông xã trước khi xuống giống.”
+                </span>
+                <span data-lang="en">
+                  <strong style="color: var(--mk-lime)">Actual verified output (52 words):</strong>
+                  “Co Do Field suits <strong>Rice → Mungbean → Rice</strong> (saves ~420 mm irrigation/year). • Active irrigation: farmer-reported <strong>[High]</strong>. • 3-season MODIS calendar: satellite <strong>[Medium]</strong>. • pH ≈ 5.6 &amp; salinity ≈ 0.9 dS/m: static model <strong>[Reference]</strong>, verify with a handheld meter. Consult your local extension officer before sowing.”
+                </span>
+              </div>
+              <span class="chip chip-high">asstVerifyReply ✓</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             SLIDE 5: QUẢN LÝ VƯỜN NHANH, 3 CHIẾN THUẬT LUÂN CANH & XUẤT PDF 1 CHẠM
+             ================================================================= -->
+        <section class="slide mk-tech-grid" data-slide="5" aria-label="Slide 5">
+          <header class="slide-head">
+            <div>
+              <p class="slide-kicker">
+                <span data-lang="vi">04 · TRẢI NGHIỆM TRỌN VẸN TRÊN TRANG LUÂN CANH (#/luan-canh)</span>
+                <span data-lang="en">04 · SEAMLESS WORKFLOW ON THE ROTATION PAGE (#/luan-canh)</span>
+              </p>
+              <h2 class="slide-title">
+                <span data-lang="vi">Quản lý vườn tại chỗ, 3 chiến thuật luân canh &amp; báo cáo PDF kỹ thuật 1 chạm</span>
+                <span data-lang="en">In-place field management, 3 rotation strategies &amp; 1-tap technical PDF report</span>
+              </h2>
+            </div>
+            <div class="slide-meta">
+              <div>rotationGen.js · rotationFarm.js</div>
+              <div>SLIDE 05 / 07</div>
+            </div>
+          </header>
+
+          <div class="bento-3">
+            <!-- Cột 1: Quản lý vườn nhanh -->
+            <article class="card mk-reticle">
+              <div>
+                <span class="chip chip-med">
+                  <span data-lang="vi">1 · Quản lý vườn nhanh (rfMgmtHtml)</span>
+                  <span data-lang="en">1 · Quick Field Management (rfMgmtHtml)</span>
+                </span>
+                <p class="big-metric" style="margin-top: 8px">
+                  <span data-lang="vi">Tại chỗ</span>
+                  <span data-lang="en">In-Place</span>
+                </p>
+                <h3 class="card-heading" style="margin-top: 4px">
+                  <span data-lang="vi">Thao tác không rời trang Luân canh</span>
+                  <span data-lang="en">Manage fields without leaving Rotation</span>
+                </h3>
+              </div>
+
+              <div class="card-subtle" style="display: grid; gap: 8px">
+                <div style="display: flex; justify-content: space-between; align-items: center">
+                  <strong style="font-size: 13px; color: var(--mk-moss-2)">🌾 Thửa Rạch Giá 01 · 1,8 ha</strong>
+                  <span class="chip chip-high">
+                    <span data-lang="vi">Đủ dữ liệu</span>
+                    <span data-lang="en">Ready</span>
+                  </span>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                  <span class="code-pill">
+                    <span data-lang="vi">✏️ Đổi tên trực tiếp</span>
+                    <span data-lang="en">✏️ Inline Rename</span>
+                  </span>
+                  <span class="code-pill">
+                    <span data-lang="vi">🎨 Đổi nhóm vườn</span>
+                    <span data-lang="en">🎨 Change Group</span>
+                  </span>
+                  <span class="code-pill">
+                    <span data-lang="vi">⚙️ Mở Cài đặt</span>
+                    <span data-lang="en">⚙️ Settings Modal</span>
+                  </span>
+                  <span class="code-pill">
+                    <span data-lang="vi">🗑️ Xóa có xác nhận</span>
+                    <span data-lang="en">🗑️ Safe Delete</span>
+                  </span>
+                </div>
+              </div>
+
+              <ul class="short-list">
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span data-lang="vi">Đổi nhanh giữa các thửa bằng thanh chip hình dáng đa giác thực (<code class="code-pill">rfMiniShape</code>).</span>
+                  <span data-lang="en">Switch fields via real polygon-silhouette chips (<code class="code-pill">rfMiniShape</code>).</span>
+                </li>
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span data-lang="vi">Chuyển mượt từ thẻ lưới sang chi tiết bằng <strong>View Transitions API</strong> (<code class="code-pill">rfSwap</code>).</span>
+                  <span data-lang="en">Smooth grid-to-detail morphing powered by <strong>View Transitions API</strong> (<code class="code-pill">rfSwap</code>).</span>
+                </li>
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span data-lang="vi">Đồng bộ tức thì với bản đồ <code class="code-pill">#/ruong-cua-toi</code> qua kho <code class="code-pill">mvm-data-v1</code>.</span>
+                  <span data-lang="en">Instant sync with <code class="code-pill">#/ruong-cua-toi</code> via <code class="code-pill">mvm-data-v1</code> local store.</span>
+                </li>
+              </ul>
+            </article>
+
+            <!-- Cột 2: 3 Chiến thuật luân canh tự do -->
+            <article class="card mk-reticle">
+              <div>
+                <span class="chip chip-high">
+                  <span data-lang="vi">2 · Bộ sinh 3 chiến thuật (rgGenerate)</span>
+                  <span data-lang="en">2 · 3-Strategy Generator (rgGenerate)</span>
+                </span>
+                <p class="big-metric" style="margin-top: 8px">9³ = 729</p>
+                <h3 class="card-heading" style="margin-top: 4px">
+                  <span data-lang="vi">Quét mọi chuỗi 3 vụ · Loại bỏ vụ Đỏ</span>
+                  <span data-lang="en">Evaluates 729 sequences · Prunes Red seasons</span>
+                </h3>
+              </div>
+
+              <div style="display: grid; gap: 6px">
+                <div class="card-subtle" style="padding: 8px 12px; border-left: 4px solid #254f35">
+                  <strong style="font-size: 12px; color: #254f35">
+                    <span data-lang="vi">⚖️ Cân bằng nhất:</span>
+                    <span data-lang="en">⚖️ Most Balanced:</span>
+                  </strong>
+                  <span style="font-size: 13px; font-weight: 800; display: block">
+                    <span data-lang="vi">Lúa → Đậu xanh → Lúa (Điểm: 88)</span>
+                    <span data-lang="en">Rice → Mungbean → Rice (Score: 88)</span>
+                  </span>
+                </div>
+                <div class="card-subtle" style="padding: 8px 12px; border-left: 4px solid #2e86c1">
+                  <strong style="font-size: 12px; color: #1b5a86">
+                    <span data-lang="vi">💧 Tiết kiệm nước nhất:</span>
+                    <span data-lang="en">💧 Most Water-Saving:</span>
+                  </strong>
+                  <span style="font-size: 13px; font-weight: 800; display: block">
+                    <span data-lang="vi">Đậu xanh → Ngô → Đậu nành (−510 mm)</span>
+                    <span data-lang="en">Mungbean → Maize → Soybean (−510 mm)</span>
+                  </span>
+                </div>
+                <div class="card-subtle" style="padding: 8px 12px; border-left: 4px solid #6d9b37">
+                  <strong style="font-size: 12px; color: #254f35">
+                    <span data-lang="vi">🌱 Tốt cho đất nhất:</span>
+                    <span data-lang="en">🌱 Best for Soil Health:</span>
+                  </strong>
+                  <span style="font-size: 13px; font-weight: 800; display: block">
+                    <span data-lang="vi">Lúa → Đậu phộng → Ngô (+5 điểm đất)</span>
+                    <span data-lang="en">Rice → Groundnut → Maize (+5 soil pts)</span>
+                  </span>
+                </div>
+              </div>
+
+              <ul class="short-list">
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span data-lang="vi">Hiểu câu tự do của bà con (<code class="code-pill">rgParseWish</code>: “muốn ít tưới”, “cải tạo đất”) để nhân trọng số.</span>
+                  <span data-lang="en">Parses free-text wishes (<code class="code-pill">rgParseWish</code>: “save water”, “build soil”) to boost weights.</span>
+                </li>
+                <li>
+                  <span class="bullet-dot"></span>
+                  <span data-lang="vi">Nút <strong>“Nhờ AI brainstorm thêm”</strong> được chấm kiểm chứng lại qua <code class="code-pill">rgCheckAi</code>.</span>
+                  <span data-lang="en"><strong>“AI Brainstorm”</strong> suggestions are re-graded deterministically via <code class="code-pill">rgCheckAi</code>.</span>
+                </li>
+              </ul>
+            </article>
+
+            <!-- Cột 3: Xuất báo cáo PDF kỹ thuật 1 chạm -->
+            <article class="card mk-reticle">
+              <div>
+                <span class="chip chip-amber">
+                  <span data-lang="vi">3 · Xuất PDF Kỹ thuật 1 chạm</span>
+                  <span data-lang="en">3 · 1-Tap Technical PDF Export</span>
+                </span>
+                <p class="big-metric amber" style="margin-top: 8px">
+                  <span data-lang="vi">1 Chạm</span>
+                  <span data-lang="en">1-Tap PDF</span>
+                </p>
+                <h3 class="card-heading" style="margin-top: 4px">
+                  <span data-lang="vi">In báo cáo offline mang gặp khuyến nông</span>
+                  <span data-lang="en">Offline printable dossier for extension officers</span>
+                </h3>
+              </div>
+
+              <div class="card-subtle" style="display: grid; gap: 6px; font-size: 12px">
+                <div style="font-weight: 800; color: var(--mk-moss-2)">
+                  <span data-lang="vi">📄 Nội dung báo cáo (#mk-print):</span>
+                  <span data-lang="en">📄 Report contents (#mk-print):</span>
+                </div>
+                <div>
+                  <span data-lang="vi">✓ Tọa độ, diện tích, tỉnh/huyện &amp; thời điểm xuất</span>
+                  <span data-lang="en">✓ Coordinates, area (ha), province &amp; timestamp</span>
+                </div>
+                <div>
+                  <span data-lang="vi">✓ Toàn bộ thông số thửa + bung sẵn nguồn <code class="code-pill">@media print</code></span>
+                  <span data-lang="en">✓ All field parameters + auto-expanded <code class="code-pill">@media print</code> sources</span>
+                </div>
+                <div>
+                  <span data-lang="vi">✓ Bảng khí hậu 12 tháng + mưa hiệu quả FAO Manual 3</span>
+                  <span data-lang="en">✓ 12-month NASA POWER climate + FAO Manual 3 effective rain</span>
+                </div>
+                <div>
+                  <span data-lang="vi">✓ Bảng đọc màu 22 lớp vệ tinh + Kế hoạch 3 vụ chi tiết</span>
+                  <span data-lang="en">✓ 22 satellite layer readings + 3-season action table</span>
+                </div>
+              </div>
+
+              <ul class="short-list">
+                <li>
+                  <span class="bullet-dot amber"></span>
+                  <span data-lang="vi">Hỗ trợ cả <strong>PDF toàn bộ hồ sơ vườn</strong> (<code class="code-pill">rfPrintGarden</code> ở Tab 3) và <strong>PDF từng chiến thuật</strong> (<code class="code-pill">rfPrintStrategy</code>).</span>
+                  <span data-lang="en">Exports both <strong>Full Field Dossier PDF</strong> (<code class="code-pill">rfPrintGarden</code>) and <strong>Single Strategy PDF</strong> (<code class="code-pill">rfPrintStrategy</code>).</span>
+                </li>
+                <li>
+                  <span class="bullet-dot amber"></span>
+                  <span data-lang="vi">Không phụ thuộc thư viện ngoài — hoạt động hoàn toàn offline trên mọi thiết bị.</span>
+                  <span data-lang="en">Zero external PDF library dependencies — works 100% offline.</span>
+                </li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             SLIDE 6: MINH BẠCH NGUỒN DỮ LIỆU & ĐỘ TIN CẬY (PROVENANCE)
+             ================================================================= -->
+        <section class="slide mk-tech-grid" data-slide="6" aria-label="Slide 6">
+          <header class="slide-head">
+            <div>
+              <p class="slide-kicker">05 · PROVENANCE &amp; SCIENTIFIC INTEGRITY (site/core/evidence.js)</p>
+              <h2 class="slide-title">
+                <span data-lang="vi">Mọi con số đều mang đối tượng Evidence &amp; nhãn độ tin cậy minh bạch</span>
+                <span data-lang="en">Every number is wrapped in an Evidence object with transparent reliability</span>
+              </h2>
+            </div>
+            <div class="slide-meta">
+              <div>check-provenance.mjs · PASS</div>
+              <div>SLIDE 06 / 07</div>
+            </div>
+          </header>
+
+          <div class="split-2">
+            <div class="card mk-reticle">
+              <h3 class="card-heading">
+                <span data-lang="vi">4 cấp độ tin cậy hiển thị nhất quán trên toàn hệ thống</span>
+                <span data-lang="en">4 reliability tiers displayed consistently across the platform</span>
+              </h3>
+              <div style="display: grid; gap: 10px; margin-top: 8px">
+                <div class="card-subtle" style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+                  <div>
+                    <strong style="font-size: 14px; color: var(--mk-moss-2)">
+                      <span data-lang="vi">Đo tại ruộng &amp; Bà con khai (ground / farmer)</span>
+                      <span data-lang="en">On-farm measurement &amp; Farmer input (ground / farmer)</span>
+                    </strong>
+                    <p style="font-size: 12px; color: var(--mk-muted)">
+                      <span data-lang="vi">Bút đo pH, khúc xạ kế/ECe tại ruộng, nguồn tưới, điểm hay ngập.</span>
+                      <span data-lang="en">Handheld pH/ECe meter readings, irrigation source, flood marks.</span>
+                    </p>
+                  </div>
+                  <span class="chip chip-high">
+                    <span data-lang="vi">Cao ⓘ</span>
+                    <span data-lang="en">High ⓘ</span>
+                  </span>
+                </div>
+
+                <div class="card-subtle" style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+                  <div>
+                    <strong style="font-size: 14px; color: var(--mk-moss-2)">
+                      <span data-lang="vi">Vệ tinh quan sát trực tiếp (satellite)</span>
+                      <span data-lang="en">Direct satellite observation (satellite)</span>
+                    </strong>
+                    <p style="font-size: 12px; color: var(--mk-muted)">
+                      <span data-lang="vi">MODIS MOD13Q1 NDVI 250 m, GPM IMERG mưa, MODIS LST nhiệt bề mặt.</span>
+                      <span data-lang="en">MODIS MOD13Q1 250 m NDVI, GPM IMERG rain, MODIS LST temperature.</span>
+                    </p>
+                  </div>
+                  <span class="chip chip-med">
+                    <span data-lang="vi">Trung bình ⓘ</span>
+                    <span data-lang="en">Medium ⓘ</span>
+                  </span>
+                </div>
+
+                <div class="card-subtle" style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+                  <div>
+                    <strong style="font-size: 14px; color: var(--mk-moss-2)">
+                      <span data-lang="vi">Mô hình &amp; Tái phân tích tĩnh (model / derived)</span>
+                      <span data-lang="en">Static models &amp; Reanalysis (model / derived)</span>
+                    </strong>
+                    <p style="font-size: 12px; color: var(--mk-muted)">
+                      <span data-lang="vi">NASA POWER 25 năm, ISRIC SoilGrids 2.0, mặn Landsat Wang et al. 2025, SMAP L4.</span>
+                      <span data-lang="en">25-yr NASA POWER, ISRIC SoilGrids 2.0, Wang et al. 2025 Landsat salinity, SMAP L4.</span>
+                    </p>
+                  </div>
+                  <span class="chip chip-ref">
+                    <span data-lang="vi">Tham khảo ⓘ</span>
+                    <span data-lang="en">Reference ⓘ</span>
+                  </span>
+                </div>
+
+                <div class="card-subtle" style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+                  <div>
+                    <strong style="font-size: 14px; color: var(--color-clay-700)">
+                      <span data-lang="vi">Chưa đủ dữ liệu / Ô bị mây che (missing)</span>
+                      <span data-lang="en">Insufficient data / Cloud-masked cell (missing)</span>
+                    </strong>
+                    <p style="font-size: 12px; color: var(--mk-muted)">
+                      <span data-lang="vi">Không nội suy bịa số; hiện nút “Nhập ngay” và hướng dẫn tự đo tại ruộng.</span>
+                      <span data-lang="en">Never interpolated or fabricated; shows “Enter now” &amp; self-measurement guide.</span>
+                    </p>
+                  </div>
+                  <span class="chip chip-clay">
+                    <span data-lang="vi">Thiếu ⓘ</span>
+                    <span data-lang="en">Missing ⓘ</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="rows-stack">
+              <div class="card-moss mk-reticle" style="flex: 1">
+                <span class="chip chip-amber" style="width: fit-content">
+                  <span data-lang="vi">Kiểm toán tự động bằng Script</span>
+                  <span data-lang="en">Automated Provenance Auditing</span>
+                </span>
+                <h3 class="card-heading" style="margin-top: 8px">
+                  <span data-lang="vi">Cam kết “3 Không” về dữ liệu nông học</span>
+                  <span data-lang="en">Three strict commitments on agronomic data</span>
+                </h3>
+                <ul class="short-list" style="margin-top: 8px">
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi"><strong>Không bịa ngưỡng cây trồng:</strong> Mọi ngưỡng nước, pH, nhiệt độ, độ mặn ECe trong <code class="code-pill">cropLibrary.js</code> đều kèm trích dẫn nguyên văn và được <code class="code-pill">check-provenance.mjs</code> đối chiếu tự động.</span>
+                    <span data-lang="en"><strong>No invented crop thresholds:</strong> Every water, pH, temperature, and ECe threshold in <code class="code-pill">cropLibrary.js</code> carries verbatim quotes verified by <code class="code-pill">check-provenance.mjs</code>.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi"><strong>Không đánh tráo loại độ mặn:</strong> Phân biệt nghiêm ngặt <code class="code-pill">ECe</code> (dung dịch bão hòa đất theo chuẩn FAO-29) với EC nước tưới và độ mặn ảnh vệ tinh.</span>
+                    <span data-lang="en"><strong>No salinity unit conflation:</strong> Strictly separates saturated-paste <code class="code-pill">ECe</code> (FAO-29) from irrigation-water EC and satellite estimates.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi"><strong>Không lấp đầy ô khuyết:</strong> Các lớp vệ tinh bị mây che hoặc rơi vào mặt nước tại tâm tỉnh đều báo khuyết trung thực, tuyệt đối không dùng hàm ngẫu nhiên.</span>
+                    <span data-lang="en"><strong>No fake gap-filling:</strong> Cloud-masked pixels or water-body province centers are reported honestly as missing — zero synthetic noise.</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="card" style="flex-direction: row; align-items: center; justify-content: space-between; gap: 16px">
+                <div>
+                  <p style="font-size: 12px; font-weight: 800; color: var(--mk-accent)">SINGLE-FILE STANDALONE BUILD</p>
+                  <p style="font-size: 14px; font-weight: 800; color: var(--mk-moss-2); margin-top: 2px">
+                    <span data-lang="vi">54 module + 11 bảng song ngữ VI/EN ➔ 1 file <code class="code-pill">index.html</code> (~3,79 MB)</span>
+                    <span data-lang="en">54 modules + 11 bilingual VI/EN tables ➔ 1 <code class="code-pill">index.html</code> (~3.79 MB)</span>
+                  </p>
+                </div>
+                <span class="chip chip-high">
+                  <span data-lang="vi">Chạy ngay bằng nhấp đúp</span>
+                  <span data-lang="en">Double-click to run offline</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =================================================================
+             SLIDE 7: TÁC ĐỘNG THỰC TẾ, MỞ RỘNG & LIVE DEMO
+             ================================================================= -->
+        <section class="slide slide-dark mk-tech-grid" data-slide="7" aria-label="Slide 7">
+          <header class="slide-head">
+            <div>
+              <p class="slide-kicker">
+                <span class="live-dot"></span>
+                <span data-lang="vi">06 · TÁC ĐỘNG THỰC TIỄN &amp; TRẢI NGHIỆM TRỰC TIẾP</span>
+                <span data-lang="en">06 · REAL-WORLD IMPACT &amp; LIVE DEMO</span>
+              </p>
+              <h2 class="slide-title">
+                <span data-lang="vi">Sẵn sàng đồng hành cùng nông dân &amp; cán bộ khuyến nông ĐBSCL</span>
+                <span data-lang="en">Ready to empower Mekong Delta farmers &amp; local extension officers</span>
+              </h2>
+            </div>
+            <div class="slide-meta">
+              <div>LIVE DEMO READY</div>
+              <div>SLIDE 07 / 07</div>
+            </div>
+          </header>
+
+          <div class="split-2">
+            <div class="rows-stack">
+              <div class="bento-3" style="height: auto">
+                <div class="card-dark">
+                  <span class="big-metric lime">&lt; 30s</span>
+                  <p style="font-size: 12px; font-weight: 700; color: var(--mk-lime-soft); margin-top: 4px">
+                    <span data-lang="vi">Từ khoanh ruộng đến bảng kế hoạch 3 vụ</span>
+                    <span data-lang="en">From outlining a field to a 3-season plan</span>
+                  </p>
+                </div>
+                <div class="card-dark">
+                  <span class="big-metric amber">13/13</span>
+                  <p style="font-size: 12px; font-weight: 700; color: var(--mk-lime-soft); margin-top: 4px">
+                    <span data-lang="vi">Tỉnh ĐBSCL có khí hậu &amp; lưới pH/mặn 5 km</span>
+                    <span data-lang="en">Mekong provinces with 5 km pH/EC &amp; climate</span>
+                  </p>
+                </div>
+                <div class="card-dark">
+                  <span class="big-metric" style="color: #ffffff">$0</span>
+                  <p style="font-size: 12px; font-weight: 700; color: var(--mk-lime-soft); margin-top: 4px">
+                    <span data-lang="vi">Chi phí hạ tầng nhờ kiến trúc Snapshot tĩnh</span>
+                    <span data-lang="en">Hosting cost via precomputed static bundle</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="card-dark mk-reticle" style="flex: 1">
+                <h3 class="card-heading">
+                  <span data-lang="vi">Giá trị mang lại cho 3 nhóm người dùng</span>
+                  <span data-lang="en">Core value across three stakeholder groups</span>
+                </h3>
+                <ul class="short-list" style="margin-top: 8px">
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi"><strong>Nông hộ ĐBSCL:</strong> Nhìn màu vườn và bảng kế hoạch 3 vụ ít chữ là hiểu ngay cây nên trồng, lượng nước tưới giảm được và việc cần chuẩn bị.</span>
+                    <span data-lang="en"><strong>Smallholder Farmers:</strong> Color-coded fields and a low-text 3-season table show what to grow, water saved, and next steps at a glance.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot amber"></span>
+                    <span data-lang="vi"><strong>Cán bộ khuyến nông xã:</strong> Có báo cáo PDF 1 chạm kèm nguồn NASA/FAO minh bạch để tư vấn chuyển đổi cơ cấu cây trồng trên đất lúa.</span>
+                    <span data-lang="en"><strong>Local Extension Officers:</strong> One-tap printable PDF reports with full NASA/FAO citations support commune-level crop transition advice.</span>
+                  </li>
+                  <li>
+                    <span class="bullet-dot lime"></span>
+                    <span data-lang="vi"><strong>Cộng đồng nghiên cứu mở:</strong> Pipeline script Python + Node.js tái lập 100% từ dữ liệu công khai NASA POWER, MODIS, GIBS, SoilGrids và Zenodo.</span>
+                    <span data-lang="en"><strong>Open Science Community:</strong> 100% reproducible Python + Node.js data pipeline built on NASA POWER, MODIS, GIBS, SoilGrids, and Zenodo.</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Khung bấm Live Demo trực tiếp -->
+            <div class="card-dark mk-reticle" style="justify-content: space-between">
+              <div>
+                <span class="chip chip-high">
+                  <span data-lang="vi">Kịch bản Live Demo 90 giây cho Giám khảo</span>
+                  <span data-lang="en">90-Second Live Demo Flow for Judges</span>
+                </span>
+                <h3 class="card-heading" style="margin-top: 10px; font-size: clamp(18px, 1.7cqw, 26px)">
+                  <span data-lang="vi">Trải nghiệm trực tiếp ngay trên sản phẩm thật</span>
+                  <span data-lang="en">Experience the live application right now</span>
+                </h3>
+              </div>
+
+              <div style="display: grid; gap: 10px">
+                <div style="padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(184,229,90,0.2)">
+                  <strong style="color: var(--mk-lime); font-size: 13px">
+                    <span data-lang="vi">Bước 1 · Bản đồ 22 lớp &amp; Tự điền (#/ruong-cua-toi)</span>
+                    <span data-lang="en">Step 1 · 22-Layer Map &amp; Smart Fill (#/ruong-cua-toi)</span>
+                  </strong>
+                  <p style="font-size: 12px; color: rgba(247,248,242,0.82); margin-top: 3px">
+                    <span data-lang="vi">Khoanh nhanh 1 thửa ruộng ➔ Xem Tab 3 tự điền pH, độ mặn, loại đất FAO và tổng hợp 22 lớp vệ tinh.</span>
+                    <span data-lang="en">Outline a field ➔ Watch Tab 3 auto-fill pH, salinity, FAO soil group, and synthesize all 22 layers.</span>
+                  </p>
+                </div>
+                <div style="padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(184,229,90,0.2)">
+                  <strong style="color: var(--color-sun-400); font-size: 13px">
+                    <span data-lang="vi">Bước 2 · 3 Chiến thuật &amp; Sửa số đo tại dòng (#/luan-canh)</span>
+                    <span data-lang="en">Step 2 · 3 Strategies &amp; Inline Override (#/luan-canh)</span>
+                  </strong>
+                  <p style="font-size: 12px; color: rgba(247,248,242,0.82); margin-top: 3px">
+                    <span data-lang="vi">Nhập đè pH/EC thực tế ngay tại dòng, so sánh 3 chiến thuật tự do và bấm xuất PDF kỹ thuật 1 chạm.</span>
+                    <span data-lang="en">Override pH/EC inline, compare the 3 generated strategies, and trigger 1-tap technical PDF export.</span>
+                  </p>
+                </div>
+                <div style="padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid rgba(184,229,90,0.2)">
+                  <strong style="color: #8cc0e3; font-size: 13px">
+                    <span data-lang="vi">Bước 3 · Hỏi Trợ lý AI 2 tầng (Nút góc phải)</span>
+                    <span data-lang="en">Step 3 · Ask the 2-Tier AI Assistant (Bottom-right FAB)</span>
+                  </strong>
+                  <p style="font-size: 12px; color: rgba(247,248,242,0.82); margin-top: 3px">
+                    <span data-lang="vi">Kiểm chứng tốc độ phản hồi 6–11s, giới hạn ≤ 80 từ và cơ chế chống bịa số liệu.</span>
+                    <span data-lang="en">Verify the 6–11s response speed, ≤ 80-word limit, and zero-hallucination ledger guardrail.</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="btn-row" style="justify-content: space-between; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.12)">
+                <div class="btn-row">
+                  <a class="btn-demo btn-lime" data-demo-hash="#/ruong-cua-toi" href="../index.html#/ruong-cua-toi">
+                    <span data-lang="vi">🚀 Mở Bản đồ Vườn của tôi</span>
+                    <span data-lang="en">🚀 Launch My Field Map</span>
+                  </a>
+                  <a class="btn-demo btn-ghost" data-demo-hash="#/luan-canh" href="../index.html#/luan-canh">
+                    <span data-lang="vi">🌾 Mở Chiến thuật Luân canh</span>
+                    <span data-lang="en">🌾 Launch Crop Rotation</span>
+                  </a>
+                </div>
+                <button type="button" class="btn-demo btn-ghost" id="btn-print-deck">
+                  <span data-lang="vi">🖨️ Xuất PDF (Ctrl+P)</span>
+                  <span data-lang="en">🖨️ Export PDF (Ctrl+P)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Thanh HUD điều khiển trình chiếu (ẩn khi in PDF) -->
+        <nav class="deck-hud" aria-label="Slide controls">
+          <div class="hud-group">
+            <button type="button" class="hud-btn" id="prev-slide" title="Previous slide (←)">←</button>
+            <div class="hud-dots" id="hud-dots" role="tablist" aria-label="Slides"></div>
+            <button type="button" class="hud-btn" id="next-slide" title="Next slide (→)">→</button>
+          </div>
+          <div class="hud-group">
+            <span data-lang="vi">Phím: <strong>←/→</strong> chuyển · <strong>L</strong> ngôn ngữ · <strong>F</strong> toàn màn hình · <strong>Ctrl+P</strong> PDF</span>
+            <span data-lang="en">Keys: <strong>←/→</strong> navigate · <strong>L</strong> language · <strong>F</strong> fullscreen · <strong>Ctrl+P</strong> PDF</span>
+            <div class="lang-switch" role="group" aria-label="Language switch">
+              <button type="button" class="lang-btn is-on" data-set-lang="vi">VI</button>
+              <button type="button" class="lang-btn" data-set-lang="en">EN</button>
+            </div>
+            <button type="button" class="hud-btn" id="btn-fullscreen" title="Fullscreen (F)">
+              <span data-lang="vi">⛶ Toàn màn hình (F)</span>
+              <span data-lang="en">⛶ Fullscreen (F)</span>
+            </button>
+          </div>
+        </nav>
+      </main>
+    </div>
+
+    <script>
+      ;(() => {
+        const slides = Array.from(document.querySelectorAll('.slide'))
+        const dotsBox = document.getElementById('hud-dots')
+        const langBtns = Array.from(document.querySelectorAll('[data-set-lang]'))
+        let idx = 0
+        let lang = localStorage.getItem('mk-pitch-lang') === 'en' || location.search.includes('lang=en') ? 'en' : 'vi'
+        let overridden = false
+
+        // Tạo nút chấm 1..7
+        slides.forEach((_, i) => {
+          const b = document.createElement('button')
+          b.type = 'button'
+          b.className = 'hud-dot' + (i === 0 ? ' is-on' : '')
+          b.textContent = String(i + 1)
+          b.setAttribute('aria-label', `Slide ${i + 1}`)
+          b.addEventListener('click', () => go(i))
+          dotsBox.appendChild(b)
+        })
+
+        const dots = Array.from(dotsBox.querySelectorAll('.hud-dot'))
+
+        function go(next) {
+          idx = (next + slides.length) % slides.length
+          slides.forEach((s, i) => s.classList.toggle('is-active', i === idx))
+          dots.forEach((d, i) => d.classList.toggle('is-on', i === idx))
+          try {
+            history.replaceState(null, '', `#slide-${idx + 1}`)
+          } catch {}
+        }
+
+        // Cập nhật bảng mô phỏng Slide 3 theo cả trạng thái (auto / overridden) và ngôn ngữ (vi / en)
+        const toggleBtn = document.getElementById('btn-toggle-override')
+        function renderSmartFillDemo() {
+          const phRow = document.querySelector('[data-row="ph"]')
+          const ecRow = document.querySelector('[data-row="ec"]')
+          if (!phRow || !ecRow || !toggleBtn) return
+          if (overridden) {
+            toggleBtn.textContent = lang === 'en' ? 'Reset: View Smart Fill (≈) state' : 'Đặt lại: Xem trạng thái Tự điền (≈)'
+            phRow.classList.add('is-override')
+            phRow.querySelector('[data-val]').textContent = lang === 'en' ? '6.2 (measured on field)' : '6,2 (bà con đo tại ruộng)'
+            phRow.querySelector('[data-chip]').className = 'chip chip-high'
+            phRow.querySelector('[data-chip]').textContent = lang === 'en' ? 'High ⓘ' : 'Cao ⓘ'
+            phRow.querySelector('[data-origin]').textContent = 'origin: "field"'
+
+            ecRow.classList.add('is-override')
+            ecRow.querySelector('[data-val]').textContent = lang === 'en' ? '1.4 dS/m (field ECe)' : '1,4 dS/m (ECe đo tại ruộng)'
+            ecRow.querySelector('[data-chip]').className = 'chip chip-high'
+            ecRow.querySelector('[data-chip]').textContent = lang === 'en' ? 'High ⓘ' : 'Cao ⓘ'
+            ecRow.querySelector('[data-origin]').textContent = 'origin: "field"'
+          } else {
+            toggleBtn.textContent = lang === 'en' ? 'Try click: Farmer enters field measurement' : 'Thử bấm: Nông dân nhập số đo thực tế'
+            phRow.classList.remove('is-override')
+            phRow.querySelector('[data-val]').textContent = lang === 'en' ? '≈ 5.4 (5 km cell estimate)' : '≈ 5,4 (ước tính ô 5 km)'
+            phRow.querySelector('[data-chip]').className = 'chip chip-ref'
+            phRow.querySelector('[data-chip]').textContent = lang === 'en' ? 'Reference ⓘ' : 'Tham khảo ⓘ'
+            phRow.querySelector('[data-origin]').textContent = 'origin: "auto"'
+
+            ecRow.classList.remove('is-override')
+            ecRow.querySelector('[data-val]').textContent = lang === 'en' ? '≈ 1.8 dS/m (not ECe yet)' : '≈ 1,8 dS/m (chưa phải ECe)'
+            ecRow.querySelector('[data-chip]').className = 'chip chip-ref'
+            ecRow.querySelector('[data-chip]').textContent = lang === 'en' ? 'Reference ⓘ' : 'Tham khảo ⓘ'
+            ecRow.querySelector('[data-origin]').textContent = 'origin: "auto"'
+          }
+        }
+
+        function setLang(nextLang) {
+          lang = nextLang === 'en' ? 'en' : 'vi'
+          document.documentElement.lang = lang
+          langBtns.forEach((b) => b.classList.toggle('is-on', b.dataset.setLang === lang))
+          document.querySelectorAll('[data-svg-vi]').forEach((el) => {
+            el.textContent = lang === 'en' ? el.getAttribute('data-svg-en') : el.getAttribute('data-svg-vi')
+          })
+          renderSmartFillDemo()
+          try {
+            localStorage.setItem('mk-pitch-lang', lang)
+          } catch {}
+        }
+
+        langBtns.forEach((b) => b.addEventListener('click', () => setLang(b.dataset.setLang)))
+        toggleBtn?.addEventListener('click', () => {
+          overridden = !overridden
+          renderSmartFillDemo()
+        })
+
+        // Khôi phục ngôn ngữ & slide ban đầu
+        setLang(lang)
+        const m = location.hash.match(/^#slide-(\d+)$/)
+        if (m) {
+          const n = Number(m[1]) - 1
+          if (n >= 0 && n < slides.length) go(n)
+        }
+
+        document.getElementById('prev-slide').addEventListener('click', () => go(idx - 1))
+        document.getElementById('next-slide').addEventListener('click', () => go(idx + 1))
+
+        function toggleFullscreen() {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen?.().catch(() => {})
+          } else {
+            document.exitFullscreen?.().catch(() => {})
+          }
+        }
+
+        document.getElementById('btn-fullscreen').addEventListener('click', toggleFullscreen)
+        document.getElementById('btn-print-deck').addEventListener('click', () => window.print())
+
+        // Điều hướng bàn phím: ←/→, Space, PageUp/PageDown, Home/End, 1..7, F, L
+        window.addEventListener('keydown', (e) => {
+          if (e.target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return
+          if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault()
+            go(idx + 1)
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault()
+            go(idx - 1)
+          } else if (e.key === 'Home') {
+            e.preventDefault()
+            go(0)
+          } else if (e.key === 'End') {
+            e.preventDefault()
+            go(slides.length - 1)
+          } else if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            e.preventDefault()
+            toggleFullscreen()
+          } else if ((e.key === 'l' || e.key === 'L') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            e.preventDefault()
+            setLang(lang === 'vi' ? 'en' : 'vi')
+          } else if (e.key >= '1' && e.key <= String(slides.length) && !e.ctrlKey && !e.metaKey) {
+            e.preventDefault()
+            go(Number(e.key) - 1)
+          }
+        })
+
+        // Tự động điều chỉnh đường dẫn Live Demo khi mở từ server gốc hay mở trực tiếp file site/pitch.html
+        const onServerRoot = location.protocol.startsWith('http') && !location.pathname.includes('/site/')
+        if (onServerRoot) {
+          document.querySelectorAll('[data-demo-hash]').forEach((a) => {
+            a.setAttribute('href', `/${a.getAttribute('data-demo-hash')}`)
+          })
+        }
+      })()
+    </script>
+  </body>
+</html>

@@ -144,7 +144,11 @@ export function rgGenerate(grid, { wish = null, params = RG_PARAMS } = {}) {
   const ok = grid.map((g) => CROP_LIB_IDS.filter((c) => g.cells[c].assessment.overall !== 'red'))
   const cands = []
   for (const a of ok[0]) for (const b of ok[1]) for (const c of ok[2]) cands.push({ crops: [a, b, c], ...rgMeasure(grid, [a, b, c]) })
-  if (!cands.length) return { proposals: [], more: [], current: wish?.crops?.length ? rgMeasure(grid, wish.crops) : null, weights: w, total: 0 }
+  // Không chuỗi nào tránh được vụ Đỏ: vẫn trả "cách đang làm" ĐỦ trường (crops, key…) để trang hiện được, không chấm điểm.
+  if (!cands.length) {
+    const cur = wish?.crops?.length ? rgMeasure(grid, wish.crops) : null
+    return { proposals: [], more: [], current: cur ? { ...cur, score: null, comps: null, crops: wish.crops.map((c) => c.id ?? null), customNames: wish.crops.map((c) => c.custom ?? null), kind: 'current', key: 'current' } : null, weights: w, total: 0 }
+  }
   const extras = cands.map((x) => x.extraMm).filter((v) => v != null)
   const minExtra = extras.length ? Math.min(...extras) : null
   const maxSoil = Math.max(...cands.map((x) => x.soilPoints ?? 0), 1)

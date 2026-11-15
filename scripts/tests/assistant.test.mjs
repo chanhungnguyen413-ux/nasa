@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
 import { evidence } from '../../site/core/evidence.js'
-import { assistantContext, asstLedgerNumbers, asstVerifyReply, fallbackAnswer } from '../../site/logic/assistantFallback.js'
+import { ASST_OFF_TOPIC, assistantContext, asstIsFarmQuestion, asstLedgerNumbers, asstVerifyReply, fallbackAnswer } from '../../site/logic/assistantFallback.js'
 
 const ev = (value, unit = 'mm') => evidence({ value, unit, kind: 'model', source: 'powerDaily' })
 
@@ -61,4 +61,16 @@ test('fallbackAnswer trả lời đúng dữ liệu ruộng và luôn kèm khuy�
   const enAns = fallbackAnswer('Which rotation strategy leads?', ctx, 'en')
   assert.match(enAns, /78\/100/)
   assert.match(enAns, /extension officer/i)
+})
+
+test('chỉ trả lời câu trong phạm vi: câu ngoài chủ đề → 1 câu từ chối ngắn', () => {
+  for (const q of ['Ai thắng World Cup?', 'Viết code Python sắp xếp mảng', 'What is the capital of France?']) {
+    assert.equal(asstIsFarmQuestion(q), false, q)
+  }
+  for (const q of ['Tháng nào thiếu nước nhất?', 'Đất phèn trồng gì?', 'Which rotation strategy fits best?', 'Cách tự đo độ mặn, pH tại ruộng?']) {
+    assert.equal(asstIsFarmQuestion(q), true, q)
+  }
+  const ctx = assistantContext({ loc: { name: 'Cờ Đỏ', lat: 10.1, lon: 105.43 }, data: sampleData, evalResult: sampleEval })
+  assert.equal(fallbackAnswer('Ai thắng World Cup?', ctx, 'vi'), ASST_OFF_TOPIC.vi)
+  assert.equal(fallbackAnswer('Write me a poem', ctx, 'en'), ASST_OFF_TOPIC.en)
 })

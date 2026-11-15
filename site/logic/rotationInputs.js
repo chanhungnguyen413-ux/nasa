@@ -30,3 +30,18 @@ export function districtInputs(PRE, id) {
     calendarYear: lastYear,
   }
 }
+
+/**
+ * Lịch vụ cấp TỈNH: chọn năm MỚI NHẤT mà nhóm k-means của năm đó có đủ 3 đỉnh vụ (đủ để xếp lịch 3 vụ);
+ * không năm nào đủ 3 vụ → giữ năm cuối (trang sẽ báo "chưa đủ lịch 3 vụ" kèm số vụ/năm thật).
+ *   kmeansByYear: { '2021': { cluster, distance }, ... } (province_calendars.json) · clusters: calendar_kmeans.json
+ * Vì sao: tâm tỉnh là 1 ô 250 m; năm cuối có thể rơi vào năm bỏ vụ / cây khác, trong khi các năm trước vẫn 3 vụ.
+ */
+export function provinceCalendarYear(kmeansByYear, clusters) {
+  const years = Object.keys(kmeansByYear ?? {}).map(Number).filter(Number.isFinite).sort((a, b) => b - a)
+  if (!years.length) return null
+  const peaksOf = (y) => clusters.find((c) => c.cluster === kmeansByYear[y]?.cluster)?.shape?.peaks ?? 0
+  const y3 = years.find((y) => peaksOf(y) === 3)
+  const year = y3 ?? years[0]
+  return { year, cluster: kmeansByYear[year].cluster, rule: y3 != null ? 'latest3' : 'last', lastYear: years[0], lastPeaks: peaksOf(years[0]) }
+}

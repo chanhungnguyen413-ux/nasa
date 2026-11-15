@@ -75,3 +75,14 @@ test('kiểm chứng đề xuất AI: chấm lại bằng lưới vụ, cây ngo
   assert.equal(out[0].seasons[1].grade, rgMeasure(grid, ['rice', 'mungbean', 'rice']).seasons[1].grade)
   assert.deepEqual(rgCheckAi(grid, null), [])
 })
+
+test('mọi chuỗi đều có vụ Đỏ → không đề xuất, nhưng "cách đang làm" vẫn đủ trường để trang hiện (không lỗi)', () => {
+  // Lưới giả: mọi cây ở vụ 1 đều Đỏ.
+  const redGrid = grid.map((g, i) => ({ ...g, cells: Object.fromEntries(Object.entries(g.cells).map(([c, cell]) => [c, i === 0 ? { ...cell, assessment: { ...cell.assessment, overall: 'red' } } : cell])) }))
+  const g = rgGenerate(redGrid, { wish: rgParseWish('lúa - lúa - lúa') })
+  assert.equal(g.proposals.length, 0)
+  assert.equal(g.total, 0)
+  assert.deepEqual(g.current.crops, ['rice', 'rice', 'rice'])
+  assert.equal(g.current.key, 'current')
+  assert.equal(g.current.score, null)
+})

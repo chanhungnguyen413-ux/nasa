@@ -154,6 +154,8 @@ export function fallbackAnswer(question, ctx = {}, lang = 'vi') {
     ? 'Lưu ý: đây chỉ là công cụ hỗ trợ quyết định, không thay thế nông dân và cán bộ khuyến nông địa phương.'
     : 'Note: this is a decision-support tool and does not replace farmers or local extension officers.'
   const has = (...words) => words.some((w) => q.includes(w))
+  // Câu ngoài phạm vi canh tác → 1 câu từ chối ngắn (giống lời dặn của server), không tóm tắt dài.
+  if (!asstIsFarmQuestion(question)) return vi ? ASST_OFF_TOPIC.vi : ASST_OFF_TOPIC.en
   if (asstIsMeasureQuestion(question)) return `${asstMeasureAnswer(question, lang)} ${disclaimer}`
   if (ctx.facts && asstIsTwoTierQuestion(question)) return asstTwoTierText(ctx, lang)
 
@@ -395,3 +397,17 @@ export function asstMeasureAnswer(question, lang = 'vi') {
 // Câu hỏi "cách đo" và câu hỏi "đề xuất / kiểm tra" được nhận diện bằng từ khoá (dùng ở fallbackAnswer).
 export const asstIsMeasureQuestion = (q) => /cách đo|tự đo|đo thế nào|đo như nào|bút đo|khúc xạ|how (do i|to) measure|measure my|meter|refractometer/i.test(String(q || ''))
 export const asstIsTwoTierQuestion = (q) => /đề xuất|kiểm tra|minh bạch|chiến thuật|luân canh|chiến lược|nên trồng|propos|check|transparen|strategy|rotation|what should i (plant|grow)/i.test(String(q || ''))
+
+// Phạm vi của trợ lý: chỉ câu hỏi về ruộng vườn, luân canh, đất, nước, thời tiết, dữ liệu trên trang.
+export const ASST_OFF_TOPIC = {
+  vi: 'Mình chỉ hỗ trợ câu hỏi về ruộng vườn và luân canh; bà con hỏi về thửa của mình nhé.',
+  en: 'I only help with questions about your fields and crop rotation; please ask about your field.',
+}
+// Từ khoá (đã bỏ dấu) cho biết câu hỏi thuộc phạm vi. Do nhóm chọn; thà nhận nhầm còn hơn từ chối nhầm.
+const ASST_FARM_WORDS = ['lua', 'ngo', 'bap', 'dau', 'cay', 'trong', 'ruong', 'vuon', 'thua', 'dat', 'man', 'phen', 'nuoc', 'tuoi', 'mua', 'han', 'vu ', 'luan canh', 'chien', 'ph', 'ec', 'phan', 'benh', 'sau', 'thoi tiet', 'nhiet', 'nasa', 'du lieu', 'ban do', 'kenh', 'ngap', 'gieo', 'thu hoach', 'nang suat', 'khuyen nong', 'ot', 'ca chua', 'hanh', 'cai', 'rau', 'thang nao', 'moi thang',
+  'rice', 'crop', 'field', 'farm', 'soil', 'water', 'rain', 'salin', 'season', 'rotation', 'irrigat', 'weather', 'plant', 'garden', 'map', 'data', 'harvest', 'yield', 'drought', 'flood', 'month', 'maize', 'bean', 'pepper', 'grow', 'sow']
+const asstFold = (s) => String(s ?? '').normalize('NFD').replace(/\p{M}/gu, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase()
+export const asstIsFarmQuestion = (q) => {
+  const t = ` ${asstFold(q)} `
+  return ASST_FARM_WORDS.some((w) => (w.length <= 3 ? new RegExp(`\\b${w.trim()}\\b`).test(t) : t.includes(w)))
+}

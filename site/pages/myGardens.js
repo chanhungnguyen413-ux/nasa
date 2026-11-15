@@ -10,11 +10,14 @@ import { STRAT_TEXT } from '../i18n/strategyText.js'
 import { FIELD_CHANGE_ANSWERS } from '../logic/fieldStrategies.js'
 import { FIELD_TEXT } from '../i18n/fieldText.js'
 import { DATA_TEXT } from '../i18n/dataText.js'
-import { DS, dsDeleteGarden, dsDeleteGroup, dsSave, dsSaveGarden, dsSaveGroup, dsSelectGarden } from '../sources/dataStore.js'
-import { fiCheck } from '../sources/farmerInput.js'
+import { DS, dsApplySnapshot, dsDeleteGarden, dsDeleteGroup, dsSave, dsSaveGarden, dsSaveGroup, dsSelectGarden, dsSnapshot } from '../sources/dataStore.js'
+import { fiCheck, fiToday } from '../sources/farmerInput.js'
+import { dmBuildDemo, dmStripDemo } from '../logic/demoData.js'
 import { powerClimate, powerReadCache } from '../sources/power.js'
 import { ssClimateFor, ssGardenEstimates } from '../logic/staticSnapshot.js'
 import { rgParseWish } from '../logic/rotationGen.js'
+import { sfFill } from '../logic/smartFill.js'
+import { ssGrids } from '../logic/staticSnapshot.js'
 import { districtInputs } from '../logic/rotationInputs.js'
 import { seasonWindows } from '../logic/rotation.js'
 import { fsCalendarSource } from '../logic/fieldStrategies.js'
@@ -133,13 +136,48 @@ function mgApplyEnvironment(g) {
   Object.assign(MF,{record:env.record,elevation:env.elevation,origin:env.origin,status:env.status,error:null})
 }
 
-function mgAssessment(g) {
-  let windows = null
-  if (gmHasBoundary(g)) {
-    const cal = fsCalendarSource({ lat:g.lat, lon:g.lon, id:g.districtId }, PROVINCES, undefined, PRECOMPUTED.provinceCal)
-    if (cal.districtId) windows = seasonWindows(districtInputs(PRECOMPUTED, cal.districtId).peakDays)
+// Lịch vụ NDVI (3 vụ) của huyện mẫu / tỉnh chứa vườn; không có → null.
+function mgWindows(g) {
+  if (!gmHasBoundary(g)) return null
+  const cal = fsCalendarSource({ lat:g.lat, lon:g.lon, id:g.districtId }, PROVINCES, undefined, PRECOMPUTED.provinceCal)
+  return cal.districtId ? seasonWindows(districtInputs(PRECOMPUTED, cal.districtId).peakDays) : null
+}
+
+/** Điền thông minh (luôn bật) cho một vườn: 1 nguồn sự thật cho màu vườn, Cài đặt, Tab 3, Luân canh, PDF. */
+function mgSmartFill(g) {
+  const grids = ssGrids(PRECOMPUTED)
+  if (g?.demo) {
+    const r = sfFill({ profile: g.profile, lat: g.lat, lon: g.lon, grids, envMap: PRECOMPUTED.envMap, windows: mgWindows(g), month: new Date().getMonth() + 1, snapshot: { ph: grids.meta.ph?.period ?? null, ec: grids.meta.ec?.period ?? null } })
+    for (const f of Object.values(r.fields)) if (f.origin === 'field') Object.assign(f, { kind: 'simulated', rate: 'sim' })
+    return r
   }
-  const inputs={ garden:g, climate:gmHasBoundary(g) ? mgGardenClimate(g) : null, windows, soil:DS.soil, marks:DS.marks, estimates:ssGardenEstimates(PRECOMPUTED,g) }
+  return sfFill({ profile: g.profile, lat: g.lat, lon: g.lon, grids, envMap: PRECOMPUTED.envMap, windows: mgWindows(g), month: new Date().getMonth() + 1, snapshot: { ph: grids.meta.ph?.period ?? null, ec: grids.meta.ec?.period ?? null } })
+}
+
+/** Chữ hiển thị của một trường tự điền: "5,8", "2,5 dS/m", "Phù sa", "Hè Thu", "Lúa"… (null nếu trống). */
+function mgFillText(key, f) {
+  if (!f || f.origin === 'empty') return null
+  const soil = DATA_TEXT[S.lang].soilForm
+  if (key === 'ph') return mfNum(f.value, 1)
+  if (key === 'ec') return `${mfNum(f.value, 1)} dS/m`
+  if (key === 'soilType') return soil.soilTypes?.[f.value] ?? f.value
+  if (key === 'season') return FIELD_TEXT[S.lang].seasons?.[f.value] ?? f.value
+  if (key === 'sowing') return FIELD_TEXT[S.lang].months?.[f.value - 1] ?? String(f.value)
+  if (key === 'cropId') return f.value ? CROP_LIBRARY[f.value]?.name[S.lang] ?? f.value : f.custom ?? null
+  return String(f.value ?? '')
+}
+
+/** "≈ 5,8 · SoilGrids · Tham khảo" — gợi ý tự điền kèm nguồn và nhãn độ tin cậy. */
+function mgFillHint(key, f) {
+  const t = mgFillText(key, f)
+  if (!t || f.origin !== 'auto') return null
+  const T = mgT()
+  return `≈ ${t} · ${T.fillSrc[f.source] ?? f.source} · ${STRAT_TEXT[S.lang].farm.rate[f.rate] ?? ''}`
+}
+
+function mgAssessment(g) {
+  const windows = mgWindows(g)
+  const inputs={ garden:g, climate:gmHasBoundary(g) ? mgGardenClimate(g) : null, windows, soil:DS.soil, marks:DS.marks, estimates:ssGardenEstimates(PRECOMPUTED,g), fill:mgSmartFill(g) }
   const inputKey=gmAssessmentKey(inputs)
   const cached=MG.assessments.get(g.id)
   if(cached?.inputKey===inputKey)return cached
@@ -174,9 +212,11 @@ function mgCurrentIdFrom(text) {
 }
 
 // Tên cây hiển thị: tên thư viện FAO, hoặc tên nông dân tự gõ kèm ghi chú "ngoài thư viện".
-function mgCropText(profile) {
+function mgCropText(profile, g = null) {
   const c=gmCropLabel(profile,S.lang)
-  return c ? (c.custom ? `${c.name} (${mgT().customCrop})` : c.name) : mgT().noCrop
+  if (c) return c.custom ? `${c.name} (${mgT().customCrop})` : c.name
+  const auto = g ? mgSmartFill(g).fields.cropId : null
+  return auto?.origin === 'auto' ? `≈ ${mgFillText('cropId', auto)} (${mgT().autoTag})` : mgT().noCrop
 }
 
 function mgPopupHtml(g,point=null) {
@@ -190,7 +230,7 @@ function mgPopupHtml(g,point=null) {
   }
   const limits=result?.limiting.map(k=>mfT().criteria[k]).join(', ')
   const reason=grade==='gray'?T.reasons[a.reason==='assessed'?'missingData':a.reason]:grade==='green'?T.popupGreen:limits?T.popupLimits(limits):T.reasons.assessed
-  return `<div class="gm-map-summary"><strong>${esc(g.name)}</strong><div class="gm-map-crop">${esc(mgCropText(g.profile))}</div><span class="gm-grade"><i style="background:${GARDEN_GRADES[grade]}"></i>${T.grades[grade]}</span>${local?`<small>${T.popupLocal}</small>`:''}<p>${esc(reason)}</p></div>`
+  return `<div class="gm-map-summary"><strong>${esc(g.name)}</strong><div class="gm-map-crop">${esc(mgCropText(g.profile,g))}</div><span class="gm-grade"><i style="background:${GARDEN_GRADES[grade]}"></i>${T.grades[grade]}</span>${local?`<small>${T.popupLocal}</small>`:''}<p>${esc(reason)}</p></div>`
 }
 
 function mgOpenPopup(id,point=null) {
@@ -210,6 +250,8 @@ function mgMapClick(id,e) {
   window.L.DomEvent.stopPropagation(e)
   if(mdActive() || MFD.mode)return mfdMapClick(e.latlng)
   if(DS.activeGardenId!==id)mgFocusGarden(id)
+  // Bấm vào thửa → tự sang Tab 3 "Chi tiết" để đọc thông tin mảnh đất ngay.
+  if(MW.tab!=='cond')mwGoTab('cond')
   mgOpenPopup(id,e.latlng)
 }
 
@@ -291,7 +333,7 @@ function mgClipCell(poly, cell, size) {
 
 function mgRefreshBox() {
   const el = $('#mg-gardens-box')
-  if (el) { el.innerHTML = mgGardensInnerHtml(); mdUpdateLiveArea() }
+  if (el) { el.innerHTML = mgGardensInnerHtml(); mdUpdateLiveArea(); if (typeof wireMotion === 'function') wireMotion() }
 }
 
 function mgSelectorHtml() {
@@ -314,20 +356,62 @@ function mgDrawingHtml() {
   return `<div class="gm-drawing"><strong class="gm-drawing-title">${icon('pen-line','size-4')}<span>${editing?T.editing:T.drawing} · ${esc(mgActiveGarden()?.name ?? '')}</span></strong><div class="gm-action-row"><button type="button" data-md="save" class="gm-primary">${T.saveBoundary}</button><button type="button" data-md="undo" class="gm-secondary" ${MD.history.length?'':'disabled'}>${icon('undo-2','size-4')}${T.undo}</button><button type="button" data-md="redo" class="gm-secondary" ${MD.redoStack?.length?'':'disabled'}>${icon('redo-2','size-4')}${T.redo}</button><button type="button" data-md="cancel" class="gm-secondary">${T.stopDrawing}</button>${editing&&MD.selectedIdx!==null&&MD.draft.length>3?`<button type="button" data-md="delVertex" class="gm-secondary">${icon('trash-2','size-4')}${T.deleteVertex}</button>`:''}</div><div id="mg-live-area"></div>${MD.error?`<p role="alert" class="gm-error">${esc(MD.error)}</p>`:''}<p class="gm-drawing-hint">${esc(hint)}</p></div>`
 }
 
+/* ---------------- Vườn demo cho buổi trình bày (site/logic/demoData.js) ---------------- */
+
+/** Hàng nút nạp / xóa thửa demo (luôn ghi rõ "Mô phỏng giả định"). */
+function mgDemoRowHtml() {
+  const T = mgT()
+  const has = DS.gardens.some((g) => g.demo)
+  return `<div class="gm-demo-row"><button type="button" data-mg="loadDemo" class="gm-secondary">${icon('sparkles','size-4')}${esc(has ? T.demoReload : T.demoLoad)}</button>${has ? `<button type="button" data-mg="clearDemo" class="gm-secondary">${icon('trash-2','size-4')}${esc(T.demoClear)}</button>` : ''}<p class="gm-demo-hint">${esc(T.demoHint)}</p></div>`
+}
+
+/** Dữ liệu tĩnh tại một điểm (cùng nguồn với điền thông minh) để bộ sinh demo lấy pH, độ mặn, loại đất, lịch vụ thật. */
+function mgDemoFillAt({ profile, lat, lon }) {
+  const grids = ssGrids(PRECOMPUTED)
+  const cal = fsCalendarSource({ lat, lon, id: null }, PROVINCES, undefined, PRECOMPUTED.provinceCal)
+  const windows = cal.districtId ? seasonWindows(districtInputs(PRECOMPUTED, cal.districtId).peakDays) : null
+  return sfFill({ profile, lat, lon, grids, envMap: PRECOMPUTED.envMap, windows, month: new Date().getMonth() + 1 })
+}
+
+/** Vẽ lại mọi nơi đọc DS.gardens sau khi nạp / xóa demo. */
+function mgAfterDemo(firstId) {
+  MG.assessments.clear()
+  if (firstId) mgSelectGarden(firstId)
+  else { DS.activeGardenId = null; DS.field = null; mgClearCurrent(); dsSave(); mwRenderBody(); mgDrawAllGardens() }
+  mgRefreshBox()
+  if (S.page === 'rotations' && typeof renderRotations === 'function') renderRotations()
+}
+
+/** Nạp bộ thửa demo ngẫu nhiên (thay bộ demo cũ, giữ nguyên thửa thật). */
+function mgLoadDemo() {
+  const base = dmStripDemo(dsSnapshot())
+  const demo = dmBuildDemo({ seed: Math.floor(Math.random() * 1e6) + 1, today: fiToday(), fillFor: mgDemoFillAt })
+  dsApplySnapshot({ ...base, gardens: [...base.gardens, ...demo.gardens], gardenGroups: [...base.gardenGroups, ...demo.groups], marks: [...base.marks, ...demo.marks], gardenView: { mode: 'group', id: '*' } })
+  MG.notice = mgT().demoLoaded(demo.gardens.length)
+  mgAfterDemo(demo.gardens[0]?.id ?? null)
+}
+
+/** Gỡ toàn bộ thửa / nhóm / điểm đánh dấu demo. */
+function mgClearDemo() {
+  dsApplySnapshot(dmStripDemo(dsSnapshot()))
+  MG.notice = mgT().demoCleared
+  mgAfterDemo(DS.gardens[0]?.id ?? null)
+}
+
 function mgGardensInnerHtml(snapshot=mgBuildSnapshot()) {
   const T=mgT()
-  if (!DS.gardenGroups.length) return `<div class="gm-empty"><span class="gm-empty-icon">${icon('folder-plus','size-8')}</span><h2>${T.emptyTitle}</h2><p>${T.emptySub}</p><button type="button" data-mg="addGroup" class="gm-primary">${icon('plus','size-4')}${T.addGroup}</button></div>`
+  if (!DS.gardenGroups.length) return `<div class="gm-empty" data-reveal="mg-empty"><span class="gm-empty-icon">${icon('folder-plus','size-8')}</span><h2>${T.emptyTitle}</h2><p>${T.emptySub}</p><button type="button" data-mg="addGroup" class="gm-primary">${icon('plus','size-4')}${T.addGroup}</button>${mgDemoRowHtml()}</div>`
   const visible=mgVisible(), ids=new Set(visible.map(g=>g.groupId))
   const groups=DS.gardenGroups.filter(group=>DS.gardenView.mode==='group'?(DS.gardenView.id==='*'||group.id===DS.gardenView.id):ids.has(group.id))
-  return `<div class="gm-heading"><div><h2>${T.title}</h2><p>${T.sub}</p></div><button type="button" data-mg="addGroup" class="gm-icon-button" title="${T.addGroup}" aria-label="${T.addGroup}">${icon('folder-plus','size-5')}</button></div>${mgSelectorHtml()}<p class="gm-local-note">${T.contextHint}</p>${mgDrawingHtml()}
+  return `<div class="gm-heading"><div><h2>${T.title}</h2><p>${T.sub}</p></div><button type="button" data-mg="addGroup" class="gm-icon-button" title="${T.addGroup}" aria-label="${T.addGroup}">${icon('folder-plus','size-5')}</button></div>${mgSelectorHtml()}${mgDemoRowHtml()}<p class="gm-local-note">${T.contextHint}</p>${mgDrawingHtml()}
     <div class="gm-groups">${groups.map(group=>{
       const collapsed = MG.collapsedGroups.has(group.id)
       const childrenHtml = collapsed ? '' : `<div class="gm-children">${visible.filter(g=>g.groupId===group.id).map(g=>{
         const a=snapshot.get(g.id)
         const isActive=g.id===DS.activeGardenId
-        return `<div class="gm-child-wrap ${isActive?'is-active':''}"><div class="gm-child ${isActive?'is-active':''}" data-garden-id="${esc(g.id)}"><button type="button" class="gm-child-select" data-mg="select" data-value="${esc(g.id)}" aria-pressed="${isActive}"><i class="gm-dot"></i><span><strong>${esc(g.name)}</strong><small>${esc(mgCropText(g.profile))}${gmHasBoundary(g)?` · ${mfNum(g.areaHa??geoAreaM2(g.polygon)/1e4,2)} ha`:` · ${T.noBoundary}`}</small></span><i class="gm-status-dot" style="background:${GARDEN_GRADES[a.grade]}" title="${T.grades[a.grade]}"></i></button><button type="button" class="gm-icon-button" data-mg="settings" data-value="${esc(g.id)}" aria-label="${T.settings}: ${esc(g.name)}" title="${T.settings}">${icon('settings','size-4')}</button></div>${isActive?`<div class="gm-child-actions"><button type="button" data-mg="draw" data-value="${esc(g.id)}" class="gm-secondary gm-child-draw">${icon(gmHasBoundary(g)?'square-dashed':'pen-line','size-4')}${gmHasBoundary(g)?T.editBoundary:T.draw}</button></div>`:''}</div>`
+        return `<div class="gm-child-wrap ${isActive?'is-active':''}"><div class="gm-child ${isActive?'is-active':''}" data-garden-id="${esc(g.id)}"><button type="button" class="gm-child-select" data-mg="select" data-value="${esc(g.id)}" aria-pressed="${isActive}"><i class="gm-dot"></i><span><strong>${esc(g.name)}</strong>${g.demo?`<em class="mk-demo-badge is-small">${esc(T.demoBadge)}</em>`:''}<small>${esc(mgCropText(g.profile,g))}${gmHasBoundary(g)?` · ${mfNum(g.areaHa??geoAreaM2(g.polygon)/1e4,2)} ha`:` · ${T.noBoundary}`}</small></span><i class="gm-status-dot" style="background:${GARDEN_GRADES[a.grade]}" title="${T.grades[a.grade]}"></i></button><button type="button" class="gm-icon-button" data-mg="settings" data-value="${esc(g.id)}" aria-label="${T.settings}: ${esc(g.name)}" title="${T.settings}">${icon('settings','size-4')}</button></div>${isActive?`<div class="gm-child-actions"><button type="button" data-mg="draw" data-value="${esc(g.id)}" class="gm-secondary gm-child-draw">${icon(gmHasBoundary(g)?'square-dashed':'pen-line','size-4')}${gmHasBoundary(g)?T.editBoundary:T.draw}</button></div>`:''}</div>`
       }).join('') || `<p class="gm-group-empty">${T.noChildren}</p>`}</div>`
-      return `<section class="gm-group ${collapsed?'is-collapsed':''}" style="--group-color:${gmColor(group.color)}"><header><span class="gm-folder">${icon('folder-open','size-5')}</span><div><h3>${esc(group.name)}</h3><small>${T.gardenCount(DS.gardens.filter(g=>g.groupId===group.id).length)}</small></div><button type="button" data-mg="addChild" data-value="${esc(group.id)}" class="gm-icon-button" title="${T.addGarden}" aria-label="${T.addGarden}: ${esc(group.name)}">${icon('plus','size-5')}</button><button type="button" data-mg="editGroup" data-value="${esc(group.id)}" class="gm-icon-button" title="${T.editGroup}" aria-label="${T.editGroup}: ${esc(group.name)}">${icon('settings-2','size-4')}</button><button type="button" data-mg="toggleGroup" data-value="${esc(group.id)}" class="gm-icon-button gm-collapse-btn" aria-expanded="${!collapsed}" title="${T.toggleGroup}" aria-label="${T.toggleGroup}: ${esc(group.name)}">${icon('chevron-down','size-4')}</button></header>${childrenHtml}</section>`
+      return `<section class="gm-group ${collapsed?'is-collapsed':''}" style="--group-color:${gmColor(group.color)}" data-reveal="mg-group-${esc(group.id)}"><header><span class="gm-folder">${icon('folder-open','size-5')}</span><div><h3>${esc(group.name)}</h3><small>${T.gardenCount(DS.gardens.filter(g=>g.groupId===group.id).length)}</small></div><button type="button" data-mg="addChild" data-value="${esc(group.id)}" class="gm-icon-button" title="${T.addGarden}" aria-label="${T.addGarden}: ${esc(group.name)}">${icon('plus','size-5')}</button><button type="button" data-mg="editGroup" data-value="${esc(group.id)}" class="gm-icon-button" title="${T.editGroup}" aria-label="${T.editGroup}: ${esc(group.name)}">${icon('settings-2','size-4')}</button><button type="button" data-mg="toggleGroup" data-value="${esc(group.id)}" class="gm-icon-button gm-collapse-btn" aria-expanded="${!collapsed}" title="${T.toggleGroup}" aria-label="${T.toggleGroup}: ${esc(group.name)}">${icon('chevron-down','size-4')}</button></header>${childrenHtml}</section>`
     }).join('')}</div>${MG.notice?`<p role="status" class="gm-save-status ${DS.saved?'':'gm-error'}">${esc(MG.notice)}</p>`:''}<p class="gm-local-note">${icon('hard-drive','size-3.5')}${T.localHint}</p>`
 }
 
@@ -349,7 +433,7 @@ function mgWorkspaceHtml() {
   const T=mgT()
   const snapshot=mgBuildSnapshot()
   let html=mgGardensBarHtml(snapshot)
-  if (DS.gardenGroups.length) html+=`<div class="gm-legend"><p class="gm-eyebrow">${T.mapLegend}</p><p>${T.boundaryColor}</p><p>${T.fillColor}</p><div class="gm-legend-grades">${Object.entries(T.grades).map(([grade,label])=>`<span><i style="background:${GARDEN_GRADES[grade]}"></i>${label}</span>`).join('')}</div><p class="gm-source">${T.sameClimate}</p><p class="gm-source">${T.advisory}</p></div>`
+  if (DS.gardenGroups.length) html+=`<div class="gm-legend" data-reveal="mg-legend"><p class="gm-eyebrow">${T.mapLegend}</p><p>${T.boundaryColor}</p><p>${T.fillColor}</p><div class="gm-legend-grades">${Object.entries(T.grades).map(([grade,label])=>`<span><i style="background:${GARDEN_GRADES[grade]}"></i>${label}</span>`).join('')}</div><p class="gm-source">${T.sameClimate}</p><p class="gm-source">${T.advisory}</p></div>`
   mgDrawAllGardens(snapshot)
   return html
 }
@@ -385,10 +469,12 @@ function mgOpenDialog(kind,id=null) {
     dialog.innerHTML=`<form id="gm-delete-form"><header><h2>${esc(T.deleteTitle(g.name||mgNextGardenName(g.groupId,g.id)))}</h2>${close}</header><div class="gm-dialog-content"><p class="gm-delete-note">${esc(T.deleteText)}</p></div><footer><button type="button" data-mg="settings" data-value="${esc(g.id)}" class="gm-secondary" autofocus>${T.deleteGroupBack}</button><button type="submit" class="gm-danger">${T.confirmDelete}</button></footer></form>`
   } else if (g) {
     const p=g.profile, F=FIELD_TEXT[S.lang], soil=DATA_TEXT[S.lang].soilForm
+    const sf=mgSmartFill(g), hint=(k)=>mgFillHint(k,sf.fields[k])
+    const soilNote=sf.fields.soilType.origin==='auto'?hint('soilType'):sf.fields.soilType.note?T.soilAmbiguous(sf.fields.soilType.note[S.lang]):null
     const defGarden=mgNextGardenName(g.groupId,g.id)
     const select=(id,label,opts,value,empty=null)=>`<label for="gm-${id}">${label}</label><select id="gm-${id}" name="${id}">${empty?`<option value="">${empty}</option>`:''}${Object.entries(opts).map(([k,v])=>`<option value="${esc(k)}" ${String(value)===String(k)?'selected':''}>${esc(v)}</option>`).join('')}</select>`
     const input=(id,label,type,value,attrs='')=>`<div><label for="gm-${id}">${label}</label><input id="gm-${id}" name="${id}" type="${type}" value="${esc(value??'')}" ${attrs}></div>`
-    dialog.innerHTML=`<form id="gm-settings-form"><header><div><p class="gm-eyebrow">${esc(mgGroup(g)?.name??'')}</p><h2>${T.settings}</h2></div>${close}</header><div class="gm-dialog-content"><label for="gm-name">${T.gardenName}</label><input id="gm-name" name="name" maxlength="80" value="${esc(g.name||defGarden)}" placeholder="${esc(defGarden)}" autofocus><p id="gm-name-error" role="alert" class="gm-field-error"></p>${select('groupId',T.group,Object.fromEntries(DS.gardenGroups.map(v=>[v.id,v.name])),g.groupId)}<label for="gm-cropText">${T.crop}</label><input id="gm-cropText" name="cropText" list="gm-crop-list" maxlength="60" autocomplete="off" value="${esc(gmCropLabel(p,S.lang)?.name??'')}" placeholder="${esc(T.cropPlaceholder)}"><datalist id="gm-crop-list">${CROP_LIB_IDS.map(c=>`<option value="${esc(CROP_LIBRARY[c].name[S.lang])}"></option>`).join('')}</datalist><p class="gm-help">${T.cropFreeHint}</p><div class="gm-form-grid"><div>${select('season',T.season,F.seasons,p.season,T.noSeason)}</div><div>${select('sowing',T.sowing,Object.fromEntries(F.months.map((m,i)=>[i+1,m])),p.sowing,T.noSowing)}</div></div>${select('irrigation',T.irrigation,F.irrigation,p.irrigation,T.unknown)}${select('cropChange',MAP_TEXT[S.lang].cond.cropChangeQ,Object.fromEntries(FIELD_CHANGE_ANSWERS.map(a=>[a,MAP_TEXT[S.lang].cond.cropChange[a]])),p.cropChange,T.unknown)}<label for="gm-currentText">${STRAT_TEXT[S.lang].currentLabel}</label><input id="gm-currentText" name="currentText" maxlength="160" autocomplete="off" value="${esc(p.currentText ?? (p.currentId ? (ROTATIONS.find(r=>r.id===p.currentId)?.crops ?? []).map(c=>CROP_LIBRARY[c]?.name[S.lang]??c).join(' - ') : ''))}" placeholder="${esc(T.currentPlaceholder)}"><p class="gm-help">${T.currentHint}</p><hr><h3>${T.soilSection}</h3><p class="gm-help">${T.soilNote}</p><div class="gm-form-grid">${input('ph',T.ph,'number',p.ph,'min="0" max="14" step="any"')}${input('ec',T.ec,'number',p.ec,'min="0" step="any"')}</div>${select('ecType',T.ecType,soil.ecTypes,p.ecType)}<div class="gm-form-grid">${input('om',T.om,'number',p.om,'min="0" max="100" step="any"')}${input('measuredAt',T.measuredAt,'date',p.measuredAt)}</div>${select('soilType',T.soilType,soil.soilTypes,p.soilType)}<p class="gm-help">${T.unusedSoilHint}</p><label class="gm-check"><input type="checkbox" name="useEstimates" value="1" ${p.useEstimates!==false?'checked':''}> <span>${T.useEstimates}</span></label><p class="gm-help">${T.useEstimatesHint}</p><label for="gm-notes">${T.notes}</label><textarea id="gm-notes" name="notes" rows="3" maxlength="2000" placeholder="${T.notesPlaceholder}">${esc(p.notes)}</textarea><p id="gm-form-error" role="alert" class="gm-error"></p><button type="button" data-mg="delete" data-value="${esc(g.id)}" class="gm-delete-link">${icon('trash-2','size-4')}${T.delete}</button></div><footer><button type="button" data-mg="closeDialog" class="gm-secondary">${T.cancel}</button><button type="submit" class="gm-primary">${T.save}</button></footer></form>`
+    dialog.innerHTML=`<form id="gm-settings-form"><header><div><p class="gm-eyebrow">${esc(mgGroup(g)?.name??'')}</p><h2>${T.settings}</h2></div>${close}</header><div class="gm-dialog-content"><label for="gm-name">${T.gardenName}</label><input id="gm-name" name="name" maxlength="80" value="${esc(g.name||defGarden)}" placeholder="${esc(defGarden)}" autofocus><p id="gm-name-error" role="alert" class="gm-field-error"></p>${select('groupId',T.group,Object.fromEntries(DS.gardenGroups.map(v=>[v.id,v.name])),g.groupId)}<label for="gm-cropText">${T.crop}</label><input id="gm-cropText" name="cropText" list="gm-crop-list" maxlength="60" autocomplete="off" value="${esc(gmCropLabel(p,S.lang)?.name??'')}" placeholder="${esc(hint('cropId') ?? T.cropPlaceholder)}"><datalist id="gm-crop-list">${CROP_LIB_IDS.map(c=>`<option value="${esc(CROP_LIBRARY[c].name[S.lang])}"></option>`).join('')}</datalist><p class="gm-help">${T.cropFreeHint}</p><div class="gm-form-grid"><div>${select('season',T.season,F.seasons,p.season,hint('season')?`${T.noSeason} (${hint('season')})`:T.noSeason)}</div><div>${select('sowing',T.sowing,Object.fromEntries(F.months.map((m,i)=>[i+1,m])),p.sowing,T.noSowing)}</div></div>${select('irrigation',T.irrigation,F.irrigation,p.irrigation,T.unknown)}${select('cropChange',MAP_TEXT[S.lang].cond.cropChangeQ,Object.fromEntries(FIELD_CHANGE_ANSWERS.map(a=>[a,MAP_TEXT[S.lang].cond.cropChange[a]])),p.cropChange,T.unknown)}<label for="gm-currentText">${STRAT_TEXT[S.lang].currentLabel}</label><input id="gm-currentText" name="currentText" maxlength="160" autocomplete="off" value="${esc(p.currentText ?? (p.currentId ? (ROTATIONS.find(r=>r.id===p.currentId)?.crops ?? []).map(c=>CROP_LIBRARY[c]?.name[S.lang]??c).join(' - ') : ''))}" placeholder="${esc(T.currentPlaceholder)}"><p class="gm-help">${T.currentHint}</p><hr><h3>${T.soilSection}</h3><p class="gm-help">${T.soilNote}</p><div class="gm-form-grid">${input('ph',T.ph,'number',p.ph,`min="0" max="14" step="any" placeholder="${esc(hint('ph') ?? '')}"`)}${input('ec',T.ec,'number',p.ec,`min="0" step="any" placeholder="${esc(hint('ec') ?? '')}"`)}</div>${select('ecType',T.ecType,soil.ecTypes,p.ecType)}<div class="gm-form-grid">${input('om',T.om,'number',p.om,'min="0" max="100" step="any"')}${input('measuredAt',T.measuredAt,'date',p.measuredAt)}</div>${select('soilType',T.soilType,soil.soilTypes,p.soilType)}${soilNote?`<p class="gm-help gm-fill-hint">${esc(soilNote)}</p>`:''}<p class="gm-help">${T.unusedSoilHint}</p><p class="gm-help gm-fill-note">${T.useEstimates} ${T.useEstimatesHint}</p><label for="gm-notes">${T.notes}</label><textarea id="gm-notes" name="notes" rows="3" maxlength="2000" placeholder="${T.notesPlaceholder}">${esc(p.notes)}</textarea><p id="gm-form-error" role="alert" class="gm-error"></p><button type="button" data-mg="delete" data-value="${esc(g.id)}" class="gm-delete-link">${icon('trash-2','size-4')}${T.delete}</button></div><footer><button type="button" data-mg="closeDialog" class="gm-secondary">${T.cancel}</button><button type="submit" class="gm-primary">${T.save}</button></footer></form>`
   }
   dialog.onclose=()=>{ MG.modal=null; MG.returnFocus?.isConnected&&MG.returnFocus.focus() }
   if (!dialog.open) dialog.showModal()
@@ -428,6 +514,8 @@ document.addEventListener('click',e=>{
   const id=b.dataset.value
   switch(b.dataset.mg) {
     case 'addGroup': return mgOpenDialog('group')
+    case 'loadDemo': return mgLoadDemo()
+    case 'clearDemo': return mgClearDemo()
     case 'editGroup': return mgOpenDialog('group',id)
     case 'deleteGroup': return mgOpenDialog('deleteGroup',id)
     case 'toggleGroup': {
@@ -457,7 +545,8 @@ document.addEventListener('click',e=>{
       if(mdActive()) mdSetMode('idle')
       if (DS.activeGardenId === id) return mgDeselectGarden()
       mgClosePopup()
-      return mgSelectGarden(id,{fit:true})
+      mgSelectGarden(id,{fit:true})
+      return mwGoTab('cond') // chọn thửa trong danh sách cũng mở Tab 3 "Chi tiết"
     case 'settings': return mgOpenDialog('garden',id)
     case 'retryEnvironment': {
       const garden=DS.gardens.find(g=>g.id===id)
@@ -531,6 +620,8 @@ document.addEventListener('input',e=>{
 document.addEventListener('submit',e=>{
   if (!['gm-group-form','gm-settings-form','gm-delete-form','gm-delete-group-form'].includes(e.target.id)) return
   e.preventDefault()
+  // Mở từ trang Luân canh (quản lý vườn nhanh) → vẽ lại trang đó sau khi lưu/xóa xong (chạy cả khi bước sau lỗi).
+  setTimeout(() => { if (S.page === 'rotations' && typeof renderRotations === 'function') { renderRotations(); revealNow('#rotations [data-reveal]') } }, 0)
   const modal=MG.modal
   if (!modal) return
   const T=mgT(), data=new FormData(e.target)
@@ -576,7 +667,7 @@ document.addEventListener('submit',e=>{
   const measuredAt=String(data.get('measuredAt')??'')||null
   if([ph,ec,om].some(v=>v!==null)&&!measuredAt) return error(T.invalidDate)
   const crop=gmResolveCrop(data.get('cropText'))
-  const profile={ ...g.profile, cropId:crop.cropId, cropName:crop.cropName, useEstimates:data.get('useEstimates')==='1', season:String(data.get('season'))||null, sowing:Number(data.get('sowing'))||null, irrigation:String(data.get('irrigation'))||null, ph,ec,om, measuredAt, ecType:String(data.get('ecType')), soilType:String(data.get('soilType')), notes:String(data.get('notes')??'').trim(), cropChange:FIELD_CHANGE_ANSWERS.includes(String(data.get('cropChange')))?String(data.get('cropChange')):null, currentText:String(data.get('currentText')??'').trim().slice(0,160)||null, currentId:mgCurrentIdFrom(String(data.get('currentText')??'')) }
+  const profile={ ...g.profile, cropId:crop.cropId, cropName:crop.cropName, useEstimates:true, season:String(data.get('season'))||null, sowing:Number(data.get('sowing'))||null, irrigation:String(data.get('irrigation'))||null, ph,ec,om, measuredAt, ecType:String(data.get('ecType')), soilType:String(data.get('soilType')), notes:String(data.get('notes')??'').trim(), cropChange:FIELD_CHANGE_ANSWERS.includes(String(data.get('cropChange')))?String(data.get('cropChange')):null, currentText:String(data.get('currentText')??'').trim().slice(0,160)||null, currentId:mgCurrentIdFrom(String(data.get('currentText')??'')) }
   dsSaveGarden({ ...g,name,groupId,profile })
   MG.assessments.delete(g.id)
   if(DS.gardenView.mode==='group'&&DS.gardenView.id!=='*') DS.gardenView.id=groupId

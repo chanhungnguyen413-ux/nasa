@@ -14,6 +14,7 @@ import * as Lucide from 'lucide-react'
 import { compile, optimize } from '@tailwindcss/node'
 import { Scanner } from '@tailwindcss/oxide'
 import { MEKONG_OUTER_RINGS, mekongPointInRing } from '../site/data/mekongBoundaries.js'
+import { provinceCalendarYear } from '../site/logic/rotationInputs.js'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const read = (p) => readFileSync(join(root, p), 'utf8')
@@ -59,6 +60,8 @@ const modules = [
   'site/logic/staticSnapshot.js', // snapshot tĩnh toàn ĐBSCL: khí hậu gần nhất, ô 5 km pH/độ mặn, rate độ chính xác
   'site/logic/fieldStrategies.js',
   'site/logic/rotationGen.js', // bộ sinh phương án luân canh tự do (9³ chuỗi, chấm bằng suitAssess) + kiểm chứng đề xuất AI
+  'site/logic/smartFill.js', // điền thông minh luôn bật: 1 nguồn sự thật cho mọi trường còn trống (sfFill)
+  'site/logic/demoData.js', // bộ sinh thửa demo (Mô phỏng giả định) cho buổi trình bày
   'site/i18n/fieldText.js',
   'site/i18n/dataText.js',
   'site/i18n/strategyText.js',
@@ -102,14 +105,23 @@ const ph5km = pre('mekong_soilgrids_ph_5km.json')
 const provCal5 = existsSync(join(root, 'site/data/precomputed/province_calendars.json')) ? pre('province_calendars.json') : null
 const provinceCal = (provCal5?.provinces ?? [])
   .filter((p) => p.calendar?.calendarCluster)
-  .map((p) => ({
-    id: p.id, code: p.code, name: p.name, nameEn: p.nameEn, lat: p.lat, lon: p.lon,
-    climate: p.climate.months,
-    monthly: p.calendar.rule.monthly,
-    calendarYear: p.calendar.calendarYear,
-    calendarCluster: p.calendar.calendarCluster,
-    sensitivity: p.calendar.sensitivity,
-  }))
+  .map((p) => {
+    // Năm lịch = năm mới nhất tâm tỉnh thấy đủ 3 vụ (provinceCalendarYear); không có → năm cuối.
+    const pick = provinceCalendarYear(p.calendar.kmeansByYear, kmeans.clusters) ?? { year: p.calendar.calendarYear, cluster: p.calendar.calendarCluster, rule: 'last', lastYear: p.calendar.calendarYear }
+    const cycles = p.calendar.rule.cyclesPerYear ?? {}
+    return {
+      id: p.id, code: p.code, name: p.name, nameEn: p.nameEn, lat: p.lat, lon: p.lon,
+      climate: p.climate.months,
+      monthly: p.calendar.rule.monthly,
+      calendarYear: pick.year,
+      calendarCluster: pick.cluster,
+      yearRule: pick.rule,
+      lastYear: pick.lastYear,
+      cyclesPerYear: cycles,
+      meanCycles: p.calendar.rule.meanCyclesPerYear ?? null,
+      sensitivity: p.calendar.sensitivity,
+    }
+  })
 const sal5km = existsSync(join(root, 'site/data/precomputed/mekong_salinity_5km.json')) ? pre('mekong_salinity_5km.json') : null
 const ndviDates = ndvi.districts.flatMap((d) => d.series.map((r) => r.date)).sort()
 
@@ -183,7 +195,8 @@ const PRECOMPUTED = {
   powerSnapshot: { generatedAt: powerMonthly.generatedAt?.slice(0, 10) ?? null, years: powerMonthly.snapshot?.years ?? null },
   snapshot: { ph: snapPh, ec: snapEc },
   provinceCal, // lịch vụ cấp tỉnh: thửa ngoài 15 km quanh huyện mẫu nhưng trong ranh tỉnh
-  provinceCalMeta: provCal5 ? { fetchedAt: provCal5.fetchedAt?.slice(0, 10) ?? null, years: provCal5.years, skipped: provCal5.provinces.filter((p) => !p.calendar?.calendarCluster).map((p) => p.code) } : null,
+  // via: lịch tỉnh lấy NDVI qua kênh nào (AppEEARS 1 ô 250 m hay ORNL khối 2 km) — tooltip đọc để ghi đúng nguồn.
+  provinceCalMeta: provCal5 ? { via: /AppEEARS/.test(provCal5.source?.ndvi ?? '') ? 'appeears' : 'ornl', file: provCal5.source?.ndviFile?.name ?? null, fetchedAt: provCal5.fetchedAt?.slice(0, 10) ?? null, years: provCal5.years, skipped: provCal5.provinces.filter((p) => !p.calendar?.calendarCluster).map((p) => p.code) } : null,
   envMap: {
     grid: { dLat: envGrid.dLat, dLon: envGrid.dLon, totalDeltaCells: soil5km.totalDeltaCells ?? 1624 },
     layers: {
@@ -267,24 +280,32 @@ const candidates = scanner.scanFiles([
 ])
 const css = optimize(compiler.build(candidates), { minify: true }).code
 
-// 4. Font: Be Vietnam Pro (latin, latin-ext, vietnamese) inlined as woff2 data URIs.
-const fontDir = 'node_modules/@fontsource/be-vietnam-pro'
-const fonts = [400, 500, 600, 700, 800]
-  .map((w) =>
-    read(`${fontDir}/${w}.css`)
-      .split('@font-face')
-      .filter((block) => block.includes('url(') && /(latin|latin-ext|vietnamese)-\d+-normal\.woff2/.test(block))
-      .map((block) => {
-        const file = block.match(/url\(\.\/files\/([^)]+\.woff2)\)/)[1]
-        const data = readFileSync(join(root, fontDir, 'files', file)).toString('base64')
-        return `@font-face${block.replace(/src:[^;]+;/, `src:url(data:font/woff2;base64,${data}) format("woff2");`)}`
-      })
-      .join('\n'),
-  )
-  .join('\n')
+// 4. Font nhúng thẳng dạng woff2 data URI (mở index.html offline vẫn đúng chữ, không gọi Google Fonts):
+//    Plus Jakarta Sans (chữ thường) + Fraunces (tiêu đề có chân) theo thiết kế nasa-UI-UX; Be Vietnam Pro làm chữ dự phòng.
+//    Mỗi gói @fontsource chỉ lấy 3 bộ ký tự latin, latin-ext, vietnamese.
+function fontFaces(pkg, styles) {
+  const fontDir = `node_modules/@fontsource/${pkg}`
+  return styles
+    .map((st) =>
+      read(`${fontDir}/${st}.css`)
+        .split('@font-face')
+        .filter((block) => block.includes('url(') && /(latin|latin-ext|vietnamese)-\d+-(normal|italic)\.woff2/.test(block))
+        .map((block) => {
+          const file = block.match(/url\(\.\/files\/([^)]+\.woff2)\)/)[1]
+          const data = readFileSync(join(root, fontDir, 'files', file)).toString('base64')
+          return `@font-face${block.replace(/src:[^;]+;/, `src:url(data:font/woff2;base64,${data}) format("woff2");`)}`
+        })
+        .join('\n'),
+    )
+    .join('\n')
+}
+const fonts = [
+  fontFaces('plus-jakarta-sans', ['500', '600', '700', '800']),
+  fontFaces('fraunces', ['600', '700', '800', '600-italic', '700-italic']),
+  fontFaces('be-vietnam-pro', ['400', '700']),
+].join('\n')
 
 const html = template
-  .replace('/*__HERO_PHOTO__*/', () => `data:image/jpeg;base64,${readFileSync(join(root, 'site/assets/mekong-fields.jpg')).toString('base64')}`)
   .replace('/*__FONTS__*/', () => fonts)
   .replace('/*__CSS__*/', () => css + '\n' + read('site/redesign.css') + '\n' + read('site/gardens.css') + '\n' + read('site/hitech.css')) // hitech.css: lớp HUD + chuyển động chung, nạp cuối để thắng lớp cũ
   .replace('/*__ICONS__*/ {}', () => JSON.stringify(icons))

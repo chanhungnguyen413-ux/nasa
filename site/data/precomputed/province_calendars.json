@@ -1,0 +1,5138 @@
+{
+ "source": {
+  "ndvi": "NASA MODIS MOD13Q1.061, 250 m, 16-day composite, via NASA AppEEARS Point Sample (LP DAAC)",
+  "ndviApi": "https://appeears.earthdatacloud.nasa.gov",
+  "climate": "NASA POWER Daily API (point), community AG",
+  "climateApi": "https://power.larc.nasa.gov/api/temporal/daily/point",
+  "ndviFile": {
+   "name": "mekong-13-tinh-MOD13Q1-061-results.csv",
+   "bytes": 547844,
+   "sha256": "f5e4fe4f193d44ca44dab3a85d4f9e09fc66ac8656c85b09c2ea88b52614135a"
+  }
+ },
+ "method": "Single 250 m MOD13Q1 pixel at each province centre (AppEEARS point sample); images with pixel_reliability not in {0 Good, 1 Marginal} treated as missing and gap-filled with calendar_rule.fill_gaps; then the same rule-based peak detection, nearest saved k-means centroid (not refitted) and sensitivity grid as the 5 sample districts.",
+ "pointNote": "Province centre from mekongBoundaries.js; ONE 250 m pixel (not a 2 km block, not a farm survey). Province-level calendar only.",
+ "years": [
+  2021,
+  2025
+ ],
+ "fetchedAt": "2026-11-15T04:41:48+00:00",
+ "provinces": [
+  {
+   "id": "p-angiang",
+   "code": "angiang",
+   "name": "An Giang",
+   "nameEn": "An Giang",
+   "lat": 10.5114,
+   "lon": 105.1828,
+   "images": 115,
+   "missingImages": 46,
+   "calendar": {
+    "rule": {
+     "cyclesPerYear": {
+      "2021": 1,
+      "2022": 1,
+      "2023": 2,
+      "2024": 2,
+      "2025": 3
+     },
+     "meanCyclesPerYear": 1.8,
+     "yearsWithThreeCycles": 1,
+     "peakDates": [
+      "2021-05-25",
+      "2022-02-02",
+      "2023-05-25",
+      "2023-10-16",
+      "2024-01-17",
+      "2024-06-09",
+      "2025-02-02",
+      "2025-06-10",
+      "2025-09-14"
+     ],
+     "bareWindows": [
+      {
+       "start": "2024-09-29",
+       "end": "2024-10-31",
+       "images": 3
+      },
+      {
+       "start": "2025-11-01",
+       "end": "2025-12-03",
+       "images": 3
+      }
+     ],
+     "monthly": [
+      {
+       "month": 1,
+       "ndviMedian": 0.756,
+       "bareShare": 0.0,
+       "peaks": 1,
+       "images": 10
+      },
+      {
+       "month": 2,
+       "ndviMedian": 0.779,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 3,
+       "ndviMedian": 0.627,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 4,
+       "ndviMedian": 0.696,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 5,
+       "ndviMedian": 0.782,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 6,
+       "ndviMedian": 0.762,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 7,
+       "ndviMedian": 0.645,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 8,
+       "ndviMedian": 0.634,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 9,
+       "ndviMedian": 0.678,
+       "bareShare": 0.1,
+       "peaks": 1,
+       "images": 10
+      },
+      {
+       "month": 10,
+       "ndviMedian": 0.532,
+       "bareShare": 0.33,
+       "peaks": 1,
+       "images": 6
+      },
+      {
+       "month": 11,
+       "ndviMedian": 0.615,
+       "bareShare": 0.22,
+       "peaks": 0,
+       "images": 9
+      },
+      {
+       "month": 12,
+       "ndviMedian": 0.569,
+       "bareShare": 0.1,
+       "peaks": 0,
+       "images": 10
+      }
+     ]
+    },
+    "kmeansByYear": {
+     "2021": {
+      "cluster": 3,
+      "distance": 0.654
+     },
+     "2022": {
+      "cluster": 3,
+      "distance": 0.549
+     },
+     "2023": {
+      "cluster": 3,
+      "distance": 0.742
+     },
+     "2024": {
+      "cluster": 3,
+      "distance": 0.829
+     },
+     "2025": {
+      "cluster": 4,
+      "distance": 0.815
+     }
+    },
+    "calendarYear": 2025,
+    "calendarCluster": 4,
+    "sensitivity": {
+     "min": 1.0,
+     "max": 2.2
+    }
+   },
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 18.72,
+       "median": 11.37,
+       "p10": 2.1,
+       "p90": 44.46,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 4.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 13.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.6,
+       "median": 0.59,
+       "p10": 0.54,
+       "p90": 0.69,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 12.89,
+       "median": 5.27,
+       "p10": 0.58,
+       "p90": 30.15,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 18.44,
+       "median": 22.0,
+       "p10": 4.8,
+       "p90": 27.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.54,
+       "median": 0.53,
+       "p10": 0.52,
+       "p90": 0.59,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 32.99,
+       "median": 21.37,
+       "p10": 2.43,
+       "p90": 59.91,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 26.32,
+       "median": 29.0,
+       "p10": 17.8,
+       "p90": 31.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.53,
+       "median": 0.52,
+       "p10": 0.52,
+       "p90": 0.54,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 70.8,
+       "median": 63.86,
+       "p10": 20.82,
+       "p90": 142.84,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 20.28,
+       "median": 21.0,
+       "p10": 9.6,
+       "p90": 29.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.56,
+       "median": 0.54,
+       "p10": 0.52,
+       "p90": 0.61,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 153.26,
+       "median": 140.55,
+       "p10": 72.12,
+       "p90": 227.74,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 7.2,
+       "median": 5.0,
+       "p10": 0.0,
+       "p90": 16.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.63,
+       "median": 0.61,
+       "p10": 0.55,
+       "p90": 0.73,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 205.04,
+       "median": 165.35,
+       "p10": 104.57,
+       "p90": 319.1,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.48,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 1.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.74,
+       "median": 0.72,
+       "p10": 0.62,
+       "p90": 0.91,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 227.89,
+       "median": 210.97,
+       "p10": 105.53,
+       "p90": 411.52,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.81,
+       "median": 0.79,
+       "p10": 0.7,
+       "p90": 0.96,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 205.65,
+       "median": 179.68,
+       "p10": 101.59,
+       "p90": 333.37,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.84,
+       "median": 0.82,
+       "p10": 0.74,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 249.31,
+       "median": 216.85,
+       "p10": 126.17,
+       "p90": 455.0,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.87,
+       "median": 0.87,
+       "p10": 0.78,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 196.68,
+       "median": 159.59,
+       "p10": 116.43,
+       "p90": 306.69,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.9,
+       "median": 0.91,
+       "p10": 0.81,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 116.55,
+       "median": 115.2,
+       "p10": 49.28,
+       "p90": 189.2,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.84,
+       "median": 0.85,
+       "p10": 0.74,
+       "p90": 0.94,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 36.7,
+       "median": 34.19,
+       "p10": 7.01,
+       "p90": 73.65,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.08,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.72,
+       "median": 0.71,
+       "p10": 0.63,
+       "p90": 0.84,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-baclieu",
+   "code": "baclieu",
+   "name": "Bạc Liêu",
+   "nameEn": "Bac Lieu",
+   "lat": 9.3139,
+   "lon": 105.4892,
+   "images": 115,
+   "missingImages": 63,
+   "calendar": null,
+   "reason": "too many missing NDVI images at the province centre",
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 20.52,
+       "median": 13.0,
+       "p10": 1.06,
+       "p90": 47.53,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.08,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.69,
+       "median": 0.67,
+       "p10": 0.6,
+       "p90": 0.78,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 10.16,
+       "median": 5.1,
+       "p10": 0.0,
+       "p90": 30.03,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 2.76,
+       "median": 1.0,
+       "p10": 0.0,
+       "p90": 8.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.6,
+       "median": 0.58,
+       "p10": 0.56,
+       "p90": 0.64,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 26.33,
+       "median": 8.69,
+       "p10": 0.2,
+       "p90": 80.81,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 14.72,
+       "median": 15.0,
+       "p10": 3.2,
+       "p90": 25.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.55,
+       "p90": 0.6,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 64.33,
+       "median": 58.51,
+       "p10": 4.38,
+       "p90": 104.33,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 17.24,
+       "median": 18.0,
+       "p10": 5.4,
+       "p90": 28.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.59,
+       "median": 0.57,
+       "p10": 0.55,
+       "p90": 0.63,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 185.92,
+       "median": 190.28,
+       "p10": 100.95,
+       "p90": 268.35,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 5.52,
+       "median": 3.0,
+       "p10": 0.0,
+       "p90": 14.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.69,
+       "median": 0.68,
+       "p10": 0.6,
+       "p90": 0.78,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 239.31,
+       "median": 221.61,
+       "p10": 139.86,
+       "p90": 317.92,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.24,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.85,
+       "median": 0.87,
+       "p10": 0.73,
+       "p90": 0.94,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 273.98,
+       "median": 254.32,
+       "p10": 147.28,
+       "p90": 449.08,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.92,
+       "median": 0.93,
+       "p10": 0.86,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 242.84,
+       "median": 238.49,
+       "p10": 152.84,
+       "p90": 328.64,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.95,
+       "median": 0.96,
+       "p10": 0.89,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 292.97,
+       "median": 280.05,
+       "p10": 189.92,
+       "p90": 415.97,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.96,
+       "median": 0.97,
+       "p10": 0.92,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 262.6,
+       "median": 214.49,
+       "p10": 142.05,
+       "p90": 399.5,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.97,
+       "median": 0.98,
+       "p10": 0.95,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 160.96,
+       "median": 157.75,
+       "p10": 87.28,
+       "p90": 224.31,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.93,
+       "median": 0.95,
+       "p10": 0.85,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 50.11,
+       "median": 34.43,
+       "p10": 12.72,
+       "p90": 112.01,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.82,
+       "median": 0.82,
+       "p10": 0.72,
+       "p90": 0.92,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-bentre",
+   "code": "bentre",
+   "name": "Bến Tre",
+   "nameEn": "Ben Tre",
+   "lat": 10.1195,
+   "lon": 106.4683,
+   "images": 115,
+   "missingImages": 52,
+   "calendar": {
+    "rule": {
+     "cyclesPerYear": {
+      "2021": 0,
+      "2022": 0,
+      "2023": 0,
+      "2024": 0,
+      "2025": 0
+     },
+     "meanCyclesPerYear": 0.0,
+     "yearsWithThreeCycles": 0,
+     "peakDates": [],
+     "bareWindows": [],
+     "monthly": [
+      {
+       "month": 1,
+       "ndviMedian": 0.808,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 2,
+       "ndviMedian": 0.777,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 3,
+       "ndviMedian": 0.776,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 4,
+       "ndviMedian": 0.751,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 5,
+       "ndviMedian": 0.746,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 6,
+       "ndviMedian": 0.803,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 7,
+       "ndviMedian": 0.77,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 8,
+       "ndviMedian": 0.779,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 9,
+       "ndviMedian": 0.795,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 10,
+       "ndviMedian": 0.805,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 6
+      },
+      {
+       "month": 11,
+       "ndviMedian": 0.818,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 9
+      },
+      {
+       "month": 12,
+       "ndviMedian": 0.799,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      }
+     ]
+    },
+    "kmeansByYear": {
+     "2021": {
+      "cluster": 3,
+      "distance": 0.894
+     },
+     "2022": {
+      "cluster": 3,
+      "distance": 0.843
+     },
+     "2023": {
+      "cluster": 3,
+      "distance": 0.859
+     },
+     "2024": {
+      "cluster": 3,
+      "distance": 0.773
+     },
+     "2025": {
+      "cluster": 3,
+      "distance": 0.82
+     }
+    },
+    "calendarYear": 2025,
+    "calendarCluster": 3,
+    "sensitivity": {
+     "min": 0.0,
+     "max": 1.2
+    }
+   },
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 14.98,
+       "median": 8.23,
+       "p10": 0.81,
+       "p90": 41.73,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.62,
+       "median": 0.61,
+       "p10": 0.53,
+       "p90": 0.73,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 7.98,
+       "median": 3.38,
+       "p10": 0.01,
+       "p90": 17.73,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.8,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 3.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.51,
+       "median": 0.5,
+       "p10": 0.47,
+       "p90": 0.56,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 21.72,
+       "median": 14.27,
+       "p10": 0.16,
+       "p90": 55.26,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 7.52,
+       "median": 7.0,
+       "p10": 1.4,
+       "p90": 14.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.48,
+       "median": 0.47,
+       "p10": 0.46,
+       "p90": 0.5,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 51.87,
+       "median": 48.55,
+       "p10": 4.78,
+       "p90": 95.22,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 14.52,
+       "median": 14.0,
+       "p10": 3.4,
+       "p90": 25.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.49,
+       "median": 0.47,
+       "p10": 0.46,
+       "p90": 0.52,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 176.4,
+       "median": 178.13,
+       "p10": 87.1,
+       "p90": 252.82,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 5.92,
+       "median": 4.0,
+       "p10": 0.0,
+       "p90": 14.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.5,
+       "p90": 0.64,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 231.65,
+       "median": 192.39,
+       "p10": 132.09,
+       "p90": 295.99,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.4,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 1.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.72,
+       "median": 0.71,
+       "p10": 0.61,
+       "p90": 0.86,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 243.58,
+       "median": 224.6,
+       "p10": 139.43,
+       "p90": 397.28,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.81,
+       "median": 0.78,
+       "p10": 0.71,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 206.21,
+       "median": 205.82,
+       "p10": 129.84,
+       "p90": 268.03,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.86,
+       "median": 0.85,
+       "p10": 0.74,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 245.58,
+       "median": 237.36,
+       "p10": 156.12,
+       "p90": 347.51,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.89,
+       "median": 0.89,
+       "p10": 0.77,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 246.35,
+       "median": 209.16,
+       "p10": 154.25,
+       "p90": 355.26,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.93,
+       "median": 0.95,
+       "p10": 0.85,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 135.41,
+       "median": 129.95,
+       "p10": 78.16,
+       "p90": 190.43,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.89,
+       "median": 0.91,
+       "p10": 0.78,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 45.3,
+       "median": 33.48,
+       "p10": 10.23,
+       "p90": 102.2,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.76,
+       "median": 0.74,
+       "p10": 0.65,
+       "p90": 0.88,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-camau",
+   "code": "camau",
+   "name": "Cà Mau",
+   "nameEn": "Ca Mau",
+   "lat": 9.0501,
+   "lon": 105.0408,
+   "images": 115,
+   "missingImages": 52,
+   "calendar": {
+    "rule": {
+     "cyclesPerYear": {
+      "2021": 1,
+      "2022": 1,
+      "2023": 1,
+      "2024": 1,
+      "2025": 1
+     },
+     "meanCyclesPerYear": 1.0,
+     "yearsWithThreeCycles": 0,
+     "peakDates": [
+      "2021-11-01",
+      "2022-08-13",
+      "2023-09-14",
+      "2024-09-29",
+      "2025-09-14"
+     ],
+     "bareWindows": [
+      {
+       "start": "2021-03-06",
+       "end": "2021-03-22",
+       "images": 2
+      }
+     ],
+     "monthly": [
+      {
+       "month": 1,
+       "ndviMedian": 0.474,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 2,
+       "ndviMedian": 0.429,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 3,
+       "ndviMedian": 0.428,
+       "bareShare": 0.2,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 4,
+       "ndviMedian": 0.423,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 5,
+       "ndviMedian": 0.469,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 6,
+       "ndviMedian": 0.521,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 7,
+       "ndviMedian": 0.556,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 8,
+       "ndviMedian": 0.577,
+       "bareShare": 0.0,
+       "peaks": 1,
+       "images": 10
+      },
+      {
+       "month": 9,
+       "ndviMedian": 0.611,
+       "bareShare": 0.0,
+       "peaks": 3,
+       "images": 10
+      },
+      {
+       "month": 10,
+       "ndviMedian": 0.608,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 6
+      },
+      {
+       "month": 11,
+       "ndviMedian": 0.559,
+       "bareShare": 0.0,
+       "peaks": 1,
+       "images": 9
+      },
+      {
+       "month": 12,
+       "ndviMedian": 0.55,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      }
+     ]
+    },
+    "kmeansByYear": {
+     "2021": {
+      "cluster": 3,
+      "distance": 0.883
+     },
+     "2022": {
+      "cluster": 3,
+      "distance": 0.826
+     },
+     "2023": {
+      "cluster": 3,
+      "distance": 0.763
+     },
+     "2024": {
+      "cluster": 3,
+      "distance": 0.718
+     },
+     "2025": {
+      "cluster": 3,
+      "distance": 0.84
+     }
+    },
+    "calendarYear": 2025,
+    "calendarCluster": 3,
+    "sensitivity": {
+     "min": 0.6,
+     "max": 1.0
+    }
+   },
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 21.63,
+       "median": 15.47,
+       "p10": 3.13,
+       "p90": 54.79,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.75,
+       "median": 0.75,
+       "p10": 0.66,
+       "p90": 0.83,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 10.32,
+       "median": 4.43,
+       "p10": 0.56,
+       "p90": 27.37,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.48,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 1.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.64,
+       "median": 0.63,
+       "p10": 0.6,
+       "p90": 0.7,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 27.56,
+       "median": 10.66,
+       "p10": 2.2,
+       "p90": 79.78,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 6.76,
+       "median": 6.0,
+       "p10": 0.4,
+       "p90": 15.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.61,
+       "median": 0.59,
+       "p10": 0.59,
+       "p90": 0.63,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 68.45,
+       "median": 74.42,
+       "p10": 12.97,
+       "p90": 109.17,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 11.0,
+       "median": 7.0,
+       "p10": 0.0,
+       "p90": 25.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.63,
+       "median": 0.61,
+       "p10": 0.59,
+       "p90": 0.7,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 193.55,
+       "median": 193.6,
+       "p10": 109.28,
+       "p90": 256.41,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 3.12,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 9.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.74,
+       "median": 0.72,
+       "p10": 0.65,
+       "p90": 0.86,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 241.85,
+       "median": 243.23,
+       "p10": 156.89,
+       "p90": 336.67,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.91,
+       "median": 0.92,
+       "p10": 0.82,
+       "p90": 0.96,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 274.25,
+       "median": 250.33,
+       "p10": 163.29,
+       "p90": 382.12,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.97,
+       "median": 0.97,
+       "p10": 0.94,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 241.66,
+       "median": 233.53,
+       "p10": 179.69,
+       "p90": 323.47,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.97,
+       "median": 0.97,
+       "p10": 0.96,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 299.66,
+       "median": 298.43,
+       "p10": 212.36,
+       "p90": 403.42,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.98,
+       "median": 0.98,
+       "p10": 0.96,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 260.07,
+       "median": 239.57,
+       "p10": 154.67,
+       "p90": 370.92,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.98,
+       "median": 0.99,
+       "p10": 0.96,
+       "p90": 1.0,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 187.22,
+       "median": 188.61,
+       "p10": 110.29,
+       "p90": 263.56,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.96,
+       "median": 0.97,
+       "p10": 0.89,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 64.3,
+       "median": 48.36,
+       "p10": 23.39,
+       "p90": 126.92,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.88,
+       "median": 0.89,
+       "p10": 0.78,
+       "p90": 0.96,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-cantho",
+   "code": "cantho",
+   "name": "Cần Thơ",
+   "nameEn": "Can Tho",
+   "lat": 10.1145,
+   "lon": 105.5305,
+   "images": 115,
+   "missingImages": 58,
+   "calendar": null,
+   "reason": "too many missing NDVI images at the province centre",
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 18.89,
+       "median": 9.8,
+       "p10": 1.07,
+       "p90": 53.72,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 1.84,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 8.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.64,
+       "median": 0.62,
+       "p10": 0.56,
+       "p90": 0.77,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 9.86,
+       "median": 5.93,
+       "p10": 0.01,
+       "p90": 24.03,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 13.96,
+       "median": 15.0,
+       "p10": 1.6,
+       "p90": 25.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.56,
+       "median": 0.54,
+       "p10": 0.51,
+       "p90": 0.62,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 24.35,
+       "median": 9.76,
+       "p10": 0.35,
+       "p90": 56.07,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 25.56,
+       "median": 29.0,
+       "p10": 14.8,
+       "p90": 31.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.52,
+       "median": 0.52,
+       "p10": 0.51,
+       "p90": 0.56,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 56.49,
+       "median": 52.19,
+       "p10": 5.36,
+       "p90": 100.45,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 21.96,
+       "median": 24.0,
+       "p10": 12.6,
+       "p90": 30.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.54,
+       "median": 0.52,
+       "p10": 0.51,
+       "p90": 0.57,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 165.47,
+       "median": 146.08,
+       "p10": 77.84,
+       "p90": 252.19,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 7.96,
+       "median": 5.0,
+       "p10": 0.4,
+       "p90": 18.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.61,
+       "median": 0.59,
+       "p10": 0.54,
+       "p90": 0.66,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 221.63,
+       "median": 189.43,
+       "p10": 126.49,
+       "p90": 288.5,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.56,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 1.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.74,
+       "median": 0.72,
+       "p10": 0.62,
+       "p90": 0.89,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 241.49,
+       "median": 214.04,
+       "p10": 119.67,
+       "p90": 444.56,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.81,
+       "median": 0.8,
+       "p10": 0.7,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 207.95,
+       "median": 200.05,
+       "p10": 119.85,
+       "p90": 285.44,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.85,
+       "median": 0.85,
+       "p10": 0.73,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 250.31,
+       "median": 226.91,
+       "p10": 139.07,
+       "p90": 382.11,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.88,
+       "median": 0.86,
+       "p10": 0.77,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 227.88,
+       "median": 211.11,
+       "p10": 127.73,
+       "p90": 349.42,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.91,
+       "median": 0.91,
+       "p10": 0.82,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 136.79,
+       "median": 120.29,
+       "p10": 69.93,
+       "p90": 212.44,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.88,
+       "median": 0.89,
+       "p10": 0.76,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 43.71,
+       "median": 30.07,
+       "p10": 8.26,
+       "p90": 102.3,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.77,
+       "median": 0.78,
+       "p10": 0.66,
+       "p90": 0.89,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-dongthap",
+   "code": "dongthap",
+   "name": "Đồng Tháp",
+   "nameEn": "Dong Thap",
+   "lat": 10.5646,
+   "lon": 105.6076,
+   "images": 115,
+   "missingImages": 35,
+   "calendar": {
+    "rule": {
+     "cyclesPerYear": {
+      "2021": 0,
+      "2022": 0,
+      "2023": 0,
+      "2024": 1,
+      "2025": 0
+     },
+     "meanCyclesPerYear": 0.2,
+     "yearsWithThreeCycles": 0,
+     "peakDates": [
+      "2024-08-28"
+     ],
+     "bareWindows": [],
+     "monthly": [
+      {
+       "month": 1,
+       "ndviMedian": 0.756,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 2,
+       "ndviMedian": 0.753,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 3,
+       "ndviMedian": 0.763,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 4,
+       "ndviMedian": 0.773,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 5,
+       "ndviMedian": 0.787,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 6,
+       "ndviMedian": 0.792,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 7,
+       "ndviMedian": 0.797,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 8,
+       "ndviMedian": 0.788,
+       "bareShare": 0.0,
+       "peaks": 1,
+       "images": 10
+      },
+      {
+       "month": 9,
+       "ndviMedian": 0.818,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 10,
+       "ndviMedian": 0.793,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 6
+      },
+      {
+       "month": 11,
+       "ndviMedian": 0.781,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 9
+      },
+      {
+       "month": 12,
+       "ndviMedian": 0.772,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      }
+     ]
+    },
+    "kmeansByYear": {
+     "2021": {
+      "cluster": 3,
+      "distance": 0.911
+     },
+     "2022": {
+      "cluster": 3,
+      "distance": 0.819
+     },
+     "2023": {
+      "cluster": 3,
+      "distance": 0.798
+     },
+     "2024": {
+      "cluster": 3,
+      "distance": 0.844
+     },
+     "2025": {
+      "cluster": 3,
+      "distance": 0.707
+     }
+    },
+    "calendarYear": 2025,
+    "calendarCluster": 3,
+    "sensitivity": {
+     "min": 0.0,
+     "max": 1.2
+    }
+   },
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 15.78,
+       "median": 7.25,
+       "p10": 1.16,
+       "p90": 40.63,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 4.8,
+       "median": 1.0,
+       "p10": 0.0,
+       "p90": 14.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.59,
+       "median": 0.55,
+       "p10": 0.49,
+       "p90": 0.69,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 9.13,
+       "median": 4.59,
+       "p10": 0.05,
+       "p90": 24.31,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 18.32,
+       "median": 23.0,
+       "p10": 4.4,
+       "p90": 27.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.51,
+       "median": 0.49,
+       "p10": 0.47,
+       "p90": 0.59,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 23.02,
+       "median": 11.24,
+       "p10": 0.64,
+       "p90": 48.07,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 27.2,
+       "median": 30.0,
+       "p10": 18.8,
+       "p90": 31.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.48,
+       "median": 0.48,
+       "p10": 0.47,
+       "p90": 0.51,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 51.67,
+       "median": 41.05,
+       "p10": 6.96,
+       "p90": 96.9,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 22.84,
+       "median": 25.0,
+       "p10": 12.6,
+       "p90": 30.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.49,
+       "median": 0.48,
+       "p10": 0.47,
+       "p90": 0.52,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 151.1,
+       "median": 146.62,
+       "p10": 55.16,
+       "p90": 242.98,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 9.84,
+       "median": 8.0,
+       "p10": 0.4,
+       "p90": 21.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.55,
+       "median": 0.54,
+       "p10": 0.49,
+       "p90": 0.61,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 208.94,
+       "median": 146.08,
+       "p10": 100.77,
+       "p90": 300.41,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 1.08,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 5.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.65,
+       "median": 0.62,
+       "p10": 0.54,
+       "p90": 0.83,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 206.36,
+       "median": 158.57,
+       "p10": 104.83,
+       "p90": 401.26,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.16,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.71,
+       "median": 0.67,
+       "p10": 0.59,
+       "p90": 0.94,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 175.86,
+       "median": 164.26,
+       "p10": 89.36,
+       "p90": 294.95,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.08,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.75,
+       "median": 0.7,
+       "p10": 0.6,
+       "p90": 0.96,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 213.64,
+       "median": 185.87,
+       "p10": 111.77,
+       "p90": 352.55,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.2,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.78,
+       "median": 0.74,
+       "p10": 0.63,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 207.45,
+       "median": 181.58,
+       "p10": 125.33,
+       "p90": 300.0,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.83,
+       "median": 0.83,
+       "p10": 0.68,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 118.09,
+       "median": 111.76,
+       "p10": 57.74,
+       "p90": 186.61,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.04,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.8,
+       "median": 0.82,
+       "p10": 0.67,
+       "p90": 0.94,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 36.42,
+       "median": 29.88,
+       "p10": 6.64,
+       "p90": 78.04,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.36,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.7,
+       "median": 0.69,
+       "p10": 0.56,
+       "p90": 0.84,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-haugiang",
+   "code": "haugiang",
+   "name": "Hậu Giang",
+   "nameEn": "Hau Giang",
+   "lat": 9.7842,
+   "lon": 105.6245,
+   "images": 115,
+   "missingImages": 57,
+   "calendar": {
+    "rule": {
+     "cyclesPerYear": {
+      "2021": 2,
+      "2022": 2,
+      "2023": 1,
+      "2024": 2,
+      "2025": 1
+     },
+     "meanCyclesPerYear": 1.6,
+     "yearsWithThreeCycles": 0,
+     "peakDates": [
+      "2021-02-18",
+      "2021-06-10",
+      "2022-01-17",
+      "2022-05-25",
+      "2023-01-01",
+      "2024-01-17",
+      "2024-05-08",
+      "2025-01-01"
+     ],
+     "bareWindows": [
+      {
+       "start": "2023-09-30",
+       "end": "2023-11-01",
+       "images": 3
+      },
+      {
+       "start": "2024-10-15",
+       "end": "2024-11-16",
+       "images": 3
+      },
+      {
+       "start": "2025-11-01",
+       "end": "2025-12-19",
+       "images": 4
+      }
+     ],
+     "monthly": [
+      {
+       "month": 1,
+       "ndviMedian": 0.811,
+       "bareShare": 0.0,
+       "peaks": 4,
+       "images": 10
+      },
+      {
+       "month": 2,
+       "ndviMedian": 0.778,
+       "bareShare": 0.0,
+       "peaks": 1,
+       "images": 10
+      },
+      {
+       "month": 3,
+       "ndviMedian": 0.665,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 4,
+       "ndviMedian": 0.688,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 5,
+       "ndviMedian": 0.749,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 6,
+       "ndviMedian": 0.647,
+       "bareShare": 0.0,
+       "peaks": 1,
+       "images": 10
+      },
+      {
+       "month": 7,
+       "ndviMedian": 0.467,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 8,
+       "ndviMedian": 0.409,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 9,
+       "ndviMedian": 0.352,
+       "bareShare": 0.1,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 10,
+       "ndviMedian": 0.331,
+       "bareShare": 0.5,
+       "peaks": 0,
+       "images": 6
+      },
+      {
+       "month": 11,
+       "ndviMedian": 0.327,
+       "bareShare": 0.44,
+       "peaks": 0,
+       "images": 9
+      },
+      {
+       "month": 12,
+       "ndviMedian": 0.587,
+       "bareShare": 0.2,
+       "peaks": 0,
+       "images": 10
+      }
+     ]
+    },
+    "kmeansByYear": {
+     "2021": {
+      "cluster": 3,
+      "distance": 0.668
+     },
+     "2022": {
+      "cluster": 3,
+      "distance": 0.6
+     },
+     "2023": {
+      "cluster": 3,
+      "distance": 0.925
+     },
+     "2024": {
+      "cluster": 2,
+      "distance": 0.929
+     },
+     "2025": {
+      "cluster": 2,
+      "distance": 1.075
+     }
+    },
+    "calendarYear": 2025,
+    "calendarCluster": 2,
+    "sensitivity": {
+     "min": 1.4,
+     "max": 2.2
+    }
+   },
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 18.89,
+       "median": 9.8,
+       "p10": 1.07,
+       "p90": 53.72,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 1.84,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 8.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.64,
+       "median": 0.62,
+       "p10": 0.56,
+       "p90": 0.77,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 9.86,
+       "median": 5.93,
+       "p10": 0.01,
+       "p90": 24.03,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 13.96,
+       "median": 15.0,
+       "p10": 1.6,
+       "p90": 25.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.56,
+       "median": 0.54,
+       "p10": 0.51,
+       "p90": 0.62,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 24.35,
+       "median": 9.76,
+       "p10": 0.35,
+       "p90": 56.07,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 25.56,
+       "median": 29.0,
+       "p10": 14.8,
+       "p90": 31.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.52,
+       "median": 0.52,
+       "p10": 0.51,
+       "p90": 0.56,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 56.49,
+       "median": 52.19,
+       "p10": 5.36,
+       "p90": 100.45,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 21.96,
+       "median": 24.0,
+       "p10": 12.6,
+       "p90": 30.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.54,
+       "median": 0.52,
+       "p10": 0.51,
+       "p90": 0.57,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 165.47,
+       "median": 146.08,
+       "p10": 77.84,
+       "p90": 252.19,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 7.96,
+       "median": 5.0,
+       "p10": 0.4,
+       "p90": 18.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.61,
+       "median": 0.59,
+       "p10": 0.54,
+       "p90": 0.66,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 221.63,
+       "median": 189.43,
+       "p10": 126.49,
+       "p90": 288.5,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.56,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 1.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.74,
+       "median": 0.72,
+       "p10": 0.62,
+       "p90": 0.89,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 241.49,
+       "median": 214.04,
+       "p10": 119.67,
+       "p90": 444.56,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.81,
+       "median": 0.8,
+       "p10": 0.7,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 207.95,
+       "median": 200.05,
+       "p10": 119.85,
+       "p90": 285.44,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.85,
+       "median": 0.85,
+       "p10": 0.73,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 250.31,
+       "median": 226.91,
+       "p10": 139.07,
+       "p90": 382.11,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.88,
+       "median": 0.86,
+       "p10": 0.77,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 227.88,
+       "median": 211.11,
+       "p10": 127.73,
+       "p90": 349.42,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.91,
+       "median": 0.91,
+       "p10": 0.82,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 136.79,
+       "median": 120.29,
+       "p10": 69.93,
+       "p90": 212.44,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.88,
+       "median": 0.89,
+       "p10": 0.76,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 43.71,
+       "median": 30.07,
+       "p10": 8.26,
+       "p90": 102.3,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.77,
+       "median": 0.78,
+       "p10": 0.66,
+       "p90": 0.89,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-kiengiang",
+   "code": "kiengiang",
+   "name": "Kiên Giang",
+   "nameEn": "Kien Giang",
+   "lat": 9.9731,
+   "lon": 105.0444,
+   "images": 115,
+   "missingImages": 115,
+   "calendar": null,
+   "reason": "too many missing NDVI images at the province centre",
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 19.94,
+       "median": 11.62,
+       "p10": 2.25,
+       "p90": 49.74,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.92,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 3.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.68,
+       "median": 0.67,
+       "p10": 0.61,
+       "p90": 0.78,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 12.28,
+       "median": 5.47,
+       "p10": 0.33,
+       "p90": 29.4,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 11.28,
+       "median": 10.0,
+       "p10": 0.8,
+       "p90": 23.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.62,
+       "median": 0.6,
+       "p10": 0.59,
+       "p90": 0.66,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 31.01,
+       "median": 19.04,
+       "p10": 2.67,
+       "p90": 81.11,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 22.56,
+       "median": 25.0,
+       "p10": 9.0,
+       "p90": 31.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.6,
+       "median": 0.6,
+       "p10": 0.59,
+       "p90": 0.63,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 70.34,
+       "median": 59.85,
+       "p10": 16.59,
+       "p90": 125.92,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 17.76,
+       "median": 17.0,
+       "p10": 6.6,
+       "p90": 28.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.63,
+       "median": 0.61,
+       "p10": 0.6,
+       "p90": 0.67,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 161.14,
+       "median": 146.74,
+       "p10": 87.46,
+       "p90": 234.85,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 4.92,
+       "median": 1.0,
+       "p10": 0.0,
+       "p90": 13.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.71,
+       "median": 0.68,
+       "p10": 0.64,
+       "p90": 0.79,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 212.7,
+       "median": 188.32,
+       "p10": 120.08,
+       "p90": 292.64,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.08,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.84,
+       "median": 0.84,
+       "p10": 0.73,
+       "p90": 0.96,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 248.9,
+       "median": 217.77,
+       "p10": 137.62,
+       "p90": 423.98,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.91,
+       "median": 0.92,
+       "p10": 0.82,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 220.46,
+       "median": 218.85,
+       "p10": 123.7,
+       "p90": 310.69,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.93,
+       "median": 0.95,
+       "p10": 0.87,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 265.37,
+       "median": 252.62,
+       "p10": 157.57,
+       "p90": 417.75,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.95,
+       "median": 0.95,
+       "p10": 0.9,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 212.66,
+       "median": 184.02,
+       "p10": 120.41,
+       "p90": 338.37,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.96,
+       "median": 0.96,
+       "p10": 0.92,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 133.95,
+       "median": 123.64,
+       "p10": 68.74,
+       "p90": 209.25,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.91,
+       "median": 0.93,
+       "p10": 0.82,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 44.86,
+       "median": 34.37,
+       "p10": 8.25,
+       "p90": 92.87,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.81,
+       "median": 0.8,
+       "p10": 0.71,
+       "p90": 0.9,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-longan",
+   "code": "longan",
+   "name": "Long An",
+   "nameEn": "Long An",
+   "lat": 10.7296,
+   "lon": 106.1714,
+   "images": 115,
+   "missingImages": 38,
+   "calendar": {
+    "rule": {
+     "cyclesPerYear": {
+      "2021": 1,
+      "2022": 0,
+      "2023": 2,
+      "2024": 2,
+      "2025": 3
+     },
+     "meanCyclesPerYear": 1.6,
+     "yearsWithThreeCycles": 1,
+     "peakDates": [
+      "2021-06-26",
+      "2023-02-02",
+      "2023-07-12",
+      "2024-02-02",
+      "2024-07-27",
+      "2025-02-02",
+      "2025-06-26",
+      "2025-10-16"
+     ],
+     "bareWindows": [
+      {
+       "start": "2024-10-15",
+       "end": "2024-11-16",
+       "images": 3
+      },
+      {
+       "start": "2025-12-19",
+       "end": "2025-12-19",
+       "images": 1
+      }
+     ],
+     "monthly": [
+      {
+       "month": 1,
+       "ndviMedian": 0.782,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 2,
+       "ndviMedian": 0.795,
+       "bareShare": 0.0,
+       "peaks": 3,
+       "images": 10
+      },
+      {
+       "month": 3,
+       "ndviMedian": 0.662,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 4,
+       "ndviMedian": 0.608,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 5,
+       "ndviMedian": 0.639,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 6,
+       "ndviMedian": 0.766,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 7,
+       "ndviMedian": 0.774,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 8,
+       "ndviMedian": 0.751,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 9,
+       "ndviMedian": 0.663,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 10,
+       "ndviMedian": 0.596,
+       "bareShare": 0.33,
+       "peaks": 1,
+       "images": 6
+      },
+      {
+       "month": 11,
+       "ndviMedian": 0.556,
+       "bareShare": 0.11,
+       "peaks": 0,
+       "images": 9
+      },
+      {
+       "month": 12,
+       "ndviMedian": 0.585,
+       "bareShare": 0.1,
+       "peaks": 0,
+       "images": 10
+      }
+     ]
+    },
+    "kmeansByYear": {
+     "2021": {
+      "cluster": 3,
+      "distance": 0.767
+     },
+     "2022": {
+      "cluster": 3,
+      "distance": 0.674
+     },
+     "2023": {
+      "cluster": 3,
+      "distance": 0.56
+     },
+     "2024": {
+      "cluster": 2,
+      "distance": 0.876
+     },
+     "2025": {
+      "cluster": 6,
+      "distance": 0.692
+     }
+    },
+    "calendarYear": 2025,
+    "calendarCluster": 6,
+    "sensitivity": {
+     "min": 1.0,
+     "max": 2.0
+    }
+   },
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 12.68,
+       "median": 5.8,
+       "p10": 1.24,
+       "p90": 32.84,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 6.24,
+       "median": 2.0,
+       "p10": 0.0,
+       "p90": 15.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.63,
+       "median": 0.62,
+       "p10": 0.57,
+       "p90": 0.71,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 7.59,
+       "median": 2.87,
+       "p10": 0.02,
+       "p90": 17.8,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 21.88,
+       "median": 23.0,
+       "p10": 11.8,
+       "p90": 28.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.55,
+       "p90": 0.6,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 20.45,
+       "median": 11.93,
+       "p10": 0.22,
+       "p90": 44.06,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 28.16,
+       "median": 30.0,
+       "p10": 22.4,
+       "p90": 31.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.56,
+       "median": 0.55,
+       "p10": 0.55,
+       "p90": 0.56,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 47.98,
+       "median": 32.06,
+       "p10": 5.25,
+       "p90": 117.17,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 22.96,
+       "median": 26.0,
+       "p10": 10.6,
+       "p90": 30.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.55,
+       "p90": 0.6,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 166.22,
+       "median": 167.54,
+       "p10": 66.56,
+       "p90": 236.66,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 9.72,
+       "median": 8.0,
+       "p10": 0.0,
+       "p90": 21.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.64,
+       "median": 0.63,
+       "p10": 0.58,
+       "p90": 0.71,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 227.14,
+       "median": 194.32,
+       "p10": 120.4,
+       "p90": 309.92,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.84,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 3.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.77,
+       "median": 0.75,
+       "p10": 0.66,
+       "p90": 0.9,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 222.32,
+       "median": 187.86,
+       "p10": 124.23,
+       "p90": 381.16,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.83,
+       "median": 0.8,
+       "p10": 0.74,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 182.71,
+       "median": 182.61,
+       "p10": 105.74,
+       "p90": 277.55,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.85,
+       "median": 0.83,
+       "p10": 0.75,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 213.64,
+       "median": 198.04,
+       "p10": 143.76,
+       "p90": 317.57,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.87,
+       "median": 0.87,
+       "p10": 0.75,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 230.34,
+       "median": 221.37,
+       "p10": 154.19,
+       "p90": 316.71,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.92,
+       "median": 0.93,
+       "p10": 0.83,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 119.62,
+       "median": 119.77,
+       "p10": 68.99,
+       "p90": 188.79,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.87,
+       "median": 0.87,
+       "p10": 0.76,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 38.96,
+       "median": 32.52,
+       "p10": 6.12,
+       "p90": 83.5,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.4,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 2.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.75,
+       "median": 0.73,
+       "p10": 0.64,
+       "p90": 0.86,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-soctrang",
+   "code": "soctrang",
+   "name": "Sóc Trăng",
+   "nameEn": "Soc Trang",
+   "lat": 9.5581,
+   "lon": 105.926,
+   "images": 115,
+   "missingImages": 62,
+   "calendar": null,
+   "reason": "too many missing NDVI images at the province centre",
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 20.52,
+       "median": 13.0,
+       "p10": 1.06,
+       "p90": 47.53,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.08,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.69,
+       "median": 0.67,
+       "p10": 0.6,
+       "p90": 0.78,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 10.16,
+       "median": 5.1,
+       "p10": 0.0,
+       "p90": 30.03,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 2.76,
+       "median": 1.0,
+       "p10": 0.0,
+       "p90": 8.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.6,
+       "median": 0.58,
+       "p10": 0.56,
+       "p90": 0.64,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 26.33,
+       "median": 8.69,
+       "p10": 0.2,
+       "p90": 80.81,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 14.72,
+       "median": 15.0,
+       "p10": 3.2,
+       "p90": 25.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.55,
+       "p90": 0.6,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 64.33,
+       "median": 58.51,
+       "p10": 4.38,
+       "p90": 104.33,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 17.24,
+       "median": 18.0,
+       "p10": 5.4,
+       "p90": 28.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.59,
+       "median": 0.57,
+       "p10": 0.55,
+       "p90": 0.63,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 185.92,
+       "median": 190.28,
+       "p10": 100.95,
+       "p90": 268.35,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 5.52,
+       "median": 3.0,
+       "p10": 0.0,
+       "p90": 14.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.69,
+       "median": 0.68,
+       "p10": 0.6,
+       "p90": 0.78,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 239.31,
+       "median": 221.61,
+       "p10": 139.86,
+       "p90": 317.92,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.24,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.85,
+       "median": 0.87,
+       "p10": 0.73,
+       "p90": 0.94,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 273.98,
+       "median": 254.32,
+       "p10": 147.28,
+       "p90": 449.08,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.92,
+       "median": 0.93,
+       "p10": 0.86,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 242.84,
+       "median": 238.49,
+       "p10": 152.84,
+       "p90": 328.64,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.95,
+       "median": 0.96,
+       "p10": 0.89,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 292.97,
+       "median": 280.05,
+       "p10": 189.92,
+       "p90": 415.97,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.96,
+       "median": 0.97,
+       "p10": 0.92,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 262.6,
+       "median": 214.49,
+       "p10": 142.05,
+       "p90": 399.5,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.97,
+       "median": 0.98,
+       "p10": 0.95,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 160.96,
+       "median": 157.75,
+       "p10": 87.28,
+       "p90": 224.31,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.93,
+       "median": 0.95,
+       "p10": 0.85,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 50.11,
+       "median": 34.43,
+       "p10": 12.72,
+       "p90": 112.01,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.82,
+       "median": 0.82,
+       "p10": 0.72,
+       "p90": 0.92,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-tiengiang",
+   "code": "tiengiang",
+   "name": "Tiền Giang",
+   "nameEn": "Tien Giang",
+   "lat": 10.3974,
+   "lon": 106.3084,
+   "images": 115,
+   "missingImages": 73,
+   "calendar": null,
+   "reason": "too many missing NDVI images at the province centre",
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 12.68,
+       "median": 5.8,
+       "p10": 1.24,
+       "p90": 32.84,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 6.24,
+       "median": 2.0,
+       "p10": 0.0,
+       "p90": 15.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.63,
+       "median": 0.62,
+       "p10": 0.57,
+       "p90": 0.71,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 7.59,
+       "median": 2.87,
+       "p10": 0.02,
+       "p90": 17.8,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 21.88,
+       "median": 23.0,
+       "p10": 11.8,
+       "p90": 28.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.55,
+       "p90": 0.6,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 20.45,
+       "median": 11.93,
+       "p10": 0.22,
+       "p90": 44.06,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 28.16,
+       "median": 30.0,
+       "p10": 22.4,
+       "p90": 31.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.56,
+       "median": 0.55,
+       "p10": 0.55,
+       "p90": 0.56,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 47.98,
+       "median": 32.06,
+       "p10": 5.25,
+       "p90": 117.17,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 22.96,
+       "median": 26.0,
+       "p10": 10.6,
+       "p90": 30.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.55,
+       "p90": 0.6,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 166.22,
+       "median": 167.54,
+       "p10": 66.56,
+       "p90": 236.66,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 9.72,
+       "median": 8.0,
+       "p10": 0.0,
+       "p90": 21.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.64,
+       "median": 0.63,
+       "p10": 0.58,
+       "p90": 0.71,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 227.14,
+       "median": 194.32,
+       "p10": 120.4,
+       "p90": 309.92,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.84,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 3.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.77,
+       "median": 0.75,
+       "p10": 0.66,
+       "p90": 0.9,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 222.32,
+       "median": 187.86,
+       "p10": 124.23,
+       "p90": 381.16,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.83,
+       "median": 0.8,
+       "p10": 0.74,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 182.71,
+       "median": 182.61,
+       "p10": 105.74,
+       "p90": 277.55,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.85,
+       "median": 0.83,
+       "p10": 0.75,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 213.64,
+       "median": 198.04,
+       "p10": 143.76,
+       "p90": 317.57,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.87,
+       "median": 0.87,
+       "p10": 0.75,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 230.34,
+       "median": 221.37,
+       "p10": 154.19,
+       "p90": 316.71,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.92,
+       "median": 0.93,
+       "p10": 0.83,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 119.62,
+       "median": 119.77,
+       "p10": 68.99,
+       "p90": 188.79,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.87,
+       "median": 0.87,
+       "p10": 0.76,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 38.96,
+       "median": 32.52,
+       "p10": 6.12,
+       "p90": 83.5,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.4,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 2.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.75,
+       "median": 0.73,
+       "p10": 0.64,
+       "p90": 0.86,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-travinh",
+   "code": "travinh",
+   "name": "Trà Vinh",
+   "nameEn": "Tra Vinh",
+   "lat": 9.7967,
+   "lon": 106.3177,
+   "images": 115,
+   "missingImages": 51,
+   "calendar": {
+    "rule": {
+     "cyclesPerYear": {
+      "2021": 2,
+      "2022": 2,
+      "2023": 2,
+      "2024": 2,
+      "2025": 2
+     },
+     "meanCyclesPerYear": 2.0,
+     "yearsWithThreeCycles": 0,
+     "peakDates": [
+      "2021-02-18",
+      "2021-06-26",
+      "2022-02-02",
+      "2022-11-01",
+      "2023-02-02",
+      "2023-06-26",
+      "2024-02-02",
+      "2024-10-31",
+      "2025-02-18",
+      "2025-10-16"
+     ],
+     "bareWindows": [],
+     "monthly": [
+      {
+       "month": 1,
+       "ndviMedian": 0.697,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 2,
+       "ndviMedian": 0.854,
+       "bareShare": 0.0,
+       "peaks": 5,
+       "images": 10
+      },
+      {
+       "month": 3,
+       "ndviMedian": 0.787,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 4,
+       "ndviMedian": 0.588,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 5,
+       "ndviMedian": 0.666,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 6,
+       "ndviMedian": 0.808,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 7,
+       "ndviMedian": 0.83,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 8,
+       "ndviMedian": 0.845,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 9,
+       "ndviMedian": 0.816,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 10,
+       "ndviMedian": 0.862,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 6
+      },
+      {
+       "month": 11,
+       "ndviMedian": 0.807,
+       "bareShare": 0.0,
+       "peaks": 1,
+       "images": 9
+      },
+      {
+       "month": 12,
+       "ndviMedian": 0.575,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      }
+     ]
+    },
+    "kmeansByYear": {
+     "2021": {
+      "cluster": 3,
+      "distance": 0.95
+     },
+     "2022": {
+      "cluster": 3,
+      "distance": 0.753
+     },
+     "2023": {
+      "cluster": 3,
+      "distance": 1.037
+     },
+     "2024": {
+      "cluster": 3,
+      "distance": 0.977
+     },
+     "2025": {
+      "cluster": 3,
+      "distance": 1.038
+     }
+    },
+    "calendarYear": 2025,
+    "calendarCluster": 3,
+    "sensitivity": {
+     "min": 1.4,
+     "max": 2.2
+    }
+   },
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 14.98,
+       "median": 8.23,
+       "p10": 0.81,
+       "p90": 41.73,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.62,
+       "median": 0.61,
+       "p10": 0.53,
+       "p90": 0.73,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 7.98,
+       "median": 3.38,
+       "p10": 0.01,
+       "p90": 17.73,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.8,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 3.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.51,
+       "median": 0.5,
+       "p10": 0.47,
+       "p90": 0.56,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 21.72,
+       "median": 14.27,
+       "p10": 0.16,
+       "p90": 55.26,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 7.52,
+       "median": 7.0,
+       "p10": 1.4,
+       "p90": 14.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.48,
+       "median": 0.47,
+       "p10": 0.46,
+       "p90": 0.5,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 51.87,
+       "median": 48.55,
+       "p10": 4.78,
+       "p90": 95.22,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 14.52,
+       "median": 14.0,
+       "p10": 3.4,
+       "p90": 25.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.49,
+       "median": 0.47,
+       "p10": 0.46,
+       "p90": 0.52,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 176.4,
+       "median": 178.13,
+       "p10": 87.1,
+       "p90": 252.82,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 5.92,
+       "median": 4.0,
+       "p10": 0.0,
+       "p90": 14.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.5,
+       "p90": 0.64,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 231.65,
+       "median": 192.39,
+       "p10": 132.09,
+       "p90": 295.99,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.4,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 1.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.72,
+       "median": 0.71,
+       "p10": 0.61,
+       "p90": 0.86,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 243.58,
+       "median": 224.6,
+       "p10": 139.43,
+       "p90": 397.28,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.81,
+       "median": 0.78,
+       "p10": 0.71,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 206.21,
+       "median": 205.82,
+       "p10": 129.84,
+       "p90": 268.03,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.86,
+       "median": 0.85,
+       "p10": 0.74,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 245.58,
+       "median": 237.36,
+       "p10": 156.12,
+       "p90": 347.51,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.89,
+       "median": 0.89,
+       "p10": 0.77,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 246.35,
+       "median": 209.16,
+       "p10": 154.25,
+       "p90": 355.26,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.93,
+       "median": 0.95,
+       "p10": 0.85,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 135.41,
+       "median": 129.95,
+       "p10": 78.16,
+       "p90": 190.43,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.89,
+       "median": 0.91,
+       "p10": 0.78,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 45.3,
+       "median": 33.48,
+       "p10": 10.23,
+       "p90": 102.2,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.76,
+       "median": 0.74,
+       "p10": 0.65,
+       "p90": 0.88,
+       "years": 25
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "p-vinhlong",
+   "code": "vinhlong",
+   "name": "Vĩnh Long",
+   "nameEn": "Vinh Long",
+   "lat": 10.102,
+   "lon": 105.9906,
+   "images": 115,
+   "missingImages": 52,
+   "calendar": {
+    "rule": {
+     "cyclesPerYear": {
+      "2021": 1,
+      "2022": 3,
+      "2023": 2,
+      "2024": 2,
+      "2025": 1
+     },
+     "meanCyclesPerYear": 1.8,
+     "yearsWithThreeCycles": 1,
+     "peakDates": [
+      "2021-05-09",
+      "2022-01-01",
+      "2022-04-23",
+      "2022-12-19",
+      "2023-04-07",
+      "2023-07-28",
+      "2024-01-01",
+      "2024-12-18",
+      "2025-05-09"
+     ],
+     "bareWindows": [
+      {
+       "start": "2021-09-30",
+       "end": "2021-11-01",
+       "images": 3
+      },
+      {
+       "start": "2022-03-06",
+       "end": "2022-03-06",
+       "images": 1
+      },
+      {
+       "start": "2023-02-18",
+       "end": "2023-02-18",
+       "images": 1
+      },
+      {
+       "start": "2024-03-05",
+       "end": "2024-03-05",
+       "images": 1
+      }
+     ],
+     "monthly": [
+      {
+       "month": 1,
+       "ndviMedian": 0.873,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 2,
+       "ndviMedian": 0.531,
+       "bareShare": 0.1,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 3,
+       "ndviMedian": 0.35,
+       "bareShare": 0.2,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 4,
+       "ndviMedian": 0.772,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 5,
+       "ndviMedian": 0.771,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      },
+      {
+       "month": 6,
+       "ndviMedian": 0.691,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 7,
+       "ndviMedian": 0.691,
+       "bareShare": 0.0,
+       "peaks": 1,
+       "images": 10
+      },
+      {
+       "month": 8,
+       "ndviMedian": 0.792,
+       "bareShare": 0.0,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 9,
+       "ndviMedian": 0.692,
+       "bareShare": 0.1,
+       "peaks": 0,
+       "images": 10
+      },
+      {
+       "month": 10,
+       "ndviMedian": 0.673,
+       "bareShare": 0.17,
+       "peaks": 0,
+       "images": 6
+      },
+      {
+       "month": 11,
+       "ndviMedian": 0.646,
+       "bareShare": 0.11,
+       "peaks": 0,
+       "images": 9
+      },
+      {
+       "month": 12,
+       "ndviMedian": 0.832,
+       "bareShare": 0.0,
+       "peaks": 2,
+       "images": 10
+      }
+     ]
+    },
+    "kmeansByYear": {
+     "2021": {
+      "cluster": 2,
+      "distance": 0.98
+     },
+     "2022": {
+      "cluster": 3,
+      "distance": 0.99
+     },
+     "2023": {
+      "cluster": 3,
+      "distance": 0.952
+     },
+     "2024": {
+      "cluster": 3,
+      "distance": 0.925
+     },
+     "2025": {
+      "cluster": 3,
+      "distance": 0.827
+     }
+    },
+    "calendarYear": 2025,
+    "calendarCluster": 3,
+    "sensitivity": {
+     "min": 1.4,
+     "max": 2.2
+    }
+   },
+   "climate": {
+    "days": 9131,
+    "missingDays": 0,
+    "months": [
+     {
+      "month": 1,
+      "rainMm": {
+       "mean": 14.98,
+       "median": 8.23,
+       "p10": 0.81,
+       "p90": 41.73,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.62,
+       "median": 0.61,
+       "p10": 0.53,
+       "p90": 0.73,
+       "years": 25
+      }
+     },
+     {
+      "month": 2,
+      "rainMm": {
+       "mean": 7.98,
+       "median": 3.38,
+       "p10": 0.01,
+       "p90": 17.73,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.8,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 3.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.51,
+       "median": 0.5,
+       "p10": 0.47,
+       "p90": 0.56,
+       "years": 25
+      }
+     },
+     {
+      "month": 3,
+      "rainMm": {
+       "mean": 21.72,
+       "median": 14.27,
+       "p10": 0.16,
+       "p90": 55.26,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 7.52,
+       "median": 7.0,
+       "p10": 1.4,
+       "p90": 14.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.48,
+       "median": 0.47,
+       "p10": 0.46,
+       "p90": 0.5,
+       "years": 25
+      }
+     },
+     {
+      "month": 4,
+      "rainMm": {
+       "mean": 51.87,
+       "median": 48.55,
+       "p10": 4.78,
+       "p90": 95.22,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 14.52,
+       "median": 14.0,
+       "p10": 3.4,
+       "p90": 25.8,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.49,
+       "median": 0.47,
+       "p10": 0.46,
+       "p90": 0.52,
+       "years": 25
+      }
+     },
+     {
+      "month": 5,
+      "rainMm": {
+       "mean": 176.4,
+       "median": 178.13,
+       "p10": 87.1,
+       "p90": 252.82,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 5.92,
+       "median": 4.0,
+       "p10": 0.0,
+       "p90": 14.6,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.57,
+       "median": 0.56,
+       "p10": 0.5,
+       "p90": 0.64,
+       "years": 25
+      }
+     },
+     {
+      "month": 6,
+      "rainMm": {
+       "mean": 231.65,
+       "median": 192.39,
+       "p10": 132.09,
+       "p90": 295.99,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.4,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 1.2,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.72,
+       "median": 0.71,
+       "p10": 0.61,
+       "p90": 0.86,
+       "years": 25
+      }
+     },
+     {
+      "month": 7,
+      "rainMm": {
+       "mean": 243.58,
+       "median": 224.6,
+       "p10": 139.43,
+       "p90": 397.28,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.81,
+       "median": 0.78,
+       "p10": 0.71,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 8,
+      "rainMm": {
+       "mean": 206.21,
+       "median": 205.82,
+       "p10": 129.84,
+       "p90": 268.03,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.86,
+       "median": 0.85,
+       "p10": 0.74,
+       "p90": 0.97,
+       "years": 25
+      }
+     },
+     {
+      "month": 9,
+      "rainMm": {
+       "mean": 245.58,
+       "median": 237.36,
+       "p10": 156.12,
+       "p90": 347.51,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.89,
+       "median": 0.89,
+       "p10": 0.77,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 10,
+      "rainMm": {
+       "mean": 246.35,
+       "median": 209.16,
+       "p10": 154.25,
+       "p90": 355.26,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.93,
+       "median": 0.95,
+       "p10": 0.85,
+       "p90": 0.99,
+       "years": 25
+      }
+     },
+     {
+      "month": 11,
+      "rainMm": {
+       "mean": 135.41,
+       "median": 129.95,
+       "p10": 78.16,
+       "p90": 190.43,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.89,
+       "median": 0.91,
+       "p10": 0.78,
+       "p90": 0.98,
+       "years": 25
+      }
+     },
+     {
+      "month": 12,
+      "rainMm": {
+       "mean": 45.3,
+       "median": 33.48,
+       "p10": 10.23,
+       "p90": 102.2,
+       "years": 25
+      },
+      "hotDays": {
+       "mean": 0.0,
+       "median": 0.0,
+       "p10": 0.0,
+       "p90": 0.0,
+       "years": 25
+      },
+      "rootWetness": {
+       "mean": 0.76,
+       "median": 0.74,
+       "p10": 0.65,
+       "p90": 0.88,
+       "years": 25
+      }
+     }
+    ]
+   }
+  }
+ ]
+}

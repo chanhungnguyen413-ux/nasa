@@ -8,7 +8,11 @@
 import { evidence } from '../core/evidence.js'
 import { CROP_LIB_IDS, CROP_LIBRARY } from '../data/cropLibrary.js'
 import { PROVINCES } from '../data/provinces.js'
+import { mekongFindProvince } from '../data/mekongBoundaries.js'
 import { PROFIT_RATIO_UPLAND, ROTATIONS, SOURCES } from '../data/rotationCrops.js'
+import { sfApplyInput } from '../logic/smartFill.js'
+import { FIELD_TEXT } from '../i18n/fieldText.js'
+import { DATA_TEXT } from '../i18n/dataText.js'
 import { RG_PARAMS, rgCheckAi, rgGenerate, rgMeasure, rgParseWish, rgSeasonGrid } from '../logic/rotationGen.js'
 import { asstLedgerNumbers, asstVerifyReply } from '../logic/assistantFallback.js'
 import { ROT_TEXT } from '../i18n/rotationText.js'
@@ -25,7 +29,9 @@ import { powerClimate, powerReadCache } from '../sources/power.js'
 // Trạng thái riêng của khối này.
 //   mode: 'grid' | 'detail' · view: id thửa | 'district' · pick: phương án đang xem ở tầng 2 (null = phương án đứng đầu)
 //   wish: câu tự do chưa lưu theo thửa · ai: kết quả AI brainstorm theo thửa · genPick: key phương án tự do đang xem
-const RF = { mode: 'grid', view: null, pick: null, irrigation: null, ph: null, ece: null, wish: {}, ai: {}, genPick: null }
+//   renaming: id vườn đang đổi tên tại chỗ · renameErr: lỗi tên rỗng
+//   edit: { gardenId, key } thông số đang nhập tại dòng · editErr: 'range' | 'invalid'
+const RF = { mode: 'grid', view: null, pick: null, irrigation: null, ph: null, ece: null, wish: {}, ai: {}, genPick: null, renaming: null, renameErr: null, edit: null, editErr: null }
 
 const RF_IRRIGATION = ['yes', 'limited', 'no', 'unknown']
 const RF_SEASONS = ['dx', 'ht', 'td']
@@ -118,7 +124,8 @@ function rfEvaluateGarden(g) {
     ...rfWhatIf(calendar.districtId),
   })
   res.gen = rfBuildGen({ res, ...inputs, sowing: p.sowing, wishText: RF.wish[g.id] ?? rfCurrentText(p) })
-  return { res, garden: g, climate, climateOrigin: origin, climatePlace: place ?? null, climateKm: distanceKm ?? null, calendar, floodCount: flood.count, est }
+  const fill = typeof mgSmartFill === 'function' ? mgSmartFill(g) : null
+  return { res, garden: g, fill, climate, climateOrigin: origin, climatePlace: place ?? null, climateKm: distanceKm ?? null, calendar, floodCount: flood.count, est }
 }
 
 /** Tính theo tâm một huyện với các câu trả lời nhanh trên trang (nguồn nước, kiểu đang trồng, pH/ECe). */
@@ -150,14 +157,15 @@ function rfEvaluateDistrict(id = S.rotDistrict) {
 function rfAssistantFacts(ev) {
   const p = ev.garden?.profile ?? {}
   const est = ev.est ?? {}
+  const own = ev.garden?.demo ? 'simulated' : 'ground' // thửa demo: số trong hồ sơ là mô phỏng, không phải số đo
   const pick = (key, unit) => {
-    if (typeof p[key] === 'number') return { key, value: p[key], unit, kind: 'ground', ecType: key === 'ec' ? p.ecType ?? 'unknown' : null, source: 'soilForm', period: p.measuredAt ?? null }
+    if (typeof p[key] === 'number') return { key, value: p[key], unit, kind: own, ecType: key === 'ec' ? p.ecType ?? 'unknown' : null, source: 'soilForm', period: p.measuredAt ?? null }
     const e = est[key]
     if (e?.origin === 'estimate') return { key, value: e.value, unit, kind: 'model', ecType: key === 'ec' ? 'unknown' : null, source: e.ev?.source ?? null, period: e.period ?? null }
     return { key, value: null, unit }
   }
   return [
-    { key: 'irrigation', present: Boolean(rfIrrigationValue(p.irrigation)), kind: 'farmer', source: 'soilForm' },
+    { key: 'irrigation', present: Boolean(rfIrrigationValue(p.irrigation)), kind: ev.garden?.demo ? 'simulated' : 'farmer', source: 'soilForm' },
     pick('ph', ''),
     pick('ec', 'dS/m'),
     { key: 'climate', present: Boolean(ev.climateOrigin), kind: 'model', source: 'powerDaily' },
@@ -323,11 +331,12 @@ function rfGardenCard(ev) {
   const g = ev.garden
   const { key, best } = rfStatus(ev.res)
   const shown = best ?? ev.res.strategies[0]
-  return `<article class="rf-card rounded-[24px] border border-[#dce3d5] bg-[#fafbf6] overflow-hidden shadow-card cursor-pointer">
+  return `<article class="rf-card rounded-[24px] border border-[#dce3d5] bg-[#fafbf6] overflow-hidden shadow-card cursor-pointer" data-reveal="rf-card-${esc(g.id)}">
       <button type="button" data-rf="openDetail" data-value="${esc(g.id)}" class="block w-full text-left">
         ${rfThumbHtml({ lat: g.lat, lon: g.lon, polygon: g.polygon, stroke: rfGroupColor(g), status: key, label: g.name, tags: rfSourceTags(ev), chain: shown ? rfSeasonChain(shown) : null, corner: rfGardenCorner(g, ev), hero: RF.view === g.id })}
         <div class="p-4">
           <p class="flex items-center gap-2 text-lg font-extrabold text-[#173d2b]"><span class="inline-block size-3 shrink-0 rounded-full" style="background:${rfGroupColor(g)}" aria-hidden="true"></span><span class="truncate">${esc(g.name || '—')}</span></p>
+          ${g.demo ? `<p class="mt-1"><span class="mk-demo-badge !ml-0">${esc(rfF().demoBadge)}</span></p>` : ''}
           <p class="mt-1 text-sm leading-relaxed text-ink">${esc(rfCardSentence(ev.res))}</p>
         </div>
       </button>
@@ -336,11 +345,193 @@ function rfGardenCard(ev) {
 
 function rfDrawCard() {
   const F = rfF()
-  return `<a href="${pageHref('myfield')}" class="rf-card flex min-h-56 flex-col items-center justify-center gap-2 rounded-[24px] border-2 border-dashed border-[#6d9b37] bg-[#f7f8f2] p-6 text-center hover:bg-[#edf1e4]">
+  return `<a href="${pageHref('myfield')}" class="rf-card flex min-h-56 flex-col items-center justify-center gap-2 rounded-[24px] border-2 border-dashed border-[#6d9b37] bg-[#f7f8f2] p-6 text-center hover:bg-[#edf1e4]" data-reveal="rf-draw">
       <span class="grid size-14 place-items-center rounded-full bg-[#173d2b] text-3xl font-extrabold text-white" aria-hidden="true">+</span>
       <span class="text-lg font-extrabold text-[#173d2b]">${esc(F.drawCardTitle)}</span>
       <span class="text-sm text-muted">${esc(F.drawCardSub)}</span>
     </a>`
+}
+
+/* ---------------- "Thông số thửa": 1 dòng / thông số + nhập ngay tại dòng ---------------- */
+
+// Thứ tự các thông số bà con nhập được (khớp sfApplyInput trong site/logic/smartFill.js).
+const RF_PARAM_KEYS = ['cropId', 'season', 'irrigation', 'ph', 'ec', 'om', 'soilType']
+
+/** Ô nhập tại dòng cho một thông số (chữ / số / ô chọn) + nút Lưu, Hủy. */
+function rfParamEditor(key, g) {
+  const F = rfF()
+  const p = g.profile ?? {}
+  const SF = DATA_TEXT[S.lang].soilForm
+  const opt = (pairs, current) => [`<option value="">${esc(F.inlineEmpty)}</option>`, ...pairs.map(([v, label]) => `<option value="${esc(v)}" ${String(current) === String(v) ? 'selected' : ''}>${esc(label)}</option>`)].join('')
+  let control
+  if (key === 'cropId') {
+    const now = gmCropLabel(p, S.lang)?.name ?? ''
+    control = `<input data-rf-input type="text" list="rf-crop-list" maxlength="60" value="${esc(now)}" class="rf-inline-ctl"><datalist id="rf-crop-list">${CROP_LIB_IDS.map((c) => `<option value="${esc(CROP_LIBRARY[c].name[S.lang])}"></option>`).join('')}</datalist>`
+  } else if (key === 'season') control = `<select data-rf-input class="rf-inline-ctl">${opt(Object.entries(FIELD_TEXT[S.lang].seasons), p.season)}</select>`
+  else if (key === 'irrigation') control = `<select data-rf-input class="rf-inline-ctl">${opt(['yes', 'limited', 'no'].map((v) => [v, F.irrigation[v]]), p.irrigation)}</select>`
+  else if (key === 'soilType') control = `<select data-rf-input class="rf-inline-ctl">${opt(Object.entries(SF.soilTypes).filter(([v]) => v !== 'unknown'), p.soilType)}</select>`
+  else {
+    control = `<input data-rf-input type="text" inputmode="decimal" autocomplete="off" placeholder="${key === 'ph' ? '0–14' : key === 'om' ? '0–100 %' : 'dS/m'}" value="${typeof p[key] === 'number' ? String(p[key]).replace('.', ROT_TEXT[S.lang].locale.startsWith('vi') ? ',' : '.') : ''}" class="rf-inline-ctl rf-inline-num">` // ô chữ: nhận cả dấu phẩy thập phân (6,5)
+    if (key === 'ec') control += `<select data-rf-ectype class="rf-inline-ctl">${Object.entries(SF.ecTypes).map(([v, label]) => `<option value="${esc(v)}" ${(p.ecType ?? 'unknown') === v ? 'selected' : ''}>${esc(label)}</option>`).join('')}</select>`
+  }
+  return `<div class="rf-inline" data-rf-edit-row="${esc(key)}">
+      <div class="rf-inline-fields">${control}</div>
+      <div class="rf-inline-btns">
+        <button type="button" data-rf="inlineSave" data-value="${esc(g.id)}" data-key="${esc(key)}" class="rf-inline-save">${icon('check', 'size-4')}${esc(F.inlineSave)}</button>
+        <button type="button" data-rf="inlineCancel" class="rf-inline-cancel">${icon('x', 'size-4')}${esc(F.inlineCancel)}</button>
+      </div>
+      <p class="rf-inline-msg ${RF.editErr ? 'is-err' : ''}">${esc(RF.editErr ? F.inlineErr[RF.editErr] ?? RF.editErr : F.inlineHint)}</p>
+    </div>`
+}
+
+/** Các dòng "Thông số thửa" của một vườn, đọc kết quả điền thông minh ev.fill (sfFill). */
+function rfParamRows(ev, { item, note, missing, tips, M, SF, provCal }) {
+  const F = rfF()
+  const g = ev.garden
+  const p = g.profile ?? {}
+  const fields = ev.fill?.fields ?? {}
+  const btn = (key, kind) => `<button type="button" data-rf="inlineEdit" data-value="${esc(g.id)}" data-key="${esc(key)}" class="rf-fix ${kind === 'empty' ? '' : 'is-soft'}">${esc(kind === 'field' ? F.inlineEdit : kind === 'auto' ? (['ph', 'ec', 'om'].includes(key) ? F.inlineOverride : F.inlineOverrideText) : F.tagFix)}</button>`
+  const label = { cropId: F.dtItems.crop, season: F.dtItems.season, irrigation: F.dtItems.irrigation, ph: F.dtItems.ph, ec: F.dtItems.ec, om: F.dtItems.om, soilType: F.dtItems.soilType }
+  const missTip = { ph: M.ph, ec: M.ec, cropId: M.settings, season: M.calendar, irrigation: M.settings, om: M.settings, soilType: M.settings }
+  // Chữ hiển thị cho giá trị bà con đã nhập.
+  const ownText = (key) => {
+    if (key === 'cropId') {
+      const c = gmCropLabel(p, S.lang)
+      return c ? esc(c.name) + (c.custom ? note(F.customCropNote, 'text-sun-700') : '') : null
+    }
+    if (key === 'season') return p.season ? esc(FIELD_TEXT[S.lang].seasons?.[p.season] ?? p.season) : p.sowing ? esc(F.sowingText(p.sowing)) : null
+    if (key === 'irrigation') return p.irrigation ? esc(F.irrigation[p.irrigation] ?? p.irrigation) : null
+    if (key === 'ph') return typeof p.ph === 'number' ? esc(rfNum(p.ph, 1)) : null
+    if (key === 'ec') return typeof p.ec === 'number' ? esc(F.condEc(rfNum(p.ec, 1), p.ecType ?? 'unknown')) + ((p.ecType ?? 'unknown') !== 'ece' ? note(F.dtNotEce, 'text-sun-700') : '') : null
+    if (key === 'om') return typeof p.om === 'number' ? esc(`${rfNum(p.om, 1)} %`) : null
+    if (key === 'soilType') return p.soilType && p.soilType !== 'unknown' ? esc(SF?.soilTypes?.[p.soilType] ?? p.soilType) : null
+    return null
+  }
+  // Tooltip nguồn cho giá trị tự điền.
+  const autoTip = (key, f) => {
+    if (f.source === 'soilgridsPh') return tips.ph(ev.est?.ph)
+    if (f.source === 'wangSalinity') return tips.ec(ev.est?.ec)
+    if (f.source === 'faoSoilMap') return { source: F.fillFaoSoil, error: F.fillSoilErr, fix: M.settings }
+    if (f.source === 'modis') return tips.modis(provCal)
+    return { source: F.fillFromCurrent, fix: M.settings }
+  }
+  const rows = RF_PARAM_KEYS.map((key) => {
+    const f = fields[key] ?? { origin: 'empty' }
+    const own = ownText(key)
+    const editing = RF.edit?.gardenId === g.id && RF.edit.key === key
+    const kind = own ? 'field' : f.origin === 'auto' ? 'auto' : 'empty'
+    let value
+    if (editing) value = rfParamEditor(key, g)
+    else if (kind === 'field') value = own + btn(key, 'field')
+    else if (kind === 'auto') {
+      const extra = key === 'ec' ? note(F.dtNotEce, 'text-sun-700') : key === 'season' && f.months ? note(rfMonthRange(f.months)) : key === 'soilType' && f.note ? note(f.note[S.lang]) : ''
+      value = `≈ ${esc(mgFillText(key, f))}${btn(key, 'auto')}${extra}`
+    } else {
+      value = `<span class="font-semibold text-clay-700">${esc(F.dtNotMeasured)}</span>${btn(key, 'empty')}${key === 'soilType' && f.note ? note(f.note[S.lang]) : ''}`
+    }
+    const rate = kind === 'field' ? (g.demo ? 'sim' : 'high') : kind === 'auto' ? f.rate : 'none'
+    const tip = kind === 'field' && g.demo ? tips.demo() : kind === 'field' ? tips.field(['ph', 'ec', 'om'].includes(key) ? p.measuredAt ?? null : null) : kind === 'auto' ? autoTip(key, f) : tips.none(missTip[key])
+    return item(label[key], value, editing ? null : rate, tip)
+  })
+  rows.push(item(F.dtItems.flood, esc(ev.floodCount ? F.floodCount(rfNum(ev.floodCount)) : F.floodNone), g.demo ? 'sim' : 'high', g.demo ? tips.demo() : tips.field(null)))
+  return rows
+}
+
+/** Lưu giá trị vừa nhập tại dòng (hoặc báo lỗi tại dòng). */
+function rfSaveInline(gardenId, key) {
+  const g = (DS.gardens ?? []).find((x) => x.id === gardenId)
+  const row = document.querySelector(`#rot-farm [data-rf-edit-row="${key}"]`)
+  if (!g || !row) return
+  const raw = row.querySelector('[data-rf-input]')?.value ?? ''
+  const ecType = row.querySelector('[data-rf-ectype]')?.value ?? 'unknown'
+  const r = sfApplyInput(key, raw, { profile: g.profile, today: new Date().toISOString().slice(0, 10), ecType })
+  if (!r.ok) {
+    RF.editErr = r.error
+    rfRender()
+    return document.querySelector('#rot-farm [data-rf-input]')?.focus()
+  }
+  dsSaveGarden({ ...g, profile: { ...g.profile, ...r.patch } })
+  dsSave()
+  if (typeof MG !== 'undefined') MG.assessments?.delete(g.id) // màu vườn / đánh giá tính lại theo số mới
+  RF.edit = null
+  RF.editErr = null
+  rfRender()
+}
+
+/* ---------------- Lịch vụ cấp tỉnh: chữ hiển thị đọc từ dữ liệu đã nạp ---------------- */
+
+// "lịch cấp tỉnh Vĩnh Long, năm 2021 (năm gần nhất tâm tỉnh có dạng 3 vụ; 2025 chỉ thấy 1 vụ)".
+function rfProvCalText(pc, cal) {
+  const F = rfF()
+  const base = F.dataCalProvince(pc.name, rfNum(cal?.distanceKm ?? 0, 0))
+  if (pc.yearRule === 'latest3' && pc.calendarYear !== pc.lastYear) return `${base} · ${F.calProvYear(pc.calendarYear, pc.lastYear, rfNum(pc.cyclesPerYear?.[pc.lastYear] ?? 0))}`
+  return `${base} · ${F.calProvYearSame(pc.calendarYear)}`
+}
+
+// Tỉnh có ảnh MODIS nhưng không năm nào thành dạng 3 vụ: báo số vụ/năm đếm được.
+function rfProvCyclesText(pc) {
+  const F = rfF()
+  const years = Object.keys(pc.cyclesPerYear ?? {})
+  return F.calProvCycles(pc.name, rfNum(pc.meanCycles ?? 0, 1), years.length ? `${years[0]}–${years[years.length - 1]}` : '—')
+}
+
+/* ---------------- Quản lý vườn nhanh (đổi tên, đổi nhóm, cài đặt, xóa) ---------------- */
+
+// Tên vườn: chữ thường, hoặc ô nhập khi đang đổi tên tại chỗ (Enter lưu · Esc hủy · rời ô cũng lưu).
+function rfMgmtName(g, cls = '') {
+  const F = rfF()
+  if (RF.renaming === g.id) {
+    return `<span class="rf-mgmt-edit"><input id="rf-rename" data-rf-rename="${esc(g.id)}" value="${esc(g.name ?? '')}" maxlength="80" aria-label="${esc(F.mgmtRename)}" class="${cls}"><span class="rf-mgmt-hint">${esc(RF.renameErr ?? F.mgmtHint)}</span></span>`
+  }
+  return `<span class="${cls}">${esc(g.name || '—')}</span>`
+}
+
+// Bộ nút thao tác của một vườn (dùng ở danh sách quản lý và ở đầu màn chi tiết).
+function rfMgmtActions(g) {
+  const F = rfF()
+  const groups = (DS.gardenGroups ?? []).map((gr) => `<option value="${esc(gr.id)}" ${gr.id === g.groupId ? 'selected' : ''}>${esc(gr.name)}</option>`).join('')
+  return `<span class="rf-mgmt-actions">
+      <button type="button" data-rf="mgmtRename" data-value="${esc(g.id)}" class="rf-mgmt-btn" title="${esc(F.mgmtRename)}" aria-label="${esc(F.mgmtRename)}: ${esc(g.name ?? '')}">${icon('pencil', 'size-4')}</button>
+      <label class="rf-mgmt-group"><span class="sr-only">${esc(F.mgmtGroup)}</span><select data-rf-group="${esc(g.id)}" title="${esc(F.mgmtGroup)}">${groups}</select></label>
+      <button type="button" data-rf="mgmtSettings" data-value="${esc(g.id)}" class="rf-mgmt-btn" title="${esc(F.mgmtSettings)}" aria-label="${esc(F.mgmtSettings)}: ${esc(g.name ?? '')}">${icon('settings', 'size-4')}</button>
+      <button type="button" data-rf="mgmtDelete" data-value="${esc(g.id)}" class="rf-mgmt-btn is-danger" title="${esc(F.mgmtDelete)}" aria-label="${esc(F.mgmtDelete)}: ${esc(g.name ?? '')}">${icon('trash-2', 'size-4')}</button>
+    </span>`
+}
+
+/** Khối "Quản lý vườn" ở màn lưới: mỗi vườn 1 dòng gọn. */
+function rfMgmtHtml() {
+  const F = rfF()
+  const gardens = DS.gardens ?? []
+  if (!gardens.length) return ''
+  const rows = gardens.map((g) => `<li class="rf-mgmt-row">
+      <span class="inline-block size-3 shrink-0 rounded-full" style="background:${rfGroupColor(g)}" aria-hidden="true"></span>
+      ${RF.renaming === g.id ? rfMgmtName(g, 'rf-mgmt-input') : `<button type="button" data-rf="openDetail" data-value="${esc(g.id)}" class="rf-mgmt-name">${esc(g.name || '—')}</button>`}
+      <span class="rf-mgmt-area">${esc(`${rfAreaHa(g)} ha`)}</span>
+      ${rfMgmtActions(g)}
+    </li>`).join('')
+  return `<details class="rf-mgmt" ${RF.renaming ? 'open' : ''}><summary>${icon('folder-cog', 'size-4')} ${esc(F.mgmtTitle(gardens.length))}</summary><ul>${rows}</ul></details>`
+}
+
+// Lưu tên mới; tên rỗng → báo lỗi, giữ ô nhập.
+function rfCommitRename(input, cancel = false) {
+  const g = (DS.gardens ?? []).find((x) => x.id === input.dataset.rfRename)
+  if (!g || cancel) {
+    RF.renaming = null
+    RF.renameErr = null
+    return rfRender()
+  }
+  const name = input.value.trim()
+  if (!name) {
+    RF.renameErr = rfF().mgmtEmpty
+    return rfRender()
+  }
+  if (name !== g.name) {
+    dsSaveGarden({ ...g, name })
+    dsSave()
+  }
+  RF.renaming = null
+  RF.renameErr = null
+  rfRender()
 }
 
 function rfGridHtml() {
@@ -355,6 +546,7 @@ function rfGridHtml() {
        <div class="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">${rfDrawCard()}</div>`
   // Dòng ghi công ảnh Esri giữ lại (rất nhỏ) vì điều khoản dùng ảnh nền bắt buộc ghi nguồn.
   return `<h3 class="text-2xl font-extrabold tracking-tight text-[#173d2b]">${esc(F.gridTitle)}</h3>
+    ${rfMgmtHtml()}
     ${cards}
     ${gardens.length ? `<p class="mt-3 text-xs text-muted">${esc(F.imageryCredit)}</p>` : ''}`
 }
@@ -420,8 +612,11 @@ function rfTips() {
   const ndvi = PRECOMPUTED.ndvi ?? {}
   return {
     field: (date) => ({ source: T.fieldSrc, date: date || T.fieldNoDate, res: T.fieldRes, method: T.fieldMethod }),
+    demo: () => ({ source: T.demoSrc, method: T.demoMethod }),
     power: (place) => ({ source: CATALOG.powerDaily?.name?.[L] ?? 'NASA POWER', date: years ? T.powerDate(years, PRECOMPUTED.powerSnapshot?.generatedAt || null) : null, res: CATALOG.powerDaily?.resolution?.[L] ?? null, method: T.powerMethod(place), error: T.powerErr, url: CATALOG.powerDaily?.url ?? null }),
-    modis: (provCal) => ({ source: T.modisSrc, date: provCal ? T.modisProvDate(provCal.calendarYear, PRECOMPUTED.provinceCalMeta?.fetchedAt || null) : ndvi.first && ndvi.last ? T.modisDate(ndvi.first, ndvi.last) : null, res: T.modisRes, method: T.modisMethod, error: T.modisErr }),
+    modis: (provCal) => provCal && PRECOMPUTED.provinceCalMeta?.via === 'appeears'
+      ? { source: T.modisAppSrc, date: T.modisProvDate(provCal.calendarYear, PRECOMPUTED.provinceCalMeta?.fetchedAt || null), res: T.modisAppRes, method: `${T.modisAppMethod}. ${provCal.yearRule === 'latest3' ? T.modisYearRule : T.modisYearLast}`, error: T.modisErr, url: 'https://appeears.earthdatacloud.nasa.gov' }
+      : ({ source: T.modisSrc, date: provCal ? T.modisProvDate(provCal.calendarYear, PRECOMPUTED.provinceCalMeta?.fetchedAt || null) : ndvi.first && ndvi.last ? T.modisDate(ndvi.first, ndvi.last) : null, res: T.modisRes, method: T.modisMethod, error: T.modisErr }),
     ph: (e) => {
       const m = grids.meta.ph ?? {}
       return { source: [m.provider, m.title].filter(Boolean).join(' · ') || null, date: m.period ?? null, res: T.sgRes(m.depth ?? ''), method: e?.method === 'nearestCell' ? T.nearMethod(rfNum(e.distanceKm, 0)) : T.cellMethod, error: T.sgErr, url: m.url ?? null }
@@ -446,7 +641,6 @@ function rfDataTableHtml(ev) {
   const F = rfF()
   const g = ev.garden
   const p = g?.profile ?? {}
-  const est = ev.est ?? {}
   const tips = rfTips()
   const SF = typeof DATA_TEXT !== 'undefined' ? DATA_TEXT[S.lang].soilForm : null
   const fix = g
@@ -460,22 +654,17 @@ function rfDataTableHtml(ev) {
       ${rate ? rfRateChip(rate, tip ?? (rate === 'none' ? tips.none(M.settings) : null)) : ''}
     </li>`
   const fieldDate = p.measuredAt ?? null
-  // Nhóm 1: đo tại ruộng / bà con khai — liệt kê đủ cả khi chưa có số.
-  const field = []
-  const cropLbl = g ? gmCropLabel(p, S.lang) : null
-  if (g) field.push(item(F.dtItems.crop, cropLbl ? esc(cropLbl.name) + (cropLbl.custom ? note(F.customCropNote, 'text-sun-700') : '') : missing(), cropLbl ? 'high' : 'none', cropLbl ? tips.field(null) : null))
-  const irr = g ? rfIrrigationValue(p.irrigation) : RF.irrigation
-  field.push(item(F.dtItems.irrigation, irr ? esc(F.irrigation[irr]) : missing(), irr ? 'high' : 'none', irr ? tips.field(null) : null))
-  const ph = g ? p.ph : RF.ph
-  field.push(item(F.dtItems.ph, typeof ph === 'number' ? esc(rfNum(ph, 1)) : missing(), typeof ph === 'number' ? 'high' : 'none', typeof ph === 'number' ? tips.field(fieldDate) : tips.none(M.ph)))
-  const ec = g ? p.ec : RF.ece
-  const ecType = g ? (p.ecType ?? 'unknown') : 'ece'
-  field.push(item(F.dtItems.ec, typeof ec === 'number' ? esc(F.condEc(rfNum(ec, 1), ecType)) + (ecType !== 'ece' ? note(F.dtNotEce, 'text-sun-700') : '') : missing(), typeof ec === 'number' ? 'high' : 'none', typeof ec === 'number' ? tips.field(fieldDate) : tips.none(M.ec)))
-  if (g) {
-    field.push(item(F.dtItems.om, typeof p.om === 'number' ? esc(`${rfNum(p.om, 1)} %`) : missing(), typeof p.om === 'number' ? 'high' : 'none', typeof p.om === 'number' ? tips.field(fieldDate) : null))
-    const soilOk = p.soilType && p.soilType !== 'unknown'
-    field.push(item(F.dtItems.soilType, soilOk ? esc(SF?.soilTypes?.[p.soilType] ?? p.soilType) : missing(), soilOk ? 'high' : 'none', soilOk ? tips.field(null) : null))
-    field.push(item(F.dtItems.flood, esc(ev.floodCount ? F.floodCount(rfNum(ev.floodCount)) : F.floodNone), 'high', tips.field(null)))
+  const cal = ev.calendar
+  const provCal = cal.mode === 'province' ? PRECOMPUTED.provinceCal?.find((x) => x.id === cal.districtId) : null
+  // Nhóm 1: "Thông số thửa" — MỖI thông số 1 dòng (đã gộp số đo + ước tính): bà con nhập (Cao) > tự điền (≈, Tham khảo) > trống.
+  // Bấm Nhập ngay / Sửa / Nhập số đo → nhập ngay tại dòng (rfParamEditor), lưu qua sfApplyInput.
+  const field = g ? rfParamRows(ev, { item, note, missing, tips, M, SF, provCal }) : []
+  if (!g) {
+    // Chế độ huyện mẫu (chưa có vườn): giữ ô nhập nhanh ở dưới (focusQuick).
+    const irr = RF.irrigation
+    field.push(item(F.dtItems.irrigation, irr ? esc(F.irrigation[irr]) : missing(), irr ? 'high' : 'none', irr ? tips.field(null) : null))
+    field.push(item(F.dtItems.ph, typeof RF.ph === 'number' ? esc(rfNum(RF.ph, 1)) : missing(), typeof RF.ph === 'number' ? 'high' : 'none', typeof RF.ph === 'number' ? tips.field(null) : tips.none(M.ph)))
+    field.push(item(F.dtItems.ec, typeof RF.ece === 'number' ? esc(F.condEc(rfNum(RF.ece, 1), 'ece')) : missing(), typeof RF.ece === 'number' ? 'high' : 'none', typeof RF.ece === 'number' ? tips.field(null) : tips.none(M.ec)))
   }
   // Nhóm 2 & 3: lớp bản đồ đang bật xếp theo đúng loại số liệu của lớp (vệ tinh hay mô hình).
   const sat = []
@@ -495,11 +684,12 @@ function rfDataTableHtml(ev) {
   } else {
     sat.push(item(F.dtItems.layer, `<span class="text-[13px] font-semibold text-muted">${esc(F.dtLayerNone)}</span>`, null))
   }
-  const cal = ev.calendar
   const calOk = Boolean(ev.res.baseRankable)
-  const calText = cal.mode === 'province' ? F.dataCalProvince(cal.provinceName, rfNum(cal.distanceKm, 0)) : cal.mode === 'borrowed' ? F.dataCalBorrowed(rfNum(cal.distanceKm, 1)) : F.dataCalDirect
-  const provCal = cal.mode === 'province' ? PRECOMPUTED.provinceCal?.find((x) => x.id === cal.districtId) : null
-  sat.push(item(F.dtItems.calendar, calOk ? esc(calText) : `<span class="font-semibold text-clay-700">${esc(F.tagNoCalendar)}</span>`, calOk ? 'medium' : 'none', calOk ? tips.modis(provCal) : tips.none(M.calendar)))
+  const calText = provCal ? rfProvCalText(provCal, cal) : cal.mode === 'borrowed' ? F.dataCalBorrowed(rfNum(cal.distanceKm, 1)) : F.dataCalDirect
+  // Có dữ liệu MODIS tỉnh nhưng chưa thành lịch 3 vụ: vẫn là dữ liệu thật (Trung bình), không ghi "Thiếu".
+  if (calOk) sat.push(item(F.dtItems.calendar, esc(calText), 'medium', tips.modis(provCal)))
+  else if (provCal) sat.push(item(F.dtItems.calendar, esc(rfProvCyclesText(provCal)), 'medium', tips.modis(provCal)))
+  else sat.push(item(F.dtItems.calendar, `<span class="font-semibold text-clay-700">${esc(F.tagNoCalendar)}</span>`, 'none', tips.none(M.calendar)))
   // Nhóm 3: mô hình tĩnh — khí hậu POWER, mưa hiệu quả FAO, ẩm vùng rễ NASA, ước tính pH/độ mặn ô 5 km.
   const climName = ev.climateOrigin === 'province' ? ev.climatePlace : ev.climateOrigin === 'district' ? (PROVINCES.find((d) => d.id === cal.districtId)?.name ?? '—') : ev.climateOrigin === 'own' ? F.dataClimateOwn : (ev.district?.name ?? '—')
   const climDetail = ev.climateOrigin === 'own' ? F.dataClimateOwn : ev.climateOrigin === 'district' || (!g && ev.climateOrigin) ? F.dataClimateDistrict : ev.climateOrigin === 'province' ? F.dataClimateProvince : null
@@ -512,23 +702,11 @@ function rfDataTableHtml(ev) {
     const hi = wet.reduce((a, b) => (b.v > a.v ? b : a))
     model.push(item(F.rootWet, esc(F.rootWetValue(rfNum(lo.v, 2), lo.month, rfNum(hi.v, 2), hi.month)), 'ref', tips.wet()))
   } else model.push(item(F.rootWet, missing(false), 'none', tips.none(M.needClimate)))
-  if (typeof ph !== 'number') {
-    const e = est.ph
-    model.push(e?.origin === 'estimate'
-      ? item(F.dtItems.phEst, esc(rfNum(e.value, 1)) + (e.method === 'nearestCell' ? note(F.dtNearest(rfNum(e.distanceKm, 0))) : ''), 'ref', tips.ph(e))
-      : item(F.dtItems.phEst, missing(false), 'none', tips.none(M.cell)))
-  }
-  if (typeof ec !== 'number') {
-    const e = est.ec
-    model.push(e?.origin === 'estimate'
-      ? item(F.dtItems.ecEst, esc(`${rfNum(e.value, 1)} dS/m`) + note(F.dtNotEce, 'text-sun-700'), 'ref', tips.ec(e))
-      : item(F.dtItems.ecEst, missing(false), 'none', tips.none(M.cell)))
-  }
   const group = (title, rows) => (rows.length ? `<section class="rf-dl-group"><h5 class="rf-dl-title">${esc(title)}</h5><ul class="rf-dl-list">${rows.join('')}</ul></section>` : '')
   return `<div>
       <div class="flex flex-wrap items-baseline justify-between gap-2">
-        <p class="text-xs font-extrabold uppercase tracking-wide text-[#6d9b37]">${esc(F.dtTitle)}</p>
-        <p class="text-[11px] text-muted">${esc(F.dtHintHover)}</p>
+        <p class="rf-dt-title text-xs font-extrabold uppercase tracking-wide text-[#6d9b37]">${esc(F.dtTitle)}</p>
+        <p class="rf-hint text-[11px] text-muted">${esc(F.dtHintHover)}</p>
       </div>
       <div class="rf-dl-grid mt-3">${group(F.dtGroups.field, field)}<div class="rf-dl-stack">${group(F.dtGroups.sat, sat)}${group(F.dtGroups.model, model)}</div></div>
       <p class="mt-2 text-[11px] leading-relaxed text-muted">${esc(F.rateHint)}</p>
@@ -545,10 +723,10 @@ function rfBannerHtml(ev) {
     : rfThumbHtml({ lat: ev.district.lat, lon: ev.district.lon, z: 13, status: key, label: ev.district.name, tags: rfSourceTags(ev), chain: shown ? rfSeasonChain(shown) : null, corner: ev.district.name, hero: true })
   const title = g ? g.name || '—' : F.districtHeading(ev.district.name)
   const sub = g ? rfGardenCorner(g, ev) : F.districtSub
-  return `<div class="grid overflow-hidden rounded-[28px] border border-[#dce3d5] bg-[#fafbf6] shadow-card lg:grid-cols-[minmax(0,420px)_1fr]">
+  return `<div class="grid overflow-hidden rounded-[28px] border border-[#dce3d5] bg-[#fafbf6] shadow-card lg:grid-cols-[minmax(0,420px)_1fr]" data-reveal="rf-banner-${esc(g ? g.id : 'district')}">
       <div class="min-w-0">${thumb}</div>
       <div class="min-w-0 p-5">
-        <h3 class="text-2xl font-extrabold tracking-tight text-[#173d2b]">${esc(title)}</h3>
+        <div class="flex flex-wrap items-center gap-2"><h3 class="text-2xl font-extrabold tracking-tight text-[#173d2b]">${g ? rfMgmtName(g, 'rf-mgmt-input is-big') : esc(title)}</h3>${g?.demo ? `<span class="mk-demo-badge">${esc(rfF().demoBadge)}</span>` : ''}${g && RF.renaming !== g.id ? rfMgmtActions(g) : ''}</div>
         <p class="mt-0.5 text-sm font-bold text-muted">${esc(sub)}</p>
         ${S.rotWhatIf.dryRainPct !== 0 || S.rotWhatIf.deltaT !== 0 ? `<div class="mt-2">${whatIfTag()}</div>` : ''}
       </div>
@@ -575,7 +753,7 @@ function rfSeasonTagList(s, i, ev) {
   const tags = []
   const crit = s.assessments[i]?.criteria ?? []
   const irr = ev.garden ? rfIrrigationValue(ev.garden.profile?.irrigation) : RF.irrigation
-  if (!s.windows?.[i]) tags.push({ text: F.tagNoCalendar, tone: 'warn', fix: false })
+  if (!s.windows?.[i]) tags.push({ text: ev.calendar?.mode === 'province' && PRECOMPUTED.provinceCal?.some((x) => x.id === ev.calendar.districtId) ? F.tagCalCycles : F.tagNoCalendar, tone: 'warn', fix: false })
   if (irr !== 'yes' && crit.some((c) => c.key === 'water' && (c.grade === 'yellow' || c.grade === 'red'))) tags.push({ text: F.tagCheckCanal, tone: 'act', fix: false })
   for (const w of new Set(crit.filter((c) => c.grade === 'red' || c.grade === 'yellow').map((c) => F.reasonWord[c.key] ?? c.key))) tags.push({ text: w, tone: 'risk', fix: false })
   const gray = crit.filter((c) => c.grade === 'gray').map((c) => RF_GRAY_TAG[c.reason]).filter(Boolean)
@@ -633,7 +811,7 @@ function rfDetailHtml(ev) {
   const all = rfGenAll(ev)
   const pick = all.find((p) => p.key === RF.genPick) ?? res.gen?.proposals?.[0] ?? res.gen?.current ?? null
   const plan = pick
-    ? `<section class="rf-answers mt-5 rounded-[28px] border border-line bg-white p-5 shadow-card">
+    ? `<section class="rf-answers mt-5 rounded-[28px] border border-line bg-white p-5 shadow-card" data-reveal="rf-plan-${esc(rfGenKey(ev))}">
       <h4 class="text-xl font-extrabold tracking-tight text-[#173d2b]">${esc(F.planTitle)} · ${esc(rfGenCrops(pick).join(' → '))}</h4>
       <div class="mt-3">${rfGenSummaryHtml(pick, res.gen)}</div>
       <div class="mt-4">${rfPlanTableHtml(rfGenAsStrategy(pick, res.gen), rfGenAlts(res.gen), ev)}</div>
@@ -643,10 +821,10 @@ function rfDetailHtml(ev) {
   return `${rfDetailNavHtml()}
     <div class="mt-5">${rfBannerHtml(ev)}</div>
     <!-- Dữ liệu thửa dạng liệt kê 3 nhóm; nguồn chi tiết nằm trong tooltip của nhãn độ tin cậy. -->
-    <section class="mt-5 rounded-[28px] border border-line bg-white p-5 shadow-card">${rfDataTableHtml(ev)}</section>
+    <section class="mt-5 rounded-[28px] border border-line bg-white p-5 shadow-card" data-reveal="rf-data-${esc(rfGenKey(ev))}">${rfDataTableHtml(ev)}</section>
     ${ev.garden ? '' : `<div class="mt-5">${rfQuickHtml()}</div>`}
     <!-- Đề xuất tự do: bà con mô tả bằng lời, bộ sinh chấm mọi chuỗi 3 vụ + AI brainstorm thêm (đều kiểm chứng lại). -->
-    <div class="mt-5">${rfGenHtml(ev, pick)}</div>
+    <div class="mt-5" data-reveal="rf-gen-${esc(rfGenKey(ev))}">${rfGenHtml(ev, pick)}</div>
     <!-- Kế hoạch 3 vụ của phương án đang chọn: 3 ô số + 1 bảng ít chữ. -->
     ${plan}`
 }
@@ -666,7 +844,7 @@ const rfCurrentText = (p) => p?.currentText ?? (p?.currentId ? (ROTATIONS.find((
 const rfGenKey = (ev) => ev.garden?.id ?? 'district'
 
 // Tên một chuỗi: cây thư viện theo ngôn ngữ, cây tự nhập giữ nguyên chữ.
-const rfGenCrops = (p) => p.crops.map((c, i) => (c ? rfCropName(c) : p.customNames?.[i] ?? '—'))
+const rfGenCrops = (p) => (p.crops ?? []).map((c, i) => (c ? rfCropName(c) : p.customNames?.[i] ?? '—'))
 
 // Mọi phương án đang có (cách đang làm + 3 đề xuất + AI + xem thêm), để chọn theo key.
 function rfGenAll(ev) {
@@ -792,7 +970,7 @@ function rfGenHtml(ev, selected) {
         <div class="rf-gen-cell"><span class="rf-plan-label">${esc(F.genCols.water)}</span><span class="text-sm font-bold tabular-nums">${water}</span></div>
         <div class="rf-gen-cell"><span class="rf-plan-label">${esc(F.genCols.soil)}</span><span class="text-sm font-bold tabular-nums">${soil}</span></div>
         <div class="rf-gen-cell"><span class="rf-plan-label">${esc(F.genCols.score)}</span><span class="text-sm font-extrabold tabular-nums">${p.score != null ? esc(rfNum(p.score)) : '—'}</span></div>
-        <details class="rf-gen-why"><summary>${esc(F.genWhy)}</summary>${rfGenWhyHtml(p, ev)}</details>
+        <div class="rf-gen-actions"><details class="rf-gen-why"><summary>${esc(F.genWhy)}</summary>${rfGenWhyHtml(p, ev)}</details><button type="button" data-rf="genPdf" data-value="${esc(p.key)}" class="rf-gen-pdf">${icon('file-down', 'size-3.5')}${esc(F.pdfStrategyBtn)}</button></div>
       </div>`
   }
   const rows = [gen.current, ...gen.proposals, ...aiList].filter(Boolean).map(row).join('')
@@ -863,6 +1041,120 @@ function rfAssistantEval(ev) {
   }
 }
 
+/* ---------------- Xuất PDF (báo cáo vườn, báo cáo chiến thuật) ----------------
+ * Cách làm: dựng báo cáo vào #mk-print rồi gọi hộp in của trình duyệt → bà con chọn "Lưu dưới dạng PDF".
+ * Vì sao không dùng thư viện PDF: trang phải chạy offline bằng 1 file index.html; hộp in có sẵn ở mọi trình duyệt.
+ * Mọi số trong báo cáo đều lấy lại từ đúng các hàm trên trang (cùng nguồn, cùng nhãn độ tin cậy). */
+
+// Một ngày giờ dễ đọc cho đầu báo cáo (theo ngôn ngữ trang).
+const rfNow = () => new Date().toLocaleString(ROT_TEXT[S.lang].locale, { dateStyle: 'medium', timeStyle: 'short' })
+
+function rfPrintReport(title, bodyHtml) {
+  document.getElementById('mk-print')?.remove()
+  const box = document.createElement('div')
+  box.id = 'mk-print'
+  box.innerHTML = `<article class="rf-report">${bodyHtml}</article>`
+  document.body.appendChild(box)
+  // Báo cho styles.css biết đang in BÁO CÁO (không phải thẻ chia sẻ) → không ẩn mọi thứ bằng visibility.
+  document.body.classList.add('mk-printing-report')
+  const oldTitle = document.title
+  document.title = title // trình duyệt dùng tiêu đề này làm tên file PDF gợi ý
+  let cleaned = false
+  const done = () => {
+    if (cleaned) return
+    cleaned = true
+    document.title = oldTitle
+    document.body.classList.remove('mk-printing-report')
+    box.remove()
+    window.removeEventListener('afterprint', done)
+  }
+  window.addEventListener('afterprint', done)
+  // Gọi in NGAY trong lượt bấm (giữ "thao tác người dùng"); hộp in dựng bản xem trước từ DOM hiện tại.
+  window.print()
+  // Dự phòng: trình duyệt không bắn afterprint thì vẫn dọn báo cáo sau khi hộp in đóng.
+  setTimeout(done, 60000) // dự phòng nếu trình duyệt không bắn afterprint (hộp in không chặn luồng)
+}
+
+// Phần đầu chung của báo cáo: tên vườn, nhóm, tọa độ, diện tích, ngày xuất.
+function rfReportHead(g, ev, heading) {
+  const F = rfF()
+  const group = DS.gardenGroups?.find((x) => x.id === g.groupId)?.name ?? '—'
+  return `<header class="rf-report-head">
+      <p class="rf-report-brand">${esc(appName())} · ${esc(F.pdfBrandNote)}</p>
+      <h1>${esc(heading)}</h1>
+      <dl class="rf-report-meta">
+        <div><dt>${esc(F.pdfMeta.garden)}</dt><dd>${esc(g.name || '—')}</dd></div>
+        <div><dt>${esc(F.pdfMeta.group)}</dt><dd>${esc(group)}</dd></div>
+        <div><dt>${esc(F.pdfMeta.coords)}</dt><dd>${Number.isFinite(g.lat) ? `${rfNum(g.lat, 5)}, ${rfNum(g.lon, 5)}` : '—'}</dd></div>
+        <div><dt>${esc(F.pdfMeta.area)}</dt><dd>${esc(`${rfAreaHa(g)} ha`)}</dd></div>
+        <div><dt>${esc(F.pdfMeta.province)}</dt><dd>${esc(Number.isFinite(g.lat) ? (mekongFindProvince(g.lat, g.lon)?.[S.lang] ?? '—') : '—')}</dd></div>
+        <div><dt>${esc(F.pdfMeta.made)}</dt><dd>${esc(rfNow())}</dd></div>
+      </dl>
+    </header>`
+}
+
+// Bảng khí hậu 12 tháng (NASA POWER) + mưa hiệu quả FAO — chép đúng số trang đang dùng.
+function rfReportClimateHtml(ev) {
+  const F = rfF()
+  if (!ev.climate?.months) return `<p>${esc(F.dtNotMeasured)}</p>`
+  const pe = wbEffectiveRain(ev.climate)
+  const v = (x, d = 0) => (x && typeof x.value === 'number' ? rfNum(x.value, d) : '—')
+  const rows = ev.climate.months.map((m, i) => `<tr><td>${m.month}</td><td>${v(m.rain)}</td><td>${v(pe.months[i]?.effRain)}</td><td>${v(m.tmax, 1)}</td><td>${v(m.tmin, 1)}</td><td>${v(m.gwetroot, 2)}</td></tr>`).join('')
+  const C = F.pdfClimateCols
+  return `<table class="rf-report-table"><thead><tr><th>${esc(C.month)}</th><th>${esc(C.rain)}</th><th>${esc(C.eff)}</th><th>${esc(C.tmax)}</th><th>${esc(C.tmin)}</th><th>${esc(C.wet)}</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="rf-report-note">${esc(F.pdfClimateNote(PRECOMPUTED.powerSnapshot?.years?.join('–') ?? '—'))}</p>`
+}
+
+// 22 lớp bản đồ tại vị trí vườn (đọc màu → nhãn ngữ nghĩa, kèm cơ quan nguồn và ngày ảnh).
+function rfReportLayersHtml(g) {
+  const F = rfF()
+  const syn = Number.isFinite(g.lat) ? emSynthesizeGardenStack(PRECOMPUTED.envMap, g.lat, g.lon, g, 0, S.lang) : null
+  if (!syn) return ''
+  const names = typeof mfT === 'function' ? mfT().layers ?? {} : {}
+  const rows = syn.groups.flatMap((grp) => grp.keys.map((key) => {
+    const it = syn.items[key]
+    return `<tr><td>${esc(names[key] ?? key)}</td><td>${esc(it.title || F.pdfNoCell)}</td><td>${esc(it.meta?.shortOrg?.[S.lang] ?? '')} · ${esc(it.meta?.dateLabel?.[S.lang] ?? '')}</td><td>${esc(F.rate[ssRate(ssLayerKind(key))])}</td></tr>`
+  })).join('')
+  const C = F.pdfLayerCols
+  return `<table class="rf-report-table"><thead><tr><th>${esc(C.layer)}</th><th>${esc(C.reading)}</th><th>${esc(C.source)}</th><th>${esc(C.rate)}</th></tr></thead><tbody>${rows}</tbody></table>`
+}
+
+const rfReportSection = (title, inner) => `<section class="rf-report-sec"><h2>${esc(title)}</h2>${inner}</section>`
+const rfReportFoot = () => `<footer class="rf-report-foot"><p>${esc(rfF().reminder)}</p><p>${esc(rfF().genWhySources)}</p></footer>`
+
+/** PDF chi tiết TOÀN BỘ dữ liệu của một vườn (nút ở Tab 3). */
+function rfPrintGarden(g) {
+  const F = rfF()
+  const ev = rfEvaluateGarden(g)
+  const gen = ev.res.gen
+  const props = gen?.proposals?.length
+    ? `<ol class="rf-report-list">${gen.proposals.map((p) => `<li><b>${esc(F.genKind[p.kind])}:</b> ${esc(rfGenCrops(p).join(' → '))} · ${esc(F.genCols.score)} ${esc(rfNum(p.score))} · ${esc(F.genCols.water)} ${esc(F.unitMm(rfNum(p.extraMm)))}</li>`).join('')}</ol>`
+    : `<p>${esc(F.genNone)}</p>`
+  rfPrintReport(F.pdfFileGarden(g.name || 'vuon'), `
+    ${rfReportHead(g, ev, F.pdfTitleGarden(g.name || '—'))}
+    ${rfReportSection(F.dtTitle, rfDataTableHtml(ev))}
+    ${rfReportSection(F.pdfClimateTitle, rfReportClimateHtml(ev))}
+    ${rfReportSection(F.pdfLayersTitle, rfReportLayersHtml(g))}
+    ${rfReportSection(F.genTitle, props)}
+    ${rfReportFoot()}`)
+}
+
+/** PDF của MỘT chiến thuật canh tác của một vườn (nút ở từng dòng đề xuất). */
+function rfPrintStrategy(ev, p) {
+  const F = rfF()
+  const g = ev.garden
+  const gen = ev.res.gen
+  const name = rfGenCrops(p).join(' → ')
+  const head = g ? rfReportHead(g, ev, F.pdfTitleStrategy(name)) : `<header class="rf-report-head"><p class="rf-report-brand">${esc(appName())}</p><h1>${esc(F.pdfTitleStrategy(name))}</h1><p>${esc(ev.district?.name ?? '')} · ${esc(rfNow())}</p></header>`
+  rfPrintReport(F.pdfFileStrategy(g?.name || ev.district?.name || 'mekong', name), `
+    ${head}
+    ${rfReportSection(`${F.genKind[p.kind] ?? ''}${p.title ? ` · ${p.title}` : ''}`, `<p class="rf-report-big">${esc(name)}</p><p>${esc(F.genCols.score)}: ${esc(p.score != null ? rfNum(p.score) : '—')} · ${esc(F.genCols.water)}: ${esc(p.extraMm != null ? F.unitMm(rfNum(p.extraMm)) : '—')} · ${esc(F.genCols.soil)}: ${esc(p.soilPoints != null ? F.unitPts(rfNum(p.soilPoints)) : '—')}</p>`)}
+    ${rfReportSection(F.planTitle, `${rfGenSummaryHtml(p, gen)}<div class="mt-3">${rfPlanTableHtml(rfGenAsStrategy(p, gen), rfGenAlts(gen), ev)}</div>`)}
+    ${rfReportSection(F.genWhy, rfGenWhyHtml(p, ev))}
+    ${rfReportSection(F.dtTitle, rfDataTableHtml(ev))}
+    ${rfReportFoot()}`)
+}
+
 /* ---------------- Phần dùng chung còn lại ---------------- */
 
 /** Bảng đầy đủ: 9 cây × 3 vụ, dạng bảng so sánh (hàng = cây, cột = vụ), kèm lý do bằng lời nông dân. */
@@ -887,7 +1179,7 @@ export function rfAltTableHtml(res, { open = true } = {}) {
   }
   const head = alts.map((a) => `<th scope="col" class="py-2 pr-3 text-left">${esc(R.seasons[a.season])}<span class="block font-semibold normal-case tracking-normal text-muted">${esc(rfMonthRange(a.months))}</span></th>`).join('')
   const body = crops.map((c) => `<tr class="border-t border-[#e6ebe0]"><th scope="row" class="py-2 pl-4 pr-3 text-left text-sm font-extrabold text-[#173d2b]">${esc(rfCropName(c))}</th>${alts.map((a) => cell(a, c)).join('')}</tr>`).join('')
-  return `<details class="mt-5 rounded-[28px] border border-line bg-white p-5 shadow-card" ${open ? 'open' : ''}>
+  return `<details class="mt-5 rounded-[28px] border border-line bg-white p-5 shadow-card" ${open ? 'open' : ''} data-reveal="rf-alt-${esc(RF.view || 'd')}">
       <summary class="cursor-pointer text-base font-extrabold text-moss-900">${esc(F.altTitle)}</summary>
       <p class="mt-1 text-sm text-muted">${esc(F.altSub)}</p>
       ${alts[0]?.source === 'sowing' ? `<p class="mt-1 text-sm font-semibold text-sun-700">${esc(F.altSowing)}</p>` : ''}
@@ -911,7 +1203,7 @@ function rfQuickHtml() {
     `<button type="button" data-rf="${attr}" data-value="${value}" aria-pressed="${on}" class="rf-press min-h-12 rounded-full border px-4 text-sm font-extrabold ${on ? 'border-moss-900 bg-moss-900 text-white' : 'border-line bg-white text-ink hover:border-moss-700'}">${esc(label)}</button>`
   const field = (id, label, value, step) =>
     `<label class="grid gap-1 text-sm font-bold text-ink">${esc(label)}<input id="${id}" type="number" inputmode="decimal" step="${step}" min="0" value="${value ?? ''}" class="min-h-12 rounded-2xl border border-line bg-white px-3 text-base font-bold" /></label>`
-  return `<div id="rf-quick" class="rounded-[28px] border border-line bg-white p-5 shadow-card" tabindex="-1">
+  return `<div id="rf-quick" class="rounded-[28px] border border-line bg-white p-5 shadow-card" tabindex="-1" data-reveal="rf-quick">
       <p class="text-lg font-extrabold">${esc(F.quickTitle)}</p>
       <p class="mt-3 text-sm font-bold text-muted">${esc(F.irrigationQ)}</p>
       <div class="mt-2 flex flex-wrap gap-2">${RF_IRRIGATION.map((v) => pill('irr', v, F.irrigation[v], irrOn(v))).join('')}</div>
@@ -954,7 +1246,7 @@ export function rfBridgeHtml({ evalResult = null, loc = null, planButton = '' } 
     ? rfThumbHtml({ lat, lon, polygon: g?.polygon ?? null, stroke: g ? rfGroupColor(g) : '#ffffff', status: res ? key : null, label: g?.name ?? loc?.name ?? '', tags, chain: shown ? rfSeasonChain(shown) : null, corner })
     : ''
   const name = g?.name || loc?.name || F.bridgeNoGarden
-  return `<div class="overflow-hidden rounded-[24px] border border-[#dce3d5] bg-[#fafbf6] shadow-card">
+  return `<div class="overflow-hidden rounded-[24px] border border-[#dce3d5] bg-[#fafbf6] shadow-card" data-reveal="rf-bridge-${esc(g ? g.id : 'loc')}">
       ${thumb}
       <div class="p-4">
         <p class="text-xs font-extrabold uppercase tracking-wide text-[#6d9b37]">${esc(F.bridgeEyebrow)}</p>
@@ -1024,7 +1316,6 @@ export function rfOpenGardenStrategy(gardenId = null) {
   const target = pageHref('rotations')
   if (location.hash !== target) location.hash = target // route() → showPage('rotations') vẽ lại trang
   renderRotations()
-  revealNow('#rotations [data-reveal]')
   setTimeout(() => rfScrollTo('rotations'), 80)
 }
 
@@ -1033,12 +1324,17 @@ export function rfRender() {
   const box = typeof document !== 'undefined' ? document.getElementById('rot-farm') : null
   if (!box) return
   const gardens = DS.gardens ?? []
-  if (RF.view !== 'district' && !gardens.some((g) => g.id === RF.view)) RF.view = gardens[0]?.id ?? 'district'
+  if (RF.view !== 'district' && !gardens.some((g) => g.id === RF.view)) {
+    if (RF.view) RF.mode = 'grid' // vườn đang xem vừa bị xóa: quay về danh sách
+    RF.view = gardens[0]?.id ?? 'district'
+  }
+  if (RF.renaming && !gardens.some((g) => g.id === RF.renaming)) RF.renaming = null
   const body = RF.mode === 'detail'
     ? rfDetailHtml(RF.view === 'district' ? rfEvaluateDistrict() : rfEvaluateGarden(gardens.find((g) => g.id === RF.view)))
     : rfGridHtml()
   // Câu nhắc "kết hợp kinh nghiệm bà con & cán bộ khuyến nông" nay nằm ở đầu trang (renderRotations), không lặp ở đây.
   box.innerHTML = body
+  if (typeof wireMotion === 'function') wireMotion()
 }
 
 // Đọc số đo nhập nhanh: rỗng → null; ngoài khoảng hợp lý (pH 0–14, ECe ≥ 0) → bỏ qua, không đoán.
@@ -1070,7 +1366,6 @@ if (typeof document !== 'undefined') {
         RF.mode = 'detail'
         RF.pick = null
         renderRotations()
-        revealNow('#rotations [data-reveal]')
         return rfScrollTo('rot-farm')
       case 'backToGrid':
         RF.mode = 'grid'
@@ -1093,6 +1388,33 @@ if (typeof document !== 'undefined') {
         const typed = document.getElementById('rf-wish')?.value?.trim()
         if (typed != null) RF.wish[g ? g.id : 'district'] = typed
         return rfAskAi(g ? rfEvaluateGarden(g) : rfEvaluateDistrict())
+      }
+      case 'inlineEdit':
+        RF.edit = { gardenId: v, key: b.dataset.key }
+        RF.editErr = null
+        rfRender()
+        return document.querySelector('#rot-farm [data-rf-input]')?.focus()
+      case 'inlineSave':
+        return rfSaveInline(v, b.dataset.key)
+      case 'inlineCancel':
+        RF.edit = null
+        RF.editErr = null
+        return rfRender()
+      case 'mgmtRename':
+        RF.renaming = v
+        RF.renameErr = null
+        rfRender()
+        document.getElementById('rf-rename')?.select()
+        return
+      case 'mgmtSettings':
+        return mgOpenDialog('garden', v)
+      case 'mgmtDelete':
+        return mgOpenDialog('delete', v)
+      case 'genPdf': {
+        const g = (DS.gardens ?? []).find((x) => x.id === RF.view)
+        const ev = g ? rfEvaluateGarden(g) : rfEvaluateDistrict()
+        const p = rfGenAll(ev).find((x) => x.key === v)
+        return p ? rfPrintStrategy(ev, p) : null
       }
       case 'genPick':
         RF.genPick = v
@@ -1162,5 +1484,47 @@ if (typeof document !== 'undefined') {
   })
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') rfCloseTips()
+  })
+}
+
+// Quản lý vườn: Enter lưu tên, Esc hủy, rời ô cũng lưu; đổi nhóm bằng ô chọn.
+if (typeof document !== 'undefined') {
+  document.addEventListener('keydown', (e) => {
+    const inl = e.target.closest?.('#rot-farm [data-rf-edit-row]')
+    if (inl && RF.edit) {
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        return rfSaveInline(RF.edit.gardenId, RF.edit.key)
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        RF.edit = null
+        RF.editErr = null
+        return rfRender()
+      }
+    }
+    const input = e.target.closest?.('#rf-rename')
+    if (!input) return
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      rfCommitRename(input)
+    } else if (e.key === 'Escape') {
+      e.preventDefault()
+      rfCommitRename(input, true)
+    }
+  })
+  document.addEventListener('focusout', (e) => {
+    const input = e.target.closest?.('#rf-rename')
+    // Rời ô vì bấm nút khác hoặc chạm ra ngoài → lưu (không lưu khi chính trang đang vẽ lại).
+    if (input && input.isConnected && RF.renaming === input.dataset.rfRename) setTimeout(() => input.isConnected && rfCommitRename(input), 0)
+  })
+  document.addEventListener('change', (e) => {
+    const sel = e.target.closest?.('select[data-rf-group]')
+    if (!sel) return
+    const g = (DS.gardens ?? []).find((x) => x.id === sel.dataset.rfGroup)
+    if (!g || !DS.gardenGroups?.some((gr) => gr.id === sel.value)) return
+    dsSaveGarden({ ...g, groupId: sel.value })
+    dsSave()
+    rfRender()
   })
 }

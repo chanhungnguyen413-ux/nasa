@@ -21,7 +21,7 @@ import { GIBS_LAYERS, catalogSource } from '../sources/catalog.js'
 import { powerElevationEvidence } from '../sources/power.js'
 import { mwFuzzySearchPlace, mwPlaceCatalog, psNormalize } from '../logic/placeSearch.js'
 import { rfBridgeHtml } from './rotationFarm.js'
-import { GARDEN_GRADES, gmCropLabel } from '../logic/gardenModel.js'
+import { GARDEN_GRADES, gmCropLabel, gmHasBoundary } from '../logic/gardenModel.js'
 
 const MW = {
   tab: 'field', // 'field' | 'cond' | 'compare'
@@ -236,6 +236,18 @@ function mwSyncSheetStyle() {
 
 // "Viên trượt" của thanh tab (site/hitech.css): đặt vị trí/kích thước bằng biến CSS, chỉ transform trượt.
 // Lần đo đầu tiên đặt ngay (không trượt từ góc trái); tab đang ẩn (offsetWidth = 0) thì bỏ qua.
+/** Chuyển sang một tab của panel (dùng chung cho nút tab và khi bấm vào thửa). */
+function mwGoTab(tab) {
+  if (MW.tab === tab) return mfRenderDynamic()
+  MW.tab = tab
+  if (typeof CSM !== 'undefined') CSM.openMenu = null
+  MW.picking = false
+  if (tab !== 'field' && typeof mdActive === 'function' && mdActive()) mdSetMode('idle')
+  if (!mwDesktop() && MW.sheet === 'peek') MW.sheet = 'half'
+  mfRenderDynamic()
+  mwAnimateTabBody()
+}
+
 function mwSyncTabIndicator() {
   const list = document.querySelector('#mw-panel [role="tablist"]')
   const on = list?.querySelector('[data-mw-tab][aria-selected="true"]')
@@ -617,6 +629,7 @@ function mwRenderBody() {
     mfzClearLayer()
     body.innerHTML = mgWorkspaceHtml()
     mdUpdateLiveArea()
+    if (typeof wireMotion === 'function') wireMotion() // hiện dần từng thẻ trong khung panel (template: panelIo)
     return
   }
 
@@ -631,6 +644,7 @@ function mwRenderBody() {
     if (typeof mfzClearLayer === 'function') mfzClearLayer()
     if (typeof mgDrawAllGardens === 'function') mgDrawAllGardens()
     body.innerHTML = mwRenderDetailsHtml()
+    if (typeof wireMotion === 'function') wireMotion() // hiện dần từng thẻ trong khung panel (template: panelIo)
     return
   }
 
@@ -646,6 +660,7 @@ function mwRenderBody() {
     if (typeof mgDrawAllGardens === 'function') mgDrawAllGardens()
     if (typeof mfdDrawLayers === 'function') mfdDrawLayers()
     body.innerHTML = mwStrategyCardHtml()
+    if (typeof wireMotion === 'function') wireMotion() // hiện dần từng thẻ trong khung panel (template: panelIo)
     return
   }
 
@@ -659,6 +674,7 @@ function mwRenderBody() {
       dock.classList.add('hidden')
     }
     body.innerHTML = typeof csmRenderHtml === 'function' ? csmRenderHtml() : ''
+    if (typeof wireMotion === 'function') wireMotion() // hiện dần từng thẻ trong khung panel (template: panelIo)
     return
   }
 }
@@ -674,7 +690,7 @@ function mwStrategyCardHtml() {
   const G = typeof mgT === 'function' ? mgT() : null
   // Chú giải màu giữ ngay trong thẻ vì thửa vẫn được tô theo mức phù hợp trên bản đồ ở Tab 4.
   const legend = g && G ? `<div class="mt-4 flex flex-wrap gap-x-3 gap-y-1 text-[11px] font-bold text-ink">${Object.entries(G.grades).map(([k, label]) => `<span class="inline-flex items-center gap-1"><i class="inline-block size-3 rounded-sm" style="background:${GARDEN_GRADES[k]}"></i>${esc(label)}</span>`).join('')}</div>` : ''
-  return `<div class="rounded-3xl border border-line bg-white p-5 shadow-card">
+  return `<div class="rounded-3xl border border-line bg-white p-5 shadow-card" data-reveal="mw-tab4-${esc(g?.id || 'loc')}">
       <p class="text-xs font-extrabold uppercase tracking-wide text-moss-700">${esc(T.eyebrow)}</p>
       <h3 class="mt-1 text-xl font-extrabold tracking-tight text-moss-950">${esc(name)}</h3>
       <dl class="mt-3 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm"><dt class="font-semibold text-muted">${esc(T.area)}</dt><dd class="font-extrabold tabular-nums text-ink">${esc(area)}</dd></dl>
@@ -832,6 +848,7 @@ function mwRenderDetailsHtml() {
   const omText = profile.om != null && profile.om !== '' ? `${profile.om}%` : D.unmeasured
   const soilTypeText = profile.soilType && profile.soilType !== 'unknown' ? SF.soilTypes?.[profile.soilType] ?? profile.soilType : D.unmeasured
 
+  const auto = g ? mwAutoFill(g) : { any: false }
   const row = (k, v) =>
     `<div class="flex items-start justify-between gap-3 border-b border-line/60 py-1.5 text-xs last:border-b-0"><span class="font-semibold text-muted">${esc(k)}</span><span class="text-right font-bold text-ink">${v}</span></div>`
 
@@ -844,49 +861,82 @@ function mwRenderDetailsHtml() {
         .join('')}</div>`
     : ''
 
+  const dKey = esc(g?.id || 'loc') // khóa reveal: mỗi thửa chỉ chạy hiệu ứng hiện dần một lần
   return `
     <div class="space-y-3">
-      <div class="rounded-3xl border border-line bg-white p-4 shadow-card">
+      <div class="rounded-3xl border border-line bg-white p-4 shadow-card" data-reveal="mw-det-head-${dKey}">
         <h3 class="text-base font-extrabold text-moss-950">${esc(g?.name || MF.loc?.name || D.title)}</h3>
+        ${g?.demo ? `<p class="mt-1"><span class="mk-demo-badge">${esc(mgT().demoBadge)}</span> <span class="text-xs text-muted">${esc(mgT().demoHint)}</span></p>` : ''}
         <div class="mt-2">
           ${row(D.areaLabel, esc(areaText))}
           ${row(D.provinceLabel, esc(prov ? (prov[S.lang] ?? prov.vi) : '—'))}
         </div>
       </div>
 
-      <div class="rounded-3xl border border-line bg-white p-4 shadow-card">
+      <div class="rounded-3xl border border-line bg-white p-4 shadow-card" data-reveal="mw-det-soil-${dKey}">
         <p class="text-xs font-extrabold uppercase tracking-wide text-moss-700">${esc(D.soilTitle)}</p>
         <div class="mt-2">
-          ${row(D.phLabel, esc(profile.ph !== '' && profile.ph != null ? String(profile.ph) : D.unmeasured))}
-          ${row(D.ecLabel, esc(ecText))}
+          ${row(D.phLabel, profile.ph !== '' && profile.ph != null ? esc(String(profile.ph)) : mwEstValue(auto.ph))}
+          ${row(D.ecLabel, profile.ec != null && profile.ec !== '' ? esc(ecText) : mwEstValue(auto.ec))}
           ${row(D.organicLabel, esc(omText))}
-          ${row(D.soilTypeLabel, esc(soilTypeText))}
+          ${row(D.soilTypeLabel, profile.soilType && profile.soilType !== 'unknown' ? esc(soilTypeText) : mwEstValue(auto.soil))}
           ${row(D.irrigationLabel, esc(irrigLabel))}
-          ${row(D.sowingLabel, esc(sowingLabel))}
+          ${row(D.sowingLabel, profile.season || profile.sowing ? esc(sowingLabel) : mwEstValue(auto.season))}
           ${row(D.marksLabel, esc(String(marksCount)))}
           ${row(D.dateLabel, esc(profile.measuredAt || D.unmeasured))}
           ${profile.notes ? row(D.notesLabel, esc(profile.notes)) : ''}
         </div>
       </div>
 
-      <div class="rounded-3xl border border-line bg-white p-4 shadow-card">
+      <div class="rounded-3xl border border-line bg-white p-4 shadow-card" data-reveal="mw-det-crop-${dKey}">
         <div class="flex items-center justify-between gap-2">
           <p class="text-xs font-extrabold uppercase tracking-wide text-moss-700">${esc(D.cropTitle)}</p>
           ${assess ? mfGradeBadge(assess.grade, typeof mgT === 'function' ? mgT().grades[assess.grade] : assess.grade) : ''}
         </div>
-        <p class="mt-1 text-sm font-extrabold text-ink">${esc(cropName || D.noCrop)}</p>
+        <p class="mt-1 text-sm font-extrabold text-ink">${cropName ? esc(cropName) : auto.crop ? mwEstValue(auto.crop) : esc(D.noCrop)}</p>
         ${!cropName && recCrops ? `<p class="mt-1 text-xs text-muted"><span class="font-bold text-moss-900">${esc(T.legend.dbsclRecCrop)}</span> ${esc(recCrops)}</p>` : ''}
         ${criteriaHtml}
       </div>
 
+      ${g && auto.any ? `<div class="rounded-3xl border border-[#f1e2b8] bg-[#fdf8ea] p-4 text-xs leading-relaxed text-ink">
+        <p>${esc(D.autoNote)}</p>
+        <button type="button" data-mg="settings" data-value="${esc(g.id)}" class="mt-2 inline-flex min-h-10 items-center gap-2 rounded-full bg-moss-900 px-4 text-xs font-extrabold text-white">${icon('pencil', 'size-4')}${esc(D.autoBtn)}</button>
+      </div>` : ''}
       ${mwClimateBannerHtml(g, D)}
       ${envChart}
       ${mwEnvSynthesisHtml(g)}
       ${g ? `<div class="grid gap-2 sm:grid-cols-2">
         <button type="button" data-mg="settings" data-value="${esc(g.id)}" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-moss-900 bg-white px-4 text-sm font-extrabold text-moss-900 hover:bg-moss-50">${icon('settings', 'size-4')}${esc(D.editBtn)}</button>
         <button type="button" data-mw="compare" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-moss-900 px-4 text-sm font-extrabold text-white shadow-card hover:bg-moss-800">${icon('scale', 'size-4')}${esc(D.compareBtn)}</button>
+        <button type="button" data-mw="pdfGarden" data-value="${esc(g.id)}" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-line bg-white px-4 text-sm font-extrabold text-moss-900 hover:bg-moss-50 sm:col-span-2">${icon('file-down', 'size-4')}${esc(D.pdfBtn)}</button>
       </div>` : ''}
     </div>`
+}
+
+/**
+ * Tự điền THAM KHẢO cho Tab 3 từ dữ liệu đã có (không ghi vào hồ sơ): pH/độ mặn ô 5 km, nhóm đất bản đồ FAO,
+ * lịch vụ MODIS của huyện/tỉnh. Mỗi giá trị kèm nhãn nguồn + "Tham khảo"; bà con vẫn được nhắc nhập số đo.
+ */
+function mwAutoFill(g) {
+  // Đọc đúng kết quả điền thông minh dùng cho màu vườn (mgSmartFill → sfFill), không tự tính riêng.
+  const sf = mgSmartFill(g)
+  const G = mgT()
+  const pick = (k) => {
+    const f = sf.fields[k]
+    if (f?.origin !== 'auto') return null
+    return { value: mgFillText(k, f), src: `${G.fillSrc[f.source] ?? f.source}` }
+  }
+  const out = { ph: pick('ph'), ec: pick('ec'), soil: pick('soilType'), season: pick('season'), crop: pick('cropId') }
+  if (!out.soil && sf.fields.soilType.note) out.soil = { value: sf.fields.soilType.note[S.lang], src: G.fillSrc.faoSoilMap }
+  out.any = Boolean(out.ph || out.ec || out.soil || out.season || out.crop)
+  return out
+}
+
+// "Chưa đo" + dòng ước tính có nguồn và nhãn Tham khảo (không bao giờ hiện như số đo tại ruộng).
+function mwEstValue(e) {
+  const D = mwT().details
+  if (!e) return esc(D.unmeasured)
+  return `<span class="block">${esc(D.unmeasured)}</span><span class="block text-[11px] font-semibold text-moss-700">≈ ${esc(e.value)}</span><span class="block text-[10px] font-semibold text-muted">${esc(e.src)} · ${esc(D.estTag)}</span>`
 }
 
 function mwCompareHtml(data) {
@@ -1073,6 +1123,10 @@ document.addEventListener('click', (e) => {
       MW.currentId = v
       mwOnInputsChanged()
       return mwRenderBody()
+    case 'pdfGarden': {
+      const g = DS.gardens.find((x) => x.id === b.dataset.value)
+      return g ? rfPrintGarden(g) : null
+    }
     case 'compare': {
       MW.tab = 'compare'
       if (!mwDesktop() && MW.sheet === 'peek') MW.sheet = 'full'

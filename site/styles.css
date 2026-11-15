@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", "Georgia", "Times New Roman", serif;
 
   /* vibrant field green for primary actions */
   --color-lime-100: #eef9d9;
@@ -82,17 +83,48 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ---------- reveal on load and scroll ---------- */
+/* ---------- reveal on load and scroll (skeleton -> content once) ---------- */
 [data-reveal] {
-  opacity: 0;
-  transform: translateY(24px);
-  transition:
-    opacity 0.9s var(--ease-out-expo),
-    transform 0.9s var(--ease-out-expo);
+  position: relative;
 }
-[data-reveal].is-in {
+[data-reveal] > * {
+  transition:
+    opacity 0.68s var(--ease-out-expo),
+    transform 0.68s var(--ease-out-expo);
+}
+[data-reveal]:not(.is-in) > * {
+  opacity: 0;
+  transform: translateY(16px);
+  pointer-events: none;
+}
+[data-reveal]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out-expo);
+  background:
+    linear-gradient(105deg, transparent 24%, rgba(255, 255, 255, 0.72) 48%, transparent 74%) 200% 0 / 220% 100%,
+    linear-gradient(#dce4cf 0 0) 16px 16px / 34% 11px no-repeat,
+    linear-gradient(#e3ead7 0 0) 16px 38px / 70% 14px no-repeat,
+    linear-gradient(#e8eee0 0 0) 16px 62px / 50% 11px no-repeat,
+    #eff3e8;
+  border: 1px solid #e2e8d8;
+}
+[data-reveal]:not(.is-in)::after {
   opacity: 1;
-  transform: none;
+  animation: mk-skeleton-shimmer 1.45s ease-in-out infinite;
+}
+[data-reveal].is-in::after {
+  opacity: 0;
+  animation: none;
+}
+@keyframes mk-skeleton-shimmer {
+  0% { background-position: 200% 0, 16px 16px, 16px 38px, 16px 62px; }
+  100% { background-position: -120% 0, 16px 16px, 16px 38px, 16px 62px; }
 }
 
 /* statement paragraph: solid colours, no scroll dimming (dimmed words read as blurred text).
@@ -231,9 +263,11 @@
   display: none;
 }
 
-/* printing from the share dialog prints only the card */
+/* printing from the share dialog prints only the card.
+   Báo cáo PDF của trang (#mk-print, rotationFarm.js) gắn class mk-printing-report lên <body> → quy tắc này không áp,
+   nếu không mọi thứ kể cả báo cáo bị ẩn và PDF ra trang trắng. */
 @media print {
-  body * { visibility: hidden !important; }
+  body:not(.mk-printing-report) * { visibility: hidden !important; }
   #print-card, #print-card * { visibility: visible !important; }
   #print-card { position: fixed; inset: 0 auto auto 0; width: 100%; box-shadow: none; }
 }
@@ -337,7 +371,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  [data-reveal] { opacity: 1; transform: none; transition: none; }
+  [data-reveal], [data-reveal] > * { opacity: 1; transform: none; transition: none; pointer-events: auto; }
+  [data-reveal]::after, [data-reveal]:not(.is-in)::after { display: none; animation: none; }
   .hero-photo, .ripple, .pop-in, .panel-in, .drawer-in, .scrim-in, .water-run, .sel-ring, .rain line, .md-first-pulse { animation: none; }
   .flow-path, .wet-overlay { transition: none; }
 }

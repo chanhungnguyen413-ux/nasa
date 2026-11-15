@@ -209,6 +209,15 @@ function mfInitMap() {
     maxBoundsViscosity: 1.0,
     worldCopyJump: false,
   }).setView(MF.loc ? [MF.loc.lat, MF.loc.lon] : [10.05, 105.55], MF.loc ? 12 : 8)
+  // Không cho zoom ra xa hơn mức nhìn trọn ĐBSCL: tính theo kích thước khung bản đồ thật (desktop/mobile khác nhau).
+  const mfDeltaBounds = Lf.latLngBounds([[8.4, 104.2], [11.15, 106.95]])
+  const mfFitMinZoom = () => {
+    const z = Math.max(6, MF.map.getBoundsZoom(mfDeltaBounds, false))
+    MF.map.setMinZoom(z)
+    MF.map.setMaxBounds(mfDeltaBounds.pad(0.35))
+  }
+  mfFitMinZoom()
+  MF.map.on('resize', mfFitMinZoom)
   const envPane = MF.map.createPane('dbsclEnvPane')
   envPane.style.zIndex = '240'
   const borderPane = MF.map.createPane('dbsclBorderPane')

@@ -27,9 +27,11 @@ const CSM_FILL = { green: '#5b8c1a', yellow: '#c58a12', red: '#8f2f14', gray: '#
 // Khung tháng tham khảo ĐBSCL cho 9 tỉnh chưa có lịch 3 vụ NDVI MODIS riêng (chỉ dùng để đọc khí hậu; suitCycle vẫn giữ Xám).
 const CSM_REF_MONTHS = { dx: [12, 1, 2, 3], ht: [4, 5, 6, 7], td: [8, 9, 10, 11] }
 
-function csmProvinceWindow(sampleId, period) {
-  if (sampleId) {
-    const windows = seasonWindows(districtInputs(PRECOMPUTED, sampleId).peakDays)
+function csmProvinceWindow(sampleId, period, provCode = null) {
+  // Lịch NDVI: huyện mẫu; ngoài 5 huyện thì lịch cấp tỉnh (province_calendars.json) nếu tỉnh có lịch 3 vụ.
+  const calId = sampleId ?? PRECOMPUTED.provinceCal?.find((p) => p.code === provCode)?.id ?? null
+  if (calId) {
+    const windows = seasonWindows(districtInputs(PRECOMPUTED, calId).peakDays)
     const ndviWindow = windows?.find((w) => w.season === period)
     if (ndviWindow) return suitWindow({ ndviWindow, crop: CSM.crop })
   }
@@ -105,7 +107,7 @@ function csmAssessAll() {
     const lat = sample ? sample.lat : prov.center[0]
     const lon = sample ? sample.lon : prov.center[1]
     const climInfo = csmProvinceClimate(prov, sample)
-    const window = csmProvinceWindow(sample?.id ?? null, CSM.period)
+    const window = csmProvinceWindow(sample?.id ?? null, CSM.period, prov.code)
     const result = climInfo.climate && window
       ? suitAssess({
           crop: CSM.crop,
@@ -248,8 +250,9 @@ function csmExplainHtml(item) {
     ? `${T.noDataPractice} ${cropGuide}`
     : cropGuide
 
-  const calBadge = item.window?.source === 'ndvi' && item.sample
-    ? `<p class="mt-1.5 inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-950">${esc(T.calSampleBadge(item.sample.name))}</p>`
+  const provCal = !item.sample ? PRECOMPUTED.provinceCal?.find((p) => p.code === item.code) : null
+  const calBadge = item.window?.source === 'ndvi' && (item.sample || provCal)
+    ? `<p class="mt-1.5 inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-950">${esc(item.sample ? T.calSampleBadge(item.sample.name) : T.calProvBadge(provCal.name, provCal.calendarYear))}</p>`
     : `<p class="mt-1.5 inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-950">${esc(T.calRefBadge)}</p>`
 
   const climAlert = !item.climate
@@ -263,7 +266,7 @@ function csmExplainHtml(item) {
     ? `<div><p class="font-extrabold text-ink">${esc(T.envContextTitle)}</p>${envDomains.map((d) => `<p class="mt-0.5 text-muted"><span class="font-bold text-ink">${esc(d.title)}:</span> ${esc(d.summary)}</p>`).join('')}</div>`
     : ''
 
-  return `<div class="mt-4 rounded-3xl border border-moss-900/20 bg-white p-4 shadow-card">
+  return `<div class="mt-4 rounded-3xl border border-moss-900/20 bg-white p-4 shadow-card" data-reveal="csm-explain-${esc(item.province.id)}">
       <div class="flex flex-wrap items-center justify-between gap-2">
         <p class="text-sm font-extrabold text-ink">${esc(item.displayName)}${item.sample ? ` · ${esc(item.sample.name.split('·')[1]?.trim() ?? '')}` : ''}</p>
         ${mfGradeBadge(r.overall, gradeLabel)}
@@ -340,7 +343,7 @@ function csmRenderHtml() {
       ? `<button type="button" data-csm="retryClimate" class="mt-2 inline-flex min-h-9 w-full items-center justify-center gap-1.5 rounded-xl border border-amber-300 bg-amber-50 px-3 text-xs font-extrabold text-amber-950 hover:bg-amber-100">${icon('refresh-cw', 'size-3.5')}${esc(T.climateRetry)}</button>`
       : ''
 
-  return `<div class="rounded-3xl border border-line bg-white p-4 shadow-card">
+  return `<div class="rounded-3xl border border-line bg-white p-4 shadow-card" data-reveal="csm-card">
       <p class="text-base font-extrabold text-ink">${T.title}</p>
       <p class="mt-1 text-xs text-muted">${esc(T.sub)}</p>
       <p class="mt-3 text-xs font-extrabold text-ink">${T.cropQ}</p>

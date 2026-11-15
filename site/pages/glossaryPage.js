@@ -44,7 +44,7 @@ const gpEntries = () => {
 
 function gpCardHtml([id, e], i) {
   const T = gpT()
-  return `<article id="term-${id}" class="gp-card" style="--gp-i:${Math.min(i, 10)}">
+  return `<article id="term-${id}" class="gp-card" data-reveal="gp-card-${esc(id)}" style="--gp-i:${Math.min(i, 10)}">
       <h3 class="gp-title">${esc(e.title)}</h3>
       <p class="gp-short">${esc(e.short)}</p>
       ${e.detail?.length ? `<ul class="gp-detail">${e.detail.map((d) => `<li>${esc(d)}</li>`).join('')}</ul>` : ''}
@@ -70,6 +70,7 @@ function gpRenderList({ animate = true } = {}) {
   for (const b of document.querySelectorAll('[data-gp-cat]')) b.setAttribute('aria-pressed', String(b.dataset.gpCat === GP.cat))
   const clear = document.getElementById('gp-clear')
   if (clear) clear.hidden = !GP.query
+  if (typeof wireMotion === 'function') wireMotion()
 }
 
 /** Vẽ cả trang Thuật ngữ. showPage('glossary') và renderAll() (đổi VI/EN) gọi hàm này. */
@@ -80,13 +81,13 @@ export function renderGlossary() {
   const chip = (cat, label, ic) =>
     `<button type="button" data-gp-cat="${cat}" aria-pressed="${GP.cat === cat}" class="gp-chip">${ic ? icon(ic, 'size-4') : ''}${esc(label)}</button>`
   box.innerHTML = `
-    <header class="mk-page-head mk-tech-grid" data-reveal>
+    <header class="mk-page-head mk-tech-grid" data-reveal="gp-head">
       <p class="mk-eyebrow"><span class="mk-live-dot"></span><span class="mk-code">03</span> · ${esc(REDESIGN_TEXT[S.lang].glossaryEyebrow)}<span class="mk-coord" aria-hidden="true">${typeof mkRegionCoord === 'function' ? mkRegionCoord() : ''}</span></p>
       <h2 class="mk-page-title">${esc(T.title)}</h2>
       <p class="mk-page-sub">${esc(T.sub)}</p>
       <span class="mk-page-scan" aria-hidden="true"></span>
     </header>
-    <div class="gp-tools" data-reveal>
+    <div class="gp-tools" data-reveal="gp-tools">
       <label class="gp-search">
         <span class="sr-only">${esc(T.searchLabel)}</span>
         ${icon('search', 'size-5 gp-search-icon')}
@@ -109,7 +110,8 @@ export function renderGlossary() {
       // setTimeout thay vì requestAnimationFrame: chạy cả khi trình duyệt tạm không vẽ khung hình.
       setTimeout(() => {
         el.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' })
-        el.classList.add('gp-flash')
+        el.classList.add('is-in', 'gp-flash')
+        if (typeof revealedKeys !== 'undefined' && el.dataset.reveal) revealedKeys.add(el.dataset.reveal)
       }, 60)
     }
   }
