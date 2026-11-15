@@ -29,9 +29,9 @@ for (const file of ['.env', '.env.local']) {
     if (m && !line.trim().startsWith('#')) env[m[1]] = m[2].replace(/^["']|["']$/g, '')
   }
 }
-const apiKey = env.GEMINI_API_KEY?.trim()
+const apiKey = (process.env.GEMINI_API_KEY || env.GEMINI_API_KEY)?.trim()
 // Model nhẹ trước (đo được ~6–11 s); model chính hay quá tải nên để dự phòng. GEMINI_MODEL (nếu có) thay model chính.
-const models = ['gemini-flash-lite-latest', env.GEMINI_MODEL?.trim() || 'gemini-flash-latest']
+const models = ['gemini-flash-lite-latest', (process.env.GEMINI_MODEL || env.GEMINI_MODEL)?.trim() || 'gemini-flash-latest']
 const ai = apiKey ? new GoogleGenAI({ apiKey }) : null
 
 function lanAddress() {
@@ -44,6 +44,11 @@ function lanAddress() {
 }
 
 function readBody(req, limit = 64 * 1024) {
+  if (req.body !== undefined && req.body !== null) {
+    if (typeof req.body === 'string') return Promise.resolve(req.body)
+    if (Buffer.isBuffer(req.body)) return Promise.resolve(req.body.toString('utf8'))
+    if (typeof req.body === 'object') return Promise.resolve(JSON.stringify(req.body))
+  }
   return new Promise((resolve, reject) => {
     let size = 0
     const chunks = []
@@ -237,17 +242,21 @@ const server = http.createServer(async (req, res) => {
   }
 })
 
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') console.error(`\nPort ${PORT} is already in use. Close the other dashboard window and try again.\n`)
-  else console.error(err)
-  process.exit(1)
-})
+export { assistant, strategies }
 
-server.listen(PORT, '0.0.0.0', () => {
-  const ip = lanAddress()
-  console.log('\n  Mekong Seasons is running')
-  console.log(`  On this laptop:  http://localhost:${PORT}/`)
-  if (ip) console.log(`  On a phone:      http://${ip}:${PORT}/  (same Wi-Fi)`)
-  console.log(`  AI assistant:    ${ai ? 'connected (Gemini key found)' : 'sample answers (no key in .env.local)'}`)
-  console.log('\n  Keep this window open. Close it to stop.\n')
-})
+if (!process.env.VERCEL) {
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') console.error(`\nPort ${PORT} is already in use. Close the other dashboard window and try again.\n`)
+    else console.error(err)
+    process.exit(1)
+  })
+
+  server.listen(PORT, '0.0.0.0', () => {
+    const ip = lanAddress()
+    console.log('\n  Mekong Seasons is running')
+    console.log(`  On this laptop:  http://localhost:${PORT}/`)
+    if (ip) console.log(`  On a phone:      http://${ip}:${PORT}/  (same Wi-Fi)`)
+    console.log(`  AI assistant:    ${ai ? 'connected (Gemini key found)' : 'sample answers (no key in .env.local)'}`)
+    console.log('\n  Keep this window open. Close it to stop.\n')
+  })
+}
