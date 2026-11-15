@@ -101,7 +101,7 @@
   100% { transform: scaleY(0); }
 }
 
-.mk-hero-scene[data-anim="off"] * { animation: none !important; transition: none !important; }
+.mk-hero-scene[data-anim="off"] *:not(.mk-pov-blink):not(.mk-blink-lid) { animation: none !important; transition: none !important; }
 .mk-hero-scene[data-anim="off"] .mk-scene-wind,
 .mk-hero-scene[data-anim="off"] .mk-scene-leaves { opacity: 0 !important; }
 

@@ -652,6 +652,8 @@
           </div>`
       }
 
+      let mkBlinkMidTimer = 0
+      let mkBlinkEndTimer = 0
       function toggleHeroAnim() {
         const next = !(S.heroAnim !== false)
         S.heroAnim = next
@@ -664,17 +666,17 @@
           if (labelSpan) labelSpan.textContent = next ? H.sceneAnimOn : H.sceneAnimOff
         }
         if (!scene) return
-        if (!next) {
+        clearTimeout(mkBlinkMidTimer)
+        clearTimeout(mkBlinkEndTimer)
+        scene.classList.remove('is-blinking')
+        void scene.offsetWidth
+        scene.classList.add('is-blinking')
+        mkBlinkMidTimer = setTimeout(() => {
+          scene.dataset.anim = S.heroAnim !== false ? 'on' : 'off'
+        }, 125)
+        mkBlinkEndTimer = setTimeout(() => {
           scene.classList.remove('is-blinking')
-          void scene.offsetWidth
-          scene.classList.add('is-blinking')
-          setTimeout(() => {
-            if (S.heroAnim === false) scene.dataset.anim = 'off'
-          }, 120)
-          setTimeout(() => scene.classList.remove('is-blinking'), 320)
-        } else {
-          scene.dataset.anim = 'on'
-        }
+        }, 320)
       }
 
       // Only the chip changes with the numbers, so the hero photo never reloads.
